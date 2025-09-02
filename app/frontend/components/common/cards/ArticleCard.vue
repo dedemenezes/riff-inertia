@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3"
 import { computed } from "vue";
 const props = defineProps({
   variant: {
@@ -18,6 +19,7 @@ const props = defineProps({
   content: { type: String, required: false },
   date: { type: String, required: true },
   category: { type: String, required: true },
+  permalink: { type: String, required: true },
 });
 
 const backgroundImageStyle = computed(() => ({
@@ -45,7 +47,9 @@ const backgroundImageStyle = computed(() => ({
       </span>
     </div>
     <h3 class="text-header-sm text-primary">
-      {{ props.title }}
+      <Link :href="`/pt/noticias/${props.permalink}`">
+        {{ props.title }}
+      </Link>
     </h3>
     <p
       v-if="props.variant === 'primary'"
