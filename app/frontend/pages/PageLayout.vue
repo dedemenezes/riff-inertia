@@ -9,7 +9,6 @@ const props = defineProps({
 
 <template>
   <SponsorHeader class="bg-azul-400" />
-  {{ console.log(props.rootUrl) }}
   <NavbarMain :root-url="props.rootUrl"/>
   <main>
     <slot />

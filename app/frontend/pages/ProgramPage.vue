@@ -14,8 +14,6 @@ const iconMapping = {
   "clock": IconClock
 };
 
-console.log(iconMapping);
-
 </script>
 
 <template>
