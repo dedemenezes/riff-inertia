@@ -1,0 +1,62 @@
+pt:
+  home:
+    banner_title: "A 26ª edição do Festival do Rio vem aí!"
+    banner_subtitle: "De 2 a 12 de outubro o cinema estará sob a luz do Rio"
+
+  quickLinks:
+    programming:
+      title: "PROGRAMAÇÃO"
+      description: "Veja a programação completa ou filtre de acordo com o que deseja."
+    tickets:
+      title: "INGRESSOS"
+      description: "Descubra como garantir sua entrada nos cinemas e eventos."
+    schedule:
+      title: "MUDANÇAS NA PROGRAMAÇÃO"
+      description: "Planeje-se verificando as mudanças na programação."
+
+  navigation:
+    programming: "Programação"
+    edition2024: "Edição 2024"
+    aboutUs: "Sobre nós"
+    news: "Notícias"
+    media: "Mídias"
+    information: "Informações"
+    press: "Imprensa"
+    archive: "Arquivo"
+    registrations: "Inscrições"
+    contact: "Contato"
+    sessoes_com_convidados: "Sessões com convidados"
+    mudancas_na_programacao: "Mudanças na programação"
+    sessoes_ao_ar_livre: "Sessões ao ar livre"
+
+  filter:
+    title: "Filtros"
+    date: "Data"
+    time: "Horário"
+    submostra: "Mostra"
+    cinema: "Cinema"
+    genero: "Genero"
+    pais: "País"
+    direcao: "Direção"
+    elenco: "Elenco"
+    selo: "Selo"
+    festivais: "Festivais"
+    premios: "Prêmios"
+    palavras_chaves: "Palavras chaves"
+
+  filtro: "Filtro | Filtros"
+
+  filter_by:
+    date: "por data"
+    time: "por horário"
+    genre: "por gênero"
+
+  loading:
+    title: "Carregando"
+    movies: "Carregando filmes"
+
+  datepicker:
+    pick_date: "Escolha uma data"
+
+  placeholder:
+    select: "Escolha um(a)"

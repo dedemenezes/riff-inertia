@@ -1,5 +1,5 @@
 <script setup>
-import IconCarretUp from './icons/IconCarretUp.vue';
+import { IconCarretUp } from '@components/common/icons';
 
 // import AccordionHeader from './AccordionHeader.vue';
 const { text } = defineProps({
