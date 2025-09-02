@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  root "pages#home"
-  get :programacao, to: "programs#index", as: :program
   scope "(:locale)", locale: /en|pt/ do
+    root "pages#home"
+    get :programacao, to: "programs#index", as: :program
     resources :noticias, only: [ :show ], param: :permalink
     # other localized routes
   end
