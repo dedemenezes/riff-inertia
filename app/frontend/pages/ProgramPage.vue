@@ -1,17 +1,18 @@
 <script setup>
 import NavButtonContext from "@components/common/buttons/NavButtonContext.vue";
-const props = defineProps({
-  text: { type: String },
-})
-const items = [
-  { name: "programming", route: "/programacao", component: IconProgram },
-  { name: "sessoes_com_convidados", route: "/", component: IconNewUser },
-  { name: "mudancas_na_programacao", route: "/", component: IconChange },
-  { name: "sessoes_ao_ar_livre", route: "/", component: IconClock },
-];
-
 import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/common/icons";
 
+const props = defineProps({
+  text: { type: String },
+  items: { type: Array, required: true }
+})
+
+const iconMapping = {
+  "program": IconProgram,
+  "user": IconNewUser,
+  "change": IconChange,
+  "clock": IconClock
+};
 
 </script>
 
@@ -28,7 +29,7 @@ import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/com
     >
       <template #icon="{ active }">
         <component
-          :is="item.component"
+          :is="iconMapping[item.icon]"
           height="30px"
           width="30px"
           :active="active"

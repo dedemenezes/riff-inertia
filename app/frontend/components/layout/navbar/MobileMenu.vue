@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 import AccordionGroup from "@/components/AccordionGroup.vue";
-// import LanguageSwitcher from "@/components/app/TheLanguageSwitcher.vue";
+import TheLanguageSwitcher from "@components/TheLanguageSwitcher.vue";
 
 // Controls menu visibility
 const isMobileMenuOpen = ref(false);
@@ -56,7 +56,7 @@ const closeMenu = () => {
             />
           </Link>
 
-          <!-- <LanguageSwitcher /> -->
+          <TheLanguageSwitcher />
           <button @click="closeMenu" class="text-neutrals-900">
             <svg
               xmlns="http://www.w3.org/2000/svg"

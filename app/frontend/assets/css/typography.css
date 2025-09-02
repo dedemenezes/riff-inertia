@@ -1,3 +1,4 @@
+@import "./tailwind-config.css" reference;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,6 +12,10 @@
   /* Body text variants */
   .text-body-regular {
     @apply font-body text-sm font-regular leading-[150%];
+  }
+
+  .text-body-regular-lg {
+    @apply text-neutrals-900 font-body text-lg font-regular leading-[140%];
   }
 
   .text-body-strong-xs {
@@ -36,6 +41,10 @@
 
   .text-header-md {
     @apply font-heading text-xl font-semibold leading-[120%];
+  }
+
+  .text-header-lg {
+    @apply font-heading text-2xl font-semibold leading-[120%];
   }
 
   .text-section-header {

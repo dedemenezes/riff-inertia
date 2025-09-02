@@ -36,10 +36,21 @@ class PagesController < ApplicationController
         href: root_url
       }
     ]
+
+    noticias = Noticia
+              .includes(:caderno)
+              .last(6)
+              .as_json(
+                only: %i[id titulo permalink chamada imagem],
+                methods: [ :caderno_nome, :display_date ]
+              )
+    # root_url = request.base_url
     render inertia: "HomePage", props: {
+      rootUrl: @root_url,
       quickLinksConfig:,
       mainItems:,
-      secondaryItems:
+      secondaryItems:,
+      noticias:
     }
   end
 end

@@ -1,4 +1,5 @@
 <script setup>
+import { Head } from "@inertiajs/vue3";
 import TwContainer from "@components/layout/TwContainer.vue"
 
 import HomeBanner from '@/components/features/home/HomeBanner.vue';
@@ -12,10 +13,12 @@ const props = defineProps({
   quickLinksConfig: { type: Array },
   mainItems: { type: Array },
   secondaryItems: { type: Array },
+  noticias: { type: Array },
 })
 </script>
 
 <template>
+  <Head title="Festival do Rio" />
   <NavbarSecondary :mainItems="props.mainItems" :secondaryItems="props.secondaryItems" />
   <HomeBanner :imagePath="banneImagePath" alt="Banner promocional">
     <h1 class="text-header-base text-2xl lg:text-3xl mb-200 text-primary">
@@ -29,7 +32,7 @@ const props = defineProps({
 
   <TwContainer>
     <div class="py-1200">
-      <ArticlesSection />
+      <ArticlesSection :articles="props.noticias"/>
     </div>
   </TwContainer>
 </template>

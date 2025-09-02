@@ -1,3 +1,8 @@
+@import "./tailwind-config.css" reference;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .tag-base {
   @apply py-100 px-250 uppercase font-body text-2xs font-medium leading-[16px] tracking-widest rounded-br-100 max-w-fit;
 }

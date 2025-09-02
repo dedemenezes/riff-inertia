@@ -13,7 +13,7 @@ const sizes = {
   md: "text-md leading-[22.4px]",
 };
 
-const { variant, size, text, tag, href } = defineProps({
+const { variant, size, text, tag, href, fontWeight } = defineProps({
   variant: {
     type: String,
     validator: (value) => ["dark", "light", "color"].includes(value),
@@ -27,8 +27,13 @@ const { variant, size, text, tag, href } = defineProps({
   text: { type: String, default: "" },
   tag: { type: String, default: "a" },
   href: { type: String, default: "#" },
+  fontWeight: {
+    type: String,
+    default: "semibold", // matches current behavior
+  },
 });
 
+const fontWeightClass = computed(() => `font-${fontWeight}`);
 const variantClass = computed(() => variants[variant]);
 const sizeClass = computed(() => sizes[size]);
 </script>
@@ -36,9 +41,9 @@ const sizeClass = computed(() => sizes[size]);
 <template>
   <component
     :is="tag"
-    :href="href"
-    class="p-100 inline-flex items-center justify-center max-w-fit font-body font-semibold"
-    :class="[sizeClass, variantClass]"
+    v-bind="tag === 'a' ? { href } : {}"
+    class="p-100 inline-flex items-center justify-center max-w-fit font-body"
+    :class="[sizeClass, variantClass, fontWeightClass]"
   >
     <slot name="icon" />
     {{ text }}
