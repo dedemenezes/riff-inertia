@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 
 const props = defineProps({
@@ -22,12 +22,15 @@ const handleBlur = () => {
   isFocused.value = false;
 };
 
-const isActive = computed(() => isHovered.value || isFocused.value);
+const { url } = usePage();
 
-// const currentRoute = useRoute();
-// const isRouteActive = computed(() => currentRoute.path == props.route);
-const isIconActive = computed(() => isActive.value);
-</script>
+const getPath = (url) => {
+  const u = new URL(url, window.location.origin);
+  return u.pathname;
+};
+
+const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route
+const isIconActive = computed(() => isHovered.value || isFocused.value || isActive.value);</script>
 
 <template>
   <Link
@@ -44,8 +47,8 @@ const isIconActive = computed(() => isActive.value);
       <slot
         name="icon"
         :hovered="isHovered"
-        :active="isIconActive || $page.url == props.route"
-        :routeActive="$page.url == props.route"
+        :active="isIconActive"
+        :routeActive="isActive"
       />
       <p class="text-body-strong-xs text-primary text-center uppercase">
         {{ props.content }}
