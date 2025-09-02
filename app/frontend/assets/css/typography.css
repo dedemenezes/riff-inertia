@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /*
+   * TYPOGRAPHY STYLES - Pure typography properties only
+   * No colors, no layout - just font, size, weight, line-height
+   */
+
+  /* Body text variants */
+  .text-body-regular {
+    @apply font-body text-sm font-regular leading-[150%];
+  }
+
+  .text-body-strong-xs {
+    @apply font-body text-xs font-semibold leading-[140%];
+  }
+
+  .text-body-strong-sm {
+    @apply font-body text-sm font-semibold leading-[140%];
+  }
+
+  .text-subheading {
+    @apply font-body text-xl font-regular leading-[30px];
+  }
+
+  /* Header variants */
+  .text-header-base {
+    @apply font-heading font-semibold leading-[120%];
+  }
+
+  .text-header-sm {
+    @apply font-heading text-lg font-semibold leading-[120%];
+  }
+
+  .text-header-md {
+    @apply font-heading text-xl font-semibold leading-[120%];
+  }
+
+  .text-section-header {
+    @apply font-heading text-lg font-semibold leading-[28.8px];
+  }
+
+  /* Special typography */
+  .text-overline {
+    @apply font-body text-2xs font-medium leading-[160%] tracking-widest uppercase;
+  }
+
+  /*
+   * SEMANTIC COLOR UTILITIES - Only colors
+   * These can be mixed with any typography class above
+   */
+  .text-primary {
+    @apply text-neutrals-900;
+  }
+
+  .text-secondary-gray {
+    @apply text-neutrals-700;
+  }
+
+  .text-muted {
+    @apply text-neutrals-600;
+  }
+
+  .text-on-dark {
+    @apply text-white-transp-1000;
+  }
+
+  .text-on-dark-secondary {
+    @apply text-white-transp-900;
+  }
+}
+
+/*
+ * OPTIONAL: Preset combinations for common patterns
+ * Only create these if you use the same combination 5+ times
+ */
+/* @layer components {
+  .text-movie-title {
+    @apply text-header-sm text-on-dark;
+  }
+
+  .text-movie-meta {
+    @apply text-overline text-on-dark-secondary;
+  }
+
+  .text-cinema-info {
+    @apply text-body-regular text-secondary;
+  }
+} */

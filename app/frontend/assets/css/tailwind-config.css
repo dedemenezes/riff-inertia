@@ -1,0 +1,145 @@
+/* Application styles */
+@import "tailwindcss";
+
+
+/* @plugin "@tailwindcss/typography"; */
+/* @plugin "@tailwindcss/forms"; */
+
+@theme {
+  /* Colors (using your JSON tokens) */
+  /* @import "./design-tokens/color-primitives.json"; */
+  --color-neutrals-100: #FFFFFF;
+  --color-neutrals-200: #F5F4F4;
+  --color-neutrals-300: #DBDAD7;
+  --color-neutrals-400: #C3C0BC;
+  --color-neutrals-500: #AAA7A1;
+  --color-neutrals-600: #908C84;
+  --color-neutrals-700: #736F68;
+  --color-neutrals-800: #56534E;
+  --color-neutrals-900: #3B3935;
+  --color-neutrals-1000: #201F1D;
+
+  --color-white-transp-100: rgba(255, 255, 255, 0.05);
+  --color-white-transp-200: rgba(255, 255, 255, 0.10);
+  --color-white-transp-300: rgba(255, 255, 255, 0.20);
+  --color-white-transp-400: rgba(255, 255, 255, 0.40);
+  --color-white-transp-500: rgba(255, 255, 255, 0.70);
+  --color-white-transp-600: rgba(255, 255, 255, 0.80);
+  --color-white-transp-700: rgba(255, 255, 255, 0.85);
+  --color-white-transp-800: rgba(255, 255, 255, 0.90);
+  --color-white-transp-900: rgba(255, 255, 255, 0.95);
+  --color-white-transp-1000: rgba(255, 255, 255, 1);
+
+  --color-black-transp-100: rgba(0, 0, 0, 0.05);
+  --color-black-transp-200: rgba(0, 0, 0, 0.10);
+  --color-black-transp-300: rgba(0, 0, 0, 0.20);
+  --color-black-transp-400: rgba(0, 0, 0, 0.40);
+  --color-black-transp-500: rgba(0, 0, 0, 0.70);
+  --color-black-transp-600: rgba(0, 0, 0, 0.80);
+  --color-black-transp-700: rgba(0, 0, 0, 0.85);
+  --color-black-transp-800: rgba(0, 0, 0, 0.90);
+  --color-black-transp-900: rgba(0, 0, 0, 0.95);
+  --color-black-transp-1000: rgba(0, 0, 0, 1);
+
+  --color-laranja-200: #FFE1C3;
+  --color-laranja-400: #FFB46A;
+  --color-laranja-600: #FF7F00;
+  --color-laranja-800: #C06103;
+  --color-laranja-1000: #8A480;
+
+  --color-magenta-200: #FFD4E9;
+  --color-magenta-400: #FF6FB7;
+  --color-magenta-600: #FF007F;
+  --color-magenta-800: #B20059;
+  --color-magenta-1000: #6A003;
+
+  --color-vermelho-100: #FFCCCC;
+  --color-vermelho-200: #FF7E7E;
+  --color-vermelho-400: #A30000;
+  --color-vermelho-600: #FF0000;
+  --color-vermelho-1000: #5E0000;
+
+  --color-violeta-200: #DA9FE0;
+  --color-violeta-400: #BF68C8;
+  --color-violeta-600: #7F008C;
+  --color-violeta-800: #580161;
+  --color-violeta-1000: #2D003;
+
+  --color-amarelo-200: #FFF8DF;
+  --color-amarelo-400: #FFECAB;
+  --color-amarelo-600: #FFDB5C;
+  --color-amarelo-800: #FFC700;
+  --color-amarelo-1000: #D4A50;
+
+  --color-verde-200: #CAFFCF;
+  --color-verde-400: #9EF4A6;
+  --color-verde-600: #1BBC2B;
+  --color-verde-800: #11861D;
+  --color-verde-1000: #094A0;
+
+  --color-azul-400: #94BBE2;
+  --color-azul-600: #1881F1;
+
+ /* Spacing scale */
+  --spacing-50: 0.125rem;
+  --spacing-100: 0.25rem;
+  --spacing-150: 0.375rem;
+  --spacing-200: 0.5rem;
+  --spacing-250: 0.625rem;
+  --spacing-300: 0.75rem;
+  --spacing-400: 1rem;
+  --spacing-600: 1.5rem;
+  --spacing-800: 2rem;
+  --spacing-1200: 3rem;
+  --spacing-1600: 4rem;
+  --spacing-2400: 6rem;
+  --spacing-4000: 9.375rem;
+
+  /* Border radius */
+  --radius-100: 0.25rem;
+  --radius-200: 0.5rem;
+  --radius-400: 1rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Fonts */
+  --font-heading: "Fira Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Font weights */
+  --font-weight-regular: 400;
+
+  /* Font sizes */
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3rem;
+  --text-5xl: 3.5rem;
+  --text-6xl: 4rem;
+  --text-7xl: 4.5rem;
+
+  /* Letter spacing */
+  --tracking-tightest: -0.075em;
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wid: 0.03125em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 1.5px;
+
+  /* Screens */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1920px;
+}
