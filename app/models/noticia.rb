@@ -7,6 +7,10 @@ class Noticia < ApplicationRecord
     I18n.locale == :pt ? caderno&.nome_pt : caderno&.nome_en
   end
 
+  def display_date
+    updated.strftime("%d.%m.%Y")
+  end
+
   def to_param
     permalink
   end

@@ -5,7 +5,8 @@ class NoticiasController < ApplicationController
     render inertia: "Noticias/Show", props: {
       conteudo: @noticia.conteudo,
       titulo: @noticia.titulo,
-      chamada: @noticia.chamada
+      chamada: @noticia.chamada,
+      rootUrl: @root_url
     }
   end
 end
