@@ -3,6 +3,9 @@ import { BaseButton } from "@/components/common/buttons";
 import MobileMenu from "@/components/layout/navbar/MobileMenu.vue";
 import { IconSearch } from "@/components/common/icons";
 import FestivalLogo from "@assets/logos/festival-logo.svg"
+const props = defineProps({
+  rootUrl: { type: String, required: true }
+});
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import FestivalLogo from "@assets/logos/festival-logo.svg"
       class="flex flex-col md:flex-row md:gap-400 items-start md:items-center"
     >
     <a
-      href="/"
+      :href="props.rootUrl"
       class="focus:outline-2 focus:-outline-offset-2 focus:outline-laranja-600"
     >
       <img
