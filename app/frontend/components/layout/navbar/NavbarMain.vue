@@ -2,6 +2,8 @@
 import { BaseButton } from "@/components/common/buttons";
 import MobileMenu from "@/components/layout/navbar/MobileMenu.vue";
 import { IconSearch } from "@/components/common/icons";
+import TheLanguageSwitcher from "@components/TheLanguageSwitcher.vue";
+
 import FestivalLogo from "@assets/logos/festival-logo.svg"
 const props = defineProps({
   rootUrl: { type: String, required: true }
@@ -52,6 +54,8 @@ const props = defineProps({
     <!-- Navbar Actions -->
     <div class="hidden md:flex items-center gap-1200">
       <IconSearch />
+      <TheLanguageSwitcher />
+
       <BaseButton as="button" size="md" variant="cta">
         RioMarket
         <img
