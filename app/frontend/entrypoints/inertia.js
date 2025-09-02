@@ -1,5 +1,6 @@
 import { createInertiaApp } from '@inertiajs/vue3'
 import { createApp, h } from 'vue'
+import PageLayout from '@pages/PageLayout.vue'
 
 createInertiaApp({
   // Set default page title
@@ -16,15 +17,15 @@ createInertiaApp({
     const pages = import.meta.glob('../pages/**/*.vue', {
       eager: true,
     })
-    return pages[`../pages/${name}.vue`]
+    // return pages[`../pages/${name}.vue`]
 
     // To use a default layout, import the Layout component
     // and use the following lines.
     // see https://inertia-rails.dev/guide/pages#default-layouts
     //
-    // const page = pages[`../pages/${name}.vue`]
-    // page.default.layout = page.default.layout || Layout
-    // return page
+    const page = pages[`../pages/${name}.vue`]
+    page.default.layout = page.default.layout || PageLayout
+    return page
   },
 
   setup({ el, App, props, plugin }) {
