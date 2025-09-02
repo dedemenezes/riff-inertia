@@ -12,6 +12,7 @@ const props = defineProps({
   quickLinksConfig: { type: Array },
   mainItems: { type: Array },
   secondaryItems: { type: Array },
+  noticias: { type: Array },
 })
 </script>
 
@@ -29,7 +30,7 @@ const props = defineProps({
 
   <TwContainer>
     <div class="py-1200">
-      <ArticlesSection />
+      <ArticlesSection :articles="props.noticias"/>
     </div>
   </TwContainer>
 </template>
