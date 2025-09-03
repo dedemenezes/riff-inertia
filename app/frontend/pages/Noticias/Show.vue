@@ -3,11 +3,13 @@ import TwContainer from "@components/layout/TwContainer.vue"
 import { IconLink } from "@components/common/icons";
 import { ButtonText } from "@components/common/buttons"
 import { ref, computed } from "vue";
+import Breadcrumb from "@components/common/Breadcrumb.vue";
 
 const props = defineProps({
   conteudo: { type: String, required: true, default: '' },
   titulo: { type: String, required: true, default: '' },
   chamada: { type: String, required: true, default: '' },
+  breadcrumbs: { type: Array, default: () => []}
 })
 
 const copyURL = () => {
@@ -48,6 +50,7 @@ const isIconActive = computed(() => isActive.value);
 
 <template>
   <TwContainer>
+    <Breadcrumb  :crumbs="props.breadcrumbs"/>
     <div class="max-w-[940px] mx-auto">
       <div class="flex flex-col gap-600 mb-800">
         <h1 class="text-header-lg">{{ props.titulo }}</h1>
