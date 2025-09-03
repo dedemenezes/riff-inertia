@@ -27,8 +27,8 @@ class NoticiasController < ApplicationController
       chamada: @noticia.chamada,
       rootUrl: @root_url,
       breadcrumbs: breadcrumbs(
-        # [ "Home", @root_url ],
-        [ "Notícias", noticia_url(@noticia) ],
+        [ "Home", @root_url ],
+        [ "Notícias", noticias_url ],
         [ @noticia.titulo, "" ]
       )
     }
