@@ -33,10 +33,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "inertia_rails", "~> 3.11"
-
 gem "vite_rails", "~> 3.0"
-
-gem "faraday", "~> 2.13"
 
 group :development, :test do
   gem "dotenv"
@@ -53,6 +50,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Git workflow integrated locally
+  gem "lefthook", require: false
 end
 
 group :test do
