@@ -43,6 +43,10 @@
     @apply font-heading text-lg font-semibold leading-[120%];
   }
 
+  .text-header-medium-sm {
+    @apply font-heading text-lg font-medium leading-[120%];
+  }
+
   .text-header-md {
     @apply font-heading text-xl font-semibold leading-[120%];
   }
