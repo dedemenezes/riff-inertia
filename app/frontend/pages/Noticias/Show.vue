@@ -128,4 +128,19 @@ const isIconActive = computed(() => isActive.value);
   display: none;
 }
 
+::v-deep .content li > span:has(b) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+
+::v-deep .content li > span b {
+  background: linear-gradient(to right, #FF007F, #FF7F00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  transition: background 0.3s ease;
+}
 </style>
