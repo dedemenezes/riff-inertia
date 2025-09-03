@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
   <ul class="flex items-center space-x-200 py-800">
     <li>
-      <Link :href="crumbs[0].href" class="flex items-center justify-center">
+      <Link href="/" class="flex items-center justify-center">
         <IconHome height="12" width="12" color="text-neutrals-900" />
       </Link>
     </li>
