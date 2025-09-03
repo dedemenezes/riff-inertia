@@ -35,7 +35,7 @@ const props = defineProps({
         </Link>
       </span>
       <span v-else class="text-body-strong-xs">
-        {{ crumb.label.split(" ").slice(0,5).join(" ") }}
+        {{ crumb.label }}
       </span>
 
     </li>
