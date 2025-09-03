@@ -110,6 +110,7 @@ const isIconActive = computed(() => isActive.value);
 ::v-deep .content img {
   width: 100% !important;
   border-radius: 8px;
+  object-fit: cover;
 }
 
 ::v-deep .content img + br + i:not(:empty), ::v-deep .content i > span, ::v-deep .content span > i  {
