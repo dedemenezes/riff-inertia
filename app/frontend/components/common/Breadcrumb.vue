@@ -13,12 +13,12 @@ const props = defineProps({
 <template>
   <ul class="flex items-center space-x-200 py-800">
     <li>
-      <Link href="/" class="flex items-center justify-center">
+      <Link :href="props.crumbs[0].href" class="flex items-center justify-center">
         <IconHome height="12" width="12" color="text-neutrals-900" />
       </Link>
     </li>
 
-    <li class="flex items-center space-x-200" v-for="(crumb, index) in props.crumbs" :key="index">
+    <li class="flex items-center space-x-200" v-for="(crumb, index) in props.crumbs.slice(1)" :key="index">
       <span>
         <IconChevronRight
           color="text-neutrals-700"
@@ -27,7 +27,7 @@ const props = defineProps({
         />
       </span>
       <span
-        v-if="index < props.crumbs.length - 1"
+        v-if="index < props.crumbs.length - 2"
         class="text-body-regular-xs text-neutrals-700  hover:text-neutrals-900"
       >
         <Link :href="crumb.href">
@@ -35,7 +35,7 @@ const props = defineProps({
         </Link>
       </span>
       <span v-else class="text-body-strong-xs">
-        {{ crumb.label.split(" ").slice(0,5).join(" ") }}...
+        {{ crumb.label.split(" ").slice(0,5).join(" ") }}
       </span>
 
     </li>
