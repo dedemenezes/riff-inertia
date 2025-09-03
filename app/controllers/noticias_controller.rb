@@ -29,7 +29,7 @@ class NoticiasController < ApplicationController
       breadcrumbs: breadcrumbs(
         [ "Home", @root_url ],
         [ "Notícias", noticias_url ],
-        [ @noticia.titulo, "" ]
+        [ @noticia.breadcrumb_title, "" ]
       )
     }
   end
