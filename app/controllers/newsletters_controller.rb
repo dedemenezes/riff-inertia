@@ -6,7 +6,7 @@ class NewslettersController < ApplicationController
       redirect_to request.referer || root_path(anchor: "newsletter"), status: :see_other
     else
       flash[:error] = "Não foi possível inscrever. Verifique seu email."
-      head :unprocessable_entity
+      redirect_to request.referer || root_path(anchor: "newsletter"), status: :see_other
     end
   end
 
