@@ -47,6 +47,10 @@
     @apply font-heading text-xl font-semibold leading-[120%];
   }
 
+  .text-header-regular-md {
+    @apply font-heading text-xl font-regular leading-[120%];
+  }
+
   .text-header-lg {
     @apply font-heading text-2xl font-semibold leading-[120%];
   }

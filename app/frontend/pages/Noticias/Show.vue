@@ -4,6 +4,7 @@ import { IconLink } from "@components/common/icons";
 import { ButtonText } from "@components/common/buttons"
 import { ref, computed } from "vue";
 import Breadcrumb from "@components/common/Breadcrumb.vue";
+import NewsletterCard from "../../components/common/cards/NewsletterCard.vue";
 
 const props = defineProps({
   conteudo: { type: String, required: true, default: '' },
@@ -51,7 +52,7 @@ const isIconActive = computed(() => isActive.value);
 <template>
   <TwContainer>
     <Breadcrumb  :crumbs="props.breadcrumbs"/>
-    <div class="max-w-[940px] mx-auto">
+    <div class="">
       <div class="flex flex-col gap-600 mb-800">
         <h1 class="text-header-lg">{{ props.titulo }}</h1>
         <p class="text-body-regular-lg">{{ props.chamada }}</p>
@@ -76,6 +77,7 @@ const isIconActive = computed(() => isActive.value);
       </div>
       <div v-html="props.conteudo" class="content text-justify text-neutrals-900"></div>
     </div>
+    <NewsletterCard />
   </TwContainer>
 </template>
 
