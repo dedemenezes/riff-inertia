@@ -18,6 +18,7 @@ const imageUrl = computed(() => {
 
 <template>
   <div class="flex flex-col gap-200 md:flex-row md:gap-400">
+    <!-- TODO: Review for locale -->
     <Link
       :href="`/pt/noticias/${props.permalink}`"
       class="w-full"

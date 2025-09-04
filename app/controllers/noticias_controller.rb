@@ -5,6 +5,21 @@ class NoticiasController < ApplicationController
   # TODO: Breakdown into smaller,
   # more readable methods
   def index
+    mainItems = [
+      I18n.t("navigation.programming"),
+      I18n.t("navigation.edition2024"),
+      I18n.t("navigation.aboutUs"),
+      I18n.t("navigation.news"),
+      I18n.t("navigation.media"),
+      I18n.t("navigation.information")
+    ]
+
+    secondaryItems = [
+      { name: I18n.t("navigation.press"), tag: "a", href: root_url },
+      { name: I18n.t("navigation.archive"), tag: "a", href: "https://www.globo.com" },
+      { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
+      { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
+    ]
     scope = Noticia.includes(:caderno).published
 
     if params[:search].present?
@@ -19,6 +34,8 @@ class NoticiasController < ApplicationController
 
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
+      mainItems:,
+      secondaryItems:,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Notícias", "" ],
