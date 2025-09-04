@@ -2,6 +2,8 @@ class Noticia < ApplicationRecord
   belongs_to :caderno
   belongs_to :idioma
 
+  scope :published, -> { where(ativo: true) }
+
   def breadcrumb_title
     "#{titulo.split(" ").first(5).join(" ")}..."
   end

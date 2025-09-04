@@ -5,7 +5,7 @@ class NoticiasController < ApplicationController
   # TODO: Breakdown into smaller,
   # more readable methods
   def index
-    scope = Noticia.includes(:caderno)
+    scope = Noticia.includes(:caderno).published
 
     if params[:search].present?
       term = "%#{params[:search].downcase}%"
