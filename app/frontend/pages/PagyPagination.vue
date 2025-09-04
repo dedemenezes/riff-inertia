@@ -4,7 +4,7 @@ import { router } from '@inertiajs/vue3'
 import IndexArticleCard from '@/components/common/cards/IndexArticleCard.vue';
 
 const props = defineProps({
-  items: {
+  noticias: {
     type: Array,
     required: true
   },
@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 // State management
-const allItems = ref([...props.items])
+const allNoticias = ref([...props.noticias])
 const currentPage = ref(props.pagy.page)
 const isLoading = ref(false)
 const loadTrigger = ref(null)
@@ -66,16 +66,19 @@ const loadMore = async () => {
     // Use Inertia to fetch only the data we need
     router.visit(newUrl, {
       method: 'get',
-      only: ['items', 'pagy'], // Only refresh these props
+      only: ['noticias', 'pagy'], // Only refresh these props
       preserveState: true,
       preserveScroll: true,
       replace: true, // Don't add to browser history
       onSuccess: (page) => {
-        // Append new items to existing ones
-        const newItems = page.props.items || []
-        // console.log(newItems);
+        // Append new noticias to existing ones
+        console.log("ONSUCCESS? page");
+        console.log(page);
+        const newNoticias = page.props.noticias || []
+        console.log("ONSUCCESS");
+        console.log(newNoticias);
 
-        allItems.value.push(...newItems)
+        allNoticias.value.push(...newNoticias)
         // Update pagination info
         currentPage.value = page.props.pagy.page
 
@@ -114,13 +117,13 @@ const setupIntersectionObserver = () => {
 
 // Reset function for when filters change
 const resetInfiniteScroll = () => {
-  allItems.value = [...props.items]
+  allNoticias.value = [...props.noticias]
   currentPage.value = props.pagy.page
   isLoading.value = false
 }
 
 // Watchers
-watch(() => props.items, (newItems) => {
+watch(() => props.noticias, (newItems) => {
   // If we're on page 1, it means filters changed or initial load
   if (props.pagy.page === 1) {
     resetInfiniteScroll()
@@ -155,9 +158,9 @@ onUnmounted(() => {
     <!-- Your existing content -->
       <div class="flex flex-col gap-800">
         {{ console.log("PagyPagination.vue") }}
-        {{ console.log(props.items) }}
+        {{ console.log(props.noticias) }}
         <IndexArticleCard
-          v-for="article in allItems"
+          v-for="article in allNoticias"
           :key="article.id"
           :title="article.titulo"
           :permalink="article.permalink"

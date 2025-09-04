@@ -47,7 +47,7 @@ const handleClear = () => {
     />
     <Breadcrumb  :crumbs="props.breadcrumbs"/>
     <PagyPagination
-      :items="props.noticias"
+      :noticias="props.noticias"
       :pagy="props.pagy"
       >
       <!-- :filters="props.filters" -->
