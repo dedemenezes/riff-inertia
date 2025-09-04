@@ -55,6 +55,8 @@ group :development do
 
   # Git workflow integrated locally
   gem "lefthook", require: false
+
+  gem "pry-byebug"
 end
 
 group :test do

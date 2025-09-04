@@ -1,28 +1,57 @@
 <script setup>
+import { usePage, router } from '@inertiajs/vue3'
+import { ref } from 'vue';
+
 import Breadcrumb from '@/components/common/Breadcrumb.vue';
-import IndexArticleCard from '@/components/common/cards/IndexArticleCard.vue';
 import TwContainer from '@/components/layout/TwContainer.vue';
+import SearchBar from '@/components/features/filters/SearchBar.vue';
+import PagyPagination from '../PagyPagination.vue';
+
 const props = defineProps({
   breadcrumbs: { type: Array, default: () => []},
-  noticias: { type: Array, default: () => []}
+  noticias: { type: Array, default: () => []},
+  currentUrl: { type: String, default: '/pt/noticias'},
+  searchQuery: { type: String, default: ''},
+  pagy: { type: Object, required: true }
 })
+
+const page = usePage()
+const searchQuery = ref(props.searchQuery)
+
+const handleSearch = (modelV) => {
+  // Get current locale from page props (set by ApplicationController)
+  const locale = page.props.currentLocale || 'pt'
+  console.log(modelV);
+
+  router.get(`/${locale}/noticias`, {
+    search: modelV
+  }, {
+    preserveState: true,
+    replace: true
+  })
+}
+
+const handleClear = () => {
+  // clear search results
+}
 </script>
 
 <template>
   <TwContainer>
+    {{ console.log("Index.vue") }}
+    {{ console.log(props.noticias) }}
+    <SearchBar
+      v-model="searchQuery"
+      @search="handleSearch"
+      @clear="handleClear"
+    />
     <Breadcrumb  :crumbs="props.breadcrumbs"/>
-    <div class="flex flex-col gap-800">
-      <IndexArticleCard
-        v-for="article in noticias"
-        :key="article.id"
-        :title="article.titulo"
-        :permalink="article.permalink"
-        :chamada="article.chamada"
-        :imagem="article.imagem"
-        :category="article.caderno_nome"
-        :date="article.display_date"
-      />
-    </div>
+    <PagyPagination
+      :items="props.noticias"
+      :pagy="props.pagy"
+      >
+      <!-- :filters="props.filters" -->
+    </PagyPagination>
   </TwContainer>
 </template>
 
