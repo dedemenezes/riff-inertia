@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
       error: flash[:error]
     }
   }
+  inertia_share currentLocale: -> {
+    I18n.locale.to_s
+  }
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
