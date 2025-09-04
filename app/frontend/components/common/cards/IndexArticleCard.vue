@@ -18,7 +18,12 @@ const imageUrl = computed(() => {
 
 <template>
   <div class="flex flex-col gap-200 md:flex-row md:gap-400">
-    <img :src="imageUrl" class="w-full h-[216px] md:h-[155px] object-cover rounded-200" />
+    <Link
+      :href="`/pt/noticias/${props.permalink}`"
+      class="w-full"
+    >
+      <img :src="imageUrl" class="w-full h-[216px] md:h-[155px] object-cover rounded-200" />
+    </Link>
     <div class="content grid grid-rows gap-200">
       <div class="flex gap-x-200 items-center self-start">
         <span class="text-overline text-primary">
