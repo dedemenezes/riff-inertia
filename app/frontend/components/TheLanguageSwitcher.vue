@@ -1,53 +1,61 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
-const availableLanguages = [
+const LANGUAGES = [
   { code: 'en', name: 'English' },
-  { code: 'pt', name: 'Portuguese' },
-];
+  { code: 'pt', name: 'Portuguese' }
+]
 
-const currentLanguage = ref(''); // This will be dynamic based on the current locale
 
-const switchLanguage = (languageCode) => {
-  // Construct the new URL by replacing the language code in the current URL
-  const newUrl = window.location.pathname.replace(/^\/[a-z]{2}/, `/${languageCode}`);
+const page = usePage()
 
-  // Update the currentLanguage to reflect the new language
-  currentLanguage.value = languageCode;
+const currentLocale = computed(() => {
+  // locale from ApplicationController
+  return page.props.currentLocale ||
+         document.documentElement.lang ||
+         'pt'
+})
 
-  // Navigate to the new URL with the selected language
-  Inertia.visit(newUrl, { preserveState: true });
-};
+const switchLanguage = (targetLocale) => {
+  if (targetLocale === currentLocale.value) return
 
-onMounted(() => {
-  const pathLang = window.location.pathname.split('/')[1]; // Get the language code from the URL
-  currentLanguage.value = pathLang || 'pt'; // Set it to the current language or default to 'pt'
-});
+  window.location.href = `/${targetLocale}`
+}
+
+const isCurrentLanguage = (languageCode) => languageCode === currentLocale.value
 </script>
 
 <template>
   <div
-    class="languages flex items-center gap-400 text-neutrals-700"
-    aria-label="language selection"
+    class="flex items-center gap-400 text-neutrals-700"
+    role="radiogroup"
+    aria-label="Language selection"
   >
-    <template v-for="language in availableLanguages" :key="language.code">
+    <template v-for="(language, index) in LANGUAGES" :key="language.code">
       <button
+        type="button"
+        role="radio"
+        :aria-checked="isCurrentLanguage(language.code)"
+        :aria-label="`Switch to ${language.name}`"
         :class="[
-          'text-body-strong-sm uppercase cursor-pointer',
-          { 'text-neutrals-900': language.code === currentLanguage },
+          'text-body-strong-sm uppercase cursor-pointer transition-colors',
+          'hover:text-neutrals-800 focus:outline-none focus:text-neutrals-900',
+          isCurrentLanguage(language.code)
+            ? 'text-neutrals-900'
+            : 'text-neutrals-700'
         ]"
         @click="switchLanguage(language.code)"
-        :aria-label="`Alterar para ${language.name}`"
-        :aria-pressed="language.code === currentLanguage"
       >
         {{ language.code.toUpperCase() }}
       </button>
+
       <img
-        v-if="language.code !== availableLanguages.at(-1).code"
+        v-if="index < LANGUAGES.length - 1"
         src="@assets/icons/divisor.svg"
-        alt="Divisor"
+        alt=""
         aria-hidden="true"
+        class="select-none"
       />
     </template>
   </div>
