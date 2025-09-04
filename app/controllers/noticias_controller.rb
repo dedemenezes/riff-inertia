@@ -2,6 +2,8 @@ class NoticiasController < ApplicationController
   include BreadcrumbsHelper
   include Pagy::Backend
 
+  # TODO: Breakdown into smaller,
+  # more readable methods
   def index
     scope = Noticia.includes(:caderno)
 
@@ -56,6 +58,7 @@ class NoticiasController < ApplicationController
     }
   end
 
+  # TODO: Relocate this piece into a concern or helper
   def pagy_infinite(collection, page_param)
     current_page = (page_param || params[:page] || 1).to_i
     limit = Pagy::DEFAULT[:limit] || 20
@@ -71,7 +74,8 @@ class NoticiasController < ApplicationController
       # Get the actual items
       items = collection.limit(total_items_needed)
 
-      # Create proper pagy object with all the metadata
+      # Create proper pagy object with
+      # all the metadata need in the frontend
       total_count = collection.count
       pagy_obj = Pagy.new(
         count: total_count,
