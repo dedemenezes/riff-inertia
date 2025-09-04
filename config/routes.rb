@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     get :programacao, to: "programs#index", as: :program
     resources :noticias, only: %i[ index show ], param: :permalink
     # other localized routes
+
+    resources :edicoes_anteriores, only: [:index]
   end
 
 
