@@ -35,7 +35,7 @@ gem "thruster", require: false
 gem "inertia_rails", "~> 3.11"
 gem "vite_rails", "~> 3.0"
 
-gem 'pagy', '~> 9.3'
+gem "pagy", "~> 9.3"
 
 group :development, :test do
   gem "dotenv"
