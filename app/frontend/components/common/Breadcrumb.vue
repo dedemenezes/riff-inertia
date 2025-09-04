@@ -11,7 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <ul class="flex items-center space-x-200 py-800">
+  <ul class="flex items-center space-x-200 py-400 lg:py-800">
     <li>
       <Link :href="props.crumbs[0].href" class="flex items-center justify-center">
         <IconHome height="12" width="12" color="text-neutrals-900" />

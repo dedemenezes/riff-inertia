@@ -20,6 +20,7 @@ class NoticiasController < ApplicationController
       { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
       { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
     ]
+
     scope = Noticia.includes(:caderno).published
 
     if params[:search].present?
@@ -29,11 +30,24 @@ class NoticiasController < ApplicationController
       )
     end
 
+    if params[:cadernos].present?
+      scope = scope.where(caderno: { permalink_pt: params[:cadernos] })
+    end
+
     ordered = scope.order(created: :desc)
     @pagy, @noticias = pagy_infinite(ordered, params[:page])
 
+    cadernos = Caderno.for_filters
+    # Only set selectedCadernos if the param exists
+    selected_filters = {}
+    if params[:cadernos].present?
+      selected_caderno = cadernos.find { |c| c["permalink_pt"] == params[:cadernos] }
+      selected_filters[:cadernos] = selected_caderno if selected_caderno
+    end
+
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
+      cadernos: cadernos,
       mainItems:,
       secondaryItems:,
       breadcrumbs: breadcrumbs(
@@ -45,18 +59,11 @@ class NoticiasController < ApplicationController
                 methods: [ :caderno_nome, :display_date ]
               ),
       pagy:  {
-        # count: @pagy.count,
         page: @pagy.page,
         pages: @pagy.pages,
         last: @pagy.last
-        # from: @pagy.from,
-        # to: @pagy.to,
-        # prev: @pagy.prev,
-        # next: @pagy.next,
-        # limit: @pagy.limit
       },
-      current_url: request.path,
-      searchQuery: params[:search]
+      selectedFilters: selected_filters
     }
   end
 

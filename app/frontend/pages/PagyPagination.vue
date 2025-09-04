@@ -28,9 +28,7 @@ let observer = null
 
 // Computed properties
 const hasReachedEnd = computed(() => {
-  console.log(currentPage.value);
 
-  console.log(props.pagy.last);
   return currentPage.value >= props.pagy.last && !isLoading.value
 })
 
@@ -72,11 +70,7 @@ const loadMore = async () => {
       replace: true, // Don't add to browser history
       onSuccess: (page) => {
         // Append new noticias to existing ones
-        console.log("ONSUCCESS? page");
-        console.log(page);
         const newNoticias = page.props.noticias || []
-        console.log("ONSUCCESS");
-        console.log(newNoticias);
 
         allNoticias.value.push(...newNoticias)
         // Update pagination info
@@ -157,8 +151,6 @@ onUnmounted(() => {
   <div class="infinite-scroll-container">
     <!-- Your existing content -->
       <div class="flex flex-col gap-800">
-        {{ console.log("PagyPagination.vue") }}
-        {{ console.log(props.noticias) }}
         <IndexArticleCard
           v-for="article in allNoticias"
           :key="article.id"

@@ -1,0 +1,124 @@
+{
+  "neutrals": {
+    "100": "#FFFFFF",
+    "200": "#F5F4F4",
+    "300": "#DBDAD7",
+    "400": "#C3C0BC",
+    "500": "#AAA7A1",
+    "600": "#908C84",
+    "700": "#736F68",
+    "800": "#56534E",
+    "900": "#3B3935",
+    "1000": "#201F1D"
+  },
+  "white-transp": {
+    "100": "rgba(255, 255, 255, 0.05)",
+    "200": "rgba(255, 255, 255, 0.10)",
+    "300": "rgba(255, 255, 255, 0.20)",
+    "400": "rgba(255, 255, 255, 0.40)",
+    "500": "rgba(255, 255, 255, 0.70)",
+    "600": "rgba(255, 255, 255, 0.80)",
+    "700": "rgba(255, 255, 255, 0.85)",
+    "800": "rgba(255, 255, 255, 0.90)",
+    "900": "rgba(255, 255, 255, 0.95)",
+    "1000": "rgba(255, 255, 255, 1)"
+  },
+  "black-transp": {
+    "100": "rgba(0, 0, 0, 0.05)",
+    "200": "rgba(0, 0, 0, 0.10)",
+    "300": "rgba(0, 0, 0, 0.20)",
+    "400": "rgba(0, 0, 0, 0.40)",
+    "500": "rgba(0, 0, 0, 0.70)",
+    "600": "rgba(0, 0, 0, 0.80)",
+    "700": "rgba(0, 0, 0, 0.85)",
+    "800": "rgba(0, 0, 0, 0.90)",
+    "900": "rgba(0, 0, 0, 0.95)",
+    "1000": "rgba(0, 0, 0, 1)"
+  },
+  "laranja": {
+    "200": "#FFE1C3",
+    "400": "#FFB46A",
+    "600": "#FF7F00",
+    "800": "#C06103",
+    "1000": "#8A480"
+  },
+  "magenta": {
+    "200": "#FFD4E9",
+    "400": "#FF6FB7",
+    "600": "#FF007F",
+    "800": "#B20059",
+    "1000": "#6A003"
+  },
+  "vermelho": {
+    "100": "#FFCCCC",
+    "200": "#FF7E7E",
+    "400": "#A30000",
+    "600": "#FF0000",
+    "1000": "#5E0000"
+  },
+  "violeta": {
+    "200": "#DA9FE0",
+    "400": "#BF68C8",
+    "600": "#7F008C",
+    "800": "#580161",
+    "1000": "#2D003"
+  },
+  "amarelo": {
+    "200": "#FFF8DF",
+    "400": "#FFECAB",
+    "600": "#FFDB5C",
+    "800": "#FFC700",
+    "1000": "#D4A50"
+  },
+  "verde": {
+    "200": "#CAFFCF",
+    "400": "#9EF4A6",
+    "600": "#1BBC2B",
+    "800": "#11861D",
+    "1000": "#094A0"
+  },
+  "azul": {
+    "400": "#94BBE2",
+    "600": "#1881F1"
+  },
+  "background": "hsl(var(--background))",
+  "foreground": "hsl(var(--foreground))",
+  "card": {
+    "DEFAULT": "hsl(var(--card))",
+    "foreground": "hsl(var(--card-foreground))"
+  },
+  "popover": {
+    "DEFAULT": "hsl(var(--popover))",
+    "foreground": "hsl(var(--popover-foreground))"
+  },
+  "primary": {
+    "DEFAULT": "hsl(var(--primary))",
+    "foreground": "hsl(var(--primary-foreground))"
+  },
+  "secondary": {
+    "DEFAULT": "hsl(var(--secondary))",
+    "foreground": "hsl(var(--secondary-foreground))"
+  },
+  "muted": {
+    "DEFAULT": "hsl(var(--muted))",
+    "foreground": "hsl(var(--muted-foreground))"
+  },
+  "accent": {
+    "DEFAULT": "hsl(var(--accent))",
+    "foreground": "hsl(var(--accent-foreground))"
+  },
+  "destructive": {
+    "DEFAULT": "hsl(var(--destructive))",
+    "foreground": "hsl(var(--destructive-foreground))"
+  },
+  "border": "hsl(var(--border))",
+  "input": "hsl(var(--input))",
+  "ring": "hsl(var(--ring))",
+  "chart": {
+    "1": "hsl(var(--chart-1))",
+    "2": "hsl(var(--chart-2))",
+    "3": "hsl(var(--chart-3))",
+    "4": "hsl(var(--chart-4))",
+    "5": "hsl(var(--chart-5))"
+  }
+}

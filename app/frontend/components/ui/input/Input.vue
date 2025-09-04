@@ -17,6 +17,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
 </script>
 
 <template>
+  <!-- TODO: Alterar estilo do input  -->
   <input
     v-model="modelValue"
     data-slot="input"
