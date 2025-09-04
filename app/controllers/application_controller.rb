@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale, :set_root_url
 
+  inertia_share flash: -> {
+    {
+      success: flash[:success],
+      error: flash[:error]
+    }
+  }
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/frontend/*"],
+      "@/components/*": ["./app/frontend/components/*"],
+      "@/lib/*": ["./app/frontend/lib/*"],
+      "@/pages/*": ["./app/frontend/pages/*"],
+      "@/assets/*": ["./app/frontend/assets/*"]
+    }
+  },
+  "include": [
+    "app/frontend/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "log",
+    "public"
+  ]
+}
