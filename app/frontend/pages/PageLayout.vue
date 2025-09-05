@@ -1,6 +1,7 @@
 <script setup>
 import NavbarMain from '@/components/layout/navbar/NavbarMain.vue'
 import SponsorHeader from '@/components/layout/headers/SponsorHeader.vue';
+import NavbarSecondary from '@/components/layout/navbar/NavbarSecondary.vue';
 import { usePage } from "@inertiajs/vue3"
 import Flashes from '@/components/shared/Flashes.vue';
 
@@ -14,6 +15,7 @@ const props = defineProps({
 <template>
   <SponsorHeader class="bg-azul-400" />
   <NavbarMain :root-url="props.rootUrl"/>
+  <NavbarSecondary />
   <Flashes />
 
   <main>
