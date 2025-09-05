@@ -16,7 +16,7 @@ class EdicoesAnterioresController < ApplicationController
       items: items,
       edicoes: @edicoes.as_json(
                 only: %i[id descricao cartaz],
-                methods: [ ]
+                methods: []
               )
     }
   end
