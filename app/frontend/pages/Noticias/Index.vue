@@ -1,7 +1,7 @@
 <script setup>
 // 1. 📦 Node.js built-ins (if used)
 // 2. 🔌 External packages (npm, libraries)
-import { router } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 // 3. 🧠 Internal libs/helpers/utilities
 import { applyFiltersToQuery } from "@/lib/applyFiltersToQuery";
 
@@ -81,6 +81,10 @@ const clearSearchQuery = () => {
 </script>
 
 <template>
+  <Head>
+    <title>Noticias - Festival do Rio</title>
+    <!-- TODO: Add metatags into all pages! -->
+  </Head>
   <NavbarSecondary :mainItems="props.mainItems" :secondaryItems="props.secondaryItems" />
   <TwContainer>
     <Breadcrumb  :crumbs="props.breadcrumbs"/>
