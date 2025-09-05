@@ -22,99 +22,20 @@ class PagesController < ApplicationController
     ]
 
     noticias = Noticia
+              .published
               .includes(:caderno)
-              .last(6)
+              .order(created: :desc)
+              .limit(6)
               .as_json(
                 only: %i[id titulo permalink chamada imagem],
-                methods: [ :caderno_nome, :display_date ]
+                methods: [ :caderno_nome, :display_date ],
               )
     # root_url = request.base_url
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
       quickLinksConfig:,
-      noticias:
-    }
-  end
-
-  private
-
-  def navbar
-    # Gather data
-    mainItems = {
-      "Programação": [
-        {
-          description: "Programação completa",
-          path: ""
-        },
-        {
-          description: "Sessões com convidados",
-          path: ""
-        },
-        {
-          description: "Programação gratuita",
-          path: ""
-        },
-        {
-          description: "Mudanças na programação",
-          path: ""
-        }
-      ],
-      "Edição 2024": [
-        {
-          description: "Todos os filmes",
-          path: ""
-        },
-        {
-          description: "Mostras",
-          path: ""
-        },
-        {
-          description: "Cinemas",
-          path: ""
-        },
-        {
-          description: "Júri",
-          path: ""
-        },
-        {
-          description: "Equipe",
-          path: ""
-        }
-      ],
-      "Sobre nós": [
-        {
-          description: "O Festival",
-          path: ""
-        },
-        {
-          description: "Edições Anteriores",
-          path: edicoes_anteriores_path
-        },
-        {
-          description: "Talent Press",
-          path: ""
-        },
-        {
-          description: "Parceiros",
-          path: ""
-        }
-      ],
-      "Notícias": [
-        {
-          description: "Todas as notícias",
-          path: ""
-        }
-      ],
-      "Mídias": [
-        {
-          description: "Fotos e vídeos",
-          path: ""
-        },
-        {
-          description: "Impressos",
-          path: ""
-        }
-      ]
+      noticias:,
+      noticasUrl: noticias_url
     }
   end
 end

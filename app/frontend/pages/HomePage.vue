@@ -11,9 +11,10 @@ import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
-  mainItems: { type: Array },
+  mainItems: { type: Object },
   secondaryItems: { type: Array },
   noticias: { type: Array },
+  noticasUrl: { type: String },
 })
 </script>
 
@@ -31,7 +32,7 @@ const props = defineProps({
 
   <TwContainer>
     <div class="py-1200">
-      <ArticlesSection :articles="props.noticias"/>
+      <ArticlesSection :articles="props.noticias" :noticiasUrl="props.noticasUrl"/>
     </div>
   </TwContainer>
 </template>

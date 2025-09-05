@@ -67,7 +67,10 @@ const setDropdownOffset = (item) => {
         </li>
       </ul>
     </div>
+
+    <!-- TODO: Idealmente accesibilidade com teclado -->
     <DropdownPanel v-for="(subitems, item) in page.props.mainItems" :key="item" :is-open="isDropdownOpen[item]" @mouseenter="handleDropdownIn(item)" @mouseleave="handleDropdownOut">
+      <!-- TODO: espacamento de cima entre dropdown e nav -->
       <div
         class="py-400 lg:pb-0 lg:max-w-7xl text-neutrals-800"
       >
