@@ -2,18 +2,11 @@
 import DropdownPanel from "@/components/layout/navbar/DropdownPanel.vue";
 import { BaseButton } from "@/components/common/buttons";
 import { ref, reactive } from "vue";
-// import { usePage } from "@inertiajs/vue3"
+import { usePage } from "@inertiajs/vue3"
 
-const props = defineProps({
-  mainItems: { type: Array },
-  secondaryItems: { type: Array },
-})
+const page = usePage()
 
-// const page = usePage()
-// console.log("coeeee", page.props.luca.success)
-
-
-const mainItemsKeys = Object.keys(props.mainItems);
+const mainItemsKeys = Object.keys(page.props.mainItems);
 const allClosed = mainItemsKeys.reduce((acc, key) => {
   acc[key] = false;
   return acc;
@@ -35,7 +28,6 @@ const handleDropdownOut = () => {
 
 const dropdownRefs = reactive({})
 const setDropdownOffset = (item) => {
-  console.log(dropdownRefs)
   const button = dropdownRefs[item].button
   const ul = dropdownRefs[item].ul
 
@@ -52,7 +44,7 @@ const setDropdownOffset = (item) => {
       class="p-400 lg:pb-0 mx-auto lg:max-w-7xl hidden md:flex items-center justify-between"
     >
       <ul class="flex flex-grow gap-600 justify-start items-center me-400 h-1600">
-        <li v-for="(subitems, item) in props.mainItems" :key="item" class="h-full">
+        <li v-for="(subitems, item) in page.props.mainItems" :key="item" class="h-full">
           <BaseButton
             class="h-full uppercase"
             as="button"
@@ -69,14 +61,14 @@ const setDropdownOffset = (item) => {
         </li>
       </ul>
       <ul class="hidden md:flex items-center space-x-400">
-        <li v-for="item in props.secondaryItems" :key="item">
+        <li v-for="item in page.props.secondaryItems" :key="item">
           <BaseButton :as="item.tag" :href="item.href" variant="gray" size="xs">{{
             item.name
           }}</BaseButton>
         </li>
       </ul>
     </div>
-    <DropdownPanel v-for="(subitems, item) in props.mainItems" :key="item" :is-open="isDropdownOpen[item]" @mouseenter="handleDropdownIn(item)" @mouseleave="handleDropdownOut">
+    <DropdownPanel v-for="(subitems, item) in page.props.mainItems" :key="item" :is-open="isDropdownOpen[item]" @mouseenter="handleDropdownIn(item)" @mouseleave="handleDropdownOut">
       <div
         class="py-400 lg:pb-0 lg:max-w-7xl text-neutrals-800"
       >

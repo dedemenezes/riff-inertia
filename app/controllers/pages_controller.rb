@@ -1,23 +1,5 @@
 class PagesController < ApplicationController
   def home
-    # # Gather data
-    # mainItems = [
-      #   I18n.t("navigation.programming"),
-      #   I18n.t("navigation.edition2024"),
-      #   I18n.t("navigation.aboutUs"),
-      #   I18n.t("navigation.news"),
-      #   I18n.t("navigation.media"),
-      #   I18n.t("navigation.information")
-      # ]
-
-    mainItems = navbar
-
-    secondaryItems = [
-      { name: I18n.t("navigation.press"), tag: "a", href: root_url },
-      { name: I18n.t("navigation.archive"), tag: "a", href: "https://www.globo.com" },
-      { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
-      { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
-    ]
     quickLinksConfig = [
       {
         id: 1,
@@ -50,8 +32,6 @@ class PagesController < ApplicationController
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
       quickLinksConfig:,
-      mainItems:,
-      secondaryItems:,
       noticias:
     }
   end
