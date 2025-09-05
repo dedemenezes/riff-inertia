@@ -1,29 +1,30 @@
 <script setup>
-  import { computed } from 'vue'
-  import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
-  const LANGUAGES = [
-    { code: 'en', name: 'English' },
-    { code: 'pt', name: 'Portuguese' }
-  ]
+const LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'pt', name: 'Portuguese' }
+]
 
 
-  const page = usePage()
+const page = usePage()
 
-  const currentLocale = computed(() => {
-    // locale from ApplicationController
-    return page.props.currentLocale ||
-          document.documentElement.lang ||
-          'pt'
-  })
+const currentLocale = computed(() => {
+  // locale from ApplicationController
+  return page.props.currentLocale ||
+         document.documentElement.lang ||
+         'pt'
+})
 
-  const switchLanguage = (targetLocale) => {
-    if (targetLocale === currentLocale.value) return
+const switchLanguage = (targetLocale) => {
+  if (targetLocale === currentLocale.value) return
 
-    window.location.href = `/${targetLocale}`
-  }
+  window.location.href = `/${targetLocale}`
+}
 
-  const isCurrentLanguage = (languageCode) => languageCode === currentLocale.value
+const isCurrentLanguage = (languageCode) => languageCode === currentLocale.value
+
 </script>
 
 <template>

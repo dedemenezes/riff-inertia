@@ -55,7 +55,7 @@ const computedHeightClass = computed(() => {
         :category="article.caderno_nome"
         :background-image="`https://s3.amazonaws.com/festivaldorio/files/imagens/${article.imagem}`"
         :permalink="article.permalink"
-        :heightClass="computedHeightClass"
+        :heightClass="computedHeightClass(2)"
         variant="secondary"
       />
     </div>

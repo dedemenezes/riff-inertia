@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     }
   }
 
+  inertia_share currentLocale: -> {
+    I18n.locale.to_s
+  }
+  
   inertia_share mainItems: -> {
     set_main_items
   }

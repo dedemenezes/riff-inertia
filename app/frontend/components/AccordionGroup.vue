@@ -17,7 +17,7 @@ const { text } = defineProps({
 <template>
   <details :open="isOpen">
     <summary
-      class="font-body font-semibold text-neutrals-900 leadgin-[19.6px] text-sm uppercase flex justify-between items-center pb-300 border-b hover:cursor-pointer"
+      class="overflow-x-hidden font-body font-semibold text-neutrals-900 leadgin-[19.6px] text-sm uppercase flex justify-between items-center pb-300 border-b border-neutrals-300 hover:cursor-pointer"
     >
       {{ text }}
       <IconCarretUp className="text-neutrals-900 accordion-icon" :width="16" />
