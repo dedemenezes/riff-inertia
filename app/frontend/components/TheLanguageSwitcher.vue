@@ -24,6 +24,7 @@ const switchLanguage = (targetLocale) => {
 }
 
 const isCurrentLanguage = (languageCode) => languageCode === currentLocale.value
+
 </script>
 
 <template>

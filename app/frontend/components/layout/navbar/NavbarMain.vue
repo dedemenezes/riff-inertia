@@ -66,6 +66,7 @@ const props = defineProps({
       </BaseButton>
     </div>
   </nav>
+  <hr class="text-neutrals-300">
 </template>
 
 <style scoped></style>

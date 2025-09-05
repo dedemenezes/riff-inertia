@@ -1,8 +1,6 @@
 <script setup>
 const props = defineProps({
-  isOpen: Boolean,
-  onMouseEnter: Function,
-  onMouseLeave: Function
+  isOpen: Boolean
 });
 </script>
 
@@ -17,13 +15,15 @@ const props = defineProps({
   >
     <div
       v-show="props.isOpen"
-      @mouseenter="props.onMouseEnter"
-      @mouseleave="props.onMouseLeave"
-      class="absolute p-400 bg-neutrals-200 h-[100px] w-full"
+      class="absolute py-400 bg-neutrals-200 w-full"
     >
       <slot />
     </div>
   </transition>
 </template>
 
-<style scoped></style>
+<style scoped>
+  div {
+    z-index: 1;
+  }
+</style>
