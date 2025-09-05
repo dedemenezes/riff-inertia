@@ -6,11 +6,14 @@ import TwContainer from "@/components/layout/TwContainer.vue";
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
-  modelValue: { type: Object, required: true },
+  // modelValue: { type: Object, required: true },
+  initialFilters: { type: Object, required: true },
 });
-const internalFilters = ref(props.modelValue);
+// const internalFilters = ref(props.modelValue);
 
-watch(internalFilters, (val) => emit("update:modelValue", val), { deep: true });
+// watch(internalFilters, (val) => emit("update:modelValue", val), { deep: true });
+
+const internalFilters = ref({ ...props.initialFilters });
 
 const emit = defineEmits([
   "update:modelValue",
@@ -18,8 +21,6 @@ const emit = defineEmits([
   "filtersCleared",
   "close-filter-menu",
 ]);
-
-const name = defineModel()
 </script>
 
 <template>
@@ -46,14 +47,17 @@ const name = defineModel()
         <SearchFilter
           v-model="internalFilters"
           @update:modelValue="(val) => emit('update:modelValue', val)"
-          @filtersApplied="emit('filtersApplied', $event)"
-          @filtersCleared="emit('filtersCleared', $event)"
+          @filtersApplied="emit('filtersApplied', internalFilters)"
+          @filtersCleared="emit('filtersCleared')"
           @close-filter-menu="emit('close-filter-menu')"
         >
           <template #filters="slotProps">
             <slot
               name="filters"
-              v-bind="slotProps"
+              :modelValue="internalFilters"
+              :updateField="(field, value) => {
+                internalFilters[field] = value
+              }"
             />
           </template>
         </SearchFilter>

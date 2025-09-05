@@ -1,115 +1,76 @@
 <script setup>
-import Breadcrumb from "@/components/common/Breadcrumb.vue";
-import TwContainer from "@/components/layout/TwContainer.vue";
-import PagyPagination from "../PagyPagination.vue";
-import NavbarSecondary from "@/components/layout/navbar/NavbarSecondary.vue";
-import MobileFilterMenu from "@/components/features/filters/MobileFilterMenu.vue";
-import NoticiasFilterForm from "@/components/features/filters/NoticiasFilterForm.vue";
-import { watch, ref, nextTick } from "vue"
+// 1. 📦 Node.js built-ins (if used)
+// 2. 🔌 External packages (npm, libraries)
 import { router } from "@inertiajs/vue3";
-import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
+// 3. 🧠 Internal libs/helpers/utilities
+import { applyFiltersToQuery } from "@/lib/applyFiltersToQuery";
+
+// 4. 🧩 Global components / shared UI
+import TwContainer from "@/components/layout/TwContainer.vue";
+import Breadcrumb from "@/components/common/Breadcrumb.vue";
+import NavbarSecondary from "@/components/layout/navbar/NavbarSecondary.vue";
 import TagFilter from "@/components/common/tags/TagFilter.vue";
 
+// 5. 🧱 Feature-specific components
+import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
+import MobileFilterMenu from "@/components/features/filters/MobileFilterMenu.vue";
+import NoticiasFilterForm from "@/components/features/filters/NoticiasFilterForm.vue";
+import PagyPagination from "../PagyPagination.vue"; // relative path (usually for siblings only)
+
+import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
+
 const props = defineProps({
-  cadernos: { type: Array },
   mainItems: { type: Array },
   secondaryItems: { type: Array },
   breadcrumbs: { type: Array, default: () => []},
   noticias: { type: Array, default: () => []},
-  // searchQuery: { type: String, default: ""},
-  selectedFilters: { type: Object },
+  cadernos: { type: Array, required: true },
+  selectedFilters: { type: Object, default: () => {} },
   pagy: { type: Object, required: true }
 })
 
-// 📦 UI state - mobile filter menu open/close
-const isFilterMenuOpen = ref(false);
-
-// 👇 DOM side effect - lock scroll when menu is open
-const openMenu = () => {
-  console.log(filters.value);
-  console.log(props.selectedFilters);
-
-  isFilterMenuOpen.value = true;
-  document.body.style.overflow = "hidden";
-};
-
-// 👇 DOM side effect - unlock scroll when menu closes
-const closeMenu = () => {
-  isFilterMenuOpen.value = false;
-  document.body.style.overflow = "";
-};
-// para mostrar é label, value
-
-const filters = ref({ ...props.selectedFilters})
+const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
 
+const filterSearch = (filtersFromChild) => {
+  // console.log("Filters from MobileFilterMenu:", filtersFromChild);
 
-// Watch for prop changes and sync local state
-watch(
-  () => props.selectedFilters,
-  (newSelectedFilters) => {
-    filters.value = { ...newSelectedFilters };
-  },
-  { deep: true }
-);
-
-const filterSearch = () => {
-  console.log("TODO: MAKE SEARCH");
-  const params = new URLSearchParams();
-
-  for (const [key, value] of Object.entries(filters.value)) {
-    if (value && typeof value === "object" && value.permalink_pt) {
-      params.append(key, value.permalink_pt);
-    }
-  }
-  router.visit(`/noticias?${params.toString()}`, {
+  const params = applyFiltersToQuery(filtersFromChild)
+  const query = params.toString()
+  router.visit(`/noticias?${query}`, {
     preserveScroll: true,
     preserveState: true,
-    only: [ "noticias", "selectedFilters" ]
-  })
-}
+    only: ["noticias", "selectedFilters"],
+  });
+};
 
 const removeQuery = (item) => {
-  const currentUrl = new URL(window.location.href);
-  const params = currentUrl.searchParams;
+  const newFilters = { ...props.selectedFilters };
 
-  let newFilters = { ...filters.value };
-
-  for (const [key, value] of params.entries()) {
-    if (value === item) {
-      params.delete(key);
+  for (const [key, value] of Object.entries(newFilters)) {
+    if (value?.permalink_pt === item) {
+      newFilters[key] = null;
     }
   }
 
-  for (const [filterKey, filterValue] of Object.entries(filters.value)) {
-    if (filterValue && filterValue.permalink_pt === item) {
-      newFilters[filterKey] = null;
-    }
-  }
+  const params = applyFiltersToQuery(newFilters)
+  const query = params.toString()
 
-  // Assign whole object to trigger reactivity
-  filters.value = newFilters;
-
-  const newUrl = `${currentUrl.pathname}?${params.toString()}`
-
-  router.visit(newUrl, {
+  router.visit(`/noticias?${query}`, {
     preserveScroll: true,
-    preserveState: false,
-    only: [ "noticias", "selectedFilters" ]
-  })
+    preserveState: false, // full reset
+    only: ["noticias", "selectedFilters"],
+  });
 }
 
 const clearSearchQuery = () => {
   const currentUrl = new URL(window.location.href);
-  // debugger
   const hasUrlParams = currentUrl.searchParams.toString() !== "";
 
   if (!hasUrlParams) {
     // console.log("Already clean - no request needed");
     return;
   }
-
-  // console.log("TODO: CLEAN SEARCH");
 
   router.visit(`/noticias`, {
     preserveScroll: true,
@@ -153,7 +114,7 @@ const clearSearchQuery = () => {
     <transition name="slide-left">
       <MobileFilterMenu
         :is-open="isFilterMenuOpen"
-        v-model="filters"
+        :initialFilters="props.selectedFilters"
         @filtersApplied="filterSearch"
         @filtersCleared="clearSearchQuery"
         @close-filter-menu="closeMenu"
@@ -173,16 +134,16 @@ const clearSearchQuery = () => {
 
     <!-- filtered tag -->
     <div
-      class="flex gap-300 pt-300 pb-400"
-      v-show="Object.values(filters).some((item) => item !== null)"
+      class="flex gap-300 pt-200 pb-300"
+      v-show="Object.values(props.selectedFilters).some((item) => item !== null)"
     >
-      <TagFilter
-        v-for="(value, key) in props.selectedFilters"
-        :key="key"
-        :filter="{label: value.nome_pt, value: value.permalink_pt }"
-        :text="value.nome_pt"
-        @remove-filter="removeQuery"
-      />
+    <TagFilter
+      v-for="(value, key) in props.selectedFilters"
+      :key="key"
+      :filter="{label: value.nome_pt, value: value.permalink_pt }"
+      :text="value.nome_pt"
+      @remove-filter="removeQuery"
+    />
     </div>
     <!-- filtered tag -->
 
