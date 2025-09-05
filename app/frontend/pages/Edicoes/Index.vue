@@ -28,7 +28,7 @@ const iconMapping = {
   <TwContainer>
     <ul class="poster-grid py-1200 gap-800">
       <Cartaz
-        v-for="edicao in props.edicoes"
+        v-for="edicao in props.edicoes" :key="edicao.id"
         :cartaz="`https://s3.amazonaws.com/festivaldorio/imagens/edicoes/small/${edicao.cartaz}`"
         :descricao="edicao.descricao"
       />
