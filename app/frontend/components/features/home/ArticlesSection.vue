@@ -19,6 +19,12 @@ const computedHeightClass = computed(() => {
     return "h-[472px]";
   };
 });
+
+const backgroundImageUrl = (fileName) => {
+  // TODO: ADD CDN
+  const baseUrl = "https://s3.amazonaws.com/festivaldorio/imagens/noticias/medium2/"
+  return `${baseUrl}${fileName}`
+}
 </script>
 
 <template>
@@ -27,24 +33,25 @@ const computedHeightClass = computed(() => {
     <div
       class="flex flex-col gap-y-800 lg:grid lg:gap-x-800 lg:grid-cols-[2fr_1fr]"
     >
-    <!-- Main two articles. First is bigger -->
-    <ArticleCard
-      v-for="(article, index) in articles.slice(0, 2)"
-      :key="article.id"
-      :title="article.titulo"
-      :content="article.chamada"
-      :date="article.display_date"
-      :category="article.caderno_nome"
-      :background-image="`https://s3.amazonaws.com/festivaldorio/files/imagens/${article.imagem}`"
-      :permalink="article.permalink"
-      :heightClass="computedHeightClass(index)"
-      variant="primary"
-    />
+      <!-- Main two articles. First is bigger -->
+      <ArticleCard
+        v-for="(article, index) in articles.slice(0, 2)"
+        :key="article.id"
+        :title="article.titulo"
+        :content="article.chamada"
+        :date="article.display_date"
+        :category="article.caderno_nome"
+        :background-image="backgroundImageUrl(article.imagem)"
+        :permalink="article.permalink"
+        :heightClass="computedHeightClass(index)"
+        variant="primary"
+      />
     </div>
 
     <!-- Small 4 articles -->
     <div
       class="flex flex-col gap-y-800 lg:grid lg:gap-x-800 lg:grid-cols-4"
+
     >
       <ArticleCard
         v-for="article in articles.slice(2,6)"
@@ -53,7 +60,7 @@ const computedHeightClass = computed(() => {
         :content="article.chamada"
         :date="article.display_date"
         :category="article.caderno_nome"
-        :background-image="`https://s3.amazonaws.com/festivaldorio/files/imagens/${article.imagem}`"
+        :background-image="backgroundImageUrl(article.imagem)"
         :permalink="article.permalink"
         :heightClass="computedHeightClass(2)"
         variant="secondary"

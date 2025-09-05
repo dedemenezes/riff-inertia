@@ -8,7 +8,6 @@ import { applyFiltersToQuery } from "@/lib/applyFiltersToQuery";
 // 4. 🧩 Global components / shared UI
 import TwContainer from "@/components/layout/TwContainer.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
-import NavbarSecondary from "@/components/layout/navbar/NavbarSecondary.vue";
 import TagFilter from "@/components/common/tags/TagFilter.vue";
 
 // 5. 🧱 Feature-specific components
@@ -20,8 +19,6 @@ import PagyPagination from "../PagyPagination.vue"; // relative path (usually fo
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 
 const props = defineProps({
-  mainItems: { type: Array },
-  secondaryItems: { type: Array },
   breadcrumbs: { type: Array, default: () => []},
   noticias: { type: Array, default: () => []},
   cadernos: { type: Array, required: true },
@@ -85,7 +82,6 @@ const clearSearchQuery = () => {
     <title>Noticias - Festival do Rio</title>
     <!-- TODO: Add metatags into all pages! -->
   </Head>
-  <NavbarSecondary :mainItems="props.mainItems" :secondaryItems="props.secondaryItems" />
   <TwContainer>
     <Breadcrumb  :crumbs="props.breadcrumbs"/>
     <!-- search & ordering -->

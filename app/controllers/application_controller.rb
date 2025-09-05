@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
       "Notícias": [
         {
           description: "Todas as notícias",
-          path: ""
+          path: noticias_url
         }
       ],
       "Mídias": [

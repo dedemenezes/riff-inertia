@@ -29,7 +29,7 @@ const getCadernoObjectFromPermalink = (permalink) => {
     :isOpen="!!props.modelValue.cadernos"
   >
     <template v-slot:content>
-      <div class="pt-400 overflow-hidden">
+      <div class="pt-400 overflow-hidden w-full">
         <ComboboxComponent
           :collection="cadernosOptions"
           :modelValue="props.modelValue.cadernos?.permalink_pt || null"

@@ -23,18 +23,23 @@ const props = defineProps({
 });
 
 const backgroundImageStyle = computed(() => ({
-  backgroundImage: `url(${props.backgroundImage})`,
-  ...(props.variant === "secondary" && {
-    minHeight: "182px",
-    maxHeight: "182px",
-  }),
+  backgroundImage: `url(${props.backgroundImage})`
 }));
+
+// Added to fix responsivenes in the home page
+const secondaryImageHeightClass = computed(() => {
+  if (props.variant === "secondary") {
+    return "lg:mix-h-[182px] lg:max-h-[182px]"
+  }
+  return ""
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-y-200" :class="heightClass">
     <div
       class="flex-grow self-stretch bg-no-repeat bg-cover bg-center rounded-200"
+      :class="secondaryImageHeightClass"
       :style="backgroundImageStyle"
     ></div>
     <div v-if="date && category" class="flex gap-x-200 items-center">
