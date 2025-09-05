@@ -39,7 +39,6 @@ const setDropdownOffset = (item) => {
 
 <template>
   <div class="">
-
     <div
       class="p-400 lg:pb-0 mx-auto lg:max-w-7xl hidden md:flex items-center justify-between"
     >

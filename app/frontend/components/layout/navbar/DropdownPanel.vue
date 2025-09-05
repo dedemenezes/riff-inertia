@@ -22,4 +22,8 @@ const props = defineProps({
   </transition>
 </template>
 
-<style scoped></style>
+<style scoped>
+  div {
+    z-index: 1;
+  }
+</style>

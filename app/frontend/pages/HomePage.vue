@@ -19,7 +19,6 @@ const props = defineProps({
 
 <template>
   <Head title="Festival do Rio" />
-  <NavbarSecondary :mainItems="props.mainItems" :secondaryItems="props.secondaryItems" />
   <HomeBanner :imagePath="banneImagePath" alt="Banner promocional">
     <h1 class="text-header-base text-2xl lg:text-3xl mb-200 text-primary">
       A 26ª edição do Festival do Rio vem aí!

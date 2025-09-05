@@ -35,7 +35,7 @@ const props = defineProps({
     bottom: 0;
     left: 0;
     color: white;
-    z-index: 9;
+    z-index: 1;
     width: 100%;
   }
 
