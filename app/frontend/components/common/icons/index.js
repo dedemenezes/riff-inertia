@@ -23,5 +23,5 @@ export { default as IconClock } from "./misc/IconClock.vue";
 // export { default as IconInfo } from "./misc/IconInfo.vue";
 export { default as IconLink } from "./misc/IconLink.vue";
 export { default as IconNewUser } from "./misc/IconNewUser.vue";
-// export { default as IconPin } from "./misc/IconPin.vue";
+export { default as IconPin } from "./misc/IconPin.vue";
 export { default as IconProgram } from "./misc/IconProgram.vue";
