@@ -11,7 +11,7 @@ class Mostra < ApplicationRecord
     "classicos-cults": "tag-classicos--cults",
     "expectativa": "tag-expectativas",
     "itinerarios-unicos": "tag-itinerarios-unicos",
-    "panorama-mundial": "tag-panorama-mundial",
+    "panorama-mundial": "tag-panorama-mundial"
   }
 
   belongs_to :importacao
