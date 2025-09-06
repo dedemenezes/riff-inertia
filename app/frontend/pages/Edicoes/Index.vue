@@ -26,7 +26,7 @@ const iconMapping = {
   <hr class="text-neutrals-300">
 
   <TwContainer>
-    <ul class="poster-grid py-1200 gap-800">
+    <ul class="grid grid-cols-2 lg:grid-cols-6 py-1200 gap-800">
       <Cartaz
         v-for="edicao in props.edicoes" :key="edicao.id"
         :cartaz="`https://s3.amazonaws.com/festivaldorio/imagens/edicoes/small/${edicao.cartaz}`"
@@ -36,9 +36,4 @@ const iconMapping = {
   </TwContainer>
 </template>
 
-<style scoped>
-  .poster-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  }
-</style>
+<style scoped></style>
