@@ -1,7 +1,7 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 import TabComponent from "@/components/common/tabs/TabComponent.vue";
-import { usePage } from '@inertiajs/vue3';
 const page = usePage()
 
 const props = defineProps({
@@ -17,6 +17,20 @@ const isActiveTab = (tabDate, tabIndex) => {
   return page.url.includes(`date=${tabDate}`) || (tabIndex === 0 && !page.url.includes('date='))
 }
 
+const tabUrls = computed(
+  () => {
+    return props.collection.map(content => {
+      const url = new URL(window.location);
+      url.pathname = new URL(props.tabBaseUrl).pathname;
+      url.searchParams.set('date', content);
+      return {
+        content,
+        url: url.toString()
+      };
+    });
+  }
+);
+
 </script>
 
 <template>
@@ -24,14 +38,14 @@ const isActiveTab = (tabDate, tabIndex) => {
     <div role="tablist" class="flex gap-300 overflow-x-auto no-scroll-bar py-400">
       <Link
         class="block"
-        v-for="(content, index) in props.collection"
-        :key="content"
-        :href="`${props.tabBaseUrl}?date=${content}${currentQuery ? `&query=${currentQuery}` : ''}`"
+        v-for="(tab, index) in tabUrls"
+        :key="tab.content"
+        :href=tab.url
       >
         <TabComponent
-          :active="isActiveTab(content, index)"
+          :active="isActiveTab(tab.content, index)"
           :tabIndex="index"
-          :content="content"
+          :content="tab.content"
         />
       </Link>
     </div>

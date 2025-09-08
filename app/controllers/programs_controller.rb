@@ -52,9 +52,7 @@ class ProgramsController < ApplicationController
 
       # Get the IDs
       # Query programacoes via SQL using mostra_ids
-      binding.b
       base_scope = base_scope.where(pelicula: { mostra_id: selected_filters[:mostrasFilter]["id"] })
-      binding.b
     end
 
     programacoes_for_date = base_scope.where(data: selected_date).order(:sessao)
