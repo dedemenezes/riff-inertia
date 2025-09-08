@@ -1,0 +1,103 @@
+program_batman:
+  cinema: cinepolis
+  pelicula: batman
+  importacoesprog_id: 123
+  edicao_id: 1
+  codigo_com_5_digitos: "00001"
+  ingresso_url_venda: "https://ingressos.com/batman"
+  data: 2024-10-05
+  sessao: "19:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+program_batman_other_day:
+  cinema: cinepolis
+  pelicula: batman
+  importacoesprog_id: 123
+  edicao_id: 1
+  codigo_com_5_digitos: "00001"
+  ingresso_url_venda: "https://ingressos.com/batman"
+  data: 2024-10-06
+  sessao: "19:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+program_special_char:
+  cinema: cinepolis
+  pelicula: special_char
+  importacoesprog_id: 123
+  edicao_id: 1
+  codigo_com_5_digitos: "00001"
+  ingresso_url_venda: "https://ingressos.com/estomago"
+  data: 2024-10-05
+  sessao: "19:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+program_matrix:
+  cinema: cinepolis
+  pelicula: matrix
+  importacoesprog_id: 123
+  edicao_id: 1
+  codigo_com_5_digitos: "00002"
+  ingresso_url_venda: "https://ingressos.com/matrix"
+  data: 2024-10-06
+  sessao: "21:00"
+  legnacopia: "PT"
+  sessao_gala: 1
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 1
+  acessibilidade: 0
+  deletado: 0
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+
+# paginated program related with peliculas
+<% 17.times do |i| %>
+program_batman_<%= i %>:
+  cinema: cinepolis
+  pelicula: test_<%= i %>
+  importacoesprog_id: 123
+  edicao_id: 1
+  codigo_com_5_digitos: "00001"
+  ingresso_url_venda: "https://ingressos.com/test_<%= i %>"
+  data: 2024-10-07
+  sessao: "0<%= i %>:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+<% end %>
