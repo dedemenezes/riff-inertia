@@ -62,6 +62,13 @@ class ProgramsController < ApplicationController
 
     display_selected_date = I18n.l(selected_date, format: "%a, %e %b", locale: :pt) if selected_date
 
+
+    # Gathering filter options
+    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.display_name }.as_json(
+      only: %i[id permalink_pt nome_abreviado],
+      methods: [ :tag_class, :display_name ]
+    )
+
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
       items:,
@@ -70,7 +77,8 @@ class ProgramsController < ApplicationController
       elements: @programacoes,
       pagy: @pagy,
       tabBaseUrl: program_url,
-      searchQuery: params[:query]
+      searchQuery: params[:query],
+      mostrasFilter: mostras_filter
     }
   end
 

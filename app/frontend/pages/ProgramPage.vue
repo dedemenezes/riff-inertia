@@ -11,6 +11,7 @@ import SearchBar from "@/components/features/filters/SearchBar.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import MobileFilterMenu from "@/components/features/filters/MobileFilterMenu.vue";
+import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -22,6 +23,8 @@ const props = defineProps({
   ,available_dates: { type: Array }
   ,selected_date: { type: String }
   ,searchQuery: { type: String }
+  ,selectedFilters: { type: Object, default: () => ({})}
+  ,mostrasFilter: { type: Array, default: () => [] }
 })
 
 const searchQuery = ref(props.searchQuery)
@@ -52,6 +55,14 @@ const iconMapping = {
   "change": IconChange,
   "clock": IconClock
 };
+
+const filterSearch = (filtersFromChild) => {
+  console.log("filterSearch")
+  console.log(filtersFromChild)
+}
+const clearSearchQuery = () => {
+  console.log("clearSearchQuery")
+}
 </script>
 
 <template>
@@ -99,8 +110,12 @@ const iconMapping = {
         @close-filter-menu="closeMenu"
       >
         <template #filters="{ modelValue, updateField }">
-          <!-- class="py-600" -->
-          {{ modelValue }}
+          <ProgramsFilterForm
+            :model-value="modelValue"
+            :update-field="updateField"
+            :mostrasFilter="props.mostrasFilter"
+          />
+          <!-- {{ modelValue }} -->
         </template>
       </MobileFilterMenu>
         <!-- input -->
