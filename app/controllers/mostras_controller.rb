@@ -17,7 +17,7 @@ class MostrasController < ApplicationController
       items: items,
       mostras: @mostras.as_json(
                 only: %i[id nome_abreviado permalink_pt nome_pt],
-                methods: []
+                methods: %i[tag_class]
               )
     }
   end

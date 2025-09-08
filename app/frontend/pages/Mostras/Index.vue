@@ -27,8 +27,10 @@ const iconMapping = {
 
   <TwContainer>
     <ul class="grid grid-cols-1 lg:grid-cols-2 py-1200 gap-800">
-      <li v-for="mostra in props.mostras" class="bg-tag-premiere-brasil">
-        <p>test</p>
+      <li v-for="mostra in props.mostras" :class="`border-s-30 bg-${mostra.tag_class}`">
+        <figure>
+          <img src="https://s3.amazonaws.com/festivaldorio/2024/site/peliculas/large/suzhour_f01cor_2024113912.jpg" :alt="mostra.nome_pt">
+        </figure>
       </li>
     </ul>
   </TwContainer>
