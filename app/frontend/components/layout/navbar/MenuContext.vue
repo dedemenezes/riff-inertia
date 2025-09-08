@@ -10,8 +10,9 @@ const props = defineProps({
 </script>
 
 <template>
+  <!-- TODO: check padding y -->
   <div
-    class="flex gap-800 px-400 py-200 lg:gap-1600 lg:py-800 lg:justify-center overflow-x-auto"
+    class="flex gap-600 px-400 py-200 lg:gap-1600 lg:py-800 lg:justify-center overflow-x-auto no-scroll-bar"
   >
     <NavButtonContext
       v-for="item in props.items"

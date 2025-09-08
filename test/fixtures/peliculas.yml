@@ -1,0 +1,81 @@
+batman:
+  titulo_portugues_coord_int: "Batman"
+  titulo_original_coord_int: "Batman Begins"
+  titulo_ingles_coord_int: "Batman Begins"
+  titulo_ingles_semartigo: "Batman"
+  titulo_portugues_semartigo: "Batman"
+  permalink: "batman-link"
+  importacao_id: 1
+  edicao_id: 1
+  mostra: sci_fi
+  imagem: "batman.jpg"
+  duracao_coord_int: 140
+  diretor_coord_int: "Christopher Nolan"
+  elenco_coord_int: "Christian Bale, Michael Caine"
+  paiscompleto_coord_int: "EUA"
+  sinopse_port_export: "Um jovem bilionário se torna o Batman."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+special_char:
+  titulo_portugues_coord_int: "São Paulo"
+  titulo_original_coord_int: "São Paulo"
+  titulo_ingles_coord_int: "São Paulo"
+  titulo_ingles_semartigo: "São Paulo"
+  titulo_portugues_semartigo: "São Paulo"
+  permalink: "sao-paulo-link"
+  importacao_id: 1
+  edicao_id: 1
+  mostra: sci_fi
+  imagem: "sao-paulo.jpg"
+  duracao_coord_int: 140
+  diretor_coord_int: "Marcos Jorge"
+  elenco_coord_int: "Babu Santana, Fabiula Nascimento"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Um jovem que busca uma vida melhor."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+matrix:
+  titulo_portugues_coord_int: "Matrix"
+  titulo_original_coord_int: "Matrix"
+  titulo_ingles_coord_int: "The Matrix"
+  titulo_ingles_semartigo: "Matrix"
+  titulo_portugues_semartigo: "Matrix"
+  permalink: "matrix-link"
+  importacao_id: 1
+  edicao_id: 1
+  mostra: sci_fi
+  imagem: "matrix.jpg"
+  duracao_coord_int: 136
+  diretor_coord_int: "Wachowskis"
+  elenco_coord_int: "Keanu Reeves, Laurence Fishburne"
+  paiscompleto_coord_int: "EUA"
+  sinopse_port_export: "Um hacker descobre a verdade sobre a realidade."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+<% 17.times do |i| %>
+test_<%= i %>:
+  titulo_portugues_coord_int: "test_<%= i %>"
+  titulo_original_coord_int: "test_<%= i %>"
+  titulo_ingles_coord_int: "test_<%= i %>"
+  titulo_ingles_semartigo: "test_<%= i %>"
+  titulo_portugues_semartigo: "test_<%= i %>"
+  permalink: "test-<%= i %>-link"
+  importacao_id: 1
+  edicao_id: 1
+  mostra: sci_fi
+  imagem: "matrix.jpg"
+  duracao_coord_int: 136
+  diretor_coord_int: "Wachowskis"
+  elenco_coord_int: "Keanu Reeves, Laurence Fishburne"
+  paiscompleto_coord_int: "EUA"
+  sinopse_port_export: "Um hacker descobre a verdade sobre a realidade TEST <%= i %>."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+<% end %>

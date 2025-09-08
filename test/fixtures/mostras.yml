@@ -1,0 +1,17 @@
+sci_fi:
+  nome_abreviado: "Sci-Fi"
+  permalink_pt: "sci-fi"
+  permalink_en: "sci-fi"
+  importacao_id: 1
+  edicao_id: 1
+  nome_pt: "Ficção Científica"
+  nome_en: "Science Fiction"
+  chamada_pt: "Mostra de filmes de ficção científica"
+  chamada_en: "Sci-fi film showcase"
+  conteudo_pt: "Conteúdo em português"
+  conteudo_en: "English content"
+  imagem: "sci-fi-banner.jpg"
+  premiere: 1
+  ordem: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
