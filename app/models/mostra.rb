@@ -8,7 +8,7 @@ class Mostra < ApplicationRecord
     "cine-memoria": "tag-cine-memoria",
     "midnight-movies": "tag-midnight-movies",
     "cinema-capacete": "tag-cinema-capacete",
-    "classicos-cults": "tag-classicos--cults",
+    "classicos-cults": "tag-classicos-cults",
     "expectativa": "tag-expectativas",
     "itinerarios-unicos": "tag-itinerarios-unicos",
     "panorama-mundial": "tag-panorama-mundial"
