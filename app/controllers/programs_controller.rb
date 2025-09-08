@@ -39,6 +39,24 @@ class ProgramsController < ApplicationController
       selected_date = parsed_date if parsed_date&.in?(available_dates)
     end
 
+    # Gathering filter options
+    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.display_name }.as_json(
+      only: %i[id permalink_pt nome_abreviado],
+      methods: [ :tag_class, :display_name ]
+    )
+
+    selected_filters = {}
+    if params[:mostrasFilter].present?
+      selected_mostra = mostras_filter.find { |c| c["tag_class"] == params[:mostrasFilter] }
+      selected_filters[:mostrasFilter] = selected_mostra if selected_mostra
+
+      # Get the IDs
+      # Query programacoes via SQL using mostra_ids
+      binding.b
+      base_scope = base_scope.where(pelicula: { mostra_id: selected_filters[:mostrasFilter]["id"] })
+      binding.b
+    end
+
     programacoes_for_date = base_scope.where(data: selected_date).order(:sessao)
 
     current_page = params[:page].to_i ||= 1
@@ -62,13 +80,6 @@ class ProgramsController < ApplicationController
 
     display_selected_date = I18n.l(selected_date, format: "%a, %e %b", locale: :pt) if selected_date
 
-
-    # Gathering filter options
-    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.display_name }.as_json(
-      only: %i[id permalink_pt nome_abreviado],
-      methods: [ :tag_class, :display_name ]
-    )
-
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
       items:,
@@ -78,6 +89,7 @@ class ProgramsController < ApplicationController
       pagy: @pagy,
       tabBaseUrl: program_url,
       searchQuery: params[:query],
+      selectedFilters: selected_filters,
       mostrasFilter: mostras_filter
     }
   end

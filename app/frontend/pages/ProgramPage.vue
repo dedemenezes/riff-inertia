@@ -59,6 +59,23 @@ const iconMapping = {
 const filterSearch = (filtersFromChild) => {
   console.log("filterSearch")
   console.log(filtersFromChild)
+  // Build query params
+  // Build full url
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(filtersFromChild)) {
+    if (value?.tag_class) {
+      params.append(key, value.tag_class);
+    }
+  }
+  // debugger
+  // Submit request
+  router.visit(`${props.tabBaseUrl}?${params.toString()}`, {
+    preserveScroll: true,
+    preserveState: true,
+    // Select props to update
+    only: ["elements", "selectedFilters"],
+  });
+  // let it go
 }
 const clearSearchQuery = () => {
   console.log("clearSearchQuery")
