@@ -1,7 +1,6 @@
 /* Application styles */
 @import "tailwindcss";
 
-
 /* @plugin "@tailwindcss/typography"; */
 /* @plugin "@tailwindcss/forms"; */
 
@@ -59,6 +58,7 @@
   --color-vermelho-600: #FF0000;
   --color-vermelho-1000: #5E0000;
 
+  --color-violeta-100: #da9fe0;
   --color-violeta-200: #DA9FE0;
   --color-violeta-400: #BF68C8;
   --color-violeta-600: #7F008C;

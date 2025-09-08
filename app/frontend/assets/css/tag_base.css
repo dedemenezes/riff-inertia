@@ -6,3 +6,99 @@
 .tag-base {
   @apply py-100 px-250 uppercase font-body text-2xs font-medium leading-[16px] tracking-widest rounded-br-100 max-w-fit;
 }
+
+@layer utilities {
+  /* Mode styles */
+  .tag-filled {
+    @apply px-2 py-1 rounded-br-100 text-sm font-medium;
+    background-color: var(--tag-bg, theme('colors.magenta.600'));
+    color: var(--tag-text, theme('colors.white-transp.1000'));
+  }
+
+  .tag-outline {
+    @apply px-2 py-1 rounded text-sm font-medium border-l-4;
+    background-color: transparent;
+    border-left-color: var(--tag-border, theme('colors.magenta.600'));
+    color: var(--tag-text, theme('colors.neutrals.900'));
+  }
+
+  /* Variant color definitions */
+  .tag-premiere-brasil {
+    --tag-bg: theme('colors.laranja.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.laranja.600');
+  }
+
+  .tag-premiere-latina {
+    --tag-bg: theme('colors.amarelo.800');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.amarelo.800');
+  }
+
+  .tag-gala-abertura {
+    --tag-bg: theme('colors.magenta.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.magenta.600');
+  }
+
+  .tag-gala-encerramento {
+    --tag-bg: theme('colors.magenta.800');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.magenta.800');
+  }
+
+  .tag-resistencias {
+    --tag-bg: theme('colors.white-transp.900');
+    --tag-text: theme('colors.neutrals.900');
+    --tag-border: theme('colors.white-transp.900');
+  }
+
+  .tag-cine-memoria {
+    --tag-bg: theme('colors.violeta.100');
+    --tag-text: theme('colors.neutrals.900');
+    --tag-border: theme('colors.violeta.100');
+  }
+
+  .tag-midnight-movies {
+    --tag-bg: theme('colors.violeta.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.violeta.600');
+  }
+
+  .tag-cinema-capacete {
+    --tag-bg: #C0C0C0;
+    --tag-text: theme('colors.neutrals.900');
+    --tag-border: #C0C0C0;
+  }
+
+  .tag-classicos--cults {
+    --tag-bg: theme('colors.neutrals.900');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.neutrals.900');
+  }
+
+  .tag-expectativas {
+    --tag-bg: theme('colors.azul.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.azul.600');
+  }
+
+  .tag-itinerarios-unicos {
+    --tag-bg: theme('colors.verde.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.verde.600');
+  }
+
+  .tag-panorama-mundial {
+    --tag-bg: theme('colors.vermelho.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.vermelho.600');
+  }
+
+  /* Fallback */
+  .tag-default {
+    --tag-bg: theme('colors.magenta.600');
+    --tag-text: theme('colors.white-transp.1000');
+    --tag-border: theme('colors.magenta.600');
+  }
+}
