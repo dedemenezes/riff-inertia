@@ -1,8 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
+
+@source "../../views/**/*.{erb,html,haml,slim}";
+@source "../../helpers/**/*.rb";
+@source "../**/*.{js,ts,jsx,tsx,vue}";
+@source "../**/*.{erb,html,rb}";
+
+@source "../assets/css/safelist.tailwind.txt";
+
 @import "tw-animate-css";
 @import "../assets/css/tailwind-config.css";
-
 
 @custom-variant dark (&:is(.dark *));
 
