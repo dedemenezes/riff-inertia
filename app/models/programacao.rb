@@ -5,4 +5,9 @@ class Programacao < ApplicationRecord
   belongs_to :importacoesprog
   belongs_to :edicao
   has_many :logs
+
+
+  def display_sessao
+    sessao.strftime("%H:%M")
+  end
 end
