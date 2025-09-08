@@ -8,6 +8,11 @@ import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
+import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
+import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
+import MobileFilterMenu from "@/components/features/filters/MobileFilterMenu.vue";
+
+const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
 const props = defineProps({
   tabBaseUrl: { type: String, required: true },
@@ -61,6 +66,46 @@ const iconMapping = {
       @clear="handleClear"
     />
 
+    <div
+      class="filter flex items-center justify-between md:gap-800 lg:gap-1200 py-300"
+    >
+      <MobileTrigger @open-menu="openMenu" />
+
+      <!-- Ordering -->
+      <div class="flex items-center gap-300">
+        <span class="text-body-strong-sm uppercase text-secondary-gray"
+          >A - Z</span
+        >
+        <img
+          src="@assets/icons/divisor.svg"
+          alt="divisor"
+          height="16px"
+          width="1px"
+        />
+        <span class="text-body-strong-sm uppercase text-neutrals-900">
+          <!-- {{$t("filter_by.date")}} -->
+           por Data
+        </span>
+      </div>
+      <!-- Ordering -->
+    </div>
+    <!-- mobile filter content -->
+    <transition name="slide-left">
+      <MobileFilterMenu
+        :is-open="isFilterMenuOpen"
+        :initialFilters="props.selectedFilters"
+        @filtersApplied="filterSearch"
+        @filtersCleared="clearSearchQuery"
+        @close-filter-menu="closeMenu"
+      >
+        <template #filters="{ modelValue, updateField }">
+          <!-- class="py-600" -->
+          {{ modelValue }}
+        </template>
+      </MobileFilterMenu>
+        <!-- input -->
+    </transition>
+    <!-- mobile filter content -->
     <MenuTabs
     :collection="props.available_dates"
     :tabBaseUrl="props.tabBaseUrl"
