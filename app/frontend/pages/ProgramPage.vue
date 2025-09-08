@@ -35,7 +35,7 @@ const handleSearch = () => {
   router.visit(`${props.tabBaseUrl}?${query}`, {
     preserveScroll: true,
     preserveState: true,
-    only: ["elements", "searchQuery", "available_dates"],
+    only: ["elements", "searchQuery", "available_dates", "selected_date"],
   });
 }
 const handleClear = () => {
@@ -142,6 +142,7 @@ const clearSearchQuery = () => {
     :collection="props.available_dates"
     :tabBaseUrl="props.tabBaseUrl"
     :current-query="searchQuery"
+    :selected-filters="props.selectedFilters"
     />
     <h1 class="text-header-medium-sm py-400 text-neutrals-900">{{ selected_date }}</h1>
     <InfiniteScrollLayout #content="{ allElements }"

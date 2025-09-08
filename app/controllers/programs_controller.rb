@@ -18,7 +18,7 @@ class ProgramsController < ApplicationController
       .includes(:cinema, pelicula: :mostra)
       .where(importacoesprog_id: last_import_id)
 
-    # Filtering
+    # Filtering SEARCH INPUT
     if params[:query].present?
       term = "%#{params[:query].downcase}%"
       base_scope = base_scope.where(
@@ -42,8 +42,6 @@ class ProgramsController < ApplicationController
       selected_mostra = mostras_filter.find { |c| c["tag_class"] == params[:mostrasFilter] }
       selected_filters[:mostrasFilter] = selected_mostra if selected_mostra
 
-      # Get the IDs
-      # Query programacoes via SQL using mostra_ids
       base_scope = base_scope.where(pelicula: { mostra_id: selected_filters[:mostrasFilter]["id"] })
     end
 

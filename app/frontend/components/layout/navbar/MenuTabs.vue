@@ -7,7 +7,8 @@ const page = usePage()
 const props = defineProps({
   collection: { type: Array, required: true },
   tabBaseUrl: { type: String, required: true },
-  currentQuery: { type: String, default: null }
+  currentQuery: { type: String, default: null },
+  selectedFilters: { type: Object, default: () => ({}) }
 })
 
 // TODO: MAKE REUSABLE!
@@ -17,20 +18,28 @@ const isActiveTab = (tabDate, tabIndex) => {
   return page.url.includes(`date=${tabDate}`) || (tabIndex === 0 && !page.url.includes('date='))
 }
 
-const tabUrls = computed(
-  () => {
-    return props.collection.map(content => {
-      const url = new URL(window.location);
-      url.pathname = new URL(props.tabBaseUrl).pathname;
-      url.searchParams.set('date', content);
-      return {
-        content,
-        url: url.toString()
-      };
-    });
-  }
-);
+const tabUrls = computed(() => {
+  return props.collection.map(content => {
+    const url = new URL(window.location);
+    url.pathname = new URL(props.tabBaseUrl).pathname;
+    url.searchParams.set('date', content);
 
+    // Add current query if exists
+    if (props.currentQuery) {
+      url.searchParams.set('query', props.currentQuery);
+    }
+
+    // Add mostrasFilter if exists
+    if (props.selectedFilters.mostrasFilter?.tag_class) {
+      url.searchParams.set('mostrasFilter', props.selectedFilters.mostrasFilter.tag_class);
+    }
+
+    return {
+      content,
+      url: url.toString()
+    };
+  });
+});
 </script>
 
 <template>
