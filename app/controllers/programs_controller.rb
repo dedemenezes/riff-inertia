@@ -31,14 +31,6 @@ class ProgramsController < ApplicationController
       )
     end
 
-    available_dates = base_scope.distinct.pluck(:data).sort
-    selected_date = available_dates.first
-
-    if params[:date].present?
-      parsed_date = Date.parse(params[:date]) rescue nil
-      selected_date = parsed_date if parsed_date&.in?(available_dates)
-    end
-
     # Gathering filter options
     mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.display_name }.as_json(
       only: %i[id permalink_pt nome_abreviado],
@@ -53,6 +45,14 @@ class ProgramsController < ApplicationController
       # Get the IDs
       # Query programacoes via SQL using mostra_ids
       base_scope = base_scope.where(pelicula: { mostra_id: selected_filters[:mostrasFilter]["id"] })
+    end
+
+    available_dates = base_scope.distinct.pluck(:data).sort
+    selected_date = available_dates.first
+
+    if params[:date].present?
+      parsed_date = Date.parse(params[:date]) rescue nil
+      selected_date = parsed_date if parsed_date&.in?(available_dates)
     end
 
     programacoes_for_date = base_scope.where(data: selected_date).order(:sessao)
