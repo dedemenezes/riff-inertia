@@ -17,6 +17,7 @@ import { useMobileTrigger } from "@/components/features/filters/composables/useM
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
 
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
+import Breadcrumb from "@/components/common/Breadcrumb.vue";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -30,6 +31,7 @@ const props = defineProps({
   ,menuTabs: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
   ,has_active_filters: { type: Boolean, default: false }
+  ,crumbs: { type: Array, required: true }
 })
 
 const localFilters = ref({ ...props.current_filters })
@@ -78,10 +80,15 @@ const { sentinel, isSticky } = useStickyMenuTabs()
 </script>
 
 <template>
+  <TwContainer>
+    <Breadcrumb :crumbs="props.crumbs" />
+  </TwContainer>
   <MenuContext
   :items="props.items"
   :icon-mapping="iconMapping"
   />
+  <hr class="text-neutrals-300">
+  <!-- TODO: review border maybe just desktop -->
   <TwContainer class="relative">
     <!-- Added for sticky menutabs -->
     <div ref="sentinel" class="h-1"></div>
@@ -107,7 +114,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           />
         </InfiniteScrollLayout>
       </div>
-      <div class="col-start-8 col-span-6 sticky top-0">
+      <div class="col-start-8 col-span-6 sticky top-0 z-70">
         <ResponsiveFilterMenu
           :is-open="isFilterMenuOpen"
           :initialFilters="localFilters"

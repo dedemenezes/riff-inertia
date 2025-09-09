@@ -1,4 +1,5 @@
 class ProgramsController < ApplicationController
+  include BreadcrumbsHelper
   DATES_PER_PAGE = 1
   include Pagy::Backend
 
@@ -90,6 +91,8 @@ class ProgramsController < ApplicationController
       }
     end
 
+    # Build breadcrumbs
+
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
       tabBaseUrl: program_url,
@@ -102,7 +105,12 @@ class ProgramsController < ApplicationController
         query: params[:query],
         mostrasFilter: selected_mostra
       },
-      has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?)
+      has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
+      crumbs: breadcrumbs(
+        [ "", @root_url ],
+        [ "Programação", "" ],
+        [ "Programação Completa", "" ],
+      )
     }
   end
 
