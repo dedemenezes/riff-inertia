@@ -26,11 +26,11 @@ const emit = defineEmits([
 ]);
 </script>
 
+<!-- v-if="props.isOpen" -->
 <template>
   <div
-    v-if="props.isOpen"
     style="margin-top: 0"
-    class="fixed inset-0 z-50 bg-white flex flex-col w-full max-w-full h-[100vh] right-0 shadow-lg overflow-y-auto"
+    class="desktop-style bg-white hidden md:flex md:flex-col sticky top-15"
   >
     <TwContainer class="h-full">
       <div class="flex flex-col h-full">
