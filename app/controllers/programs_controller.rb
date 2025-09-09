@@ -34,7 +34,7 @@ class ProgramsController < ApplicationController
     end
 
     # Gathering filter options
-    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.id }.as_json(
+    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.id }.sort_by { _1.permalink_pt }.as_json(
       only: %i[id permalink_pt nome_abreviado],
       methods: [ :tag_class, :display_name ]
     )
@@ -89,10 +89,6 @@ class ProgramsController < ApplicationController
         active: date.to_s == params[:date] || (date == selected_date && !params[:date])
       }
     end
-
-    # Build filter URLs for the frontend
-    filter_submit_url = build_filter_url(params)
-    clear_filters_url = program_url # Just the base URL
 
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
@@ -149,11 +145,5 @@ class ProgramsController < ApplicationController
     # raise
     # raise
     url_for(params: query_params, only_path: true)
-  end
-
-  def build_filter_url(current_params)
-    # Build the URL with current filters, preserving what should be preserved
-    base_params = current_params.permit(:date).to_h
-    url_for(params: base_params, only_path: true)
   end
 end
