@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
         },
         {
           description: "Mostras",
-          path: ""
+          path: mostras_path
         },
         {
           description: "Cinemas",
@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
       "Notícias": [
         {
           description: "Todas as notícias",
-          path: noticias_url
+          path: noticias_path
         }
       ],
       "Mídias": [

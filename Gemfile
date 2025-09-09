@@ -52,9 +52,6 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-
-  # Git workflow integrated locally
-  gem "lefthook", require: false
 end
 
 group :test do
