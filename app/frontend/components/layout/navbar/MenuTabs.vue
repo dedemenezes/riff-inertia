@@ -9,11 +9,12 @@ const props = defineProps({
 </script>
 
 <template>
+  <!-- MenuTabs.vue -->
   <nav
     aria-label="Program dates"
     :class="[
       'bg-white-transp-1000',
-      { 'sticky top-0 z-40 will-change-transform': props.isSticky }
+      { 'sticky top-0 z-30 will-change-transform': props.isSticky }
     ]"
   >
     <div

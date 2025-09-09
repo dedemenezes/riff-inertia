@@ -27,7 +27,7 @@ const activeSearchIcon = computed(() => props.modelValue && props.modelValue.len
 </script>
 
 <template>
-  <div class="input w-full mb-400 lg:mb-0 lg:flex-grow">
+  <div class="input w-full mb-0 lg:flex-grow">
     <div class="relative">
       <div
         class="absolute inset-y-0 left-0 pl-3 flex items-center"

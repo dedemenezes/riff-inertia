@@ -28,13 +28,13 @@ const emit = defineEmits([
   <!-- Desktop Layout: Sticky sidebar (always visible) -->
   <div
     style="margin-top: 0"
-    class="desktop-style bg-white hidden md:flex md:flex-col sticky top-15"
+    class="desktop-style bg-white hidden md:flex md:flex-col sticky top-0"
   >
     <TwContainer class="h-full">
       <div class="flex flex-col h-full">
         <!-- Desktop Filter header -->
         <div
-          class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000 z-10"
+          class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000"
         >
           <p class="text-header-sm text-neutrals-900 uppercase">
             FILTROS
@@ -76,7 +76,7 @@ const emit = defineEmits([
       <div class="flex flex-col h-full">
         <!-- Mobile Filter header -->
         <div
-          class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000 z-10"
+          class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000 z-50"
         >
           <p class="text-header-sm text-neutrals-900 uppercase">
             FILTROS

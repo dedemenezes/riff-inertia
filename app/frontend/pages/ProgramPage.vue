@@ -1,6 +1,10 @@
 <script setup>
 // TODO: CHANGE TEXT WHEN NO RESULT FOR FILTERING
-import { ref,  watch } from "vue";
+// TODO: FIX LIMPAR FILTRO
+// TODO: Click cleansearchbar should close mobile filter menu?
+// TODO: Click cleansearchbar should make new request to remove query param
+
+import { ref } from "vue";
 import { router } from "@inertiajs/vue3"
 import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/common/icons";
 
@@ -90,21 +94,21 @@ const { sentinel, isSticky } = useStickyMenuTabs()
   <hr class="text-neutrals-300">
   <!-- TODO: review border maybe just desktop -->
   <TwContainer class="relative">
-    <!-- Added for sticky menutabs -->
-    <div ref="sentinel" class="h-1"></div>
-    <MenuTabs
-      :is-sticky="isSticky"
-      :tabs="menuTabs"
-      class="h-15"
-    />
     <div
-    class="filter flex items-center justify-end py-300 sticky top-15 z-40 bg-white"
+    class="filter flex lg:hidden items-center justify-end py-300 bg-white"
     >
       <MobileTrigger @open-menu="openMenu" />
     </div>
 
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
+        <!-- Added for sticky menutabs -->
+        <div ref="sentinel" class="h-1"></div>
+        <MenuTabs
+          :is-sticky="isSticky"
+          :tabs="menuTabs"
+          class="h-15"
+        />
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
@@ -114,7 +118,8 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           />
         </InfiniteScrollLayout>
       </div>
-      <div class="col-start-8 col-span-6 sticky top-0 z-70">
+      <div class="col-start-8 col-span-6 sticky top-0 z-50">
+        <div ref="sentinel" class="h-1"></div>
         <ResponsiveFilterMenu
           :is-open="isFilterMenuOpen"
           :initialFilters="localFilters"
