@@ -66,8 +66,6 @@ const props = defineProps({
       </BaseButton>
     </div>
   </nav>
-  <hr class="text-neutrals-300">
-  <!-- TODO: review border maybe just desktop -->
 </template>
 
 <style scoped></style>

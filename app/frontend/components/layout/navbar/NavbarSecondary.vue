@@ -82,6 +82,8 @@ const setDropdownOffset = (item) => {
       </div>
     </DropdownPanel>
   </div>
+  <!-- TODO: review border maybe just desktop -->
+  <hr class="text-neutrals-300">
 </template>
 
 <style scoped></style>
