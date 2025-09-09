@@ -38,7 +38,7 @@ const movieGenre = computed(() => {
       <img
         :src="moviePoster"
         alt="movie-name poster"
-        class="rounded-200 h-[326px] w-full object-cover"
+        class="rounded-200 h-[268px] w-full object-cover"
       />
       <!-- Overlay -->
       <div
