@@ -1,7 +1,8 @@
 class MostrasController < ApplicationController
   def index
     @edicao_atual = Edicao.find_by(descricao: "2024") # TODO: Change to 2025
-    @mostras = @edicao_atual.mostras
+    @mostras = @edicao_atual.mostras.group_by(&:display_name)
+    @categorias = @mostras.map { |categoria, mostras| { name: categoria, class: mostras.first.tag_class } }
 
     items = [
       # Links tem que vir do controller para incluir localizacao. Textos também
@@ -15,10 +16,7 @@ class MostrasController < ApplicationController
     render inertia: "Mostras/Index", props: {
       rootUrl: @root_url,
       items: items,
-      mostras: @mostras.as_json(
-                only: %i[id nome_abreviado permalink_pt nome_pt],
-                methods: %i[tag_class]
-              )
+      categorias: @categorias.as_json
     }
   end
 end
