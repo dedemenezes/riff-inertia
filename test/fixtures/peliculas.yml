@@ -79,3 +79,126 @@ test_<%= i %>:
   created: <%= Date.today %>
   updated: <%= Date.today %>
 <% end %>
+
+
+
+# test/fixtures/peliculas.yml
+cidade_perdida:
+  titulo_portugues_coord_int: "Cidade Perdida"
+  titulo_original_coord_int: "Cidade Perdida"
+  titulo_ingles_coord_int: "Lost City"
+  titulo_ingles_semartigo: "Lost City"
+  titulo_portugues_semartigo: "Cidade Perdida"
+  permalink: "cidade-perdida"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: competicao_nacional
+  imagem: "cidade_perdida.jpg"
+  duracao_coord_int: 120
+  diretor_coord_int: "João Silva"
+  elenco_coord_int: "Maria Santos, Pedro Costa"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Drama sobre uma cidade em transformação."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+amor_brasilia:
+  titulo_portugues_coord_int: "Amor em Brasília"
+  titulo_original_coord_int: "Amor em Brasília"
+  titulo_ingles_coord_int: "Love in Brasilia"
+  titulo_ingles_semartigo: "Love in Brasilia"
+  titulo_portugues_semartigo: "Amor em Brasília"
+  permalink: "amor-brasilia"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: competicao_nacional
+  imagem: "amor_brasilia.jpg"
+  duracao_coord_int: 95
+  diretor_coord_int: "Ana Pereira"
+  elenco_coord_int: "Carlos Lima, Fernanda Rocha"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Romance passado na capital federal."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+berlin_nights:
+  titulo_portugues_coord_int: "Berlin Nights"
+  titulo_original_coord_int: "Berliner Nächte"
+  titulo_ingles_coord_int: "Berlin Nights"
+  titulo_ingles_semartigo: "Berlin Nights"
+  titulo_portugues_semartigo: "Berlin Nights"
+  permalink: "berlin-nights"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: mostra_internacional
+  imagem: "berlin_nights.jpg"
+  duracao_coord_int: 110
+  diretor_coord_int: "Hans Mueller"
+  elenco_coord_int: "Klaus Weber, Ingrid Schmidt"
+  paiscompleto_coord_int: "Alemanha"
+  sinopse_port_export: "Thriller alemão ambientado em Berlim."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+paris_stories:
+  titulo_portugues_coord_int: "Paris Stories"
+  titulo_original_coord_int: "Histoires de Paris"
+  titulo_ingles_coord_int: "Paris Stories"
+  titulo_ingles_semartigo: "Paris Stories"
+  titulo_portugues_semartigo: "Paris Stories"
+  permalink: "paris-stories"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: mostra_internacional
+  imagem: "paris_stories.jpg"
+  duracao_coord_int: 105
+  diretor_coord_int: "Pierre Dubois"
+  elenco_coord_int: "Jean Martin, Sophie Laurent"
+  paiscompleto_coord_int: "França"
+  sinopse_port_export: "Comédia francesa sobre a vida parisiense."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+amazonia_selvagem:
+  titulo_portugues_coord_int: "Amazônia Selvagem"
+  titulo_original_coord_int: "Amazônia Selvagem"
+  titulo_ingles_coord_int: "Wild Amazon"
+  titulo_ingles_semartigo: "Wild Amazon"
+  titulo_portugues_semartigo: "Amazônia Selvagem"
+  permalink: "amazonia-selvagem"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: documentarios
+  imagem: "amazonia.jpg"
+  duracao_coord_int: 85
+  diretor_coord_int: "Roberto Oliveira"
+  elenco_coord_int: "Documentário"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Documentário sobre a fauna amazônica."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+cidade_transformacao:
+  titulo_portugues_coord_int: "Cidade em Transformação"
+  titulo_original_coord_int: "Cidade em Transformação"
+  titulo_ingles_coord_int: "City in Transformation"
+  titulo_ingles_semartigo: "City in Transformation"
+  titulo_portugues_semartigo: "Cidade em Transformação"
+  permalink: "cidade-transformacao"
+  importacao_id: 1
+  edicao_id: 12
+  mostra: documentarios
+  imagem: "cidade_transformacao.jpg"
+  duracao_coord_int: 75
+  diretor_coord_int: "Marina Costa"
+  elenco_coord_int: "Documentário"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Documentário sobre urbanização."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
