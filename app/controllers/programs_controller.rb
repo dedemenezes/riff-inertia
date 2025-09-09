@@ -42,6 +42,9 @@ class ProgramsController < ApplicationController
       only: %i[id permalink_pt nome_abreviado],
       methods: [ :tag_class, :display_name ]
     )
+    cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |m| m.id }.sort_by { |it| it.nome }.as_json(
+      only: %i[id nome endereco edicao_id]
+    )
 
     if params[:mostrasFilter].present?
       selected_mostra = mostras_filter.find { |c| c["permalink_pt"] == params[:mostrasFilter] }
@@ -51,7 +54,16 @@ class ProgramsController < ApplicationController
         base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostrasFilter]["permalink_pt"] })
       end
     end
-    # raise
+
+    if params[:cinemasFilter]
+      selected_cinema = cinemas_filter.find do |cinema_filter|
+        (cinema_filter["id"] === params[:cinemasFilter].to_i) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
+      end
+      if selected_cinema
+        selected_filters[:cinemasFilter] = selected_cinema
+        base_scope = base_scope.where(cinema_id: selected_cinema["id"])
+      end
+    end
 
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
@@ -103,6 +115,7 @@ class ProgramsController < ApplicationController
       elements: @programacoes,
       pagy: @pagy,
       mostrasFilter: mostras_filter,
+      cinemaOptions: cinemas_filter,
       menuTabs: @menu_tabs,
       current_filters: {
         query: params[:query],
@@ -153,8 +166,6 @@ class ProgramsController < ApplicationController
     query_params = {}
     query_params[:mostrasFilter]= filters[:mostrasFilter]["permalink_pt"] if filters[:mostrasFilter].present?
     query_params[:date] = date
-    # raise
-    # raise
     url_for(params: query_params, only_path: true)
   end
 end
