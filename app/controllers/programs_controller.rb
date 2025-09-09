@@ -1,4 +1,7 @@
 class ProgramsController < ApplicationController
+  EDICAO_ATUAL = 12
+  # TODO: MAKE THIS ENV VARIABLE?
+
   include BreadcrumbsHelper
   DATES_PER_PAGE = 1
   include Pagy::Backend
@@ -18,7 +21,7 @@ class ProgramsController < ApplicationController
     base_scope = Programacao
       .joins(pelicula: :mostra)
       .includes(:cinema, pelicula: :mostra)
-      .where(importacoesprog_id: last_import_id)
+      .where(importacoesprog_id: last_import_id) # ALTERAR PARA EDICAO ID
 
     # Filtering SEARCH INPUT
     if params[:query].present?
