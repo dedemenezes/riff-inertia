@@ -30,7 +30,7 @@ const open = ref(false);
 // Props definition for v-model support
 const props = defineProps({
   collection: { type: Array, required: true },
-  modelValue: { type: String, default: "" }, // v-model prop
+  modelValue: { type: [String, Number], default: "" }, // v-model prop
   placeholder: { type: String, default: "placeholder.select" },
   withIcon: { type: Boolean, default: false },
 });
