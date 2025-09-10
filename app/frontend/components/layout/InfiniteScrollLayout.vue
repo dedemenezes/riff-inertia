@@ -144,7 +144,7 @@ onUnmounted(() => {
       v-else-if="hasReachedEnd"
       class="text-center py-8 text-gray-500"
     >
-      <p>Você viu todas as sessões disponíveis.</p>
+      <p>Não há sessões disponíveis.</p>
     </div>
 
     <div
