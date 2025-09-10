@@ -462,7 +462,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     mostras_filter = props["mostrasFilter"]
-    assert_equal 3, mostras_filter.length
+    assert_equal 4, mostras_filter.length
 
     # Check that all mostras are included
     permalinks = mostras_filter.map { |m| m["permalink_pt"] }
@@ -475,5 +475,184 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert mostra["id"].present?
     assert mostra["permalink_pt"].present?
     assert mostra["nome_abreviado"].present?
+  end
+
+  test "provides correct cinemas filters options" do
+    get program_url
+    assert_response :success
+    props = inertia_props
+    cinema_options = props["cinemasFilter"]
+    assert_equal 2, cinema_options.length
+  end
+
+  test "filters by cinema - cine brasilia" do
+    cine_brasilia = cinemas(:cine_brasilia)
+    get program_url, params: { cinemasFilter: cine_brasilia.id }
+
+    assert_response :success
+    props = inertia_props
+
+    # 17 total only 5 first page
+    elements = props["elements"]
+    assert_equal 5, elements.length
+    # 17 total so 5 pages
+    total_elements = props["pagy"]["count"]
+    assert_equal 17, total_elements
+  end
+  test "filters by cinema - cinepolis" do
+    cinepolis = cinemas(:cinepolis)
+    get program_url, params: { cinemasFilter: cinepolis.id }
+
+    assert_response :success
+    props = inertia_props
+
+    elements = props["elements"]
+    titles = elements.map { |e| e["titulo"] }
+
+    # Movies associated with cinepolis only
+    expected_titles = [ "Cidade Perdida", "Cidade em Transformação", "Amor em Brasília", "Berlin Nights", "São Paulo" ]
+    expected_titles.each { |title| assert_includes titles, title }
+  end
+
+  test "handles invalid cinema filter gracefully" do
+    get program_url, params: { cinemasFilter: 999_999 }
+
+    assert_response :success
+    props = inertia_props
+
+    # Should fallback to all movies (no filter)
+    assert props["elements"].length > 0
+
+    selected_filters = props["current_filters"]
+    assert_nil selected_filters["cinemasFilter"]
+  end
+
+  test "combines search query and cinema filter" do
+    cinepolis = cinemas(:cinepolis)
+    get program_url, params: {
+      query: "Batman",
+      cinemasFilter: cinepolis.id
+    }
+
+    assert_response :success
+    props = inertia_props
+
+    elements = props["elements"]
+    assert_equal 1, elements.length
+    assert_equal "Batman", elements.first["titulo"]
+
+    # Filters preserved
+    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+  end
+
+  test "combines search query and cinema filter with no results" do
+    cine_brasilia = cinemas(:cine_brasilia)
+    get program_url, params: {
+      query: "Batman",
+      cinemasFilter: cine_brasilia.id
+    }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal 0, props["elements"].length
+
+    # Filters preserved
+    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal cine_brasilia.id, props["current_filters"]["cinemasFilter"]["id"]
+  end
+
+  test "search finds movies across different cinemas" do
+    get program_url, params: { query: "Cidade" }
+
+    assert_response :success
+    props = inertia_props
+
+    elements = props["elements"]
+    titles = elements.map { |e| e["titulo"] }
+
+    assert_includes titles, "Cidade Perdida"
+    assert_includes titles, "Cidade em Transformação"
+  end
+
+  test "cinema filter affects available dates" do
+    cine_brasilia = cinemas(:cine_brasilia)
+    get program_url, params: { cinemasFilter: cine_brasilia.id }
+
+    assert_response :success
+    props = inertia_props
+
+    available_dates = props["menuTabs"].map { _1["date"] }
+    assert_equal [ "2024-10-07" ], available_dates.uniq
+  end
+
+  test "preserves cinema filter when navigating dates" do
+    cinepolis = cinemas(:cinepolis)
+    get program_url, params: {
+      cinemasFilter: cinepolis.id,
+      date: "2024-10-06"
+    }
+
+    assert_response :success
+    props = inertia_props
+
+    elements = props["elements"]
+    titles = elements.map { |e| e["titulo"] }
+    assert_includes titles, "Amazônia Selvagem"
+    assert_includes titles, "Matrix"
+
+    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+  end
+
+  test "combines all filters - search, cinema, and date" do
+    cinepolis = cinemas(:cinepolis)
+    get program_url, params: {
+      query: "Cidade",
+      cinemasFilter: cinepolis.id,
+      date: "2024-10-07"
+    }
+
+    assert_response :success
+    props = inertia_props
+
+    elements = props["elements"]
+    assert_equal 1, elements.length
+    assert_equal "Cidade em Transformação", elements.first["titulo"]
+
+    assert_equal "Cidade", props["current_filters"]["query"]
+    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
+  end
+
+  test "cinema filter with pagination" do
+    cine_brasilia = cinemas(:cine_brasilia)
+    get program_url, params: { cinemasFilter: cine_brasilia.id }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal 5, props["elements"].length
+    assert_equal 1, props["pagy"]["page"]
+    assert_equal 17, props["pagy"]["count"]
+  end
+
+  test "returns correct cinemasFilter options in props" do
+    get program_url
+
+    assert_response :success
+    props = inertia_props
+
+    cinemas_filter = props["cinemasFilter"]
+    assert_equal 2, cinemas_filter.length
+
+    names = cinemas_filter.map { _1["nome"] }
+    assert_includes names, "Cinépolis Lagoon"
+    assert_includes names, "Cine Brasília"
+
+    # Ensure structure
+    cinema = cinemas_filter.first
+    assert cinema["id"].present?
+    assert cinema["nome"].present?
   end
 end

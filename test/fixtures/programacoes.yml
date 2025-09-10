@@ -81,8 +81,8 @@ program_matrix:
 
 # paginated program related with peliculas
 <% 17.times do |i| %>
-program_batman_<%= i %>:
-  cinema: cinepolis
+program_test_<%= i %>:
+  cinema: cine_brasilia
   pelicula: test_<%= i %>
   importacoesprog_id: 123
   edicao_id: 12
@@ -145,7 +145,7 @@ programa_amor_brasilia_1:
   updated: <%= Date.yesterday %>
 
 programa_berlin_nights_1:
-  cinema: cine_brasilia
+  cinema: cinepolis
   pelicula: berlin_nights
   importacoesprog_id: 123
   edicao_id: 12
@@ -165,7 +165,7 @@ programa_berlin_nights_1:
   updated: <%= Date.yesterday %>
 
 programa_paris_stories_1:
-  cinema: cine_brasilia
+  cinema: cinepolis
   pelicula: paris_stories
   importacoesprog_id: 123
   edicao_id: 12
@@ -205,7 +205,7 @@ programa_amazonia_selvagem_1:
   updated: <%= Date.yesterday %>
 
 programa_cidade_transformacao_0:
-  cinema: cine_brasilia
+  cinema: cinepolis
   pelicula: cidade_transformacao
   importacoesprog_id: 123
   edicao_id: 12
@@ -225,7 +225,7 @@ programa_cidade_transformacao_0:
   updated: <%= Date.yesterday %>
 
 programa_cidade_transformacao_1:
-  cinema: cine_brasilia
+  cinema: cinepolis
   pelicula: cidade_transformacao
   importacoesprog_id: 123
   edicao_id: 12
@@ -285,7 +285,7 @@ programa_berlin_nights_2:
   updated: <%= Date.yesterday %>
 
 programa_cidade_transformacao_2:
-  cinema: cine_brasilia
+  cinema: cinepolis
   pelicula: cidade_transformacao
   importacoesprog_id: 123
   edicao_id: 12

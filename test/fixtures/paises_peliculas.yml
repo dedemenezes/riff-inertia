@@ -1,0 +1,46 @@
+batman_usa:
+  pais: usa
+  pelicula: batman
+
+special_char_br:
+  pais: br
+  pelicula: special_char
+
+matrix_usa:
+  pais: usa
+  pelicula: matrix
+
+cidade_perdida_ar:
+  pais: ar
+  pelicula: cidade_perdida
+
+cidade_perdida_br:
+  pais: br
+  pelicula: cidade_perdida
+
+amor_brasilia_usa:
+  pais: usa
+  pelicula: amor_brasilia
+
+berlin_nights_ger:
+  pais: ger
+  pelicula: berlin_nights
+
+paris_stories_fr:
+  pais: fr
+  pelicula: paris_stories
+
+amazonia_selvagem_br:
+  pais: br
+  pelicula: amazonia_selvagem
+
+cidade_transformacao_br:
+  pais: br
+  pelicula: cidade_transformacao
+
+
+<% 17.times do |i| %>
+paises_peliculas_<%= i %>:
+  pais: br
+  pelicula: test_<%= i %>
+<% end %>

@@ -6,7 +6,7 @@ batman:
   titulo_portugues_semartigo: "Batman"
   permalink: "batman-link"
   importacao_id: 1
-  edicao_id: 1
+  edicao_id: 12
   mostra: sci_fi
   imagem: "batman.jpg"
   duracao_coord_int: 140
@@ -26,7 +26,7 @@ special_char:
   titulo_portugues_semartigo: "São Paulo"
   permalink: "sao-paulo-link"
   importacao_id: 1
-  edicao_id: 1
+  edicao_id: 12
   mostra: sci_fi
   imagem: "sao-paulo.jpg"
   duracao_coord_int: 140
@@ -46,7 +46,7 @@ matrix:
   titulo_portugues_semartigo: "Matrix"
   permalink: "matrix-link"
   importacao_id: 1
-  edicao_id: 1
+  edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
   duracao_coord_int: 136
@@ -67,7 +67,7 @@ test_<%= i %>:
   titulo_portugues_semartigo: "test_<%= i %>"
   permalink: "test-<%= i %>-link"
   importacao_id: 1
-  edicao_id: 1
+  edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
   duracao_coord_int: 136

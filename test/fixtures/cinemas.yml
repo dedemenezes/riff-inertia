@@ -2,7 +2,7 @@
 cinepolis:
   nome: "Cinépolis Lagoon"
   bairro_id: 1
-  edicao_id: 1
+  edicao_id: 12
   endereco: "Av. Borges de Medeiros, 1424 - Lagoa"
   telefone: "(21) 99999-9999"
   capacidade: "300"
