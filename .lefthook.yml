@@ -1,7 +1,0 @@
-pre-push:
-  parallel: true
-  commands:
-    rubocop:
-      run: bundle exec rubocop
-    brakeman:
-      run: bin/brakeman --no-pager
