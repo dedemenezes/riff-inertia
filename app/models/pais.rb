@@ -15,4 +15,8 @@ class Pais < ApplicationRecord
       I18n.t("countries.#{nome_without_special_char}")
     end
   end
+
+  def filter_label
+    I18n.t("filter.pais")
+  end
 end

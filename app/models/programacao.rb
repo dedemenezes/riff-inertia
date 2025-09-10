@@ -18,4 +18,8 @@ class Programacao < ApplicationRecord
   def filter_display
     sessao.strftime("%Hh%M")
   end
+
+  def filter_label
+    I18n.t("filter.time")
+  end
 end

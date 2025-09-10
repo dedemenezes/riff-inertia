@@ -37,4 +37,8 @@ class Mostra < ApplicationRecord
       nome_en
     end
   end
+
+  def filter_label
+    I18n.t("filter.submostra")
+  end
 end

@@ -15,35 +15,24 @@ const props = defineProps({
   sessoes:  { type: Array, default: () => [] },
 });
 
-// Transform cadernos prop for ComboboxComponent format
-const mostrasFilterOptions = computed(() => {
-  return props.mostrasFilter.map(caderno => ({
-    label: caderno.filter_display,
-    value: caderno.filter_value,
+const mapFilterOptions = (filterList) => {
+  return filterList.map(option => ({
+    label: option.filter_display,
+    value: option.filter_value,
   }));
-});
-// Transform cinema prop for ComboboxComponent format
-const cinemasFilterOptions = computed(() => {
-  return props.cinemasFilter.map(cinema => ({
-    label: cinema.filter_display,
-    value: cinema.filter_value,
-  }));
-});
-// Transform cinema prop for ComboboxComponent format
-const paisesFilterOptions = computed(() => {
-  return props.paisesFilter.map(pais => ({
-    label: pais.filter_display,
-    value: pais.filter_value,
-  }));
-});
-// Transform cinema prop for ComboboxComponent format
-const genresFilterOptions = computed(() => {
-  return props.genresFilter.map(genre => ({
-    label: genre.filter_display,
-    value: genre.filter_value,
-  }));
-});
+}
 
+const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostrasFilter));
+const mostraLabel = computed(() => props.mostrasFilter[0].filter_label)
+
+const cinemasFilterOptions = computed(() => mapFilterOptions(props.cinemasFilter));
+const cinemaLabel = computed(() => props.cinemasFilter[0].filter_label)
+
+const paisesFilterOptions = computed(() => mapFilterOptions(props.paisesFilter));
+const paisLabel = computed(() => props.paisesFilter[0].filter_label)
+
+const genresFilterOptions = computed(() => mapFilterOptions(props.genresFilter));
+const genreLabel = computed(() => props.genresFilter[0].filter_label)
 // Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
   return props.sessoes.map(sessao => ({
@@ -51,6 +40,7 @@ const sessoesFilterOptions = computed(() => {
     value: sessao.filter_value,
   }));
 });
+const sessaoLabel = computed(() => props.sessoes[0].filter_label)
 
 const getMostraObjectFromTagClas = (filter_value) => {
   return props.mostrasFilter.find(c => c.filter_value === filter_value) || null;
@@ -90,7 +80,7 @@ const getQueryObject = (filter_value) => {
 
    <!-- HORARIO -->
     <AccordionGroup
-      text="Horário"
+      :text="sessaoLabel"
       :isOpen="!!props.modelValue.sessao"
     >
       <template v-slot:content>
@@ -104,7 +94,7 @@ const getQueryObject = (filter_value) => {
 
    <!-- MOSTRAS -->
    <AccordionGroup
-   text="Mostra"
+   :text="mostraLabel"
    :isOpen="!!props.modelValue.mostrasFilter"
    >
    <template v-slot:content>
@@ -120,7 +110,7 @@ const getQueryObject = (filter_value) => {
 
   <!-- CINEMAS -->
   <AccordionGroup
-    text="Cinema"
+    :text="cinemaLabel"
     :isOpen="!!props.modelValue.cinemasFilter"
   >
     <template v-slot:content>
@@ -136,7 +126,7 @@ const getQueryObject = (filter_value) => {
 
   <!-- GENRES -->
   <AccordionGroup
-    text="Gênero"
+    :text="genreLabel"
     :isOpen="!!props.modelValue.genresFilter"
   >
     <template v-slot:content>
