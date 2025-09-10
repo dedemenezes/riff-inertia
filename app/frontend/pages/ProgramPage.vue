@@ -23,6 +23,7 @@ import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useSti
 
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
+import { extractFilterValues } from "@/lib/filterUtils";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -34,6 +35,7 @@ const props = defineProps({
   ,mostrasFilter: { type: Array, default: () => [] }
   ,cinemasFilter: { type: Array, default: () => [] }
   ,paisesFilter: { type: Array, default: () => [] }
+  ,genresFilter: { type: Array, default: () => [] }
   ,sessoes: { type: Array, default: () => [] }
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
@@ -61,29 +63,19 @@ const handleClear = () => {
 
 // Called when filters applied in MobileFilterMenu
 const filterSearch = (filtersFromChild) => {
-  const cleanedFilters = {}
-
-  for (const [key, value] of Object.entries(filtersFromChild)) {
-    if (value != null) {
-      if (key === 'mostrasFilter' && typeof value === 'object' && value?.filter_value) {
-        cleanedFilters[key] = value.filter_value  // Extract just the string
-      } else if (key === 'sessao' && typeof value === 'object' && value?.filter_value) {
-        cleanedFilters[key] = value.filter_value  // Extract just the string
-      } else if (key === 'paisesFilter' && typeof value === 'object' && value?.filter_value) {
-        cleanedFilters[key] = value.filter_value  // Extract just the string
-      } else if (key === 'cinemasFilter' && typeof value === 'object' && value?.filter_value) {
-        cleanedFilters[key] = value.filter_value  // Extract just the string
-      } else {
-        cleanedFilters[key] = value
-      }
-    }
-  }
+  const cleanedFilters = extractFilterValues(filtersFromChild)
   router.get(props.tabBaseUrl, cleanedFilters, {
     preserveState: true,
     preserveScroll: true,
     only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
   })
 };
+
+const removeQuery = (what) => {
+  debugger
+  // remove the correct queryparams from url
+  // make new request with the up to date filters
+}
 
 // Called when filters cleared from MobileFilterMenu
 const clearSearchQuery = () => {
@@ -123,7 +115,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
        "filter_display": "19h00" }
       } -->
     <div
-      class="flex gap-300 pt-200 pb-300"
+      class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
       v-if="Object.values(props.current_filters).some((item) => item !== null)"
     >
       <TagFilter
@@ -145,6 +137,18 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           :tabs="menuTabs"
           class="h-15"
         />
+        <div
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          v-if="Object.values(props.current_filters).some((item) => item !== null)"
+        >
+          <TagFilter
+            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            :key="key"
+            :filter="{ label: value.filter_display, value: value.filter_value }"
+            :text="value.filter_display"
+            @remove-filter="removeQuery"
+            />
+        </div>
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
@@ -170,6 +174,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
               :mostrasFilter="props.mostrasFilter"
               :cinemasFilter="props.cinemasFilter"
               :paisesFilter="props.paisesFilter"
+              :genresFilter="props.genresFilter"
               :sessoes="props.sessoes"
             />
           </template>
