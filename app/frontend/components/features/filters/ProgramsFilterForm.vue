@@ -41,6 +41,7 @@ const directorLabel = computed(() => props.directors[0].filter_label)
 
 // Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
+  // TODO: TRANSLATE
   return props.sessoes.map(sessao => ({
     label: `Início às ${sessao.filter_display}`,
     value: sessao.filter_value,
@@ -48,27 +49,10 @@ const sessoesFilterOptions = computed(() => {
 });
 const sessaoLabel = computed(() => props.sessoes[0].filter_label)
 
-const getMostraObjectFromTagClas = (filter_value) => {
-  return props.mostrasFilter.find(c => c.filter_value === filter_value) || null;
-};
-const getSessaoObject = (filter_value) => {
-  return props.sessoes.find(c => c.filter_value === filter_value) || null;
-};
-const getCinemaObject = (filter_value) => {
-  return props.cinemasFilter.find(c => c.filter_value === filter_value) || null;
-};
-
-const getPaisObject = (filter_value) => {
-  return props.paisesFilter.find(c => c.filter_value === filter_value) || null;
+const getSelectedFrom = (collectionName, value) => {
+  return props[collectionName].find(option => option.filter_value == value)
 }
 
-const getGenreObject = (filter_value) => {
-  return props.genresFilter.find(c => c.filter_value === filter_value) || null;
-}
-
-const getDirectorObject = (filter_value) => {
-  return props.directors.find(c => c.filter_value === filter_value) || null;
-}
 const getQueryObject = (filter_value) => {
   // TODO: REFACTOR
   // I'm building here beause the other get here as collection
@@ -80,7 +64,6 @@ const getQueryObject = (filter_value) => {
 </script>
 
 <template>
-  <!-- Article-specific filter content -->
    <div class="pt-400">
      <SearchBar
        :modelValue="props.modelValue.query?.filter_value"
@@ -96,7 +79,7 @@ const getQueryObject = (filter_value) => {
       <template v-slot:content>
         <SelectComponent
           :modelValue="props.modelValue.sessao?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('sessao', getSessaoObject(val))"
+          @update:modelValue="(val) => props.updateField('sessao', getSelectedFrom('sessoes', val))"
           :collection="sessoesFilterOptions"
         />
       </template>
@@ -112,7 +95,7 @@ const getQueryObject = (filter_value) => {
        <ComboboxComponent
        :collection="mostrasFilterOptions"
        :modelValue="props.modelValue.mostrasFilter?.filter_value || null"
-       @update:modelValue="(val) => props.updateField('mostrasFilter', getMostraObjectFromTagClas(val))"
+       @update:modelValue="(val) => props.updateField('mostrasFilter', getSelectedFrom('mostrasFilter', val))"
        />
       </div>
     </template>
@@ -128,7 +111,7 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="cinemasFilterOptions"
         :modelValue="props.modelValue.cinemasFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('cinemasFilter', getCinemaObject(val))"
+        @update:modelValue="(val) => props.updateField('cinemasFilter', getSelectedFrom('cinemasFilter', val))"
         />
       </div>
     </template>
@@ -144,7 +127,7 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="genresFilterOptions"
         :modelValue="props.modelValue.genresFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('genresFilter', getGenreObject(val))"
+        @update:modelValue="(val) => props.updateField('genresFilter', getSelectedFrom('genresFilter', val))"
         />
       </div>
     </template>
@@ -160,7 +143,7 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="paisesFilterOptions"
         :modelValue="props.modelValue.paisesFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('paisesFilter', getPaisObject(val))"
+        @update:modelValue="(val) => props.updateField('paisesFilter', getSelectedFrom('paisesFilter', val))"
         />
       </div>
     </template>
@@ -176,7 +159,7 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="directorsOptions"
         :modelValue="props.modelValue.director?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('director', getDirectorObject(val))"
+        @update:modelValue="(val) => props.updateField('director', getSelectedFrom('directors', val))"
         />
       </div>
     </template>
