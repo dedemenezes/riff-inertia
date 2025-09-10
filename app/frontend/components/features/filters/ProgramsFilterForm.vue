@@ -18,22 +18,22 @@ const props = defineProps({
 // Transform cadernos prop for ComboboxComponent format
 const mostrasFilterOptions = computed(() => {
   return props.mostrasFilter.map(caderno => ({
-    label: caderno.nome_abreviado,
-    value: caderno.permalink_pt,
+    label: caderno.filter_display,
+    value: caderno.filter_value,
   }));
 });
 // Transform cinema prop for ComboboxComponent format
 const cinemasFilterOptions = computed(() => {
   return props.cinemasFilter.map(cinema => ({
-    label: cinema.nome,
-    value: cinema.id,
+    label: cinema.filter_display,
+    value: cinema.filter_value,
   }));
 });
 // Transform cinema prop for ComboboxComponent format
 const paisesFilterOptions = computed(() => {
   return props.paisesFilter.map(pais => ({
-    label: pais.nome_pais,
-    value: pais.id,
+    label: pais.filter_display,
+    value: pais.filter_value,
   }));
 });
 // Transform cinema prop for ComboboxComponent format
