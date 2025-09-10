@@ -31,6 +31,10 @@ class Mostra < ApplicationRecord
   end
 
   def filter_display
-    display_name
+    if I18n.locale == :pt
+      nome_pt
+    else
+      nome_en
+    end
   end
 end
