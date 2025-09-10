@@ -16,6 +16,7 @@ import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
+import TagFilter from "@/components/common/tags/TagFilter.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
@@ -31,6 +32,9 @@ const props = defineProps({
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
   ,mostrasFilter: { type: Array, default: () => [] }
+  ,cinemasFilter: { type: Array, default: () => [] }
+  ,paisesFilter: { type: Array, default: () => [] }
+  ,sessoes: { type: Array, default: () => [] }
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
@@ -60,10 +64,18 @@ const filterSearch = (filtersFromChild) => {
   const cleanedFilters = {}
 
   for (const [key, value] of Object.entries(filtersFromChild)) {
-    if (key === 'mostrasFilter' && typeof value === 'object' && value?.permalink_pt) {
-      cleanedFilters[key] = value.permalink_pt  // Extract just the string
-    } else {
-      cleanedFilters[key] = value
+    if (value != null) {
+      if (key === 'mostrasFilter' && typeof value === 'object' && value?.filter_value) {
+        cleanedFilters[key] = value.filter_value  // Extract just the string
+      } else if (key === 'sessao' && typeof value === 'object' && value?.filter_value) {
+        cleanedFilters[key] = value.filter_value  // Extract just the string
+      } else if (key === 'paisesFilter' && typeof value === 'object' && value?.filter_value) {
+        cleanedFilters[key] = value.filter_value  // Extract just the string
+      } else if (key === 'cinemasFilter' && typeof value === 'object' && value?.filter_value) {
+        cleanedFilters[key] = value.filter_value  // Extract just the string
+      } else {
+        cleanedFilters[key] = value
+      }
     }
   }
   router.get(props.tabBaseUrl, cleanedFilters, {
@@ -100,6 +112,30 @@ const { sentinel, isSticky } = useStickyMenuTabs()
       <MobileTrigger @open-menu="openMenu" />
     </div>
 
+    <!-- filtered tag -->
+     <!-- { "query": null,
+       "mostrasFilter": null,
+       "cinemasFilter": null,
+       "paisesFilter": null,
+       "sessao": { "sessao": "2000-01-01T19:00:00.000Z",
+       "display_sessao": "19:00",
+       "filter_value": "19h00",
+       "filter_display": "19h00" }
+      } -->
+    <div
+      class="flex gap-300 pt-200 pb-300"
+      v-if="Object.values(props.current_filters).some((item) => item !== null)"
+    >
+      <TagFilter
+        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+        :key="key"
+        :filter="{ label: value.filter_display, value: value.filter_value }"
+        :text="value.filter_display"
+        @remove-filter="removeQuery"
+        />
+    </div>
+    <!-- filtered tag -->
+
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
         <!-- Added for sticky menutabs -->
@@ -132,6 +168,9 @@ const { sentinel, isSticky } = useStickyMenuTabs()
               :model-value="modelValue"
               :update-field="updateField"
               :mostrasFilter="props.mostrasFilter"
+              :cinemasFilter="props.cinemasFilter"
+              :paisesFilter="props.paisesFilter"
+              :sessoes="props.sessoes"
             />
           </template>
         </ResponsiveFilterMenu>

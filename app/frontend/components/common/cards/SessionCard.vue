@@ -64,9 +64,7 @@ const movieGenre = computed(() => {
           {{ props.session.titulo }}
         </h2>
         <div class="flex items-center gap-200">
-          <span class="text-overline text-on-dark-secondary">{{
-            "TBD"
-          }}</span>
+          <span class="text-overline text-on-dark-secondary">{{ props.session.paises }}</span>
           <img
             src="@assets/icons/divisor.svg"
             alt="divisor"
