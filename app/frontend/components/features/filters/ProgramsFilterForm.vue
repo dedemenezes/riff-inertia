@@ -65,6 +65,10 @@ const getPaisObject = (filter_value) => {
 const getGenreObject = (filter_value) => {
   return props.genresFilter.find(c => c.filter_value === filter_value) || null;
 }
+
+const getDirectorObject = (filter_value) => {
+  return props.directors.find(c => c.filter_value === filter_value) || null;
+}
 const getQueryObject = (filter_value) => {
   // TODO: REFACTOR
   // I'm building here beause the other get here as collection
@@ -172,7 +176,7 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="directorsOptions"
         :modelValue="props.modelValue.director?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('paisesFilter', getPaisObject(val))"
+        @update:modelValue="(val) => props.updateField('director', getDirectorObject(val))"
         />
       </div>
     </template>

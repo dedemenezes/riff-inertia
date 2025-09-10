@@ -99,6 +99,22 @@ class ProgramsController < ApplicationController
       end
     end
 
+    if params[:director].present?
+      selected_director = @directors_filter.find { |d| d["filter_value"] == params[:director] }
+
+      if selected_director
+        selected_filters[:director] = selected_director
+
+        # Get pelicula IDs first - clean, simple query
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+                              .where(diretor_coord_int: selected_director["filter_value"])
+                              .pluck(:id)
+
+        # Then filter programacoes by IDs - no complex joins
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      end
+    end
+
     # Get Scope Available dates
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
@@ -163,7 +179,8 @@ class ProgramsController < ApplicationController
         cinemasFilter: selected_cinema,
         paisesFilter: selected_pais,
         genresFilter: selected_genre,
-        sessao: selected_sessao
+        sessao: selected_sessao,
+        director: selected_director
       },
       has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
       crumbs: breadcrumbs(
@@ -208,10 +225,12 @@ class ProgramsController < ApplicationController
 
   def build_tab_url(date, filters)
     query_params = {}
-    query_params[:mostrasFilter]= filters[:mostrasFilter]["permalink_pt"] if filters[:mostrasFilter].present?
-    query_params[:cinemasFilter]= filters[:cinemasFilter]["id"] if filters[:cinemasFilter].present?
-    query_params[:paisesFilter]= filters[:paisesFilter]["id"] if filters[:paisesFilter].present?
+    query_params[:mostra]= filters[:mostrasFilter]["filter_value"] if filters[:mostrasFilter].present?
+    query_params[:cinema]= filters[:cinemasFilter]["filter_value"] if filters[:cinemasFilter].present?
+    query_params[:pais]= filters[:paisesFilter]["filter_value"] if filters[:paisesFilter].present?
+    query_params[:genre]= filters[:genre]["filter_value"] if filters[:genre].present?
     query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
+    query_params[:director]= filters[:director]["filter_value"] if filters[:director].present?
     query_params[:date] = date
     url_for(params: query_params, only_path: true)
   end
