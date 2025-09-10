@@ -7,8 +7,8 @@ Rails.application.routes.draw do
     resources :noticias, only: %i[ index show ], param: :permalink
     # other localized routes
 
-    resources :edicoes_anteriores, only: [ :index ]
-    resources :mostras, only: [ :index ]
+    resources :edicoes_anteriores, only: %i[ index ]
+    resources :mostras, only: %i[ index show ], param: :category
   end
 
 
