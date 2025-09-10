@@ -11,6 +11,7 @@ const props = defineProps({
   mostrasFilter: { type: Array, default: () => [] }, // Program-specific prop
   cinemasFilter: { type: Array, default: () => [] }, // Program-specific prop
   paisesFilter: { type: Array, default: () => [] },
+  genresFilter: { type: Array, default: () => [] },
   sessoes:  { type: Array, default: () => [] },
 });
 
@@ -36,6 +37,14 @@ const paisesFilterOptions = computed(() => {
   }));
 });
 // Transform cinema prop for ComboboxComponent format
+const genresFilterOptions = computed(() => {
+  return props.genresFilter.map(genre => ({
+    label: genre.filter_display,
+    value: genre.filter_value,
+  }));
+});
+
+// Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
   return props.sessoes.map(sessao => ({
     label: `Início às ${sessao.filter_display}`,
@@ -56,16 +65,44 @@ const getCinemaObject = (filter_value) => {
 const getPaisObject = (filter_value) => {
   return props.paisesFilter.find(c => c.filter_value === filter_value) || null;
 }
+
+const getGenreObject = (filter_value) => {
+  return props.genresFilter.find(c => c.filter_value === filter_value) || null;
+}
+const getQueryObject = (filter_value) => {
+  // TODO: REFACTOR
+  // I'm building here beause the other get here as collection
+  // everything gets here from controller current_filters prop
+  // this is just one so i cant search for it so we build
+  return {"filter_display": filter_value, "filter_value": filter_value} || null;
+}
+
 </script>
 
 <template>
   <!-- Article-specific filter content -->
    <div class="pt-400">
      <SearchBar
-       :modelValue="props.modelValue.query"
-       @update:modelValue="(val) => props.updateField('query', val)"
+       :modelValue="props.modelValue.query?.filter_value"
+       @update:modelValue="(val) => props.updateField('query', getQueryObject(val))"
        />
    </div>
+
+  <!-- GENRES -->
+  <AccordionGroup
+    text="Gênero"
+    :isOpen="!!props.modelValue.genresFilter"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="genresFilterOptions"
+        :modelValue="props.modelValue.genresFilter?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genresFilter', getGenreObject(val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
 
    <!-- HORARIO -->
     <AccordionGroup

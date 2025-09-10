@@ -19,7 +19,7 @@ const removeSelf = () => {
 
 <template>
 <span
-  class="max-w-fit inline-flex items-center gap-100 px-200 py-100 border rounded-full border-neutrals-300 font-body text-xs text-neutrals-700 font-regular leading-[18px]"
+  class="max-w-fit inline-flex items-center gap-100 px-200 py-100 border rounded-full border-neutrals-300 font-body text-xs text-neutrals-700 font-regular leading-[18px] shrink-0"
   role="group"
   :aria-label="`Filter: ${props.filter.label}`"
 >
@@ -28,7 +28,7 @@ const removeSelf = () => {
   <button
     type="button"
     :aria-label="`Remove ${props.filter.label} filter`"
-    class="ml-100 p-50 -m-50 bg-transparent border-0 rounded
+    class="p-50 -m-50 bg-transparent border-0 rounded
            cursor-pointer
            hover:bg-neutrals-100 hover:text-neutrals-800
            focus:outline-none focus:ring-1 focus:ring-neutrals-500 focus:ring-offset-1

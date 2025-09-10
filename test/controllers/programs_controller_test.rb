@@ -80,7 +80,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # 3. Check that search query is preserved in props
     props = inertia_props
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
 
     # 4. Verify results are filtered by both query AND date
     elements = props["elements"]
@@ -121,7 +121,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Should fall back to first available date
     assert props["menuTabs"].present?
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
   end
 
   test "pagination returns 1st page with search and date filters" do
@@ -225,7 +225,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     props = inertia_props
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-06"
 
     elements = props["elements"]
@@ -254,7 +254,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Should handle gracefully - empty results, preserved search, fallback date
     assert_equal 1, props["elements"].count
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
     # Should fallback to first available date with Batman movies
     assert_not_equal "2024-10-04", props["menuTabs"].map { _1["date"] }
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-05"
@@ -348,7 +348,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Cidade Perdida", elements.first["titulo"]
 
     # Verify both filters are preserved
-    assert_equal "Cidade", props["current_filters"]["query"]
+    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
   end
 
@@ -366,7 +366,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, elements.length
 
     # Filters should still be preserved
-    assert_equal "Paris", props["current_filters"]["query"]
+    assert_equal "Paris", props["current_filters"]["query"]["filter_value"]
     assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
   end
 
@@ -429,7 +429,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Cidade em Transformação", elements.first["titulo"]
 
     # All filters should be preserved
-    assert_equal "Cidade", props["current_filters"]["query"]
+    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal "documentarios", props["current_filters"]["mostrasFilter"]["permalink_pt"]
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
   end
@@ -542,7 +542,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Batman", elements.first["titulo"]
 
     # Filters preserved
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
   end
 
@@ -559,7 +559,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, props["elements"].length
 
     # Filters preserved
-    assert_equal "Batman", props["current_filters"]["query"]
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
     assert_equal cine_brasilia.id, props["current_filters"]["cinemasFilter"]["id"]
   end
 
@@ -620,7 +620,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, elements.length
     assert_equal "Cidade em Transformação", elements.first["titulo"]
 
-    assert_equal "Cidade", props["current_filters"]["query"]
+    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
   end

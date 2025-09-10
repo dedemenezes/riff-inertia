@@ -38,7 +38,8 @@ class ProgramsController < ApplicationController
       ).pluck(:id)
 
       base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      selected_filters[:query] = params[:query]
+      selected_query = { "filter_display": params[:query], "filter_value": params[:query] }
+      selected_filters[:query] = selected_query
     end
 
     if params[:mostrasFilter].present?
@@ -66,19 +67,33 @@ class ProgramsController < ApplicationController
       end
       if selected_pais
         selected_filters[:paisesFilter] = selected_pais
-        # raise
         # base_scope = base_scope.where(paises_id: selected_pais["id"])
         base_scope = base_scope.joins(pelicula: :paises).where(pelicula: { paises: { id: selected_pais["id"] } })
       end
     end
 
     if params[:sessao].present?
-      # raise
       selected_sessao = @sessoes.find { |sessao| (sessao["filter_value"] === params[:sessao]) }
 
       if selected_sessao
         selected_filters[:sessao] = selected_sessao
         base_scope = base_scope.where(sessao: params[:sessao]..)
+      end
+    end
+
+    if params[:genresFilter].present?
+      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genresFilter]) }
+
+      if selected_genre
+        selected_filters[:genre] = selected_genre
+        locale_index = I18n.locale == :en ? -1 : 1
+
+        # substring index is used to split the text in the database and select by index
+        base_scope = base_scope.where(
+          "SUBSTRING_INDEX(SUBSTRING_INDEX(peliculas.catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
+          locale_index,
+          "%#{selected_genre['filter_value']}%"
+        )
       end
     end
 
@@ -127,7 +142,6 @@ class ProgramsController < ApplicationController
     end
 
     # Build breadcrumbs
-    # raise
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
       tabBaseUrl: program_url,
@@ -137,13 +151,15 @@ class ProgramsController < ApplicationController
       mostrasFilter: @mostras_filter,
       cinemasFilter: @cinemas_filter,
       paisesFilter: @paises_filter,
+      genresFilter: @genres_filter,
       sessoes: @sessoes,
       menuTabs: @menu_tabs,
       current_filters: { # those are the ones used as modelValue
-        query: params[:query],
+        query: selected_query,
         mostrasFilter: selected_mostra,
         cinemasFilter: selected_cinema,
         paisesFilter: selected_pais,
+        genresFilter: selected_genre,
         sessao: selected_sessao
       },
       has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
@@ -192,6 +208,7 @@ class ProgramsController < ApplicationController
     query_params[:mostrasFilter]= filters[:mostrasFilter]["permalink_pt"] if filters[:mostrasFilter].present?
     query_params[:cinemasFilter]= filters[:cinemasFilter]["id"] if filters[:cinemasFilter].present?
     query_params[:paisesFilter]= filters[:paisesFilter]["id"] if filters[:paisesFilter].present?
+    query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
     query_params[:date] = date
     url_for(params: query_params, only_path: true)
   end
@@ -228,5 +245,7 @@ class ProgramsController < ApplicationController
       only: %i[sessao],
       methods: %i[display_sessao filter_value filter_display]
     )
+
+    @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
   end
 end
