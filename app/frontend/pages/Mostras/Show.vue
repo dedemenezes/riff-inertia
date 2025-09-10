@@ -52,7 +52,7 @@ const iconMapping = {
   />
 
   <TwContainer class="flex flex-col gap-1200">
-    <!-- Título e Submostras -->
+    <!-- Title and Submostras -->
     <div class="grid lg:grid-cols-3 grid-cols-1 gap-800">
       <div :class="`border-s-8 border-${props.tag_class} rounded-100 px-400 py-300 flex flex-col gap-200 col-span-2 h-fit`">
         <h2 class="text-header-medium-sm">{{ props.categoria }}</h2>
@@ -81,6 +81,7 @@ const iconMapping = {
       </div>
     </div>
 
+    <!-- Scroll to Filmes -->
     <div class="flex justify-center">
       <button :class="`cursor-pointer text-body-strong-sm flex gap-200`" @click="scrollToFilmes">
         Ver Filmes<IconCarretUp class="rotate-180"/>
