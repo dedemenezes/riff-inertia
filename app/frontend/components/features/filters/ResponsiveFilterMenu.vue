@@ -68,7 +68,7 @@ const emit = defineEmits([
 
   <!-- Mobile Layout: Fullscreen modal (only when open) -->
   <div
-    v-if="props.isOpen"
+    v-show="props.isOpen"
     style="margin-top: 0"
     class="fixed inset-0 z-50 bg-white flex md:hidden flex-col w-full max-w-full h-[100vh] right-0 shadow-lg overflow-y-auto"
   >
