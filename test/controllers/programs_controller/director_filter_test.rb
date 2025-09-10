@@ -184,7 +184,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   test "combines director filter with mostra filter" do
     get program_url, params: {
       director: "João Silva",
-      mostrasFilter: "competicao-nacional"
+      mostra: "competicao-nacional"
     }
 
     assert_response :success
@@ -196,13 +196,13 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # Verify both filters are preserved
     assert_equal "João Silva", props["current_filters"]["director"]["filter_value"]
-    assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines director filter with mostra filter with no results" do
     get program_url, params: {
       director: "Christopher Nolan",
-      mostrasFilter: "competicao-nacional"
+      mostra: "competicao-nacional"
     }
 
     assert_response :success
@@ -214,14 +214,14 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # Filters should still be preserved
     assert_equal "Christopher Nolan", props["current_filters"]["director"]["filter_value"]
-    assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines director filter with cinema filter" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
       director: "João Silva",
-      cinemasFilter: cinepolis.id
+      cinema: cinepolis.id
     }
 
     assert_response :success
@@ -237,7 +237,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # Verify both filters are preserved
     assert_equal "João Silva", props["current_filters"]["director"]["filter_value"]
-    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "director filter affects available dates" do
@@ -274,8 +274,8 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     get program_url, params: {
       query: "Matrix",
       director: "Wachowskis",
-      mostrasFilter: "sci-fi", # Adjust based on actual mostra permalink
-      cinemasFilter: cinepolis.id,
+      mostra: "sci-fi", # Adjust based on actual mostra permalink
+      cinema: cinepolis.id,
       date: "2024-10-06" # Adjust based on when Matrix is shown at Cinépolis
     }
 
@@ -292,7 +292,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_equal "Matrix", props["current_filters"]["query"]["filter_value"]
     assert_equal "Wachowskis", props["current_filters"]["director"]["filter_value"]
     # Adjust mostra assertion based on actual data structure
-    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "returns correct director options in props" do

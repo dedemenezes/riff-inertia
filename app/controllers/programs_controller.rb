@@ -42,31 +42,31 @@ class ProgramsController < ApplicationController
       selected_filters[:query] = selected_query
     end
 
-    if params[:mostrasFilter].present?
-      selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostrasFilter] }
-      selected_filters[:mostrasFilter] = selected_mostra if selected_mostra
+    if params[:mostra].present?
+      selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostra] }
+      selected_filters[:mostra] = selected_mostra if selected_mostra
 
       if selected_mostra
-        base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostrasFilter]["permalink_pt"] })
+        base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostra]["permalink_pt"] })
       end
     end
 
-    if params[:cinemasFilter]
+    if params[:cinema]
       selected_cinema = @cinemas_filter.find do |cinema_filter|
-        (cinema_filter["id"].to_s === params[:cinemasFilter]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
+        (cinema_filter["id"].to_s === params[:cinema]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
       end
       if selected_cinema
-        selected_filters[:cinemasFilter] = selected_cinema
+        selected_filters[:cinema] = selected_cinema
         base_scope = base_scope.where(cinema_id: selected_cinema["id"])
       end
     end
 
-    if params[:paisesFilter]
+    if params[:pais]
       selected_pais = @paises_filter.find do |pais_filter|
-        (pais_filter["id"].to_s === params[:paisesFilter])
+        (pais_filter["id"].to_s === params[:pais])
       end
       if selected_pais
-        selected_filters[:paisesFilter] = selected_pais
+        selected_filters[:pais] = selected_pais
         # base_scope = base_scope.where(paises_id: selected_pais["id"])
         base_scope = base_scope.joins(pelicula: :paises).where(pelicula: { paises: { id: selected_pais["id"] } })
       end
@@ -81,8 +81,8 @@ class ProgramsController < ApplicationController
       end
     end
 
-    if params[:genresFilter].present?
-      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genresFilter]) }
+    if params[:genre].present?
+      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genre]) }
 
       if selected_genre
         selected_filters[:genre] = selected_genre
@@ -167,22 +167,22 @@ class ProgramsController < ApplicationController
       elements: @programacoes,
       pagy: @pagy,
       mostras: @mostras_filter,
-      cinemasFilter: @cinemas_filter,
-      paisesFilter: @paises_filter,
-      genresFilter: @genres_filter,
+      cinemas: @cinemas_filter,
+      paises: @paises_filter,
+      genres: @genres_filter,
       sessoes: @sessoes,
       directors: @directors_filter,
       menuTabs: @menu_tabs,
       current_filters: { # those are the ones used as modelValue
         query: selected_query,
         mostra: selected_mostra,
-        cinemasFilter: selected_cinema,
-        paisesFilter: selected_pais,
-        genresFilter: selected_genre,
+        cinema: selected_cinema,
+        pais: selected_pais,
+        genre: selected_genre,
         sessao: selected_sessao,
         director: selected_director
       },
-      has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
+      has_active_filters: params.permit(:query, :mostra).to_h.values.any?(&:present?),
       crumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Programação", "" ],
@@ -225,9 +225,9 @@ class ProgramsController < ApplicationController
 
   def build_tab_url(date, filters)
     query_params = {}
-    query_params[:mostra]= filters[:mostrasFilter]["filter_value"] if filters[:mostrasFilter].present?
-    query_params[:cinema]= filters[:cinemasFilter]["filter_value"] if filters[:cinemasFilter].present?
-    query_params[:pais]= filters[:paisesFilter]["filter_value"] if filters[:paisesFilter].present?
+    query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
+    query_params[:cinema]= filters[:cinema]["filter_value"] if filters[:cinema].present?
+    query_params[:pais]= filters[:pais]["filter_value"] if filters[:pais].present?
     query_params[:genre]= filters[:genre]["filter_value"] if filters[:genre].present?
     query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
     query_params[:director]= filters[:director]["filter_value"] if filters[:director].present?

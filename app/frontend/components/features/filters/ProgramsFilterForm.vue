@@ -9,9 +9,9 @@ const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
   mostras: { type: Array, default: () => [] }, // Program-specific prop
-  cinemasFilter: { type: Array, default: () => [] }, // Program-specific prop
-  paisesFilter: { type: Array, default: () => [] },
-  genresFilter: { type: Array, default: () => [] },
+  cinemas: { type: Array, default: () => [] }, // Program-specific prop
+  paises: { type: Array, default: () => [] },
+  genres: { type: Array, default: () => [] },
   sessoes:  { type: Array, default: () => [] },
   directors:  { type: Array, default: () => [] },
 });
@@ -26,14 +26,14 @@ const mapFilterOptions = (filterList) => {
 const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostras));
 const mostraLabel = computed(() => props.mostras[0].filter_label)
 
-const cinemasFilterOptions = computed(() => mapFilterOptions(props.cinemasFilter));
-const cinemaLabel = computed(() => props.cinemasFilter[0].filter_label)
+const cinemasFilterOptions = computed(() => mapFilterOptions(props.cinemas));
+const cinemaLabel = computed(() => props.cinemas[0].filter_label)
 
-const paisesFilterOptions = computed(() => mapFilterOptions(props.paisesFilter));
-const paisLabel = computed(() => props.paisesFilter[0].filter_label)
+const paisesFilterOptions = computed(() => mapFilterOptions(props.paises));
+const paisLabel = computed(() => props.paises[0].filter_label)
 
-const genresFilterOptions = computed(() => mapFilterOptions(props.genresFilter));
-const genreLabel = computed(() => props.genresFilter[0].filter_label)
+const genresFilterOptions = computed(() => mapFilterOptions(props.genres));
+const genreLabel = computed(() => props.genres[0].filter_label)
 
 const directorsOptions = computed(() => mapFilterOptions(props.directors));
 const directorLabel = computed(() => props.directors[0].filter_label)
@@ -104,14 +104,14 @@ const getQueryObject = (filter_value) => {
   <!-- CINEMAS -->
   <AccordionGroup
     :text="cinemaLabel"
-    :isOpen="!!props.modelValue.cinemasFilter"
+    :isOpen="!!props.modelValue.cinema"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="cinemasFilterOptions"
-        :modelValue="props.modelValue.cinemasFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('cinemasFilter', getSelectedFrom('cinemasFilter', val))"
+        :modelValue="props.modelValue.cinema?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('cinema', getSelectedFrom('cinemas', val))"
         />
       </div>
     </template>
@@ -120,14 +120,14 @@ const getQueryObject = (filter_value) => {
   <!-- GENRES -->
   <AccordionGroup
     :text="genreLabel"
-    :isOpen="!!props.modelValue.genresFilter"
+    :isOpen="!!props.modelValue.genre"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="genresFilterOptions"
-        :modelValue="props.modelValue.genresFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('genresFilter', getSelectedFrom('genresFilter', val))"
+        :modelValue="props.modelValue.genre?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genre', getSelectedFrom('genres', val))"
         />
       </div>
     </template>
@@ -136,14 +136,14 @@ const getQueryObject = (filter_value) => {
   <!-- PAISES -->
   <AccordionGroup
     :text="paisLabel"
-    :isOpen="!!props.modelValue.paisesFilter"
+    :isOpen="!!props.modelValue.pais"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="paisesFilterOptions"
-        :modelValue="props.modelValue.paisesFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('paisesFilter', getSelectedFrom('paisesFilter', val))"
+        :modelValue="props.modelValue.pais?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('pais', getSelectedFrom('paises', val))"
         />
       </div>
     </template>

@@ -277,7 +277,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by mostra - competicao nacional" do
-    get program_url, params: { mostrasFilter: "competicao-nacional" }
+    get program_url, params: { mostra: "competicao-nacional" }
 
     assert_response :success
     props = inertia_props
@@ -291,7 +291,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by mostra - mostra internacional" do
-    get program_url, params: { mostrasFilter: "mostra-internacional" }
+    get program_url, params: { mostra: "mostra-internacional" }
 
     assert_response :success
     props = inertia_props
@@ -305,7 +305,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by mostra - documentarios" do
-    get program_url, params: { mostrasFilter: "documentarios" }
+    get program_url, params: { mostra: "documentarios" }
 
     assert_response :success
     props = inertia_props
@@ -319,7 +319,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "handles invalid mostra filter gracefully" do
-    get program_url, params: { mostrasFilter: "non-existent-mostra" }
+    get program_url, params: { mostra: "non-existent-mostra" }
 
     assert_response :success
     props = inertia_props
@@ -330,14 +330,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # selectedFilters should be empty
     selected_filters = props["current_filters"]
-    assert_nil selected_filters["mostrasFilter"]
+    assert_nil selected_filters["mostra"]
   end
 
   # COMBINED FILTERS TESTS
   test "combines search query and mostra filter" do
     get program_url, params: {
       query: "Cidade",
-      mostrasFilter: "competicao-nacional"
+      mostra: "competicao-nacional"
     }
 
     assert_response :success
@@ -349,13 +349,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Verify both filters are preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
-    assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines search query and mostra filter with no results" do
     get program_url, params: {
       query: "Paris",
-      mostrasFilter: "competicao-nacional"
+      mostra: "competicao-nacional"
     }
 
     assert_response :success
@@ -367,7 +367,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Filters should still be preserved
     assert_equal "Paris", props["current_filters"]["query"]["filter_value"]
-    assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "search finds movies across different mostras" do
@@ -386,7 +386,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
   test "mostra filter affects available dates" do
     # Documentarios only has content on 2024-10-05, 2024-10-06 and 2024-10-07
-    get program_url, params: { mostrasFilter: "documentarios" }
+    get program_url, params: { mostra: "documentarios" }
 
     assert_response :success
     props = inertia_props
@@ -398,7 +398,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
   test "preserves mostra filter when navigating dates" do
     get program_url, params: {
-      mostrasFilter: "competicao-nacional",
+      mostra: "competicao-nacional",
       date: "2024-10-06"
     }
 
@@ -411,13 +411,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Cidade Perdida", elements.first["titulo"]
 
     # Filter should be preserved
-    assert_equal "competicao-nacional", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines all filters - search, mostra, and date" do
     get program_url, params: {
       query: "Cidade",
-      mostrasFilter: "documentarios",
+      mostra: "documentarios",
       date: "2024-10-07"
     }
 
@@ -430,13 +430,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # All filters should be preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
-    assert_equal "documentarios", props["current_filters"]["mostrasFilter"]["permalink_pt"]
+    assert_equal "documentarios", props["current_filters"]["mostra"]["permalink_pt"]
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
   end
 
   test "mostra filter with pagination" do
     get program_url, params: {
-      mostrasFilter: "competicao-nacional"
+      mostra: "competicao-nacional"
     }
 
     assert_response :success
@@ -455,13 +455,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, pagy["page"]
   end
 
-  test "returns correct mostrasFilter options in props" do
+  test "returns correct mostras options in props" do
     get program_url
 
     assert_response :success
     props = inertia_props
 
-    mostras_filter = props["mostrasFilter"]
+    mostras_filter = props["mostras"]
     assert_equal 4, mostras_filter.length
 
     # Check that all mostras are included
@@ -481,13 +481,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     get program_url
     assert_response :success
     props = inertia_props
-    cinema_options = props["cinemasFilter"]
+    cinema_options = props["cinemas"]
     assert_equal 2, cinema_options.length
   end
 
   test "filters by cinema - cine brasilia" do
     cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinemasFilter: cine_brasilia.id }
+    get program_url, params: { cinema: cine_brasilia.id }
 
     assert_response :success
     props = inertia_props
@@ -501,7 +501,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
   test "filters by cinema - cinepolis" do
     cinepolis = cinemas(:cinepolis)
-    get program_url, params: { cinemasFilter: cinepolis.id }
+    get program_url, params: { cinema: cinepolis.id }
 
     assert_response :success
     props = inertia_props
@@ -515,7 +515,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "handles invalid cinema filter gracefully" do
-    get program_url, params: { cinemasFilter: 999_999 }
+    get program_url, params: { cinema: 999_999 }
 
     assert_response :success
     props = inertia_props
@@ -524,14 +524,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert props["elements"].length > 0
 
     selected_filters = props["current_filters"]
-    assert_nil selected_filters["cinemasFilter"]
+    assert_nil selected_filters["cinema"]
   end
 
   test "combines search query and cinema filter" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
       query: "Batman",
-      cinemasFilter: cinepolis.id
+      cinema: cinepolis.id
     }
 
     assert_response :success
@@ -543,14 +543,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Filters preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "combines search query and cinema filter with no results" do
     cine_brasilia = cinemas(:cine_brasilia)
     get program_url, params: {
       query: "Batman",
-      cinemasFilter: cine_brasilia.id
+      cinema: cine_brasilia.id
     }
 
     assert_response :success
@@ -560,7 +560,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Filters preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal cine_brasilia.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cine_brasilia.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "search finds movies across different cinemas" do
@@ -578,7 +578,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
   test "cinema filter affects available dates" do
     cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinemasFilter: cine_brasilia.id }
+    get program_url, params: { cinema: cine_brasilia.id }
 
     assert_response :success
     props = inertia_props
@@ -590,7 +590,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   test "preserves cinema filter when navigating dates" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
-      cinemasFilter: cinepolis.id,
+      cinema: cinepolis.id,
       date: "2024-10-06"
     }
 
@@ -602,14 +602,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_includes titles, "Amazônia Selvagem"
     assert_includes titles, "Matrix"
 
-    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "combines all filters - search, cinema, and date" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
       query: "Cidade",
-      cinemasFilter: cinepolis.id,
+      cinema: cinepolis.id,
       date: "2024-10-07"
     }
 
@@ -621,13 +621,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Cidade em Transformação", elements.first["titulo"]
 
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
-    assert_equal cinepolis.id, props["current_filters"]["cinemasFilter"]["id"]
+    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
     assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
   end
 
   test "cinema filter with pagination" do
     cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinemasFilter: cine_brasilia.id }
+    get program_url, params: { cinema: cine_brasilia.id }
 
     assert_response :success
     props = inertia_props
@@ -637,13 +637,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 17, props["pagy"]["count"]
   end
 
-  test "returns correct cinemasFilter options in props" do
+  test "returns correct cinemas options in props" do
     get program_url
 
     assert_response :success
     props = inertia_props
 
-    cinemas_filter = props["cinemasFilter"]
+    cinemas_filter = props["cinemas"]
     assert_equal 2, cinemas_filter.length
 
     names = cinemas_filter.map { _1["nome"] }

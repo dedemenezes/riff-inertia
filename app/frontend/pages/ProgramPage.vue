@@ -33,9 +33,9 @@ const props = defineProps({
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
   ,mostras: { type: Array, default: () => [] }
-  ,cinemasFilter: { type: Array, default: () => [] }
-  ,paisesFilter: { type: Array, default: () => [] }
-  ,genresFilter: { type: Array, default: () => [] }
+  ,cinemas: { type: Array, default: () => [] }
+  ,paises: { type: Array, default: () => [] }
+  ,genres: { type: Array, default: () => [] }
   ,sessoes: { type: Array, default: () => [] }
   ,directors: { type: Array, default: () => [] }
   // NEW LIFE
@@ -108,7 +108,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
     <!-- filtered tag -->
      <!-- { "query": null,
        "mostrasFilter": null,
-       "cinemasFilter": null,
+       "cinemas": null,
        "paisesFilter": null,
        "sessao": { "sessao": "2000-01-01T19:00:00.000Z",
        "display_sessao": "19:00",
@@ -172,9 +172,9 @@ const { sentinel, isSticky } = useStickyMenuTabs()
               :model-value="modelValue"
               :update-field="updateField"
               :mostras="props.mostras"
-              :cinemasFilter="props.cinemasFilter"
-              :paisesFilter="props.paisesFilter"
-              :genresFilter="props.genresFilter"
+              :cinemas="props.cinemas"
+              :paises="props.paises"
+              :genres="props.genres"
               :sessoes="props.sessoes"
               :directors="props.directors"
             />
