@@ -13,7 +13,7 @@ const props = defineProps({
 
 const emit = defineEmits(["remove-filter"]);
 const removeSelf = () => {
-  emit("remove-filter", props.filter.value);
+  emit("remove-filter", props.filter);
 };
 </script>
 
@@ -21,13 +21,13 @@ const removeSelf = () => {
 <span
   class="max-w-fit inline-flex items-center gap-100 px-200 py-100 border rounded-full border-neutrals-300 font-body text-xs text-neutrals-700 font-regular leading-[18px] shrink-0"
   role="group"
-  :aria-label="`Filter: ${props.filter.label}`"
+  :aria-label="`Filter: ${props.filter.filter_display}`"
 >
-  {{ props.filter.label }}
+  {{ props.text }}
 
   <button
     type="button"
-    :aria-label="`Remove ${props.filter.label} filter`"
+    :aria-label="`Remove ${props.filter.filter_display} filter`"
     class="p-50 -m-50 bg-transparent border-0 rounded
            cursor-pointer
            hover:bg-neutrals-100 hover:text-neutrals-800

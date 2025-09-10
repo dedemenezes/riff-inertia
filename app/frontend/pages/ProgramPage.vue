@@ -105,29 +105,22 @@ const { sentinel, isSticky } = useStickyMenuTabs()
       <MobileTrigger @open-menu="openMenu" />
     </div>
 
-    <!-- filtered tag -->
-     <!-- { "query": null,
-       "mostrasFilter": null,
-       "cinemas": null,
-       "paisesFilter": null,
-       "sessao": { "sessao": "2000-01-01T19:00:00.000Z",
-       "display_sessao": "19:00",
-       "filter_value": "19h00",
-       "filter_display": "19h00" }
-      } -->
+    <!-- TODO: REFAC into reusable components -->
+    <!-- MOBILE TAG FILTER -->
     <div
       class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
-      v-if="Object.values(props.current_filters).some((item) => item !== null)"
+      v-if="Object.values(localFilters).some((item) => item !== null)"
     >
       <TagFilter
-        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+        v-for="[key, value] in Object.entries(localFilters).filter(([k, v]) => v !== null)"
         :key="key"
-        :filter="{ label: value.filter_display, value: value.filter_value }"
+        :filter="value"
         :text="value.filter_display"
         @remove-filter="removeQuery"
-        />
+      />
     </div>
     <!-- filtered tag -->
+
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
         <!-- Added for sticky menutabs -->
@@ -137,18 +130,22 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           :tabs="menuTabs"
           class="h-15"
         />
+
+        <!-- DESKTOP TAG FILTER -->
         <div
           class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
-          v-if="Object.values(props.current_filters).some((item) => item !== null)"
+          v-if="Object.values(localFilters).some((item) => item !== null)"
         >
           <TagFilter
-            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            v-for="[key, value] in Object.entries(localFilters).filter(([k, v]) => v !== null)"
             :key="key"
-            :filter="{ label: value.filter_display, value: value.filter_value }"
+            :filter="value"
             :text="value.filter_display"
             @remove-filter="removeQuery"
-            />
+          />
         </div>
+
+        <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
