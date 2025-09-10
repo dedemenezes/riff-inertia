@@ -213,7 +213,7 @@ class ProgramsController < ApplicationController
                             .sort_by { |it| it.permalink_pt }
                             .as_json(
                               only: %i[id permalink_pt nome_abreviado],
-                              methods: [ :tag_class, :display_name, :filter_value, :filter_display]
+                              methods: [ :tag_class, :display_name, :filter_value, :filter_display ]
                             )
     @cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL)
                             .to_a
