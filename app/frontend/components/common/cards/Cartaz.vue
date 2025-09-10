@@ -10,7 +10,7 @@ const props = defineProps({
     <img :src="props.cartaz" :alt="`Poster do Festival de ${props.descricao}`">
     <p class="p-400">
       {{ props.descricao }}
-      <hr>
+      <!-- <hr> -->
     </p>
   </li>
 </template>
@@ -44,7 +44,7 @@ const props = defineProps({
     height: auto;
   }
 
-  hr {
+  /* hr {
     visibility: hidden;
     transition: visibility 0.2s ease, margin-top .3s ease
   }
@@ -52,5 +52,5 @@ const props = defineProps({
   li:hover hr {
     visibility: visible;
     margin-top: 1rem;
-  }
+  } */
 </style>
