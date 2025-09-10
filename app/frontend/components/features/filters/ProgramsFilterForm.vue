@@ -88,22 +88,6 @@ const getQueryObject = (filter_value) => {
        />
    </div>
 
-  <!-- GENRES -->
-  <AccordionGroup
-    text="Gênero"
-    :isOpen="!!props.modelValue.genresFilter"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-        :collection="genresFilterOptions"
-        :modelValue="props.modelValue.genresFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('genresFilter', getGenreObject(val))"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
-
    <!-- HORARIO -->
     <AccordionGroup
       text="Horário"
@@ -145,6 +129,22 @@ const getQueryObject = (filter_value) => {
         :collection="cinemasFilterOptions"
         :modelValue="props.modelValue.cinemasFilter?.filter_value || null"
         @update:modelValue="(val) => props.updateField('cinemasFilter', getCinemaObject(val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
+
+  <!-- GENRES -->
+  <AccordionGroup
+    text="Gênero"
+    :isOpen="!!props.modelValue.genresFilter"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="genresFilterOptions"
+        :modelValue="props.modelValue.genresFilter?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genresFilter', getGenreObject(val))"
         />
       </div>
     </template>
