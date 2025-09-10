@@ -166,7 +166,7 @@ class ProgramsController < ApplicationController
       items:,
       elements: @programacoes,
       pagy: @pagy,
-      mostrasFilter: @mostras_filter,
+      mostras: @mostras_filter,
       cinemasFilter: @cinemas_filter,
       paisesFilter: @paises_filter,
       genresFilter: @genres_filter,
@@ -175,7 +175,7 @@ class ProgramsController < ApplicationController
       menuTabs: @menu_tabs,
       current_filters: { # those are the ones used as modelValue
         query: selected_query,
-        mostrasFilter: selected_mostra,
+        mostra: selected_mostra,
         cinemasFilter: selected_cinema,
         paisesFilter: selected_pais,
         genresFilter: selected_genre,

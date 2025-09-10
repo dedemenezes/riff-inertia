@@ -8,7 +8,7 @@ import SelectComponent from "@/components/ui/SelectComponent.vue";
 const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
-  mostrasFilter: { type: Array, default: () => [] }, // Program-specific prop
+  mostras: { type: Array, default: () => [] }, // Program-specific prop
   cinemasFilter: { type: Array, default: () => [] }, // Program-specific prop
   paisesFilter: { type: Array, default: () => [] },
   genresFilter: { type: Array, default: () => [] },
@@ -23,8 +23,8 @@ const mapFilterOptions = (filterList) => {
   }));
 }
 
-const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostrasFilter));
-const mostraLabel = computed(() => props.mostrasFilter[0].filter_label)
+const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostras));
+const mostraLabel = computed(() => props.mostras[0].filter_label)
 
 const cinemasFilterOptions = computed(() => mapFilterOptions(props.cinemasFilter));
 const cinemaLabel = computed(() => props.cinemasFilter[0].filter_label)
@@ -94,8 +94,8 @@ const getQueryObject = (filter_value) => {
      <div class="overflow-hidden w-full">
        <ComboboxComponent
        :collection="mostrasFilterOptions"
-       :modelValue="props.modelValue.mostrasFilter?.filter_value || null"
-       @update:modelValue="(val) => props.updateField('mostrasFilter', getSelectedFrom('mostrasFilter', val))"
+       :modelValue="props.modelValue.mostra?.filter_value || null"
+       @update:modelValue="(val) => props.updateField('mostra', getSelectedFrom('mostras', val))"
        />
       </div>
     </template>

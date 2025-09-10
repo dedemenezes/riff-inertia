@@ -32,7 +32,7 @@ const props = defineProps({
   items: { type: Array, required: true }
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
-  ,mostrasFilter: { type: Array, default: () => [] }
+  ,mostras: { type: Array, default: () => [] }
   ,cinemasFilter: { type: Array, default: () => [] }
   ,paisesFilter: { type: Array, default: () => [] }
   ,genresFilter: { type: Array, default: () => [] }
@@ -171,7 +171,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
             <ProgramsFilterForm
               :model-value="modelValue"
               :update-field="updateField"
-              :mostrasFilter="props.mostrasFilter"
+              :mostras="props.mostras"
               :cinemasFilter="props.cinemasFilter"
               :paisesFilter="props.paisesFilter"
               :genresFilter="props.genresFilter"
