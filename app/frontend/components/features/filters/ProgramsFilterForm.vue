@@ -13,6 +13,7 @@ const props = defineProps({
   paisesFilter: { type: Array, default: () => [] },
   genresFilter: { type: Array, default: () => [] },
   sessoes:  { type: Array, default: () => [] },
+  directors:  { type: Array, default: () => [] },
 });
 
 const mapFilterOptions = (filterList) => {
@@ -33,6 +34,11 @@ const paisLabel = computed(() => props.paisesFilter[0].filter_label)
 
 const genresFilterOptions = computed(() => mapFilterOptions(props.genresFilter));
 const genreLabel = computed(() => props.genresFilter[0].filter_label)
+
+const directorsOptions = computed(() => mapFilterOptions(props.directors));
+const directorLabel = computed(() => props.directors[0].filter_label)
+
+
 // Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
   return props.sessoes.map(sessao => ({
@@ -142,7 +148,7 @@ const getQueryObject = (filter_value) => {
 
   <!-- PAISES -->
   <AccordionGroup
-    text="Pais"
+    :text="paisLabel"
     :isOpen="!!props.modelValue.paisesFilter"
   >
     <template v-slot:content>
@@ -150,6 +156,22 @@ const getQueryObject = (filter_value) => {
         <ComboboxComponent
         :collection="paisesFilterOptions"
         :modelValue="props.modelValue.paisesFilter?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('paisesFilter', getPaisObject(val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
+
+  <!-- DIRETORES -->
+  <AccordionGroup
+    :text="directorLabel"
+    :isOpen="!!props.modelValue.director"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="directorsOptions"
+        :modelValue="props.modelValue.director?.filter_value || null"
         @update:modelValue="(val) => props.updateField('paisesFilter', getPaisObject(val))"
         />
       </div>

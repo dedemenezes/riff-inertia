@@ -37,6 +37,7 @@ const props = defineProps({
   ,paisesFilter: { type: Array, default: () => [] }
   ,genresFilter: { type: Array, default: () => [] }
   ,sessoes: { type: Array, default: () => [] }
+  ,directors: { type: Array, default: () => [] }
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
@@ -127,7 +128,6 @@ const { sentinel, isSticky } = useStickyMenuTabs()
         />
     </div>
     <!-- filtered tag -->
-
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
         <!-- Added for sticky menutabs -->
@@ -176,6 +176,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
               :paisesFilter="props.paisesFilter"
               :genresFilter="props.genresFilter"
               :sessoes="props.sessoes"
+              :directors="props.directors"
             />
           </template>
         </ResponsiveFilterMenu>

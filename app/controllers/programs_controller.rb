@@ -155,6 +155,7 @@ class ProgramsController < ApplicationController
       paisesFilter: @paises_filter,
       genresFilter: @genres_filter,
       sessoes: @sessoes,
+      directors: @directors_filter,
       menuTabs: @menu_tabs,
       current_filters: { # those are the ones used as modelValue
         query: selected_query,
@@ -249,5 +250,6 @@ class ProgramsController < ApplicationController
     )
 
     @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
+    @directors_filter = Pelicula.directors_for(EDICAO_ATUAL)
   end
 end
