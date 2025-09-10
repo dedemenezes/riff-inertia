@@ -12,11 +12,11 @@ class Pelicula < ApplicationRecord
   has_many :peliculas_tags
 
   def self.genres_for(edicao_id)
-    # Rails.cache.fetch("genres-for-edicao-#{edicao_id}-#{I18n.locale}", expires_in: 12.hours) do
+      # Rails.cache.fetch("genres-for-edicao-#{edicao_id}-#{I18n.locale}", expires_in: 12.hours) do
       locale_index = I18n.locale == :en ? 1 : 0
 
       genres = where(edicao_id: edicao_id)
-        .where.not(catalogo_ficha_2007: [nil, ""])
+        .where.not(catalogo_ficha_2007: [ nil, "" ])
         .pluck(:catalogo_ficha_2007)
         .map { |raw| raw.split(" ").first&.split("/")&.[](locale_index) }
         .compact
