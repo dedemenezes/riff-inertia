@@ -1,4 +1,6 @@
 class Pelicula < ApplicationRecord
+  include ActionView::Helpers::TextHelper
+
   belongs_to :importacao
   belongs_to :edicao
   belongs_to :mostra
@@ -17,5 +19,16 @@ class Pelicula < ApplicationRecord
       "en": 1
     }
     catalogo_ficha_2007.split(" ")&.first.split("/")[locales[I18n.locale]] || "TBD"
+  end
+
+  def display_paises
+    all_paises = paises.map { |it| it.nome_pais }
+    # TODO: ORDER HOW?
+    counter = all_paises.length
+    if counter > 1
+      "#{all_paises.first} + #{pluralize(counter - 1, "país", "países")}"
+    else
+      all_paises.first
+    end
   end
 end
