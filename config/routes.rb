@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     # other localized routes
 
     resources :edicoes_anteriores, only: [ :index ]
+    resources :mostras, only: [ :index ]
   end
 
 
