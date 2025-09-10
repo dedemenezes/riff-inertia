@@ -3,7 +3,7 @@ sci_fi:
   permalink_pt: "sci-fi"
   permalink_en: "sci-fi"
   importacao_id: 1
-  edicao_id: 1
+  edicao_id: 12
   nome_pt: "Ficção Científica"
   nome_en: "Science Fiction"
   chamada_pt: "Mostra de filmes de ficção científica"
@@ -13,5 +13,61 @@ sci_fi:
   imagem: "sci-fi-banner.jpg"
   premiere: 1
   ordem: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+
+# test/fixtures/mostras.yml
+competicao_nacional:
+  nome_abreviado: "Comp Nacional"
+  permalink_pt: "competicao-nacional"
+  permalink_en: "national-competition"
+  importacao_id: 1
+  edicao_id: 12
+  nome_pt: "Competição Nacional"
+  nome_en: "National Competition"
+  chamada_pt: "Filmes nacionais em competição"
+  chamada_en: "National films in competition"
+  conteudo_pt: "Mostra competitiva de cinema nacional"
+  conteudo_en: "Competitive showcase of national cinema"
+  imagem: "competicao-nacional.jpg"
+  premiere: 1
+  ordem: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+mostra_internacional:
+  nome_abreviado: "Internacional"
+  permalink_pt: "mostra-internacional"
+  permalink_en: "international-showcase"
+  importacao_id: 1
+  edicao_id: 12
+  nome_pt: "Mostra Internacional"
+  nome_en: "International Showcase"
+  chamada_pt: "Cinema internacional de qualidade"
+  chamada_en: "Quality international cinema"
+  conteudo_pt: "Filmes internacionais selecionados"
+  conteudo_en: "Selected international films"
+  imagem: "internacional.jpg"
+  premiere: 1
+  ordem: 2
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+documentarios:
+  nome_abreviado: "Docs"
+  permalink_pt: "documentarios"
+  permalink_en: "documentaries"
+  importacao_id: 1
+  edicao_id: 12
+  nome_pt: "Documentários"
+  nome_en: "Documentaries"
+  chamada_pt: "Documentários imperdíveis"
+  chamada_en: "Unmissable documentaries"
+  conteudo_pt: "Seleção de documentários nacionais e internacionais"
+  conteudo_en: "Selection of national and international documentaries"
+  imagem: "documentarios.jpg"
+  premiere: 1
+  ordem: 3
   created: <%= Date.today %>
   updated: <%= Date.today %>

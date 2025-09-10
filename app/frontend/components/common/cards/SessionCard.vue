@@ -38,7 +38,7 @@ const movieGenre = computed(() => {
       <img
         :src="moviePoster"
         alt="movie-name poster"
-        class="rounded-200 h-[326px] w-full object-cover"
+        class="rounded-200 h-[268px] w-full object-cover"
       />
       <!-- Overlay -->
       <div
@@ -64,9 +64,7 @@ const movieGenre = computed(() => {
           {{ props.session.titulo }}
         </h2>
         <div class="flex items-center gap-200">
-          <span class="text-overline text-on-dark-secondary">{{
-            "TBD"
-          }}</span>
+          <span class="text-overline text-on-dark-secondary">{{ props.session.paises }}</span>
           <img
             src="@assets/icons/divisor.svg"
             alt="divisor"

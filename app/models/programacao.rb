@@ -10,4 +10,12 @@ class Programacao < ApplicationRecord
   def display_sessao
     sessao.strftime("%H:%M")
   end
+
+  def filter_value
+    sessao.strftime("%Hh%M")
+  end
+
+  def filter_display
+    sessao.strftime("%Hh%M")
+  end
 end

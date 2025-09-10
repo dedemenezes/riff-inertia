@@ -43,8 +43,14 @@ const clearAllFilters = () => {
 };
 
 const hasActiveFilters = computed(() => {
-  return Object.values(props.modelValue).some((value) => value !== null);
+  const keysToIgnore = ['page', 'date']; // Add keys you want to ignore
+
+  return Object.entries(props.modelValue)
+    .filter(([key, value]) => !keysToIgnore.includes(key))
+    .filter(([key, value]) => value != "")
+    .some(([key, value]) => value !== null);
 });
+  // return Object.values(props.modelValue).some((value) => value !== null);
 
 const updateField = (key, value) => {
   emit("update:modelValue", { ...props.modelValue, [key]: value });

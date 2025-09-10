@@ -1,4 +1,8 @@
 class ProgramsController < ApplicationController
+  EDICAO_ATUAL = 12
+  # TODO: MAKE THIS ENV VARIABLE?
+
+  include BreadcrumbsHelper
   DATES_PER_PAGE = 1
   include Pagy::Backend
 
@@ -11,47 +15,85 @@ class ProgramsController < ApplicationController
       { name: I18n.t("navigation.sessoes_ao_ar_livre"), route: "/", icon: "clock" }
     ]
 
+    selected_filters = {}
     last_import_id = Programacao.maximum(:importacoesprog_id)
 
     base_scope = Programacao
-      .joins(:pelicula)
+      .joins(pelicula: :mostra)
       .includes(:cinema, pelicula: :mostra)
-      .where(importacoesprog_id: last_import_id)
+      .where(importacoesprog_id: last_import_id, edicao_id: EDICAO_ATUAL) # TODO: remover importacoes?
+
+    set_filter_options(base_scope)
 
     # Filtering SEARCH INPUT
     if params[:query].present?
       term = "%#{params[:query].downcase}%"
-      base_scope = base_scope.where(
-        "LOWER(peliculas.titulo_ingles_coord_int) LIKE :query OR
-        LOWER(peliculas.titulo_original_coord_int) LIKE :query OR
-        LOWER(peliculas.titulo_portugues_coord_int) LIKE :query OR
-        LOWER(peliculas.titulo_ingles_semartigo) LIKE :query OR
-        LOWER(peliculas.titulo_portugues_semartigo) LIKE :query",
-        query: term
-      )
+      pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).where(
+        "LOWER(titulo_ingles_coord_int) LIKE :term OR
+        LOWER(titulo_original_coord_int) LIKE :term OR
+        LOWER(titulo_portugues_coord_int) LIKE :term OR
+        LOWER(titulo_ingles_semartigo) LIKE :term OR
+        LOWER(titulo_portugues_semartigo) LIKE :term",
+        term: term
+      ).pluck(:id)
+
+      base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      selected_filters[:query] = params[:query]
     end
 
-    # Gathering filter options
-    mostras_filter = Mostra.where(edicao_id: 12).to_a.uniq { |m| m.display_name }.as_json(
-      only: %i[id permalink_pt nome_abreviado],
-      methods: [ :tag_class, :display_name ]
-    )
-
-    selected_filters = {}
     if params[:mostrasFilter].present?
-      selected_mostra = mostras_filter.find { |c| c["tag_class"] == params[:mostrasFilter] }
+      selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostrasFilter] }
       selected_filters[:mostrasFilter] = selected_mostra if selected_mostra
 
-      base_scope = base_scope.where(pelicula: { mostra_id: selected_filters[:mostrasFilter]["id"] })
+      if selected_mostra
+        base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostrasFilter]["permalink_pt"] })
+      end
     end
 
+    if params[:cinemasFilter]
+      selected_cinema = @cinemas_filter.find do |cinema_filter|
+        (cinema_filter["id"].to_s === params[:cinemasFilter]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
+      end
+      if selected_cinema
+        selected_filters[:cinemasFilter] = selected_cinema
+        base_scope = base_scope.where(cinema_id: selected_cinema["id"])
+      end
+    end
+
+    if params[:paisesFilter]
+      selected_pais = @paises_filter.find do |pais_filter|
+        (pais_filter["id"].to_s === params[:paisesFilter])
+      end
+      if selected_pais
+        selected_filters[:paisesFilter] = selected_pais
+        # raise
+        # base_scope = base_scope.where(paises_id: selected_pais["id"])
+        base_scope = base_scope.joins(pelicula: :paises).where(pelicula: { paises: { id: selected_pais["id"] } })
+      end
+    end
+
+    if params[:sessao].present?
+      # raise
+      selected_sessao = @sessoes.find { |sessao| (sessao["filter_value"] === params[:sessao]) }
+
+      if selected_sessao
+        selected_filters[:sessao] = selected_sessao
+        base_scope = base_scope.where(sessao: params[:sessao]..)
+      end
+    end
+
+    # Get Scope Available dates
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
 
+    # Filter by date
     if params[:date].present?
       parsed_date = Date.parse(params[:date]) rescue nil
-      selected_date = parsed_date if parsed_date&.in?(available_dates)
+      if parsed_date&.in?(available_dates)
+        selected_date = parsed_date
+      end
     end
+    selected_filters[:date] = selected_date
 
     programacoes_for_date = base_scope.where(data: selected_date).order(:sessao)
 
@@ -59,34 +101,57 @@ class ProgramsController < ApplicationController
 
     @pagy, @programacoes = pagy_infinite(programacoes_for_date, current_page)
 
-    @programacoes = @programacoes.map do |p|
+    @programacoes = @programacoes.map do |programacao|
       {
-        id: p.id,
-        data: p.data,
-        sessao: [ p.display_sessao ],
-        cinema: p.cinema&.nome,
-        titulo: p.pelicula&.titulo_portugues_coord_int,
-        duracao: p.pelicula&.duracao_coord_int,
-        imagem: p.pelicula&.imagem,
-        genero: p.pelicula&.genre,
-        mostra: p.pelicula&.mostra&.display_name,
-        mostra_tag_class: p.pelicula&.mostra&.tag_class
+        id: programacao.id,
+        data: programacao.data,
+        sessao: [ programacao.display_sessao ],
+        cinema: programacao.cinema&.nome,
+        titulo: programacao.pelicula&.titulo_portugues_coord_int,
+        duracao: programacao.pelicula&.duracao_coord_int,
+        imagem: programacao.pelicula&.imagem,
+        genero: programacao.pelicula&.genre,
+        paises: programacao.pelicula&.display_paises,
+        mostra: programacao.pelicula&.mostra&.display_name,
+        mostra_tag_class: programacao.pelicula&.mostra&.tag_class
       }
     end
 
-    display_selected_date = I18n.l(selected_date, format: "%a, %e %b", locale: :pt) if selected_date
+    # display_selected_date = I18n.l(selected_date, format: "%a, %e %b", locale: :pt) if selected_date
+    @menu_tabs = available_dates.map do |date|
+      {
+        date: date,
+        url: build_tab_url(date, selected_filters),
+        active: date.to_s == params[:date] || (date == selected_date && !params[:date])
+      }
+    end
 
+    # Build breadcrumbs
+    # raise
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
+      tabBaseUrl: program_url,
       items:,
-      available_dates:,
-      selected_date: display_selected_date,
       elements: @programacoes,
       pagy: @pagy,
-      tabBaseUrl: program_url,
-      searchQuery: params[:query],
-      selectedFilters: selected_filters,
-      mostrasFilter: mostras_filter
+      mostrasFilter: @mostras_filter,
+      cinemasFilter: @cinemas_filter,
+      paisesFilter: @paises_filter,
+      sessoes: @sessoes,
+      menuTabs: @menu_tabs,
+      current_filters: { # those are the ones used as modelValue
+        query: params[:query],
+        mostrasFilter: selected_mostra,
+        cinemasFilter: selected_cinema,
+        paisesFilter: selected_pais,
+        sessao: selected_sessao
+      },
+      has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
+      crumbs: breadcrumbs(
+        [ "", @root_url ],
+        [ "Programação", "" ],
+        [ "Programação Completa", "" ],
+      )
     }
   end
 
@@ -120,5 +185,48 @@ class ProgramsController < ApplicationController
 
       [ pagy_obj, items ]
     end
+  end
+
+  def build_tab_url(date, filters)
+    query_params = {}
+    query_params[:mostrasFilter]= filters[:mostrasFilter]["permalink_pt"] if filters[:mostrasFilter].present?
+    query_params[:cinemasFilter]= filters[:cinemasFilter]["id"] if filters[:cinemasFilter].present?
+    query_params[:paisesFilter]= filters[:paisesFilter]["id"] if filters[:paisesFilter].present?
+    query_params[:date] = date
+    url_for(params: query_params, only_path: true)
+  end
+
+  def set_filter_options(base_scope)
+    @paises_filter   = base_scope.includes(pelicula: :paises)
+                                .map { _1.pelicula.paises }
+                                .flatten
+                                .uniq
+                                .sort_by { |it| it.nome_pais }
+                                .as_json(
+                                  only: %i[id nome_pais],
+                                  methods: %i[filter_display filter_value]
+                                )
+
+    @mostras_filter  = Mostra.where(edicao_id: EDICAO_ATUAL)
+                            .to_a
+                            .uniq { |m| m.id }
+                            .sort_by { |it| it.permalink_pt }
+                            .as_json(
+                              only: %i[id permalink_pt nome_abreviado],
+                              methods: [ :tag_class, :display_name, :filter_value, :filter_display ]
+                            )
+    @cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL)
+                            .to_a
+                            .uniq { |m| m.id }
+                            .sort_by { |it| it.nome }
+                            .as_json(
+                              only: %i[id nome endereco edicao_id],
+                              methods: %i[filter_display filter_value]
+                            )
+
+    @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort.as_json(
+      only: %i[sessao],
+      methods: %i[display_sessao filter_value filter_display]
+    )
   end
 end

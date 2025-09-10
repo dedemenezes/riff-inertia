@@ -2,7 +2,7 @@ program_batman:
   cinema: cinepolis
   pelicula: batman
   importacoesprog_id: 123
-  edicao_id: 1
+  edicao_id: 12
   codigo_com_5_digitos: "00001"
   ingresso_url_venda: "https://ingressos.com/batman"
   data: 2024-10-05
@@ -22,7 +22,7 @@ program_batman_other_day:
   cinema: cinepolis
   pelicula: batman
   importacoesprog_id: 123
-  edicao_id: 1
+  edicao_id: 12
   codigo_com_5_digitos: "00001"
   ingresso_url_venda: "https://ingressos.com/batman"
   data: 2024-10-06
@@ -42,7 +42,7 @@ program_special_char:
   cinema: cinepolis
   pelicula: special_char
   importacoesprog_id: 123
-  edicao_id: 1
+  edicao_id: 12
   codigo_com_5_digitos: "00001"
   ingresso_url_venda: "https://ingressos.com/estomago"
   data: 2024-10-05
@@ -62,7 +62,7 @@ program_matrix:
   cinema: cinepolis
   pelicula: matrix
   importacoesprog_id: 123
-  edicao_id: 1
+  edicao_id: 12
   codigo_com_5_digitos: "00002"
   ingresso_url_venda: "https://ingressos.com/matrix"
   data: 2024-10-06
@@ -81,11 +81,11 @@ program_matrix:
 
 # paginated program related with peliculas
 <% 17.times do |i| %>
-program_batman_<%= i %>:
-  cinema: cinepolis
+program_test_<%= i %>:
+  cinema: cine_brasilia
   pelicula: test_<%= i %>
   importacoesprog_id: 123
-  edicao_id: 1
+  edicao_id: 12
   codigo_com_5_digitos: "00001"
   ingresso_url_venda: "https://ingressos.com/test_<%= i %>"
   data: 2024-10-07
@@ -101,3 +101,205 @@ program_batman_<%= i %>:
   created: <%= Date.yesterday %>
   updated: <%= Date.yesterday %>
 <% end %>
+
+
+# test/fixtures/programacaos.yml
+programa_cidade_perdida_1:
+  cinema: cinepolis
+  pelicula: cidade_perdida
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00001"
+  ingresso_url_venda: "https://ingressos.com/cidade-perdida-1"
+  data: 2024-10-05
+  sessao: "14:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_amor_brasilia_1:
+  cinema: cinepolis
+  pelicula: amor_brasilia
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00002"
+  ingresso_url_venda: "https://ingressos.com/amor-brasilia-1"
+  data: 2024-10-05
+  sessao: "16:30"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_berlin_nights_1:
+  cinema: cinepolis
+  pelicula: berlin_nights
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00003"
+  ingresso_url_venda: "https://ingressos.com/berlin-nights-1"
+  data: 2024-10-05
+  sessao: "19:00"
+  legnacopia: "EN"
+  sessao_gala: 1
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_paris_stories_1:
+  cinema: cinepolis
+  pelicula: paris_stories
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00004"
+  ingresso_url_venda: "https://ingressos.com/paris-stories-1"
+  data: 2024-10-05
+  sessao: "21:30"
+  legnacopia: "FR"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_amazonia_selvagem_1:
+  cinema: cinepolis
+  pelicula: amazonia_selvagem
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00005"
+  ingresso_url_venda: "https://ingressos.com/amazonia-selvagem-1"
+  data: 2024-10-06
+  sessao: "15:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 1
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 1
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_cidade_transformacao_0:
+  cinema: cinepolis
+  pelicula: cidade_transformacao
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00006"
+  ingresso_url_venda: "https://ingressos.com/cidade-transformacao-1"
+  data: 2024-10-05
+  sessao: "15:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_cidade_transformacao_1:
+  cinema: cinepolis
+  pelicula: cidade_transformacao
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00006"
+  ingresso_url_venda: "https://ingressos.com/cidade-transformacao-1"
+  data: 2024-10-06
+  sessao: "17:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_cidade_perdida_2:
+  cinema: cinepolis
+  pelicula: cidade_perdida
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00007"
+  ingresso_url_venda: "https://ingressos.com/cidade-perdida-2"
+  data: 2024-10-06
+  sessao: "20:00"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_berlin_nights_2:
+  cinema: cinepolis
+  pelicula: berlin_nights
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00008"
+  ingresso_url_venda: "https://ingressos.com/berlin-nights-2"
+  data: 2024-10-07
+  sessao: "18:00"
+  legnacopia: "EN"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>
+
+programa_cidade_transformacao_2:
+  cinema: cinepolis
+  pelicula: cidade_transformacao
+  importacoesprog_id: 123
+  edicao_id: 12
+  codigo_com_5_digitos: "00009"
+  ingresso_url_venda: "https://ingressos.com/cidade-transformacao-2"
+  data: 2024-10-07
+  sessao: "20:30"
+  legnacopia: "PT"
+  sessao_gala: 0
+  sessao_cineencontro: 0
+  filmecolado: "N"
+  sessao_fechada_manual: 0
+  gratuito: 0
+  acessibilidade: 1
+  deletado: 0
+  created: <%= Date.yesterday %>
+  updated: <%= Date.yesterday %>

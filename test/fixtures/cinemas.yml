@@ -1,7 +1,8 @@
+# TODO: Two equals?
 cinepolis:
   nome: "Cinépolis Lagoon"
   bairro_id: 1
-  edicao_id: 1
+  edicao_id: 12
   endereco: "Av. Borges de Medeiros, 1424 - Lagoa"
   telefone: "(21) 99999-9999"
   capacidade: "300"
@@ -10,5 +11,35 @@ cinepolis:
   tipo_venda_codigo: "online"
   seq_cinema: "C001"
   seq_estabelecimento: "E001"
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+cinepolis:
+  nome: "Cinépolis Lagoon"
+  bairro_id: 1
+  edicao_id: 12
+  endereco: "Av. Borges de Medeiros, 1424 - Lagoa"
+  telefone: "(21) 99999-9999"
+  capacidade: "300"
+  estado: "RJ"
+  ingresso: 1
+  tipo_venda_codigo: "online"
+  seq_cinema: "C001"
+  seq_estabelecimento: "E001"
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+cine_brasilia:
+  nome: "Cine Brasília"
+  bairro_id: 2
+  edicao_id: 12
+  endereco: "Av. Paulista, 1000 - Centro"
+  telefone: "(21) 88888-8888"
+  capacidade: "250"
+  estado: "RJ"
+  ingresso: 1
+  tipo_venda_codigo: "online"
+  seq_cinema: "C002"
+  seq_estabelecimento: "E002"
   created: <%= Date.today %>
   updated: <%= Date.today %>

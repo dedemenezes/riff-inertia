@@ -1,64 +1,39 @@
 <script setup>
-import { Link, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 import TabComponent from "@/components/common/tabs/TabComponent.vue";
-const page = usePage()
 
 const props = defineProps({
-  collection: { type: Array, required: true },
-  tabBaseUrl: { type: String, required: true },
-  currentQuery: { type: String, default: null },
-  selectedFilters: { type: Object, default: () => ({}) }
+  tabs: { type: Array, required: true }, // Pre-built tabs from backend
+  isSticky: { type: Boolean, default: false }
 })
-
-// TODO: MAKE REUSABLE!
-const isActiveTab = (tabDate, tabIndex) => {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(tabDate)) return false
-
-  return page.url.includes(`date=${tabDate}`) || (tabIndex === 0 && !page.url.includes('date='))
-}
-
-const tabUrls = computed(() => {
-  return props.collection.map(content => {
-    const url = new URL(window.location);
-    url.pathname = new URL(props.tabBaseUrl).pathname;
-    url.searchParams.set('date', content);
-
-    // Add current query if exists
-    if (props.currentQuery) {
-      url.searchParams.set('query', props.currentQuery);
-    }
-
-    // Add mostrasFilter if exists
-    if (props.selectedFilters.mostrasFilter?.tag_class) {
-      url.searchParams.set('mostrasFilter', props.selectedFilters.mostrasFilter.tag_class);
-    }
-
-    return {
-      content,
-      url: url.toString()
-    };
-  });
-});
 </script>
 
 <template>
-  <nav aria-label="Program dates">
-    <div role="tablist" class="flex gap-300 overflow-x-auto no-scroll-bar py-400">
+  <!-- MenuTabs.vue -->
+  <nav
+    aria-label="Program dates"
+    :class="[
+      'bg-white-transp-1000',
+      { 'sticky top-0 z-30 will-change-transform': props.isSticky }
+    ]"
+  >
+    <div
+      role="tablist"
+      class="flex gap-300 overflow-x-auto no-scroll-bar py-300 lg:py-400"
+      :class="{ '-mt-[1px]': props.isSticky }"
+    >
       <Link
         class="block"
-        v-for="(tab, index) in tabUrls"
-        :key="tab.content"
-        :href=tab.url
+        v-for="(tab, index) in tabs"
+        :key="tab.date"
+        :href="tab.url"
       >
         <TabComponent
-          :active="isActiveTab(tab.content, index)"
+          :active="tab.active"
           :tabIndex="index"
-          :content="tab.content"
+          :content="tab.date"
         />
       </Link>
     </div>
   </nav>
 </template>
-
-<style scoped></style>

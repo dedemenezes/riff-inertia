@@ -25,4 +25,12 @@ class Mostra < ApplicationRecord
   def display_name
     nome_abreviado.split(/[-:]/).first
   end
+
+  def filter_value
+    permalink_pt
+  end
+
+  def filter_display
+    display_name
+  end
 end
