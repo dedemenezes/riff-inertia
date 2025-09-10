@@ -1,9 +1,13 @@
 {
   "private": true,
   "type": "module",
+ "scripts": {
+    "test": "vitest"
+  },
   "devDependencies": {
     "vite": "^7.1.4",
-    "vite-plugin-ruby": "^5.1.1"
+    "vite-plugin-ruby": "^5.1.1",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@inertiajs/vue3": "^2.1.3",
