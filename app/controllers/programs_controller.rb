@@ -130,6 +130,7 @@ class ProgramsController < ApplicationController
         base_scope = base_scope.where(pelicula_id: pelicula_ids)
       end
     end
+
     # Get Scope Available dates
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
@@ -261,7 +262,7 @@ class ProgramsController < ApplicationController
                                 .sort_by { |it| it.nome_pais }
                                 .as_json(
                                   only: %i[id nome_pais],
-                                  methods: %i[filter_display filter_value]
+                                  methods: %i[filter_display filter_value filter_label]
                                 )
 
     @mostras_filter  = Mostra.where(edicao_id: EDICAO_ATUAL)
@@ -270,7 +271,7 @@ class ProgramsController < ApplicationController
                             .sort_by { |it| it.permalink_pt }
                             .as_json(
                               only: %i[id permalink_pt nome_abreviado],
-                              methods: [ :tag_class, :display_name, :filter_value, :filter_display ]
+                              methods: [ :tag_class, :display_name, :filter_value, :filter_display, :filter_label ]
                             )
     @cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL)
                             .to_a
@@ -278,12 +279,12 @@ class ProgramsController < ApplicationController
                             .sort_by { |it| it.nome }
                             .as_json(
                               only: %i[id nome endereco edicao_id],
-                              methods: %i[filter_display filter_value]
+                              methods: %i[filter_display filter_value filter_label]
                             )
 
     @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort.as_json(
       only: %i[sessao],
-      methods: %i[display_sessao filter_value filter_display]
+      methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
     @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
