@@ -10,4 +10,8 @@ class Cinema < ApplicationRecord
   def filter_display
     nome
   end
+
+  def filter_label
+    I18n.t("filter.cinema")
+  end
 end
