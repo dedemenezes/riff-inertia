@@ -94,9 +94,37 @@ class ProgramsController < ApplicationController
           locale_index,
           "%#{selected_genre['filter_value']}%"
         )
+    if params["direção"].present?
+      selected_director = @directors_filter.find { |d| d["filter_value"] == params["direção"] }
+
+      if selected_director
+        selected_filters["direção"] = selected_director
+
+        # Get pelicula IDs first - clean, simple query
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+                              .where(diretor_coord_int: selected_director["filter_value"])
+                              .pluck(:id)
+
+        # Then filter programacoes by IDs - no complex joins
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
       end
     end
 
+    if params[:elenco].present?
+      actor_query = params[:elenco]
+
+      # Find peliculas with this actor
+      pelicula_ids = Pelicula.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
+      if pelicula_ids.any?
+        selected_actor = {
+          "filter_display" => actor_query,
+          "filter_value" => actor_query,
+          "filter_label" => I18n.t("filter.elenco")
+        }
+        selected_filters[:elenco] = selected_actor
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      end
+    end
     # Get Scope Available dates
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
@@ -255,5 +283,6 @@ class ProgramsController < ApplicationController
 
     @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
     @directors_filter = Pelicula.directors_for(EDICAO_ATUAL)
+    @actors_filter = Pelicula.cast_for(EDICAO_ATUAL)
   end
 end
