@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import AccordionGroup from "@/components/AccordionGroup.vue";
-import ComboboxComponent from "@/components/ui/ComboboxComponent.vue";
+const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
