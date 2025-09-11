@@ -23,7 +23,13 @@ class Pelicula < ApplicationRecord
         .uniq
         .sort
 
-      genres.map { |g| { "filter_display" => g, "filter_value" => g } }
+      genres.map do |genre|
+        {
+          "filter_display" => genre,
+          "filter_value" => genre,
+          "filter_label" => I18n.t("filter.genero")
+        }
+      end
     # end
   end
 
