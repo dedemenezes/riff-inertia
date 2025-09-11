@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  EDICAO_ATUAL_ANO = "2024"
-
   before_action :set_locale, :set_root_url
 
   inertia_share flash: -> {
@@ -24,10 +22,6 @@ class ApplicationController < ActionController::Base
 
   inertia_share imageBaseURL: -> {
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
-  }
-
-  inertia_share edicaoAtualAno: -> {
-    EDICAO_ATUAL_ANO
   }
 
   def set_locale
