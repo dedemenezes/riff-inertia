@@ -8,6 +8,7 @@ const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadc
 const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
 const BaseButton = defineAsyncComponent(() => import('@/components/common/buttons/BaseButton.vue'));
 const IconChevronLeft = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronLeft.vue'));
+const IconChevronRight = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronRight.vue'));
 const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
 const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
 const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
@@ -97,12 +98,24 @@ const tabs = [
     <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center" />
 
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-    <!--  || isDesktop -->
     <div class="flex flex-col gap-6 sm:flex-row sm:gap-4 py-600">
+
+      <!--  || isDesktop -->
       <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
-        <div>
-          <h3 class="text-overline text-neutrals-700 uppercase">sobre o filme</h3>
-          <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
+        <h3 class="text-overline text-neutrals-700 uppercase pb-200">sobre o filme</h3>
+        <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
+        <div class="flex flex-col gap-400 py-400 items-center justify-center">
+          <img :src="props.pelicula.imageURL" class="h-[251px] w-[201px] object-cover" :alt="`${pelicula.display_titulo} banner`">
+          <!-- TRanslate website -->
+          <ButtonText variant="dark" class="gap-200" text="Ver fotos de imprensa" tag="a">
+            <template #icon>
+              <IconChevronRight height="16" width="16" color="inherit order-2"/>
+            </template>
+          </ButtonText>
+        </div>
+        <div :class="`border-s-8 border-${props.pelicula.mostra_tag_class} rounded-100 px-400 py-300 flex flex-col gap-200 col-span-2 h-fit`">
+          <h2 class="text-header-medium-sm">{{ props.pelicula.mostra_name }}</h2>
+          <p class="text-body-regular">A Première Brasil é a mostra competitiva central do Festival do Rio, dedicada a filmes brasileiros inéditos que valorizam a diversidade de narrativas e refletem a realidade do país. Desde 1999, já apresentou mais de 1.300 títulos. Curtas e longas selecionados integram mostras competitivas e não competitivas, com as produções em disputa concorrendo ao Troféu Redentor na seleção principal ou na Première Brasil: Novos Rumos.</p>
         </div>
       </section>
 
