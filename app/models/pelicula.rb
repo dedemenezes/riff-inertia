@@ -64,6 +64,7 @@ class Pelicula < ApplicationRecord
     end
   end
 
+  # TODO: WE GET 1k+. think about it
   def self.all_cast_for(edicao_id)
     where(edicao_id: edicao_id)
       .where.not(elenco_coord_int: [ nil, "" ])
