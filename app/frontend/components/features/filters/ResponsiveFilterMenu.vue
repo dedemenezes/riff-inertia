@@ -79,11 +79,6 @@ const closeBtn = useTemplateRef('close-btn');
         leave-from-class="transform translate-x-0"
         leave-to-class="transform -translate-x-full"
       >
-      <FocusTrap
-        v-if="props.isOpen"
-        :initial-focus="() => $refs.closeBtn"
-        v-model:active="props.isOpen"
-      >
           <div
           v-show="props.isOpen"
           style="margin-top: 0"
@@ -124,7 +119,6 @@ const closeBtn = useTemplateRef('close-btn');
             </div>
           </TwContainer>
         </div>
-      </FocusTrap>
      </transition>
    </Teleport>
 </template>

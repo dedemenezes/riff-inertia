@@ -33,6 +33,7 @@ const props = defineProps({
   modelValue: { type: [String, Number], default: "" }, // v-model prop
   placeholder: { type: String, default: "placeholder.select" },
   withIcon: { type: Boolean, default: false },
+  emptyMessage: {type: String, default: "Nenhum Encontrado"}
 });
 
 // Emit definition for v-model support
@@ -94,7 +95,7 @@ const iconColor = (value) =>
     <PopoverContent class="min-w-[var(--reka-popper-anchor-width)] p-0 border-neutrals-300">
       <Command v-model="value">
         <CommandInput placeholder="Search..." class="border-neutrals-300" />
-        <CommandEmpty>No framework found.</CommandEmpty>
+        <CommandEmpty>{{ props.emptyMessage }}</CommandEmpty>
         <CommandList>
           <CommandGroup>
             <CommandItem
