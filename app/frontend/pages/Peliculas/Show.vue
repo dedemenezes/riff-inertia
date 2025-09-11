@@ -102,7 +102,7 @@ const tabs = [
       <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
         <div>
           <h3 class="text-overline text-neutrals-700 uppercase">sobre o filme</h3>
-          <p class="text-body-regular"></p>
+          <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
         </div>
       </section>
 

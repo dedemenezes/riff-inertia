@@ -21,6 +21,7 @@ class PeliculasController < ApplicationController
       pelicula: @pelicula.as_json(
         only: columns_needed,
         methods: %i[
+          display_sinopse
           display_titulo
           imageURL
           display_paises

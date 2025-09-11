@@ -98,6 +98,10 @@ class Pelicula < ApplicationRecord
     I18n.locale == :pt ? titulo_portugues_coord_int : titulo_ingles_coord_int
   end
 
+  def display_sinopse
+    I18n.locale == :pt ? sinopse_port_export : sinopse_ing_export
+  end
+
   def mostra_name
     mostra.filter_display
   end
