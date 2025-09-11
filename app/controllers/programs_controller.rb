@@ -88,12 +88,17 @@ class ProgramsController < ApplicationController
         selected_filters[:genre] = selected_genre
         locale_index = I18n.locale == :en ? -1 : 1
 
-        # substring index is used to split the text in the database and select by index
-        base_scope = base_scope.where(
-          "SUBSTRING_INDEX(SUBSTRING_INDEX(peliculas.catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
+        # Use subquery instead of raw SQL on joined table
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).where(
+          "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
           locale_index,
           "%#{selected_genre['filter_value']}%"
-        )
+        ).pluck(:id)
+
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      end
+    end
+
     if params["direção"].present?
       selected_director = @directors_filter.find { |d| d["filter_value"] == params["direção"] }
 
