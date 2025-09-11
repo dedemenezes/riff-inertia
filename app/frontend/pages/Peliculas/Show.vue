@@ -3,6 +3,7 @@
 import { ref, defineAsyncComponent } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import PeliculaSession from '@/components/common/cards/PeliculaSessionCard.vue';
+import CarouselComponent from '@/components/ui/CarouselComponent.vue';
 
 const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadcrumb.vue'));
 const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
@@ -20,13 +21,13 @@ const props = defineProps({
   pelicula: { type: Object, required: true }
 });
 
-const activeTab = ref('sessoes')
 
 const tabs = [
-  { id: 'sessoes', label: 'Sessões' },
   { id: 'informacoes', label: 'Informações' },
-  { id: 'credito', label: 'Créditos' }
+  { id: 'sessoes', label: 'Sessões' },
+  { id: 'creditos', label: 'Créditos' }
 ]
+const activeTab = ref(tabs[2].id)
 </script>
 
 <template>
@@ -117,6 +118,11 @@ const tabs = [
           <h2 class="text-header-medium-sm">{{ props.pelicula.mostra_name }}</h2>
           <p class="text-body-regular">A Première Brasil é a mostra competitiva central do Festival do Rio, dedicada a filmes brasileiros inéditos que valorizam a diversidade de narrativas e refletem a realidade do país. Desde 1999, já apresentou mais de 1.300 títulos. Curtas e longas selecionados integram mostras competitivas e não competitivas, com as produções em disputa concorrendo ao Troféu Redentor na seleção principal ou na Première Brasil: Novos Rumos.</p>
         </div>
+
+        <CarouselComponent
+          :imageCollection="props.pelicula.carousel_images"
+          :class-names="['pt-800']"
+        />
       </section>
 
       <section v-show="activeTab === 'sessoes'" class="w-full sm:w-1/3 space-y-400">
@@ -130,16 +136,82 @@ const tabs = [
 
       <section v-show="activeTab === 'creditos'" class="w-full sm:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-        CAMPEAO
+        <div class="py-600">
+          <h3 class="text-overline text-neutrals-700 uppercase pb-300">DIREÇÃO</h3>
+          <!-- TODO: TRANSLATE -->
+          <div class="card__director rounded-200 w-1/2">
+            <img
+              :src="props.pelicula.director_image"
+              :alt="`Foto de ${props.pelicula.diretor_coord_int}`"
+              class="h-[154px] w-full object-cover object-top rounded-t-200"
+            >
+            <div class="card__content bg-neutrals-200 rounded-200 ps-200 py-250">
+              <p class="text-header-md text-neutrals-900">{{ props.pelicula.diretor_coord_int }}</p>
+            </div>
+          </div>
+        </div>
+        <hr class="text-neutrals-300">
+        <div class="space-y-400 pt-400">
+          <div class="grid grid-cols-3">
+            <p class="text-overline text-neutrals-700 uppercase pb-200">roteiro</p>
+            <ul class="col-span-2 flex flex-col">
+              <li
+                v-for="member in props.pelicula.roteiro_team"
+                :key="member"
+              >
+                <p class="text-body-regular">{{ member }}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-3">
+            <p class="text-overline text-neutrals-700 uppercase pb-200">fotografia</p>
+            <ul class="col-span-2 flex flex-col">
+              <li
+                v-for="member in props.pelicula.fotografia_team"
+                :key="member"
+              >
+                <p class="text-body-regular">{{ member }}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-3">
+            <p class="text-overline text-neutrals-700 uppercase pb-200">montagem</p>
+            <ul class="col-span-2 flex flex-col">
+              <li
+                v-for="member in props.pelicula.montagem_team"
+                :key="member"
+              >
+                <p class="text-body-regular">{{ member }}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-3">
+            <p class="text-overline text-neutrals-700 uppercase pb-200">direção</p>
+            <ul class="col-span-2 flex flex-col">
+              <li
+                v-for="member in props.pelicula.diretor_team"
+                :key="member"
+              >
+                <p class="text-body-regular">{{ member }}</p>
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-3">
+            <p class="text-overline text-neutrals-700 uppercase pb-200">direção</p>
+            <ul class="col-span-2 flex flex-col">
+              <li
+                v-for="member in props.pelicula.producaoempresa_team"
+                :key="member"
+              >
+                <p class="text-body-regular text-neutrals-900">{{ member }}</p>
+              </li>
+            </ul>
+          </div>
+
+        </div>
       </section>
     </div>
-       <!-- SOBRE -->
-       <!-- Cartaz/link imprensa -->
-       <!-- Selos -->
-       <!-- PREMIOS -->
-       <!-- palavras-chave -->
   </TwContainer>
-
 </template>
 
 <style scoped>

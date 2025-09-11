@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer components {
   /*
    * TYPOGRAPHY STYLES - Pure typography properties only
@@ -73,8 +74,12 @@
     @apply font-heading text-lg font-medium leading-[120%];
   }
 
-  .text-header-md {
+  .text-header-xl {
     @apply font-heading text-xl font-semibold leading-[120%];
+  }
+
+  .text-header-md {
+    @apply font-heading text-md font-medium leading-[120%];
   }
 
   .text-header-regular-md {
