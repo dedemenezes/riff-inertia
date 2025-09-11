@@ -27,6 +27,45 @@ class Pelicula < ApplicationRecord
     # end
   end
 
+  def self.directors_for(edicao_id)
+      # Rails.cache.fetch("directors-for-edicao-#{edicao_id}", expires_in: 12.hours) do
+      where(edicao_id: edicao_id)
+        .where.not(diretor_coord_int: [ nil, "" ])
+        .pluck(:diretor_coord_int)
+        .map(&:strip)
+        .uniq
+        .compact
+        .sort
+        .map do |director|
+          {
+            "filter_display" => director,
+            "filter_value" => director,
+            "filter_label" => I18n.t("filter.direcao")
+          }
+        end
+    # end
+  end
+
+  # Filter options
+  def self.cast_for(edicao_id)
+    # Filter collection must be cached
+    all_cast_for(edicao_id).map do |cast|
+      {
+        "filter_display": cast,
+        "filter_value": cast,
+        "filter_label": I18n.t("filter.elenco")
+      }
+    end
+  end
+
+  def self.all_cast_for(edicao_id)
+    where(edicao_id: edicao_id)
+      .where.not(elenco_coord_int: [ nil, "" ])
+      .pluck(:elenco_coord_int)
+      .flat_map { |cast| cast.split(",").map(&:strip) }
+      .reject(&:blank?).uniq.sort
+  end
+
   def genre
     return "TBD" unless catalogo_ficha_2007
 

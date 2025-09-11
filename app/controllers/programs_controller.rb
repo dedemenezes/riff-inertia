@@ -247,5 +247,6 @@ class ProgramsController < ApplicationController
     )
 
     @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
+    @directors_filter = Pelicula.directors_for(EDICAO_ATUAL)
   end
 end
