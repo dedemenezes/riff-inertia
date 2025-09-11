@@ -1,13 +1,16 @@
 <!-- const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue')) -->
 <script setup>
-import { computed, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import PeliculaSession from '@/components/common/cards/PeliculaSession.vue';
 
 const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadcrumb.vue'));
 const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
+const BaseButton = defineAsyncComponent(() => import('@/components/common/buttons/BaseButton.vue'));
 const IconChevronLeft = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronLeft.vue'));
 const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
-const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'))
+const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
+const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
 const page = usePage()
 
 const props = defineProps({
@@ -15,6 +18,14 @@ const props = defineProps({
   crumbs: { type: Array, required: true, default: () => []},
   pelicula: { type: Object, required: true }
 });
+
+const activeTab = ref('sessoes')
+
+const tabs = [
+  { id: 'sessoes', label: 'Sessões' },
+  { id: 'informacoes', label: 'Informações' },
+  { id: 'credito', label: 'Créditos' }
+]
 </script>
 
 <template>
@@ -40,8 +51,8 @@ const props = defineProps({
             <h1 class="text-header-medium-sm pb-100">{{ props.pelicula.titulo_portugues_coord_int }}</h1>
             <p class="text-body-regular italic">{{ props.pelicula.titulo_ingles_coord_int }}</p>
           </section>
-          <div class="flex items-center gap-200">
-            <p class="text-overline">{{ props.pelicula.display_paises }}</p>
+          <div class="flex items-center gap-200 flex-wrap">
+            <p class="text-overline shrink-0">{{ props.pelicula.display_paises }}</p>
             <img
               src="@assets/icons/divisor_black.svg"
               alt=""
@@ -81,12 +92,40 @@ const props = defineProps({
     </div>
   </header>
      <!-- Tabs -->
-     <!-- SOBRE -->
-     <!-- Cartaz/link imprensa -->
-     <!-- Selos -->
-     <!-- PREMIOS -->
-     <!-- palavras-chave -->
+  <TwContainer>
 
+    <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center" />
+
+    <div class="flex flex-col gap-6 sm:flex-row sm:gap-4 py-600">
+      <!--  || isDesktop -->
+      <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
+        <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
+        FLAMENGO
+      </section>
+      <!--  || isDesktop -->
+      <!-- EACH SHOULD
+        BE A COMPONENT LAZY LOADED -->
+      <section v-show="activeTab === 'sessoes'" class="w-full sm:w-1/3 space-y-400">
+        <BaseButton variant="dark" class="w-full">Comprar pacote de ingressos</BaseButton>
+
+        <div v-for="(item, index) in [1,2,3]">
+          <PeliculaSession class="mb-400" />
+          <hr v-show="index < 2" class="text-neutrals-300">
+        </div>
+      </section>
+
+      <!--  || isDesktop -->
+      <section v-show="activeTab === 'creditos'" class="w-full sm:w-1/3">
+        <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
+        CAMPEAO
+      </section>
+    </div>
+       <!-- SOBRE -->
+       <!-- Cartaz/link imprensa -->
+       <!-- Selos -->
+       <!-- PREMIOS -->
+       <!-- palavras-chave -->
+  </TwContainer>
 
 </template>
 
