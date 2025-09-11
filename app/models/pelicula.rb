@@ -102,6 +102,10 @@ class Pelicula < ApplicationRecord
     mostra.filter_display
   end
 
+  def mostra_tag_class
+    mostra.tag_class
+  end
+
   def imageURL
       # TODO: CACHE
       # TODO: IF WE WANT DIFFERENT SIZE?

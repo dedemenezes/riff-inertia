@@ -26,6 +26,7 @@ class PeliculasController < ApplicationController
           display_paises
           genre
           mostra_name
+          mostra_tag_class
         ]
       ),
       crumbs: breadcrumbs(
