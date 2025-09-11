@@ -8,67 +8,55 @@ import SelectComponent from "@/components/ui/SelectComponent.vue";
 const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
-  mostrasFilter: { type: Array, default: () => [] }, // Program-specific prop
-  cinemasFilter: { type: Array, default: () => [] }, // Program-specific prop
-  paisesFilter: { type: Array, default: () => [] },
-  genresFilter: { type: Array, default: () => [] },
+  mostras: { type: Array, default: () => [] }, // Program-specific prop
+  cinemas: { type: Array, default: () => [] }, // Program-specific prop
+  paises: { type: Array, default: () => [] },
+  genres: { type: Array, default: () => [] },
   sessoes:  { type: Array, default: () => [] },
+  directors:  { type: Array, default: () => [] },
+  actors:  { type: Array, default: () => [] },
 });
 
-// Transform cadernos prop for ComboboxComponent format
-const mostrasFilterOptions = computed(() => {
-  return props.mostrasFilter.map(caderno => ({
-    label: caderno.nome_abreviado,
-    value: caderno.permalink_pt,
+const mapFilterOptions = (filterList) => {
+  return filterList.map(option => ({
+    label: option.filter_display,
+    value: option.filter_value,
   }));
-});
-// Transform cinema prop for ComboboxComponent format
-const cinemasFilterOptions = computed(() => {
-  return props.cinemasFilter.map(cinema => ({
-    label: cinema.nome,
-    value: cinema.id,
-  }));
-});
-// Transform cinema prop for ComboboxComponent format
-const paisesFilterOptions = computed(() => {
-  return props.paisesFilter.map(pais => ({
-    label: pais.nome_pais,
-    value: pais.id,
-  }));
-});
-// Transform cinema prop for ComboboxComponent format
-const genresFilterOptions = computed(() => {
-  return props.genresFilter.map(genre => ({
-    label: genre.filter_display,
-    value: genre.filter_value,
-  }));
-});
+}
+
+const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostras));
+const mostraLabel = computed(() => props.mostras[0].filter_label)
+
+const actorsFilterOptions = computed(() => mapFilterOptions(props.actors));
+const actorsLabel = computed(() => props.actors[0]?.filter_label)
+
+const cinemasFilterOptions = computed(() => mapFilterOptions(props.cinemas));
+const cinemaLabel = computed(() => props.cinemas[0].filter_label)
+
+const paisesFilterOptions = computed(() => mapFilterOptions(props.paises));
+const paisLabel = computed(() => props.paises[0].filter_label)
+
+const genresFilterOptions = computed(() => mapFilterOptions(props.genres));
+const genreLabel = computed(() => props.genres[0].filter_label)
+
+const directorsOptions = computed(() => mapFilterOptions(props.directors));
+const directorLabel = computed(() => props.directors[0].filter_label)
+
 
 // Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
+  // TODO: TRANSLATE
   return props.sessoes.map(sessao => ({
     label: `Início às ${sessao.filter_display}`,
     value: sessao.filter_value,
   }));
 });
+const sessaoLabel = computed(() => props.sessoes[0].filter_label)
 
-const getMostraObjectFromTagClas = (filter_value) => {
-  return props.mostrasFilter.find(c => c.filter_value === filter_value) || null;
-};
-const getSessaoObject = (filter_value) => {
-  return props.sessoes.find(c => c.filter_value === filter_value) || null;
-};
-const getCinemaObject = (filter_value) => {
-  return props.cinemasFilter.find(c => c.filter_value === filter_value) || null;
-};
-
-const getPaisObject = (filter_value) => {
-  return props.paisesFilter.find(c => c.filter_value === filter_value) || null;
+const getSelectedFrom = (collectionName, value) => {
+  return props[collectionName].find(option => option.filter_value == value)
 }
 
-const getGenreObject = (filter_value) => {
-  return props.genresFilter.find(c => c.filter_value === filter_value) || null;
-}
 const getQueryObject = (filter_value) => {
   // TODO: REFACTOR
   // I'm building here beause the other get here as collection
@@ -80,7 +68,6 @@ const getQueryObject = (filter_value) => {
 </script>
 
 <template>
-  <!-- Article-specific filter content -->
    <div class="pt-400">
      <SearchBar
        :modelValue="props.modelValue.query?.filter_value"
@@ -88,31 +75,15 @@ const getQueryObject = (filter_value) => {
        />
    </div>
 
-  <!-- GENRES -->
-  <AccordionGroup
-    text="Gênero"
-    :isOpen="!!props.modelValue.genresFilter"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-        :collection="genresFilterOptions"
-        :modelValue="props.modelValue.genresFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('genresFilter', getGenreObject(val))"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
-
    <!-- HORARIO -->
     <AccordionGroup
-      text="Horário"
+      :text="sessaoLabel"
       :isOpen="!!props.modelValue.sessao"
     >
       <template v-slot:content>
         <SelectComponent
           :modelValue="props.modelValue.sessao?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('sessao', getSessaoObject(val))"
+          @update:modelValue="(val) => props.updateField('sessao', getSelectedFrom('sessoes', val))"
           :collection="sessoesFilterOptions"
         />
       </template>
@@ -120,15 +91,15 @@ const getQueryObject = (filter_value) => {
 
    <!-- MOSTRAS -->
    <AccordionGroup
-   text="Mostra"
+   :text="mostraLabel"
    :isOpen="!!props.modelValue.mostrasFilter"
    >
    <template v-slot:content>
      <div class="overflow-hidden w-full">
        <ComboboxComponent
        :collection="mostrasFilterOptions"
-       :modelValue="props.modelValue.mostrasFilter?.filter_value || null"
-       @update:modelValue="(val) => props.updateField('mostrasFilter', getMostraObjectFromTagClas(val))"
+       :modelValue="props.modelValue.mostra?.filter_value || null"
+       @update:modelValue="(val) => props.updateField('mostra', getSelectedFrom('mostras', val))"
        />
       </div>
     </template>
@@ -136,15 +107,31 @@ const getQueryObject = (filter_value) => {
 
   <!-- CINEMAS -->
   <AccordionGroup
-    text="Cinema"
-    :isOpen="!!props.modelValue.cinemasFilter"
+    :text="cinemaLabel"
+    :isOpen="!!props.modelValue.cinema"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="cinemasFilterOptions"
-        :modelValue="props.modelValue.cinemasFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('cinemasFilter', getCinemaObject(val))"
+        :modelValue="props.modelValue.cinema?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('cinema', getSelectedFrom('cinemas', val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
+
+  <!-- GENRES -->
+  <AccordionGroup
+    :text="genreLabel"
+    :isOpen="!!props.modelValue.genre"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="genresFilterOptions"
+        :modelValue="props.modelValue.genre?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genre', getSelectedFrom('genres', val))"
         />
       </div>
     </template>
@@ -152,15 +139,47 @@ const getQueryObject = (filter_value) => {
 
   <!-- PAISES -->
   <AccordionGroup
-    text="Pais"
-    :isOpen="!!props.modelValue.paisesFilter"
+    :text="paisLabel"
+    :isOpen="!!props.modelValue.pais"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="paisesFilterOptions"
-        :modelValue="props.modelValue.paisesFilter?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('paisesFilter', getPaisObject(val))"
+        :modelValue="props.modelValue.pais?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('pais', getSelectedFrom('paises', val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
+
+  <!-- DIRETORES -->
+  <AccordionGroup
+    :text="directorLabel"
+    :isOpen="!!props.modelValue['direção']"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="directorsOptions"
+        :modelValue="props.modelValue['direção']?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('direção', getSelectedFrom('directors', val))"
+        />
+      </div>
+    </template>
+  </AccordionGroup>
+
+  <!-- ACTORS -->
+  <AccordionGroup
+    :text="actorsLabel"
+    :isOpen="!!props.modelValue.elenco"
+  >
+    <template v-slot:content>
+      <div class="overflow-hidden w-full">
+        <ComboboxComponent
+        :collection="actorsFilterOptions"
+        :modelValue="props.modelValue.elenco?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('elenco', getSelectedFrom('actors', val))"
         />
       </div>
     </template>
