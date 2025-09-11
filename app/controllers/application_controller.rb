@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
       "Programação": [
         {
           description: "Programação completa",
-          path: ""
+          path: program_path
         },
         {
           description: "Sessões com convidados",
