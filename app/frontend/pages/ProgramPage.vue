@@ -73,9 +73,27 @@ const filterSearch = (filtersFromChild) => {
 };
 
 const removeQuery = (what) => {
-  debugger
-  // remove the correct queryparams from url
+  const params = new URLSearchParams()
+  // TODO: ADD ALL TRANSLATIONS OR REFACTOR AI CAN ADD TRANSLATIONS
+  if (["Country", "Pais"].includes(what.filter_label)) {
+    localFilters.value['pais'] = null
+  }
+
+  if (["Showcase", "Mostra"].includes(what.filter_label)) {
+    localFilters.value['mostra'] = null
+  }
   // make new request with the up to date filters
+  debugger
+  Object.entries(localFilters.value).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== "") {
+      params.set(key, value.filter_value);
+    }
+  })
+  router.get(props.tabBaseUrl, params, {
+    preserveState: true,
+    preserveScroll: true,
+    only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+  })
 }
 
 // Called when filters cleared from MobileFilterMenu
@@ -109,10 +127,10 @@ const { sentinel, isSticky } = useStickyMenuTabs()
     <!-- MOBILE TAG FILTER -->
     <div
       class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
-      v-if="Object.values(localFilters).some((item) => item !== null)"
+      v-if="Object.values(props.current_filters).some((item) => item !== null)"
     >
       <TagFilter
-        v-for="[key, value] in Object.entries(localFilters).filter(([k, v]) => v !== null)"
+        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
         :key="key"
         :filter="value"
         :text="value.filter_display"
@@ -134,11 +152,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
         <!-- DESKTOP TAG FILTER -->
         <div
           class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
-          v-if="Object.values(localFilters).some((item) => item !== null)"
+          v-if="Object.values(props.current_filters).some((item) => item !== null)"
         >
           <TagFilter
-            v-for="[key, value] in Object.entries(localFilters).filter(([k, v]) => v !== null)"
-            :key="key"
+            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            :key="value.filter_value"
             :filter="value"
             :text="value.filter_display"
             @remove-filter="removeQuery"
