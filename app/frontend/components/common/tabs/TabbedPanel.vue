@@ -12,7 +12,7 @@ function select(tabId) {
 </script>
 
 <template>
-  <nav role="tablist" class="bg-white-transp-1000 flex gap-3 overflow-x-auto no-scroll-bar py-3">
+  <nav role="tablist" class="bg-white-transp-1000 flex gap-300 overflow-x-auto no-scroll-bar py-3">
     <button
       v-for="(tab, index) in props.tabs"
       :key="tab.id"
@@ -30,7 +30,7 @@ function select(tabId) {
       >
         <!-- Inner tab content -->
         <div
-          class="bg-white px-[33.3px] pt-[6px] text-body-strong-sm flex items-center justify-center"
+          class="bg-white px-[33.3px] pt-[6px] flex items-center justify-center text-body-strong-sm uppercase"
           :class="modelValue === tab.id ? 'text-neutrals-900' : 'text-neutrals-700'"
         >
           {{ tab.label }}
