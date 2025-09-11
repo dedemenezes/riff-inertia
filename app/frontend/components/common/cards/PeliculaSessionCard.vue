@@ -5,8 +5,8 @@ import TagScreening from '@/components/common/tags/TagScreening.vue';
 </script>
 
 <template>
-  <div class="bg-neutrals-200 p-400 flex flex-col gap-400">
-    <p class="text-header-medium-sm">Qua, 9 Set</p>
+  <div class="bg-neutrals-200 p-400 flex flex-col gap-400 rounded-200">
+    <h3 class="text-header-medium-sm">Qua, 9 Set</h3>
     <div>
       <div class="flex items-center gap-200 pb-100">
         <IconPin height="16" width="16" color="text-neutrals-900"/> <p class="text-body-regular-line-small">Cine Odeon - CCLSR</p>

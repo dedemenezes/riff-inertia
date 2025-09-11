@@ -2,7 +2,7 @@
 <script setup>
 import { ref, defineAsyncComponent } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import PeliculaSession from '@/components/common/cards/PeliculaSession.vue';
+import PeliculaSession from '@/components/common/cards/PeliculaSessionCard.vue';
 
 const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadcrumb.vue'));
 const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
@@ -49,7 +49,7 @@ const tabs = [
         <div class="py-400 space-y-400">
           <section>
             <h1 class="text-header-medium-sm pb-100">{{ props.pelicula.titulo_portugues_coord_int }}</h1>
-            <p class="text-body-regular italic">{{ props.pelicula.titulo_ingles_coord_int }}</p>
+            <h2 class="text-body-regular italic">{{ props.pelicula.titulo_ingles_coord_int }}</h2>
           </section>
           <div class="flex items-center gap-200 flex-wrap">
             <p class="text-overline shrink-0">{{ props.pelicula.display_paises }}</p>
@@ -96,15 +96,16 @@ const tabs = [
 
     <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center" />
 
+    <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
+    <!--  || isDesktop -->
     <div class="flex flex-col gap-6 sm:flex-row sm:gap-4 py-600">
-      <!--  || isDesktop -->
       <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
-        <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-        FLAMENGO
+        <div>
+          <h3 class="text-overline text-neutrals-700 uppercase">sobre o filme</h3>
+          <p class="text-body-regular"></p>
+        </div>
       </section>
-      <!--  || isDesktop -->
-      <!-- EACH SHOULD
-        BE A COMPONENT LAZY LOADED -->
+
       <section v-show="activeTab === 'sessoes'" class="w-full sm:w-1/3 space-y-400">
         <BaseButton variant="dark" class="w-full">Comprar pacote de ingressos</BaseButton>
 
@@ -114,7 +115,6 @@ const tabs = [
         </div>
       </section>
 
-      <!--  || isDesktop -->
       <section v-show="activeTab === 'creditos'" class="w-full sm:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         CAMPEAO
