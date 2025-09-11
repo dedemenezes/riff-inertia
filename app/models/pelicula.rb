@@ -94,6 +94,8 @@ class Pelicula < ApplicationRecord
     end
   end
 
+      # TODO: CACHE
+      # TODO: IF WE WANT DIFFERENT SIZE?
   # Caches actor names with pelicula id
   def self.actor_to_pelicula_mapping(edicao_id)
     Rails.cache.fetch("actor-pelicula-mapping-#{edicao_id}", expires_in: 6.hours) do
