@@ -30,15 +30,15 @@ const tabs = [
 
 <template>
   <TwContainer>
-     <Breadcrumb :crumbs="props.crumbs" />
-     <!-- TODO: Translate back text instalar i18n vue -->
+    <Breadcrumb :crumbs="props.crumbs" />
+    <!-- TODO: Translate back text instalar i18n vue -->
 
-     <!-- back link -->
-     <ButtonText variant="dark" class="gap-200" style="padding-left: 0 !important;" text="Voltar" tag="a">
-        <template #icon>
-          <IconChevronLeft height="16" width="16" color="inherit"/>
-        </template>
-     </ButtonText>
+    <!-- back link -->
+    <ButtonText variant="dark" class="gap-200 py-400" text="Voltar" tag="a">
+      <template #icon>
+        <IconChevronLeft height="16" width="16" color="inherit"/>
+      </template>
+    </ButtonText>
   </TwContainer>
   <!-- banner image -->
   <img :src="props.pelicula.imageURL" class="h-[222px] object-cover" :alt="`${pelicula.display_titulo} banner`">
