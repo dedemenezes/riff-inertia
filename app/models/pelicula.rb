@@ -94,8 +94,22 @@ class Pelicula < ApplicationRecord
     end
   end
 
+  def display_titulo
+    I18n.locale == :pt ? titulo_portugues_coord_int : titulo_ingles_coord_int
+  end
+
+  def mostra_name
+    mostra.filter_display
+  end
+
+  def imageURL
       # TODO: CACHE
       # TODO: IF WE WANT DIFFERENT SIZE?
+      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/large/#{imagem}"
+    # end
+  end
+
   # Caches actor names with pelicula id
   def self.actor_to_pelicula_mapping(edicao_id)
     Rails.cache.fetch("actor-pelicula-mapping-#{edicao_id}", expires_in: 6.hours) do
