@@ -96,7 +96,7 @@ cidade_perdida:
   imagem: "cidade_perdida.jpg"
   duracao_coord_int: 120
   diretor_coord_int: "João Silva"
-  elenco_coord_int: "Maria Santos, Pedro Costa"
+  elenco_coord_int: "Maria Santos , Pedro Costa "
   paiscompleto_coord_int: "Brasil"
   sinopse_port_export: "Drama sobre uma cidade em transformação."
   ativo: 1
@@ -156,7 +156,7 @@ paris_stories:
   imagem: "paris_stories.jpg"
   duracao_coord_int: 105
   diretor_coord_int: "Pierre Dubois"
-  elenco_coord_int: "Jean Martin, Sophie Laurent"
+  elenco_coord_int: "Jean Martin, Sophie Laurent, François Truffaut, Jean-Luc Godard"
   paiscompleto_coord_int: "França"
   sinopse_port_export: "Comédia francesa sobre a vida parisiense."
   ativo: 1
@@ -176,7 +176,7 @@ amazonia_selvagem:
   imagem: "amazonia.jpg"
   duracao_coord_int: 85
   diretor_coord_int: "Roberto Oliveira"
-  elenco_coord_int: "Documentário"
+  elenco_coord_int: "Ailton Krenak"
   paiscompleto_coord_int: "Brasil"
   sinopse_port_export: "Documentário sobre a fauna amazônica."
   ativo: 1
@@ -196,7 +196,7 @@ cidade_transformacao:
   imagem: "cidade_transformacao.jpg"
   duracao_coord_int: 75
   diretor_coord_int: "Marina Costa"
-  elenco_coord_int: "Documentário"
+  elenco_coord_int: ""
   paiscompleto_coord_int: "Brasil"
   sinopse_port_export: "Documentário sobre urbanização."
   ativo: 1
