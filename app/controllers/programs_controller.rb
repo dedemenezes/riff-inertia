@@ -42,31 +42,31 @@ class ProgramsController < ApplicationController
       selected_filters[:query] = selected_query
     end
 
-    if params[:mostrasFilter].present?
-      selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostrasFilter] }
-      selected_filters[:mostrasFilter] = selected_mostra if selected_mostra
+    if params[:mostra].present?
+      selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostra] }
+      selected_filters[:mostra] = selected_mostra if selected_mostra
 
       if selected_mostra
-        base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostrasFilter]["permalink_pt"] })
+        base_scope = base_scope.where(mostras: { permalink_pt: selected_filters[:mostra]["permalink_pt"] })
       end
     end
 
-    if params[:cinemasFilter]
+    if params[:cinema]
       selected_cinema = @cinemas_filter.find do |cinema_filter|
-        (cinema_filter["id"].to_s === params[:cinemasFilter]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
+        (cinema_filter["id"].to_s === params[:cinema]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
       end
       if selected_cinema
-        selected_filters[:cinemasFilter] = selected_cinema
+        selected_filters[:cinema] = selected_cinema
         base_scope = base_scope.where(cinema_id: selected_cinema["id"])
       end
     end
 
-    if params[:paisesFilter]
+    if params[:pais]
       selected_pais = @paises_filter.find do |pais_filter|
-        (pais_filter["id"].to_s === params[:paisesFilter])
+        (pais_filter["id"].to_s === params[:pais])
       end
       if selected_pais
-        selected_filters[:paisesFilter] = selected_pais
+        selected_filters[:pais] = selected_pais
         # base_scope = base_scope.where(paises_id: selected_pais["id"])
         base_scope = base_scope.joins(pelicula: :paises).where(pelicula: { paises: { id: selected_pais["id"] } })
       end
@@ -81,19 +81,53 @@ class ProgramsController < ApplicationController
       end
     end
 
-    if params[:genresFilter].present?
-      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genresFilter]) }
+    if params[:genre].present?
+      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genre]) }
 
       if selected_genre
         selected_filters[:genre] = selected_genre
         locale_index = I18n.locale == :en ? -1 : 1
 
-        # substring index is used to split the text in the database and select by index
-        base_scope = base_scope.where(
-          "SUBSTRING_INDEX(SUBSTRING_INDEX(peliculas.catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
+        # Use subquery instead of raw SQL on joined table
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).where(
+          "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
           locale_index,
           "%#{selected_genre['filter_value']}%"
-        )
+        ).pluck(:id)
+
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      end
+    end
+
+    if params["direção"].present?
+      selected_director = @directors_filter.find { |d| d["filter_value"] == params["direção"] }
+
+      if selected_director
+        selected_filters["direção"] = selected_director
+
+        # Get pelicula IDs first - clean, simple query
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+                              .where(diretor_coord_int: selected_director["filter_value"])
+                              .pluck(:id)
+
+        # Then filter programacoes by IDs - no complex joins
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
+      end
+    end
+
+    if params[:elenco].present?
+      actor_query = params[:elenco]
+
+      # Find peliculas with this actor
+      pelicula_ids = Pelicula.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
+      if pelicula_ids.any?
+        selected_actor = {
+          "filter_display" => actor_query,
+          "filter_value" => actor_query,
+          "filter_label" => I18n.t("filter.elenco")
+        }
+        selected_filters[:elenco] = selected_actor
+        base_scope = base_scope.where(pelicula_id: pelicula_ids)
       end
     end
 
@@ -148,21 +182,25 @@ class ProgramsController < ApplicationController
       items:,
       elements: @programacoes,
       pagy: @pagy,
-      mostrasFilter: @mostras_filter,
-      cinemasFilter: @cinemas_filter,
-      paisesFilter: @paises_filter,
-      genresFilter: @genres_filter,
+      mostras: @mostras_filter,
+      cinemas: @cinemas_filter,
+      paises: @paises_filter,
+      genres: @genres_filter,
       sessoes: @sessoes,
+      directors: @directors_filter,
+      actors: @actors_filter,
       menuTabs: @menu_tabs,
       current_filters: { # those are the ones used as modelValue
         query: selected_query,
-        mostrasFilter: selected_mostra,
-        cinemasFilter: selected_cinema,
-        paisesFilter: selected_pais,
-        genresFilter: selected_genre,
-        sessao: selected_sessao
+        mostra: selected_mostra,
+        cinema: selected_cinema,
+        pais: selected_pais,
+        genre: selected_genre,
+        sessao: selected_sessao,
+        elenco: selected_actor,
+        "direção" => selected_director
       },
-      has_active_filters: params.permit(:query, :mostrasFilter).to_h.values.any?(&:present?),
+      has_active_filters: params.permit(:query, :mostra).to_h.values.any?(&:present?),
       crumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Programação", "" ],
@@ -205,10 +243,13 @@ class ProgramsController < ApplicationController
 
   def build_tab_url(date, filters)
     query_params = {}
-    query_params[:mostrasFilter]= filters[:mostrasFilter]["permalink_pt"] if filters[:mostrasFilter].present?
-    query_params[:cinemasFilter]= filters[:cinemasFilter]["id"] if filters[:cinemasFilter].present?
-    query_params[:paisesFilter]= filters[:paisesFilter]["id"] if filters[:paisesFilter].present?
+    query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
+    query_params[:cinema]= filters[:cinema]["filter_value"] if filters[:cinema].present?
+    query_params[:pais]= filters[:pais]["filter_value"] if filters[:pais].present?
+    query_params[:genre]= filters[:genre]["filter_value"] if filters[:genre].present?
     query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
+    query_params["direção"]= filters["direção"]["filter_value"] if filters["direção"].present?
+    query_params[:elenco]= filters[:elenco]["filter_value"] if filters[:elenco].present?
     query_params[:date] = date
     url_for(params: query_params, only_path: true)
   end
@@ -221,7 +262,7 @@ class ProgramsController < ApplicationController
                                 .sort_by { |it| it.nome_pais }
                                 .as_json(
                                   only: %i[id nome_pais],
-                                  methods: %i[filter_display filter_value]
+                                  methods: %i[filter_display filter_value filter_label]
                                 )
 
     @mostras_filter  = Mostra.where(edicao_id: EDICAO_ATUAL)
@@ -230,7 +271,7 @@ class ProgramsController < ApplicationController
                             .sort_by { |it| it.permalink_pt }
                             .as_json(
                               only: %i[id permalink_pt nome_abreviado],
-                              methods: [ :tag_class, :display_name, :filter_value, :filter_display ]
+                              methods: [ :tag_class, :display_name, :filter_value, :filter_display, :filter_label ]
                             )
     @cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL)
                             .to_a
@@ -238,14 +279,16 @@ class ProgramsController < ApplicationController
                             .sort_by { |it| it.nome }
                             .as_json(
                               only: %i[id nome endereco edicao_id],
-                              methods: %i[filter_display filter_value]
+                              methods: %i[filter_display filter_value filter_label]
                             )
 
     @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort.as_json(
       only: %i[sessao],
-      methods: %i[display_sessao filter_value filter_display]
+      methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
     @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
+    @directors_filter = Pelicula.directors_for(EDICAO_ATUAL)
+    @actors_filter = Pelicula.cast_for(EDICAO_ATUAL)
   end
 end

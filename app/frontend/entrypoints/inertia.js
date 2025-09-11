@@ -1,6 +1,7 @@
 import { createInertiaApp } from '@inertiajs/vue3'
 import { createApp, h } from 'vue'
 import PageLayout from '@pages/PageLayout.vue'
+import { FocusTrap } from 'focus-trap-vue'
 
 createInertiaApp({
   // Set default page title
@@ -30,6 +31,7 @@ createInertiaApp({
 
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
+      .component('FocusTrap', FocusTrap)
       .use(plugin)
       .mount(el)
   },

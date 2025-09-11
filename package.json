@@ -1,7 +1,7 @@
 {
   "private": true,
   "type": "module",
- "scripts": {
+  "scripts": {
     "test": "vitest"
   },
   "devDependencies": {
@@ -19,6 +19,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-vue": "^8.6.0",
+    "focus-trap": "^7.6.5",
+    "focus-trap-vue": "^4.1.0",
     "lucide-vue-next": "^0.542.0",
     "reka-ui": "^2.5.0",
     "tailwind-merge": "^3.3.1",

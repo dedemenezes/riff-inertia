@@ -11,6 +11,7 @@ export { default as IconCarretUp } from "./navigation/IconCarretUp.vue";
 export { default as IconHome } from "./navigation/IconHome.vue";
 export { default as IconChevronLeft } from "./navigation/IconChevronLeft.vue";
 export { default as IconChevronRight } from "./navigation/IconChevronRight.vue";
+export { default as IconBoxArrowUp } from "./navigation/IconBoxArrowUp.vue";
 // export { default as IconMenu } from "./navigation/IconMenu.vue";
 
 // Status

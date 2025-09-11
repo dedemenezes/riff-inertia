@@ -23,8 +23,54 @@ class Pelicula < ApplicationRecord
         .uniq
         .sort
 
-      genres.map { |g| { "filter_display" => g, "filter_value" => g } }
+      genres.map do |genre|
+        {
+          "filter_display" => genre,
+          "filter_value" => genre,
+          "filter_label" => I18n.t("filter.genero")
+        }
+      end
     # end
+  end
+
+  def self.directors_for(edicao_id)
+      # Rails.cache.fetch("directors-for-edicao-#{edicao_id}", expires_in: 12.hours) do
+      where(edicao_id: edicao_id)
+        .where.not(diretor_coord_int: [ nil, "" ])
+        .pluck(:diretor_coord_int)
+        .map(&:strip)
+        .uniq
+        .compact
+        .sort
+        .map do |director|
+          {
+            "filter_display" => director,
+            "filter_value" => director,
+            "filter_label" => I18n.t("filter.direcao")
+          }
+        end
+    # end
+  end
+
+  # Filter options
+  def self.cast_for(edicao_id)
+    # Filter collection must be cached
+    all_cast_for(edicao_id).map do |cast|
+      {
+        "filter_display": cast,
+        "filter_value": cast,
+        "filter_label": I18n.t("filter.elenco")
+      }
+    end
+  end
+
+  # TODO: WE GET 1k+. think about it
+  def self.all_cast_for(edicao_id)
+    where(edicao_id: edicao_id)
+      .where.not(elenco_coord_int: [ nil, "" ])
+      .pluck(:elenco_coord_int)
+      .flat_map { |cast| cast.split(",").map(&:strip) }
+      .reject(&:blank?).uniq.sort
   end
 
   def genre
@@ -46,5 +92,40 @@ class Pelicula < ApplicationRecord
     else
       all_paises.first
     end
+  end
+
+  # Caches actor names with pelicula id
+  def self.actor_to_pelicula_mapping(edicao_id)
+    Rails.cache.fetch("actor-pelicula-mapping-#{edicao_id}", expires_in: 6.hours) do
+      mapping = {}
+
+      where(edicao_id: edicao_id)
+        .where.not(elenco_coord_int: [ nil, "" ])
+        .pluck(:id, :elenco_coord_int)
+        .each do |pelicula_id, cast_string|
+          cast_string.split(",").each do |actor|
+            clean_actor = actor.strip
+            next if clean_actor.blank?
+
+            mapping[clean_actor] ||= []
+            mapping[clean_actor.downcase] ||= []
+            # Store both exact name and normalized version
+            mapping[clean_actor] << pelicula_id
+            mapping[clean_actor.downcase] << pelicula_id
+          end
+        end
+
+      # Remove duplicates and return
+      mapping.each { |ky, value| mapping[ky] = value.uniq }
+      mapping
+    end
+  end
+
+  # get from cache and search for pelicula ids
+  def self.with_actor(actor_name, edicao_id)
+    mapping = actor_to_pelicula_mapping(edicao_id)
+    pelicula_ids = mapping[actor_name] || mapping[actor_name.downcase] || []
+
+    where(id: pelicula_ids)
   end
 end
