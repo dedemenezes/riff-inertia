@@ -1,4 +1,5 @@
 <script setup>
+// TODO: Close form filter only after success submit?
 // TODO: CHANGE TEXT WHEN NO RESULT FOR FILTERING
 // TODO: FIX LIMPAR FILTRO
 // TODO: Click cleansearchbar should close mobile filter menu?
@@ -32,11 +33,13 @@ const props = defineProps({
   items: { type: Array, required: true }
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
-  ,mostrasFilter: { type: Array, default: () => [] }
-  ,cinemasFilter: { type: Array, default: () => [] }
-  ,paisesFilter: { type: Array, default: () => [] }
-  ,genresFilter: { type: Array, default: () => [] }
+  ,mostras: { type: Array, default: () => [] }
+  ,cinemas: { type: Array, default: () => [] }
+  ,paises: { type: Array, default: () => [] }
+  ,genres: { type: Array, default: () => [] }
   ,sessoes: { type: Array, default: () => [] }
+  ,directors: { type: Array, default: () => [] }
+  ,actors: { type: Array, default: () => [] }
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
@@ -72,9 +75,30 @@ const filterSearch = (filtersFromChild) => {
 };
 
 const removeQuery = (what) => {
-  debugger
-  // remove the correct queryparams from url
+  const newParams = new URLSearchParams()
+  // TODO: ADD ALL TRANSLATIONS OR REFACTOR AI CAN ADD TRANSLATIONS
+  if (["Country", "Pais"].includes(what.filter_label)) {
+    localFilters.value['pais'] = null
+  }
+
+  if (["Showcase", "Mostra"].includes(what.filter_label)) {
+    localFilters.value['mostra'] = null
+  }
   // make new request with the up to date filters
+  debugger
+  if (localFilters.value[what["filter_label"].toLowerCase()]) {
+    localFilters.value[what["filter_label"].toLowerCase()] = null
+  }
+  Object.entries(localFilters.value).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== "") {
+      newParams.set(key, value.filter_value);
+    }
+  })
+  router.get(props.tabBaseUrl, newParams, {
+    preserveState: true,
+    preserveScroll: true,
+    only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+  })
 }
 
 // Called when filters cleared from MobileFilterMenu
@@ -104,16 +128,8 @@ const { sentinel, isSticky } = useStickyMenuTabs()
       <MobileTrigger @open-menu="openMenu" />
     </div>
 
-    <!-- filtered tag -->
-     <!-- { "query": null,
-       "mostrasFilter": null,
-       "cinemasFilter": null,
-       "paisesFilter": null,
-       "sessao": { "sessao": "2000-01-01T19:00:00.000Z",
-       "display_sessao": "19:00",
-       "filter_value": "19h00",
-       "filter_display": "19h00" }
-      } -->
+    <!-- TODO: REFAC into reusable components -->
+    <!-- MOBILE TAG FILTER -->
     <div
       class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
       v-if="Object.values(props.current_filters).some((item) => item !== null)"
@@ -121,10 +137,10 @@ const { sentinel, isSticky } = useStickyMenuTabs()
       <TagFilter
         v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
         :key="key"
-        :filter="{ label: value.filter_display, value: value.filter_value }"
+        :filter="value"
         :text="value.filter_display"
         @remove-filter="removeQuery"
-        />
+      />
     </div>
     <!-- filtered tag -->
 
@@ -137,18 +153,22 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           :tabs="menuTabs"
           class="h-15"
         />
+
+        <!-- DESKTOP TAG FILTER -->
         <div
           class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
           v-if="Object.values(props.current_filters).some((item) => item !== null)"
         >
           <TagFilter
             v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
-            :key="key"
-            :filter="{ label: value.filter_display, value: value.filter_value }"
+            :key="value.filter_value"
+            :filter="value"
             :text="value.filter_display"
             @remove-filter="removeQuery"
-            />
+          />
         </div>
+
+        <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
@@ -171,11 +191,13 @@ const { sentinel, isSticky } = useStickyMenuTabs()
             <ProgramsFilterForm
               :model-value="modelValue"
               :update-field="updateField"
-              :mostrasFilter="props.mostrasFilter"
-              :cinemasFilter="props.cinemasFilter"
-              :paisesFilter="props.paisesFilter"
-              :genresFilter="props.genresFilter"
+              :mostras="props.mostras"
+              :cinemas="props.cinemas"
+              :paises="props.paises"
+              :genres="props.genres"
               :sessoes="props.sessoes"
+              :directors="props.directors"
+              :actors="props.actors"
             />
           </template>
         </ResponsiveFilterMenu>
