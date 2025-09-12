@@ -6,7 +6,6 @@ class Pelicula < ApplicationRecord
   METHODS_NEEDED = %i[
     display_sinopse
     display_titulo
-    montagem_team
     diretor_team
     fotografia_team
     producaoempresa_team
