@@ -1,19 +1,16 @@
 <!-- const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue')) -->
 <script setup>
 import { ref, defineAsyncComponent } from 'vue';
-import { usePage } from '@inertiajs/vue3';
-import PeliculaSession from '@/components/common/cards/PeliculaSessionCard.vue';
-import CarouselComponent from '@/components/ui/CarouselComponent.vue';
 
+const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
+const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
+const CreditosContent = defineAsyncComponent(() => import('@/components/features/peliculas/CreditosContent.vue'));
 const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadcrumb.vue'));
 const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
-const BaseButton = defineAsyncComponent(() => import('@/components/common/buttons/BaseButton.vue'));
 const IconChevronLeft = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronLeft.vue'));
-const IconChevronRight = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronRight.vue'));
 const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
 const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
 const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
-const page = usePage()
 
 const props = defineProps({
   rootUrl: { type: String, required: true },
@@ -21,13 +18,12 @@ const props = defineProps({
   pelicula: { type: Object, required: true }
 });
 
-
 const tabs = [
   { id: 'informacoes', label: 'Informações' },
   { id: 'sessoes', label: 'Sessões' },
   { id: 'creditos', label: 'Créditos' }
 ]
-const activeTab = ref(tabs[2].id)
+const activeTab = ref(tabs[0].id)
 </script>
 
 <template>
@@ -103,112 +99,46 @@ const activeTab = ref(tabs[2].id)
 
       <!--  || isDesktop -->
       <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
-        <h3 class="text-overline text-neutrals-700 uppercase pb-200">sobre o filme</h3>
-        <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
-        <div class="flex flex-col gap-400 py-400 items-center justify-center">
-          <img :src="props.pelicula.imageURL" class="h-[251px] w-[201px] object-cover" :alt="`${pelicula.display_titulo} banner`">
-          <!-- TRanslate website -->
-          <ButtonText variant="dark" class="gap-200" text="Ver fotos de imprensa" tag="a">
-            <template #icon>
-              <IconChevronRight height="16" width="16" color="inherit order-2"/>
-            </template>
-          </ButtonText>
-        </div>
-        <div :class="`border-s-8 border-${props.pelicula.mostra_tag_class} rounded-100 px-400 py-300 flex flex-col gap-200 col-span-2 h-fit`">
-          <h2 class="text-header-medium-sm">{{ props.pelicula.mostra_name }}</h2>
-          <p class="text-body-regular">A Première Brasil é a mostra competitiva central do Festival do Rio, dedicada a filmes brasileiros inéditos que valorizam a diversidade de narrativas e refletem a realidade do país. Desde 1999, já apresentou mais de 1.300 títulos. Curtas e longas selecionados integram mostras competitivas e não competitivas, com as produções em disputa concorrendo ao Troféu Redentor na seleção principal ou na Première Brasil: Novos Rumos.</p>
-        </div>
-
-        <CarouselComponent
-          :imageCollection="props.pelicula.carousel_images"
-          :class-names="['pt-800']"
-        />
+        <Suspense>
+          <InformacoesContent
+            :display_sinopse="props.pelicula.display_sinopse"
+            :imageURL="props.pelicula.imageURL"
+            :display_titulo="props.pelicula.display_titulo"
+            :mostra_tag_class="props.pelicula.mostra_tag_class"
+            :mostra_name="props.pelicula.mostra_name"
+            :carousel_images="props.pelicula.carousel_images"
+          />
+          <template #fallback>
+            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+          </template>
+        </Suspense>
       </section>
 
       <section v-show="activeTab === 'sessoes'" class="w-full sm:w-1/3 space-y-400">
-        <BaseButton variant="dark" class="w-full">Comprar pacote de ingressos</BaseButton>
-
-        <div v-for="(item, index) in [1,2,3]">
-          <PeliculaSession class="mb-400" />
-          <hr v-show="index < 2" class="text-neutrals-300">
-        </div>
+        <Suspense>
+          <SessoesContent />
+          <template #fallback>
+            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+          </template>
+        </Suspense>
       </section>
 
       <section v-show="activeTab === 'creditos'" class="w-full sm:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-        <div class="py-600">
-          <h3 class="text-overline text-neutrals-700 uppercase pb-300">DIREÇÃO</h3>
-          <!-- TODO: TRANSLATE -->
-          <div class="card__director rounded-200 w-1/2">
-            <img
-              :src="props.pelicula.director_image"
-              :alt="`Foto de ${props.pelicula.diretor_coord_int}`"
-              class="h-[154px] w-full object-cover object-top rounded-t-200"
-            >
-            <div class="card__content bg-neutrals-200 rounded-200 ps-200 py-250">
-              <p class="text-header-md text-neutrals-900">{{ props.pelicula.diretor_coord_int }}</p>
-            </div>
-          </div>
-        </div>
-        <hr class="text-neutrals-300">
-        <div class="space-y-400 pt-400">
-          <div class="grid grid-cols-3">
-            <p class="text-overline text-neutrals-700 uppercase pb-200">roteiro</p>
-            <ul class="col-span-2 flex flex-col">
-              <li
-                v-for="member in props.pelicula.roteiro_team"
-                :key="member"
-              >
-                <p class="text-body-regular">{{ member }}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="grid grid-cols-3">
-            <p class="text-overline text-neutrals-700 uppercase pb-200">fotografia</p>
-            <ul class="col-span-2 flex flex-col">
-              <li
-                v-for="member in props.pelicula.fotografia_team"
-                :key="member"
-              >
-                <p class="text-body-regular">{{ member }}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="grid grid-cols-3">
-            <p class="text-overline text-neutrals-700 uppercase pb-200">montagem</p>
-            <ul class="col-span-2 flex flex-col">
-              <li
-                v-for="member in props.pelicula.montagem_team"
-                :key="member"
-              >
-                <p class="text-body-regular">{{ member }}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="grid grid-cols-3">
-            <p class="text-overline text-neutrals-700 uppercase pb-200">direção</p>
-            <ul class="col-span-2 flex flex-col">
-              <li
-                v-for="member in props.pelicula.diretor_team"
-                :key="member"
-              >
-                <p class="text-body-regular">{{ member }}</p>
-              </li>
-            </ul>
-          </div>
-          <div class="grid grid-cols-3">
-            <p class="text-overline text-neutrals-700 uppercase pb-200">direção</p>
-            <ul class="col-span-2 flex flex-col">
-              <li
-                v-for="member in props.pelicula.producaoempresa_team"
-                :key="member"
-              >
-                <p class="text-body-regular text-neutrals-900">{{ member }}</p>
-              </li>
-            </ul>
-          </div>
-
-        </div>
+        <Suspense>
+          <CreditosContent
+            :director_image="props.pelicula.director_image"
+            :diretor_coord_int="props.pelicula.diretor_coord_int"
+            :roteiro_team="props.pelicula.roteiro_team"
+            :fotografia_team="props.pelicula.fotografia_team"
+            :montagem_team="props.pelicula.montagem_team"
+            :diretor_team="props.pelicula.diretor_team"
+            :producaoempresa_team="props.pelicula.producaoempresa_team"
+          />
+          <template #fallback>
+            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+          </template>
+        </Suspense>
       </section>
     </div>
   </TwContainer>
