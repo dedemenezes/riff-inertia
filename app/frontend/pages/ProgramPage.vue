@@ -4,6 +4,8 @@
 // TODO: FIX LIMPAR FILTRO
 // TODO: Click cleansearchbar should close mobile filter menu?
 // TODO: Click cleansearchbar should make new request to remove query param
+// TODO: Add icon for menu tabs scroll
+// TODO: Fix image urls
 
 import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3"

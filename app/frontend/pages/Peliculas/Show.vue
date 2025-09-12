@@ -1,5 +1,9 @@
 <script setup>
 // TODO: renderizar imagem grande desktop, mobile menor
+// TODO: botao com cursor hover para comprar ingresso
+// TODO: Fix carousel só se tiver imagem para mostrar
+// TODO: E se filme nao tiver imagem na db?
+
 import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue';
 
 const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
