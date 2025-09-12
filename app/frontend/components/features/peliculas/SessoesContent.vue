@@ -1,9 +1,9 @@
 <script setup>
 import { defineAsyncComponent } from 'vue';
+import BaseButton from '@/components/common/buttons/BaseButton.vue';
 const PeliculaSession = defineAsyncComponent(() => import('@/components/common/cards/PeliculaSessionCard.vue'));
-const BaseButton = defineAsyncComponent(() => import('@/components/common/buttons/BaseButton.vue'));
 </script>
-
+<!-- TODO: TRADUZIR -->
 <template>
   <BaseButton variant="dark" class="w-full">Comprar pacote de ingressos</BaseButton>
 

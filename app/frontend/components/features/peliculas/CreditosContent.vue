@@ -13,7 +13,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="py-600">
+  <div class="py-600 md:pt-0">
     <h3 class="text-overline text-neutrals-700 uppercase pb-300">DIREÇÃO</h3>
     <!-- TODO: TRANSLATE -->
     <div class="card__director rounded-200 w-1/2">
@@ -21,6 +21,7 @@ const props = defineProps({
         :src="props.director_image"
         :alt="`Foto de ${props.diretor_coord_int}`"
         class="h-[154px] w-full object-cover object-top rounded-t-200"
+        loading="lazy"
       >
       <div class="card__content bg-neutrals-200 rounded-200 ps-200 py-250">
         <p class="text-header-md text-neutrals-900">{{ props.diretor_coord_int }}</p>

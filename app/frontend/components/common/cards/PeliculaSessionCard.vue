@@ -1,4 +1,5 @@
 <script setup>
+// TODO: ADD PROPS AND EVERYTHING
 import { BaseButton } from '@/components/common/buttons';
 import { IconPin } from '@/components/common/icons';
 import TagScreening from '@/components/common/tags/TagScreening.vue';
