@@ -13,7 +13,8 @@ class PeliculasController < ApplicationController
         [ "", @root_url ],
         [ I18n.t("navigation.programming"), program_path ],
         [ @pelicula.display_titulo, "" ]
-      )
+      ),
+      backPath: request.referer || root_path
     }
   end
 end

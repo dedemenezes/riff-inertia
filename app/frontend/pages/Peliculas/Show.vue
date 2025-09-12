@@ -15,6 +15,7 @@ const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/
 const props = defineProps({
   rootUrl: { type: String, required: true },
   crumbs: { type: Array, required: true, default: () => []},
+  backPath: String,
   pelicula: { type: Object, required: true }
 });
 
@@ -40,7 +41,7 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
     <!-- TODO: Translate back text instalar i18n vue -->
 
     <!-- back link -->
-    <ButtonText variant="dark" class="gap-200 py-400" text="Voltar" tag="a">
+    <ButtonText variant="dark" class="gap-200 py-400" text="Voltar" tag="a" :href="props.backPath">
       <template #icon>
         <IconChevronLeft height="16" width="16" color="inherit"/>
       </template>
