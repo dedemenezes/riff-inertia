@@ -104,7 +104,7 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
     <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center lg:hidden" />
 
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-    <div class="flex flex-col gap-6 sm:flex-row sm:gap-800 py-600">
+    <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
 
       <section v-show="activeTab === 'creditos' || isDesktop" class="w-full sm:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->

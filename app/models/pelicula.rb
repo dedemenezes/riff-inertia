@@ -180,6 +180,7 @@ class Pelicula < ApplicationRecord
     # end
   end
 
+  # TODO: RETHINK THIS MAYBE THERE ISN'T TWO IMAGES
   def carousel_images
     image_name = imagem
     return if image_name.nil? || image_name.empty?
