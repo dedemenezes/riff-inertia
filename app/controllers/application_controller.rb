@@ -22,6 +22,10 @@ class ApplicationController < ActionController::Base
     set_secondary_items
   }
 
+  inertia_share menuContext: -> {
+    set_menu_context
+  }
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
@@ -120,5 +124,33 @@ class ApplicationController < ActionController::Base
       { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
       { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
     ]
+  end
+
+  def set_menu_context
+    {
+      "programacao" => [
+        { name: "Programação", route: program_url, icon: "program" },
+        { name: "Sessões com convidados", route: "/", icon: "user" },
+        { name: "Mudanças na Programação", route: "/", icon: "change" },
+        { name: "Programação Gratuita", route: "/", icon: "ticket" }
+      ],
+      "edicao" => [
+        { name: "Todos os Filmes", route: "/", icon: "program" },
+        { name: "Mostras", route: mostras_path, icon: "grid" },
+        { name: "Cinemas", route: "/", icon: "pin" },
+        { name: "Juri", route: "/", icon: "trophy" },
+        { name: "Equipe", route: "/", icon: "people" }
+      ],
+      "sobre" => [
+        { name: "O Festival", route: "/", icon: "logoFest" },
+        { name: "Edições Anteriores", route: edicoes_anteriores_url, icon: "calendar" },
+        { name: "Talent Press", route: "/", icon: "talentPress" },
+        { name: "Parceiros", route: "/", icon: "handshake" }
+      ],
+      "midias" => [
+        { name: "Fotos & Vídeos", route: "/", icon: "image" },
+        { name: "Impressos", route: "/", icon: "book" }
+      ]
+    }
   end
 end

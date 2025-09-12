@@ -1,28 +1,16 @@
 <script setup>
-import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/common/icons";
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 
-
 const props = defineProps({
-  items: { type: Array, required: true },
   categorias: { type: Array, default: () => []}
 })
-
-// TODO: alterar icones
-const iconMapping = {
-  "program": IconProgram,
-  "user": IconNewUser,
-  "change": IconChange,
-  "clock": IconClock
-};
 </script>
 
 <template>
   <!-- TODO: alterar a imagem do card -->
   <MenuContext
-    :items="props.items"
-    :icon-mapping="iconMapping"
+    nav="edicao"
   />
   <hr class="text-neutrals-300">
 
