@@ -1,6 +1,6 @@
-<!-- const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue')) -->
 <script setup>
-import { ref, defineAsyncComponent } from 'vue';
+// TODO: renderizar imagem grande desktop, mobile menor
+import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue';
 
 const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
 const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
@@ -24,6 +24,14 @@ const tabs = [
   { id: 'creditos', label: 'Créditos' }
 ]
 const activeTab = ref(tabs[0].id)
+
+const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
+const isDesktop = computed(() => width.value >= 740)
+
+const updateWidth = () => width.value = window.innerWidth
+
+onMounted(() => window.addEventListener('resize', updateWidth))
+onUnmounted(() => window.removeEventListener('resize', updateWidth))
 </script>
 
 <template>
@@ -39,7 +47,7 @@ const activeTab = ref(tabs[0].id)
     </ButtonText>
   </TwContainer>
   <!-- banner image -->
-  <img :src="props.pelicula.imageURL" class="h-[222px] object-cover" :alt="`${pelicula.display_titulo} banner`">
+  <img :src="props.pelicula.imageURL" class="h-[222px] lg:h-[634px] w-full object-cover" :alt="`${pelicula.display_titulo} banner`">
   <!-- short info card -->
   <header>
     <div class="bg-neutrals-200">
@@ -92,13 +100,30 @@ const activeTab = ref(tabs[0].id)
      <!-- Tabs -->
   <TwContainer>
 
-    <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center" />
+    <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center lg:hidden" />
 
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-    <div class="flex flex-col gap-6 sm:flex-row sm:gap-4 py-600">
+    <div class="flex flex-col gap-6 sm:flex-row sm:gap-800 py-600">
 
-      <!--  || isDesktop -->
-      <section v-show="activeTab === 'informacoes'" class="w-full sm:w-1/3">
+      <section v-show="activeTab === 'creditos' || isDesktop" class="w-full sm:w-1/3">
+        <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
+        <Suspense>
+          <CreditosContent
+            :director_image="props.pelicula.director_image"
+            :diretor_coord_int="props.pelicula.diretor_coord_int"
+            :roteiro_team="props.pelicula.roteiro_team"
+            :fotografia_team="props.pelicula.fotografia_team"
+            :montagem_team="props.pelicula.montagem_team"
+            :diretor_team="props.pelicula.diretor_team"
+            :producaoempresa_team="props.pelicula.producaoempresa_team"
+          />
+          <template #fallback>
+            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+          </template>
+        </Suspense>
+      </section>
+
+      <section v-show="activeTab === 'informacoes' || isDesktop" class="w-full sm:w-2/3">
         <Suspense>
           <InformacoesContent
             :display_sinopse="props.pelicula.display_sinopse"
@@ -114,27 +139,9 @@ const activeTab = ref(tabs[0].id)
         </Suspense>
       </section>
 
-      <section v-show="activeTab === 'sessoes'" class="w-full sm:w-1/3 space-y-400">
+      <section v-show="activeTab === 'sessoes' || isDesktop" class="w-full sm:w-1/3 space-y-400">
         <Suspense>
           <SessoesContent />
-          <template #fallback>
-            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
-          </template>
-        </Suspense>
-      </section>
-
-      <section v-show="activeTab === 'creditos'" class="w-full sm:w-1/3">
-        <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-        <Suspense>
-          <CreditosContent
-            :director_image="props.pelicula.director_image"
-            :diretor_coord_int="props.pelicula.diretor_coord_int"
-            :roteiro_team="props.pelicula.roteiro_team"
-            :fotografia_team="props.pelicula.fotografia_team"
-            :montagem_team="props.pelicula.montagem_team"
-            :diretor_team="props.pelicula.diretor_team"
-            :producaoempresa_team="props.pelicula.producaoempresa_team"
-          />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
