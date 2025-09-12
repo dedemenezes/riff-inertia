@@ -5,6 +5,7 @@ import { computed, ref } from "vue";
 const props = defineProps({
   content: { type: String, required: true },
   route: { type: String, default: "#" },
+  active: {type: Boolean }
 });
 const isHovered = ref(false);
 const handleMouseEnter = () => {
@@ -47,7 +48,7 @@ const isIconActive = computed(() => isHovered.value || isFocused.value || isActi
       <slot
         name="icon"
         :hovered="isHovered"
-        :active="isIconActive"
+        :active="props.active || isIconActive"
         :routeActive="isActive"
       />
       <p class="text-body-strong-xs text-primary text-center uppercase">

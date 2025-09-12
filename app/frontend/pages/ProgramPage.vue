@@ -7,7 +7,6 @@
 
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3"
-import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/common/icons";
 
 import TwContainer from "@/components/layout/TwContainer.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
@@ -50,15 +49,6 @@ const props = defineProps({
 })
 
 const localFilters = ref({ ...props.current_filters })
-
-
-const iconMapping = {
-  "program": IconProgram,
-  "user": IconNewUser,
-  "change": IconChange,
-  "clock": IconClock
-};
-
 
 // Called when user clears search bar
 const handleClear = () => {
@@ -121,10 +111,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
   <TwContainer>
     <Breadcrumb :crumbs="props.crumbs" />
   </TwContainer>
+
   <MenuContext
-  :items="props.items"
-  :icon-mapping="iconMapping"
+    nav="programacao"
   />
+
   <hr class="text-neutrals-300">
   <!-- TODO: review border maybe just desktop -->
   <TwContainer class="relative">
