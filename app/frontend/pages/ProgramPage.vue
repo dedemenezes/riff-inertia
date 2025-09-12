@@ -98,9 +98,9 @@ const removeQuery = (what) => {
   const newParams = new URLSearchParams()
 
   // Clear the specific filter
-  if (["Country", "Pais"].includes(what.filter_label)) {
-    localFilters.value['pais'] = null
-    filters.value['pais'] = null
+  if (["Time", "Sessão"].includes(what.filter_label)) {
+    localFilters.value['sessao'] = null
+    filters.value['sessao'] = null
   }
 
   if (["Showcase", "Mostra"].includes(what.filter_label)) {
@@ -118,6 +118,17 @@ const removeQuery = (what) => {
     localFilters.value['genero'] = null
     filters.value['genero'] = null
   }
+
+  if (["Country", "Pais"].includes(what.filter_label)) {
+    localFilters.value['pais'] = null
+    filters.value['pais'] = null
+  }
+
+  if (["Director", "Direção"].includes(what.filter_label)) {
+    localFilters.value['direcao'] = null
+    filters.value['direcao'] = null
+  }
+
 
   if (["Cast", "Elenco"].includes(what.filter_label)) {
     localFilters.value['elenco'] = null
