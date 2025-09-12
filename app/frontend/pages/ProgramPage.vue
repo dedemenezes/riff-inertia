@@ -20,8 +20,6 @@ import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 
-import TagFilterBar from "@/components/features/filters/TagFilterBar.vue";
-
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
 
