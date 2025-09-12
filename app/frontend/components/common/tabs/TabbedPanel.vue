@@ -30,7 +30,7 @@ function select(tabId) {
       >
         <!-- Inner tab content -->
         <div
-          class="bg-white px-[33.3px] pt-[6px] flex items-center justify-center text-body-strong-sm uppercase"
+          class="bg-white px-[7.3px] lg:px-[33.3px] pt-[6px] flex items-center justify-center text-body-strong-sm uppercase"
           :class="modelValue === tab.id ? 'text-neutrals-900' : 'text-neutrals-700'"
         >
           {{ tab.label }}

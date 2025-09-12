@@ -1,7 +1,10 @@
 <script setup>
 import { computed } from "vue";
 import AccordionGroup from "@/components/AccordionGroup.vue";
-import ComboboxComponent from "@/components/ui/ComboboxComponent.vue";
+
+const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
+// import ComboboxComponent from "@/components/ui/ComboboxComponent.vue";
+
 // import DatePickerComponent from "@/components/common/forms/components/DatePickerComponent.vue";
 // import SelectComponent from "@/components/common/forms/components/SelectComponent.vue";
 // import { collection, showcases } from "@/lib/fakeData";

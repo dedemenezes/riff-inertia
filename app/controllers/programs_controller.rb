@@ -81,11 +81,11 @@ class ProgramsController < ApplicationController
       end
     end
 
-    if params[:genre].present?
-      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genre]) }
+    if params[:genero].present?
+      selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genero]) }
 
       if selected_genre
-        selected_filters[:genre] = selected_genre
+        selected_filters[:genero] = selected_genre
         locale_index = I18n.locale == :en ? -1 : 1
 
         # Use subquery instead of raw SQL on joined table
@@ -99,11 +99,11 @@ class ProgramsController < ApplicationController
       end
     end
 
-    if params["direção"].present?
-      selected_director = @directors_filter.find { |d| d["filter_value"] == params["direção"] }
+    if params[:direcao].present?
+      selected_director = @directors_filter.find { |d| d["filter_value"] == params[:direcao] }
 
       if selected_director
-        selected_filters["direção"] = selected_director
+        selected_filters[:direcao] = selected_director
 
         # Get pelicula IDs first - clean, simple query
         pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
@@ -162,7 +162,8 @@ class ProgramsController < ApplicationController
         genero: programacao.pelicula&.genre,
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,
-        mostra_tag_class: programacao.pelicula&.mostra&.tag_class
+        mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
+        pelicula_url: pelicula_path(programacao.pelicula.permalink)
       }
     end
 
@@ -195,10 +196,10 @@ class ProgramsController < ApplicationController
         mostra: selected_mostra,
         cinema: selected_cinema,
         pais: selected_pais,
-        genre: selected_genre,
+        genero: selected_genre,
         sessao: selected_sessao,
         elenco: selected_actor,
-        "direção" => selected_director
+        direcao: selected_director
       },
       has_active_filters: params.permit(:query, :mostra).to_h.values.any?(&:present?),
       crumbs: breadcrumbs(
@@ -246,9 +247,9 @@ class ProgramsController < ApplicationController
     query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
     query_params[:cinema]= filters[:cinema]["filter_value"] if filters[:cinema].present?
     query_params[:pais]= filters[:pais]["filter_value"] if filters[:pais].present?
-    query_params[:genre]= filters[:genre]["filter_value"] if filters[:genre].present?
+    query_params[:genero]= filters[:genero]["filter_value"] if filters[:genero].present?
     query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
-    query_params["direção"]= filters["direção"]["filter_value"] if filters["direção"].present?
+    query_params[:direcao]= filters[:direcao]["filter_value"] if filters[:direcao].present?
     query_params[:elenco]= filters[:elenco]["filter_value"] if filters[:elenco].present?
     query_params[:date] = date
     url_for(params: query_params, only_path: true)
