@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
     {
       "programacao" => [
         { name: "Programação", route: program_url, icon: "program" },
-        { name: "Sessões com convidados", route: "/", icon: "user" },
+        { name: "Sessões com convidados", route: "/", icon: "newUser" },
         { name: "Mudanças na Programação", route: "/", icon: "change" },
         { name: "Programação Gratuita", route: "/", icon: "ticket" }
       ],
