@@ -124,14 +124,14 @@ const getQueryObject = (filter_value) => {
   <!-- GENRES -->
   <AccordionGroup
     :text="genreLabel"
-    :isOpen="!!props.modelValue.genre"
+    :isOpen="!!props.modelValue.genero"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="genresFilterOptions"
-        :modelValue="props.modelValue.genre?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('genre', getSelectedFrom('genres', val))"
+        :modelValue="props.modelValue.genero?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genero', getSelectedFrom('genres', val))"
         />
       </div>
     </template>
@@ -156,14 +156,14 @@ const getQueryObject = (filter_value) => {
   <!-- DIRETORES -->
   <AccordionGroup
     :text="directorLabel"
-    :isOpen="!!props.modelValue['direção']"
+    :isOpen="!!props.modelValue.direcao"
   >
     <template v-slot:content>
       <div class="overflow-hidden w-full">
         <ComboboxComponent
         :collection="directorsOptions"
-        :modelValue="props.modelValue['direção']?.filter_value || null"
-        @update:modelValue="(val) => props.updateField('direção', getSelectedFrom('directors', val))"
+        :modelValue="props.modelValue.direcao?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('direcao', getSelectedFrom('directors', val))"
         />
       </div>
     </template>
