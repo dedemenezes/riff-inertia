@@ -160,4 +160,9 @@ class PeliculaTest < ActiveSupport::TestCase
 
     Rails.cache = original_cache
   end
+  test "diretor_team parses directors correctly" do
+    batman = peliculas(:batman)
+    batman.update(diretor_coord_int: "Christopher Nolan, Denis Villeneuve")
+    assert_equal [ "Christopher Nolan", "Denis Villeneuve" ], batman.diretor_team
+  end
 end

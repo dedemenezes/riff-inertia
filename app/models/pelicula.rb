@@ -1,5 +1,6 @@
 class Pelicula < ApplicationRecord
   include ActionView::Helpers::TextHelper
+  include TeamParseable
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -134,33 +135,23 @@ class Pelicula < ApplicationRecord
   end
 
   def diretor_team
-    return if diretor_coord_int.nil? || diretor_coord_int.empty?
-
-    diretor_coord_int.split(",").map(&:strip)
+    parse_team(diretor_coord_int)
   end
 
   def fotografia_team
-    return if fotografia_coord_int.nil? || fotografia_coord_int.empty?
-
-    fotografia_coord_int.split(",").map(&:strip)
+    parse_team(fotografia_coord_int)
   end
 
   def producaoempresa_team
-    return if producaoempresa_coord_int.nil? || producaoempresa_coord_int.empty?
-
-    producaoempresa_coord_int.split(",").map(&:strip)
+    parse_team(producaoempresa_coord_int)
   end
 
   def roteiro_team
-    return if roteiro_coord_int.nil? || roteiro_coord_int.empty?
-
-    roteiro_coord_int.split(",").map(&:strip)
+    parse_team(roteiro_coord_int)
   end
 
   def montagem_team
-    return if montagem_coord_int.nil? || montagem_coord_int.empty?
-
-    montagem_coord_int.split(",").map(&:strip)
+    parse_team(montagem_coord_int)
   end
 
   def mostra_name
