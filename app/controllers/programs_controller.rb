@@ -279,8 +279,8 @@ class ProgramsController < ApplicationController
       methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
-    @genres_filter = Pelicula.genres_for(EDICAO_ATUAL)
-    @directors_filter = Pelicula.directors_for(EDICAO_ATUAL)
-    @actors_filter = Pelicula.cast_for(EDICAO_ATUAL)
+    @genres_filter = Pelicula.collection_for_genres
+    @directors_filter = Pelicula.collection_for_directors
+    @actors_filter = Pelicula.collection_for_actors
   end
 end

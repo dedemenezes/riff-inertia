@@ -4,20 +4,20 @@
 // TODO: FIX LIMPAR FILTRO
 // TODO: Click cleansearchbar should close mobile filter menu?
 // TODO: Click cleansearchbar should make new request to remove query param
+// TODO: Add icon for menu tabs scroll
+// TODO: Fix image urls
 
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3"
 
 import TwContainer from "@/components/layout/TwContainer.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
-
+import TagFilter from "@/components/common/tags/TagFilter.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
-
-import TagFilterBar from "@/components/features/filters/TagFilterBar.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
@@ -48,19 +48,58 @@ const props = defineProps({
   ,crumbs: { type: Array, required: true }
 })
 
-const localFilters = ref({ ...props.current_filters })
+// Initialize with proper structure
+const initializeFilters = () => ({
+  query: null,
+  sessao: null,
+  mostra: null,
+  cinema: null,
+  genero: null,
+  pais: null,
+  direcao: null,
+  elenco: null,
+  ...props.current_filters // Override with actual values
+})
+
+
+const localFilters = ref(initializeFilters())
+const filters = ref(initializeFilters())
+
+// Watch for prop changes and update our local state
+watch(() => props.current_filters, (newFilters) => {
+  localFilters.value = initializeFilters()
+  filters.value = initializeFilters()
+}, { immediate: true, deep: true })
+
+// This can be removed right?
+// We are not using the props anymore
+// here are the removed props from MenuContext below
+// :items="props.items"
+// :icon-mapping="iconMapping"
+//const iconMapping = {
+//  "program": IconProgram,
+//  "user": IconNewUser,
+//  "change": IconChange,
+//  "clock": IconClock
+//};
+
+// Update field function to pass to the form
+const updateField = (fieldName, value) => {
+  console.log(`Updating ${fieldName}:`, value)
+  filters.value[fieldName] = value
+  localFilters.value[fieldName] = value
+}
 
 // Called when user clears search bar
-const handleClear = () => {
-  filters.value.query = null;
-  submit(props.tabBaseUrl);
-};
+// const handleClear = () => {
+//  filters.value.query = null;
+//  submit(props.tabBaseUrl);
+// };
 
 // Called when filters applied in MobileFilterMenu
 const filterSearch = (filtersFromChild) => {
-  const cleanedFilters = extractFilterValues(filtersFromChild)
+  const cleanedFilters = extractFilterValues(filtersFromChild || filters.value)
   router.get(props.tabBaseUrl, cleanedFilters, {
-    preserveState: true,
     preserveScroll: true,
     only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
   })
@@ -68,30 +107,52 @@ const filterSearch = (filtersFromChild) => {
 
 const removeQuery = (what) => {
   const newParams = new URLSearchParams()
-  // TODO: ADD ALL TRANSLATIONS OR REFACTOR AI CAN ADD TRANSLATIONS
-  if (["Country", "Pais"].includes(what.filter_label)) {
-    localFilters.value['pais'] = null
+
+  // Clear the specific filter
+  if (["Time", "Sessão"].includes(what.filter_label)) {
+    localFilters.value['sessao'] = null
+    filters.value['sessao'] = null
   }
 
   if (["Showcase", "Mostra"].includes(what.filter_label)) {
     localFilters.value['mostra'] = null
+    filters.value['mostra'] = null
   }
 
-  // This will remove all special chars
-  // making every localFilters key same as filter_label
-  const keyToRemoveFromQuery = slugify(what["filter_label"]);
+  // Add other filter types as needed
+  if (["Cinema"].includes(what.filter_label)) {
+    localFilters.value['cinema'] = null
+    filters.value['cinema'] = null
+  }
 
-  if (localFilters.value[keyToRemoveFromQuery]) {
-    localFilters.value[keyToRemoveFromQuery] = null
+  if (["Genre", "Genero"].includes(what.filter_label)) {
+    localFilters.value['genero'] = null
+    filters.value['genero'] = null
+  }
+
+  if (["Country", "Pais"].includes(what.filter_label)) {
+    localFilters.value['pais'] = null
+    filters.value['pais'] = null
+  }
+
+  if (["Director", "Direção"].includes(what.filter_label)) {
+    localFilters.value['direcao'] = null
+    filters.value['direcao'] = null
+  }
+
+
+  if (["Cast", "Elenco"].includes(what.filter_label)) {
+    localFilters.value['elenco'] = null
+    filters.value['elenco'] = null
   }
 
   Object.entries(localFilters.value).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== "") {
+    if (value !== null && value !== undefined && value !== "" && value?.filter_value) {
       newParams.set(key, value.filter_value);
     }
   })
+
   router.get(props.tabBaseUrl, newParams, {
-    preserveState: true,
     preserveScroll: true,
     only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
   })
@@ -99,8 +160,13 @@ const removeQuery = (what) => {
 
 // Called when filters cleared from MobileFilterMenu
 const clearSearchQuery = () => {
-  clearAll();
-  submit(props.tabBaseUrl);
+  const clearedFilters = initializeFilters()
+  localFilters.value = clearedFilters
+  filters.value = clearedFilters
+  // router.get(props.tabBaseUrl, {}, {
+  //   preserveScroll: true,
+  //   only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+  // });
 };
 
 // sticket menutabs
@@ -108,6 +174,10 @@ const { sentinel, isSticky } = useStickyMenuTabs()
 </script>
 
 <template>
+  <!-- <p>current_filters: {{ props.current_filters }}</p>
+  <p>localFilters: {{ localFilters }}</p>
+  <p>filters: {{ filters }}</p> -->
+
   <TwContainer>
     <Breadcrumb :crumbs="props.crumbs" />
   </TwContainer>
@@ -117,41 +187,46 @@ const { sentinel, isSticky } = useStickyMenuTabs()
   />
 
   <hr class="text-neutrals-300">
-  <!-- TODO: review border maybe just desktop -->
+
   <TwContainer class="relative">
-    <div
-    class="filter flex lg:hidden items-center justify-end py-300 bg-white"
-    >
+    <div class="filter flex lg:hidden items-center justify-end py-300 bg-white">
       <MobileTrigger @open-menu="openMenu" />
     </div>
 
-    <!-- TODO: REFAC into reusable components -->
     <!-- MOBILE TAG FILTER -->
-    <TagFilterBar
-      className="flex lg:hidden pt-200 pb-300"
-      :filters="props.current_filters"
-      :onRemove="removeQuery"
-    />
-    <!-- filtered tag -->
+    <div
+      class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
+      v-if="Object.values(props.current_filters).some((item) => item !== null)"
+    >
+      <TagFilter
+        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+        :key="key"
+        :filter="value"
+        :text="value.filter_display"
+        @remove-filter="removeQuery"
+      />
+    </div>
 
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
-        <!-- Added for sticky menutabs -->
         <div ref="sentinel" class="h-1"></div>
         <MenuTabs
           :is-sticky="isSticky"
           :tabs="menuTabs"
           class="h-15"
         />
-
-        <!-- DESKTOP TAG FILTER -->
-        <TagFilterBar
-          className="hidden lg:flex pt-200 pb-300 sticky top-15 z-10 bg-white"
-          :filters="props.current_filters"
-          :onRemove="removeQuery"
-        />
-
-        <!-- CONTENT -->
+        <div
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          v-if="Object.values(props.current_filters).some((item) => item !== null)"
+        >
+          <TagFilter
+            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            :key="value.filter_value"
+            :filter="value"
+            :text="value.filter_display"
+            @remove-filter="removeQuery"
+          />
+        </div>        <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
@@ -161,19 +236,21 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           />
         </InfiniteScrollLayout>
       </div>
+
       <div class="col-start-8 col-span-6 sticky top-0 z-50">
         <div ref="sentinel" class="h-1"></div>
         <ResponsiveFilterMenu
+          v-model="filters"
           :is-open="isFilterMenuOpen"
           :initialFilters="localFilters"
           @filtersApplied="filterSearch"
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
         >
-          <template #filters="{ modelValue, updateField }">
+          <template #filters="{ modelValue, updateField: updateFromMenu }">
             <ProgramsFilterForm
               :model-value="modelValue"
-              :update-field="updateField"
+              :update-field="updateFromMenu || updateField"
               :mostras="props.mostras"
               :cinemas="props.cinemas"
               :paises="props.paises"
