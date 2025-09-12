@@ -26,6 +26,7 @@ import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useSti
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import { extractFilterValues } from "@/lib/filterUtils";
+import { slugify } from "@/lib/utils";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -85,11 +86,15 @@ const removeQuery = (what) => {
   if (["Showcase", "Mostra"].includes(what.filter_label)) {
     localFilters.value['mostra'] = null
   }
-  // make new request with the up to date filters
-  debugger
-  if (localFilters.value[what["filter_label"].toLowerCase()]) {
-    localFilters.value[what["filter_label"].toLowerCase()] = null
+
+  // This will remove all special chars
+  // making every localFilters key same as filter_label
+  const keyToRemoveFromQuery = slugify(what["filter_label"]);
+
+  if (localFilters.value[keyToRemoveFromQuery]) {
+    localFilters.value[keyToRemoveFromQuery] = null
   }
+
   Object.entries(localFilters.value).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== "") {
       newParams.set(key, value.filter_value);

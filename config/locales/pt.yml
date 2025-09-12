@@ -32,7 +32,7 @@ pt:
   filter:
     title: "Filtros"
     date: "Data"
-    time: "Horário"
+    time: "Sessão"
     submostra: "Mostra"
     cinema: "Cinema"
     genero: "Genero"
