@@ -7,6 +7,15 @@
 // TODO: Add icon for menu tabs scroll
 // TODO: Fix image urls
 
+// FOLLOWING THE COMMENTS INSIDE RESPONSIVE MENU
+// IN HERE WE RECEIVE ALL THE FILTER OPTIONS AS PROPS
+// WE RECEIVE THE CURRENT_FILTERS FROM THE CONTROLLER
+// A HASH CONTAINING THE SELECTED OPTION
+// WITH STRUCTURE PREDEFINED
+// {filter_display: '', filter_value: '', filter_label: ''}
+// but maybe this is not mandatory
+
+
 import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3"
 
@@ -58,46 +67,48 @@ const initializeFilters = () => ({
   pais: null,
   direcao: null,
   elenco: null,
-  ...props.current_filters // Override with actual values
 })
 
+// Override with reactive filter with
+// current filtered values in case
+// there are any coming from controller
+const overrideFiltersValues = () => {
+  const emptyFilters = initializeFilters()
+  return {emptyFilters, ...props.current_filters}
+}
 
-const localFilters = ref(initializeFilters())
-const filters = ref(initializeFilters())
+const filters = ref(overrideFiltersValues())
 
 // Watch for prop changes and update our local state
+// DONT THINK WE NEED AS THE PROP COMES FROM THE CONTROLLER
+// WHEN WE CHANGE A FILTER WE WILL AND SHOULD
+// ALWAYS UPDATE FILTERS REACTIVE AND NOT PROPS
+// PROPS DONT CHANGE VALUE
 watch(() => props.current_filters, (newFilters) => {
-  localFilters.value = initializeFilters()
-  filters.value = initializeFilters()
+  filters.value = overrideFiltersValues()
 }, { immediate: true, deep: true })
 
-// This can be removed right?
-// We are not using the props anymore
-// here are the removed props from MenuContext below
-// :items="props.items"
-// :icon-mapping="iconMapping"
-//const iconMapping = {
-//  "program": IconProgram,
-//  "user": IconNewUser,
-//  "change": IconChange,
-//  "clock": IconClock
-//};
-
 // Update field function to pass to the form
+// if we are defining and passin we dont need it there
+// but in my mind it should be inside searchfilter
+// i said smth related to this
+// inside responsivefiltermenu comments
 const updateField = (fieldName, value) => {
   console.log(`Updating ${fieldName}:`, value)
   filters.value[fieldName] = value
-  localFilters.value[fieldName] = value
 }
 
 // Called when user clears search bar
-// const handleClear = () => {
-//  filters.value.query = null;
-//  submit(props.tabBaseUrl);
-// };
+const handleClear = () => {
+  debugger
+  filters.value.query = null;
+  submit(props.tabBaseUrl);
+};
 
-// Called when filters applied in MobileFilterMenu
+// Called when filters applied through button inside filter
 const filterSearch = (filtersFromChild) => {
+  // this function extract actually
+  // build the query params ignoring null filters
   const cleanedFilters = extractFilterValues(filtersFromChild || filters.value)
   router.get(props.tabBaseUrl, cleanedFilters, {
     preserveScroll: true,
@@ -109,44 +120,39 @@ const removeQuery = (what) => {
   const newParams = new URLSearchParams()
 
   // Clear the specific filter
+  // TODO: REFAC TIP ADD FILTER_KEY FROM CONTROLLER
+  // IT SHOULD MAKE AGNOSTIC
   if (["Time", "Sessão"].includes(what.filter_label)) {
-    localFilters.value['sessao'] = null
     filters.value['sessao'] = null
   }
 
   if (["Showcase", "Mostra"].includes(what.filter_label)) {
-    localFilters.value['mostra'] = null
     filters.value['mostra'] = null
   }
 
   // Add other filter types as needed
   if (["Cinema"].includes(what.filter_label)) {
-    localFilters.value['cinema'] = null
     filters.value['cinema'] = null
   }
 
   if (["Genre", "Genero"].includes(what.filter_label)) {
-    localFilters.value['genero'] = null
     filters.value['genero'] = null
   }
 
   if (["Country", "Pais"].includes(what.filter_label)) {
-    localFilters.value['pais'] = null
     filters.value['pais'] = null
   }
 
   if (["Director", "Direção"].includes(what.filter_label)) {
-    localFilters.value['direcao'] = null
     filters.value['direcao'] = null
   }
 
 
   if (["Cast", "Elenco"].includes(what.filter_label)) {
-    localFilters.value['elenco'] = null
     filters.value['elenco'] = null
   }
 
-  Object.entries(localFilters.value).forEach(([key, value]) => {
+  Object.entries(filters.value).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== "" && value?.filter_value) {
       newParams.set(key, value.filter_value);
     }
@@ -158,11 +164,12 @@ const removeQuery = (what) => {
   })
 }
 
-// Called when filters cleared from MobileFilterMenu
+// Called when filters cleared from Limpar Todos btn
 const clearSearchQuery = () => {
   const clearedFilters = initializeFilters()
-  localFilters.value = clearedFilters
   filters.value = clearedFilters
+  debugger
+  // MUST ACTIVATE IT
   // router.get(props.tabBaseUrl, {}, {
   //   preserveScroll: true,
   //   only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
@@ -174,9 +181,9 @@ const { sentinel, isSticky } = useStickyMenuTabs()
 </script>
 
 <template>
-  <!-- <p>current_filters: {{ props.current_filters }}</p>
-  <p>localFilters: {{ localFilters }}</p>
-  <p>filters: {{ filters }}</p> -->
+  <p class="text-neutrals-900">current_filters: {{ props.current_filters }}</p>
+  <!-- <p class="text-neutrals-700">localFilters: {{ localFilters }}</p> -->
+  <p class="text-neutrals-500">filters: {{ filters }}</p>
 
   <TwContainer>
     <Breadcrumb :crumbs="props.crumbs" />
@@ -226,7 +233,8 @@ const { sentinel, isSticky } = useStickyMenuTabs()
             :text="value.filter_display"
             @remove-filter="removeQuery"
           />
-        </div>        <!-- CONTENT -->
+        </div>
+        <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
@@ -242,7 +250,6 @@ const { sentinel, isSticky } = useStickyMenuTabs()
         <ResponsiveFilterMenu
           v-model="filters"
           :is-open="isFilterMenuOpen"
-          :initialFilters="localFilters"
           @filtersApplied="filterSearch"
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"

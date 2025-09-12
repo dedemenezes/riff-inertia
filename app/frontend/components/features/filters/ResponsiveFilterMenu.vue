@@ -1,3 +1,27 @@
+<!--
+// WE REMOVED EVERYHTING BELOW
+// AND NOW THE WHOLE DATA FLOW
+// INSIDE THIS COMPONENT RELIES
+// ON THE MODELVALUE PROPS PASSED FROM THE PARENT
+// IT WILL FORWARD THE MODELVALUE
+// TO THE SEARCHFILTER COMPONENT
+// AS PROP :modelValue AND RECEIVE
+// IT BACK IN THE TEMPLATE THROUGH
+// MODELVALUE :modelValue
+
+// WHEN SEARCHFILTER UPDATES MODELVALUE
+// IT WILL FORWARD THE EVENT UPDATE:MODELVALUE
+// WE RECEIVE HERE, UPDATE THE KEY FILTER
+// INSIDE MODELVALUE WITH THE USER SELECTED OPTION
+// AND FORWARD AN UPDATE:MODELVALUE EVENT
+
+// THIS LAST EMIT IS NOT RECEIVED HERE BUT IN THE PARENT
+// AND THEN WE SUBMIT THE FILTER IN THE PARENT
+
+// A HUGE CHAIN THAT FOR SURE CAN BE SIMPLIFIED
+// BECAUSE THE SEARCHFILTER ALSO HAS AN UPDATEFIELD FUNCTION
+// THIS SHOULD BE ONLY IN ONE PLACE.
+ -->
 <script setup>
 import { ref, watch, useTemplateRef } from "vue";
 import { IconClose } from "@/components/common/icons";
@@ -6,22 +30,9 @@ import TwContainer from "@/components/layout/TwContainer.vue";
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
-  initialFilters: { type: Object, required: true },
+  // initialFilters: { type: Object, required: true },
   modelValue: { type: Object, required: true },
 });
-
-// Use a single internal state for both desktop and mobile
-const internalFilters = ref({ ...props.modelValue });
-
-// Watch for changes in modelValue from parent
-watch(() => props.modelValue, (newValue) => {
-  internalFilters.value = { ...newValue };
-}, { deep: true, immediate: true });
-
-// Watch for changes in initialFilters (after successful submission)
-watch(() => props.initialFilters, (newFilters) => {
-  internalFilters.value = { ...newFilters };
-}, { deep: true });
 
 const emit = defineEmits([
   "update:modelValue",
@@ -35,31 +46,27 @@ const closeBtn = useTemplateRef('close-btn');
 // Unified update function that emits changes back to parent
 const updateField = (field, value) => {
   console.log(`ResponsiveFilterMenu updating ${field}:`, value);
-
-  // Update internal state
-  internalFilters.value[field] = value;
-
   // Emit the change back to parent
-  const updatedFilters = { ...internalFilters.value };
+  const updatedFilters = { ...props.modelValue, [field]: value };
   emit('update:modelValue', updatedFilters);
 };
 
 // Handle filter application
 const handleFiltersApplied = () => {
-  console.log('Filters applied:', internalFilters.value);
-  emit('filtersApplied', internalFilters.value);
+  console.log('Filters applied:', props.modelValue);
+  emit('filtersApplied', props.modelValue);
 };
 
 // Handle filter clearing
 const handleFiltersCleared = () => {
-  console.log('Filters cleared');
-  // Reset internal filters
-  const clearedFilters = Object.keys(internalFilters.value).reduce((acc, key) => {
+  console.log('Clearing Filters...');
+  // Reset internal filters = RESET MODELVALUE
+  const clearedFilters = Object.keys(props.modelValue).reduce((acc, key) => {
     acc[key] = null;
     return acc;
   }, {});
+  console.log('Filters cleared', clearedFilters);
 
-  internalFilters.value = clearedFilters;
   emit('update:modelValue', clearedFilters);
   emit('filtersCleared');
 };
@@ -68,11 +75,11 @@ const handleFiltersCleared = () => {
 <template>
   <!-- Debug info -->
   <!-- <div class="bg-blue-50 p-2 mb-4 text-xs">
-    <p><strong>ResponsiveFilterMenu internalFilters:</strong> {{ internalFilters }}</p>
     <p><strong>ResponsiveFilterMenu modelValue:</strong> {{ modelValue }}</p>
   </div> -->
 
   <!-- Desktop Layout: Sticky sidebar (always visible) -->
+   <!-- add js to isDesktop -->
   <div
     style="margin-top: 0"
     class="desktop-style bg-white hidden md:flex md:flex-col sticky top-0"
@@ -90,8 +97,8 @@ const handleFiltersCleared = () => {
 
         <!-- Desktop Filter Content -->
         <SearchFilter
-          v-model="internalFilters"
-          @update:modelValue="(val) => emit('update:modelValue', val)"
+          :modelValue="props.modelValue"
+          @update:modelValue="emit('update:modelValue', $event)"
           @filtersApplied="handleFiltersApplied"
           @filtersCleared="handleFiltersCleared"
           @close-filter-menu="emit('close-filter-menu')"
@@ -99,7 +106,7 @@ const handleFiltersCleared = () => {
           <template #filters="slotProps">
             <slot
               name="filters"
-              :modelValue="internalFilters"
+              :modelValue="modelValue"
               :updateField="updateField"
             />
           </template>
@@ -144,7 +151,7 @@ const handleFiltersCleared = () => {
 
             <!-- Mobile Filter Content -->
             <SearchFilter
-              v-model="internalFilters"
+              :modelValue="modelValue"
               @update:modelValue="(val) => emit('update:modelValue', val)"
               @filtersApplied="handleFiltersApplied"
               @filtersCleared="handleFiltersCleared"
@@ -153,7 +160,7 @@ const handleFiltersCleared = () => {
               <template #filters="slotProps">
                 <slot
                   name="filters"
-                  :modelValue="internalFilters"
+                  :modelValue="modelValue"
                   :updateField="updateField"
                 />
               </template>
