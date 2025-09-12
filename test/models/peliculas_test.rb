@@ -139,11 +139,13 @@ class PeliculaTest < ActiveSupport::TestCase
     # Clear cache to ensure clean test
     Rails.cache.delete("actor-pelicula-mapping-#{edicao_id}")
 
+    first_mapping = nil
     # First call should hit database
     assert_queries_count(1) do
       first_mapping = Pelicula.actor_to_pelicula_mapping(edicao_id)
     end
 
+    second_mapping = nil
     # Second call should use cache (no database queries)
     assert_no_queries do
       second_mapping = Pelicula.actor_to_pelicula_mapping(edicao_id)
@@ -164,5 +166,17 @@ class PeliculaTest < ActiveSupport::TestCase
     batman = peliculas(:batman)
     batman.update(diretor_coord_int: "Christopher Nolan, Denis Villeneuve")
     assert_equal [ "Christopher Nolan", "Denis Villeneuve" ], batman.diretor_team
+  end
+
+  test "cast_for returns all actors" do
+    expected = Pelicula.pluck(:elenco_coord_int).map { _1.split(",") }.flatten.uniq.map(&:strip).count
+    actual = Pelicula.cast_for(12)
+    assert_equal expected, actual.length
+  end
+
+  test "collection_for elenco returns all actors" do
+    expected = Pelicula.pluck(:elenco_coord_int).map { _1.split(",") }.flatten.uniq.map(&:strip).count
+    actual = Pelicula.collection_for_actors
+    assert_equal expected, actual.count
   end
 end

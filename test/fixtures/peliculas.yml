@@ -6,6 +6,7 @@ batman:
   titulo_portugues_semartigo: "Batman"
   permalink: "batman-link"
   importacao_id: 1
+  catalogo_ficha_2007: "Documentário/Documentary"
   edicao_id: 12
   mostra: sci_fi
   imagem: "batman.jpg"
@@ -26,6 +27,7 @@ special_char:
   titulo_portugues_semartigo: "São Paulo"
   permalink: "sao-paulo-link"
   importacao_id: 1
+  catalogo_ficha_2007: "Documentário/Documentary"
   edicao_id: 12
   mostra: sci_fi
   imagem: "sao-paulo.jpg"
@@ -46,6 +48,7 @@ matrix:
   titulo_portugues_semartigo: "Matrix"
   permalink: "matrix-link"
   importacao_id: 1
+  catalogo_ficha_2007: "Documentário/Documentary"
   edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
@@ -67,6 +70,7 @@ test_<%= i %>:
   titulo_portugues_semartigo: "test_<%= i %>"
   permalink: "test-<%= i %>-link"
   importacao_id: 1
+  # catalogo_ficha_2007:
   edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
@@ -91,6 +95,7 @@ cidade_perdida:
   titulo_portugues_semartigo: "Cidade Perdida"
   permalink: "cidade-perdida"
   importacao_id: 1
+  catalogo_ficha_2007: Animação/Animation
   edicao_id: 12
   mostra: competicao_nacional
   imagem: "cidade_perdida.jpg"
@@ -111,6 +116,7 @@ amor_brasilia:
   titulo_portugues_semartigo: "Amor em Brasília"
   permalink: "amor-brasilia"
   importacao_id: 1
+  catalogo_ficha_2007: Animação/Animation
   edicao_id: 12
   mostra: competicao_nacional
   imagem: "amor_brasilia.jpg"
@@ -131,6 +137,7 @@ berlin_nights:
   titulo_portugues_semartigo: "Berlin Nights"
   permalink: "berlin-nights"
   importacao_id: 1
+  catalogo_ficha_2007: Animação/Animation
   edicao_id: 12
   mostra: mostra_internacional
   imagem: "berlin_nights.jpg"
@@ -151,6 +158,7 @@ paris_stories:
   titulo_portugues_semartigo: "Paris Stories"
   permalink: "paris-stories"
   importacao_id: 1
+  catalogo_ficha_2007:
   edicao_id: 12
   mostra: mostra_internacional
   imagem: "paris_stories.jpg"
@@ -171,6 +179,7 @@ amazonia_selvagem:
   titulo_portugues_semartigo: "Amazônia Selvagem"
   permalink: "amazonia-selvagem"
   importacao_id: 1
+  catalogo_ficha_2007:
   edicao_id: 12
   mostra: documentarios
   imagem: "amazonia.jpg"
@@ -191,6 +200,7 @@ cidade_transformacao:
   titulo_portugues_semartigo: "Cidade em Transformação"
   permalink: "cidade-transformacao"
   importacao_id: 1
+  catalogo_ficha_2007:
   edicao_id: 12
   mostra: documentarios
   imagem: "cidade_transformacao.jpg"

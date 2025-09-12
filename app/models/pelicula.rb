@@ -1,6 +1,6 @@
 class Pelicula < ApplicationRecord
   include ActionView::Helpers::TextHelper
-  include TeamParseable
+  include TeamParseable, Filterable
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -42,66 +42,25 @@ class Pelicula < ApplicationRecord
   has_many :programacoes
   has_many :peliculas_tags
 
-  def self.genres_for(edicao_id)
-      # Rails.cache.fetch("genres-for-edicao-#{edicao_id}-#{I18n.locale}", expires_in: 12.hours) do
-      locale_index = I18n.locale == :en ? 1 : 0
-
-      genres = where(edicao_id: edicao_id)
-        .where.not(catalogo_ficha_2007: [ nil, "" ])
-        .pluck(:catalogo_ficha_2007)
-        .map { |raw| raw.split(" ").first&.split("/")&.[](locale_index) }
-        .compact
-        .uniq
-        .sort
-
-      genres.map do |genre|
-        {
-          "filter_display" => genre,
-          "filter_value" => genre,
-          "filter_label" => I18n.t("filter.genero")
-        }
-      end
-    # end
-  end
-
-  def self.directors_for(edicao_id)
-      # Rails.cache.fetch("directors-for-edicao-#{edicao_id}", expires_in: 12.hours) do
-      where(edicao_id: edicao_id)
-        .where.not(diretor_coord_int: [ nil, "" ])
-        .pluck(:diretor_coord_int)
-        .map(&:strip)
-        .uniq
-        .compact
-        .sort
-        .map do |director|
-          {
-            "filter_display" => director,
-            "filter_value" => director,
-            "filter_label" => I18n.t("filter.direcao")
-          }
-        end
-    # end
-  end
-
-  # Filter options
-  def self.cast_for(edicao_id)
-    # Filter collection must be cached
-    all_cast_for(edicao_id).map do |cast|
-      {
-        "filter_display": cast,
-        "filter_value": cast,
-        "filter_label": I18n.t("filter.elenco")
-      }
+  def self.collection_for_genres
+    # Rails.cache.fetch("genres-for-edicao-#{edicao_id}-#{I18n.locale}", expires_in: 12.hours) do
+    locale_index = I18n.locale == :en ? 1 : 0
+    collection_for(:catalogo_ficha_2007, :genero) do |fichas|
+      fichas.map { |ficha| ficha.split(" ").first&.split("/")&.at(locale_index) }
     end
   end
 
-  # TODO: WE GET 1k+. think about it
-  def self.all_cast_for(edicao_id)
-    where(edicao_id: edicao_id)
-      .where.not(elenco_coord_int: [ nil, "" ])
-      .pluck(:elenco_coord_int)
-      .flat_map { |cast| cast.split(",").map(&:strip) }
-      .reject(&:blank?).uniq.sort
+  def self.collection_for_directors
+    # Rails.cache.fetch("directors-for-edicao-#{edicao_id}", expires_in: 12.hours) do
+    collection_for(:diretor_coord_int, :direcao) do |directors|
+      directors.map(&:strip)
+    end
+  end
+
+  def self.collection_for_actors
+    collection_for(:elenco_coord_int, :elenco) do |actors|
+      actors.flat_map { |cast| cast.split(",").map(&:strip) }
+    end
   end
 
   def genre
