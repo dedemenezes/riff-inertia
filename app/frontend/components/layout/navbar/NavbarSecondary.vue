@@ -76,7 +76,7 @@ const setDropdownOffset = (item) => {
       >
         <ul class="" :ref="ul => dropdownRefs[item]['ul'] = ul">
           <p v-for="subitem in subitems" class="p-200">
-            <a :href="subitem.path">{{ subitem.description }}</a>
+            <a :href="subitem.path">{{ subitem.name }}</a>
           </p>
         </ul>
       </div>

@@ -7,14 +7,6 @@ class ProgramsController < ApplicationController
   include Pagy::Backend
 
   def index
-    items = [
-      # Links tem que vir do controller para incluir localizacao. Textos também
-      { name: I18n.t("navigation.programming"), route: program_url, icon: "program" },
-      { name: I18n.t("navigation.sessoes_com_convidados"), route: "/", icon: "user" },
-      { name: I18n.t("navigation.mudancas_na_programacao"), route: "/", icon: "change" },
-      { name: I18n.t("navigation.sessoes_ao_ar_livre"), route: "/", icon: "clock" }
-    ]
-
     selected_filters = {}
     last_import_id = Programacao.maximum(:importacoesprog_id)
 
@@ -180,7 +172,6 @@ class ProgramsController < ApplicationController
     render inertia: "ProgramPage", props: {
       rootUrl: @root_url,
       tabBaseUrl: program_url,
-      items:,
       elements: @programacoes,
       pagy: @pagy,
       mostras: @mostras_filter,

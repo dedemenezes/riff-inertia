@@ -9,7 +9,6 @@
 
 import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3"
-import { IconProgram, IconClock, IconChange, IconNewUser } from "@components/common/icons";
 
 import TwContainer from "@/components/layout/TwContainer.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
@@ -62,6 +61,7 @@ const initializeFilters = () => ({
   ...props.current_filters // Override with actual values
 })
 
+
 const localFilters = ref(initializeFilters())
 const filters = ref(initializeFilters())
 
@@ -71,12 +71,17 @@ watch(() => props.current_filters, (newFilters) => {
   filters.value = initializeFilters()
 }, { immediate: true, deep: true })
 
-const iconMapping = {
-  "program": IconProgram,
-  "user": IconNewUser,
-  "change": IconChange,
-  "clock": IconClock
-};
+// This can be removed right?
+// We are not using the props anymore
+// here are the removed props from MenuContext below
+// :items="props.items"
+// :icon-mapping="iconMapping"
+//const iconMapping = {
+//  "program": IconProgram,
+//  "user": IconNewUser,
+//  "change": IconChange,
+//  "clock": IconClock
+//};
 
 // Update field function to pass to the form
 const updateField = (fieldName, value) => {
@@ -84,6 +89,12 @@ const updateField = (fieldName, value) => {
   filters.value[fieldName] = value
   localFilters.value[fieldName] = value
 }
+
+// Called when user clears search bar
+// const handleClear = () => {
+//  filters.value.query = null;
+//  submit(props.tabBaseUrl);
+// };
 
 // Called when filters applied in MobileFilterMenu
 const filterSearch = (filtersFromChild) => {
@@ -172,8 +183,7 @@ const { sentinel, isSticky } = useStickyMenuTabs()
   </TwContainer>
 
   <MenuContext
-    :items="props.items"
-    :icon-mapping="iconMapping"
+    nav="programacao"
   />
 
   <hr class="text-neutrals-300">

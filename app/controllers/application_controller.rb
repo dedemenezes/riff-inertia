@@ -20,6 +20,11 @@ class ApplicationController < ActionController::Base
     set_secondary_items
   }
 
+  inertia_share menuContext: -> {
+    set_menu_context
+  }
+  # fixed conflict here remove coment after testing
+
   inertia_share imageBaseURL: -> {
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
@@ -39,78 +44,58 @@ class ApplicationController < ActionController::Base
   def set_main_items
     {
       "Programação": [
-        {
-          description: "Programação completa",
-          path: program_path
-        },
-        {
-          description: "Sessões com convidados",
-          path: ""
-        },
-        {
-          description: "Programação gratuita",
-          path: ""
-        },
-        {
-          description: "Mudanças na programação",
-          path: ""
-        }
+        { name: "Programação completa", path: program_path },
+        { name: "Sessões com convidados", path: "" },
+        { name: "Programação gratuita", path: "" },
+        { name: "Mudanças na programação", path: "" }
       ],
       "Edição 2024": [
-        {
-          description: "Todos os filmes",
-          path: ""
-        },
-        {
-          description: "Mostras",
-          path: mostras_path
-        },
-        {
-          description: "Cinemas",
-          path: ""
-        },
-        {
-          description: "Júri",
-          path: ""
-        },
-        {
-          description: "Equipe",
-          path: ""
-        }
+        { name: "Todos os filmes", path: "" },
+        { name: "Mostras", path: mostras_path },
+        { name: "Cinemas", path: "" },
+        { name: "Júri", path: "" },
+        { name: "Equipe", path: "" }
       ],
       "Sobre nós": [
-        {
-          description: "O Festival",
-          path: ""
-        },
-        {
-          description: "Edições Anteriores",
-          path: edicoes_anteriores_path
-        },
-        {
-          description: "Talent Press",
-          path: ""
-        },
-        {
-          description: "Parceiros",
-          path: ""
-        }
+        { name: "O Festival", path: "" },
+        { name: "Edições Anteriores", path: edicoes_anteriores_path },
+        { name: "Talent Press", path: "" },
+        { name: "Parceiros", path: "" }
       ],
       "Notícias": [
-        {
-          description: "Todas as notícias",
-          path: noticias_path
-        }
+        { name: "Todas as notícias", path: noticias_path }
       ],
       "Mídias": [
-        {
-          description: "Fotos e vídeos",
-          path: ""
-        },
-        {
-          description: "Impressos",
-          path: ""
-        }
+        { name: "Fotos e vídeos", path: "" },
+        { name: "Impressos", path: "" }
+      ]
+    }
+  end
+
+  def set_menu_context
+    {
+      "programacao" => [
+        { name: "Programação", path: program_url, icon: "program" },
+        { name: "Sessões com convidados", path: "", icon: "newUser" },
+        { name: "Mudanças na Programação", path: "", icon: "change" },
+        { name: "Programação Gratuita", path: "", icon: "ticket" }
+      ],
+      "edicao" => [
+        { name: "Todos os Filmes", path: "", icon: "program" },
+        { name: "Mostras", path: mostras_path, icon: "grid" },
+        { name: "Cinemas", path: "", icon: "pin" },
+        { name: "Juri", path: "", icon: "trophy" },
+        { name: "Equipe", path: "", icon: "people" }
+      ],
+      "sobre" => [
+        { name: "O Festival", path: "", icon: "logoFest" },
+        { name: "Edições Anteriores", path: edicoes_anteriores_url, icon: "calendar" },
+        { name: "Talent Press", path: "", icon: "talentPress" },
+        { name: "Parceiros", path: "", icon: "handshake" }
+      ],
+      "midias" => [
+        { name: "Fotos & Vídeos", path: "", icon: "image" },
+        { name: "Impressos", path: "", icon: "book" }
       ]
     }
   end

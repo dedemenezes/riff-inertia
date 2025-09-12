@@ -1,5 +1,4 @@
 <script setup>
-import { IconProgram, IconClock, IconChange, IconNewUser, IconCarretUp } from "@components/common/icons";
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import trofeuImagePath from "@assets/images/trofeu_redentor.png";
@@ -19,7 +18,6 @@ const refToFilmesSession = ref(null)
 
 const toggleAllMostras = () => {
   displayAllMostras.value = !displayAllMostras.value
-  console.log(displayAllMostras.value)
 }
 
 const scrollToFilmes = () => {
@@ -27,28 +25,17 @@ const scrollToFilmes = () => {
 }
 
 const props = defineProps({
-  items: { type: Array, required: true },
   mostras: { type: Array, default: () => []},
   categoria: { type: String },
   tag_class: { type: String }
 })
 
-// TODO: alterar icones
-const iconMapping = {
-  "program": IconProgram,
-  "user": IconNewUser,
-  "change": IconChange,
-  "clock": IconClock
-};
-
 </script>
 
 <template>
-  <!-- MenuContext -->
-  <!-- TODO: alterar a imagem do card -->
   <MenuContext
-    :items="props.items"
-    :icon-mapping="iconMapping"
+    nav="edicao"
+    activePage="Mostras"
   />
 
   <TwContainer class="flex flex-col gap-1200">
