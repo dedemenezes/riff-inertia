@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, defineAsyncComponent } from "vue";
 import AccordionGroup from "@/components/AccordionGroup.vue";
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
 
