@@ -2,7 +2,7 @@ require "test_helper"
 
 class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   test "filters by director - Christopher Nolan" do
-    get program_url, params: { "direção" => "Christopher Nolan" }
+    get program_url, params: { "direcao" => "Christopher Nolan" }
 
     assert_response :success
     props = inertia_props
@@ -17,7 +17,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Wachowskis" do
-    get program_url, params: { "direção" => "Wachowskis" }
+    get program_url, params: { "direcao" => "Wachowskis" }
 
     assert_response :success
     props = inertia_props
@@ -32,7 +32,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - João Silva" do
-    get program_url, params: { "direção" => "João Silva" }
+    get program_url, params: { "direcao" => "João Silva" }
 
     assert_response :success
     props = inertia_props
@@ -46,7 +46,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Ana Pereira" do
-    get program_url, params: { "direção" => "Ana Pereira" }
+    get program_url, params: { "direcao" => "Ana Pereira" }
 
     assert_response :success
     props = inertia_props
@@ -60,7 +60,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Hans Mueller" do
-    get program_url, params: { "direção" => "Hans Mueller" }
+    get program_url, params: { "direcao" => "Hans Mueller" }
 
     assert_response :success
     props = inertia_props
@@ -74,7 +74,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Pierre Dubois" do
-    get program_url, params: { "direção" => "Pierre Dubois" }
+    get program_url, params: { "direcao" => "Pierre Dubois" }
 
     assert_response :success
     props = inertia_props
@@ -88,7 +88,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Roberto Oliveira" do
-    get program_url, params: { "direção" => "Roberto Oliveira" }
+    get program_url, params: { "direcao" => "Roberto Oliveira" }
 
     assert_response :success
     props = inertia_props
@@ -102,7 +102,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Marina Costa" do
-    get program_url, params: { "direção" => "Marina Costa" }
+    get program_url, params: { "direcao" => "Marina Costa" }
 
     assert_response :success
     props = inertia_props
@@ -116,7 +116,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by director - Marcos Jorge" do
-    get program_url, params: { "direção" => "Marcos Jorge" }
+    get program_url, params: { "direcao" => "Marcos Jorge" }
 
     assert_response :success
     props = inertia_props
@@ -133,7 +133,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   test "combines search query and director filter" do
     get program_url, params: {
       query: "Batman",
-      "direção" => "Christopher Nolan"
+      "direcao" => "Christopher Nolan"
     }
 
     assert_response :success
@@ -145,13 +145,13 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # Verify both filters are preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal "Christopher Nolan", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "Christopher Nolan", props["current_filters"]["direcao"]["filter_value"]
   end
 
   test "combines search query and director filter with no results" do
     get program_url, params: {
       query: "Batman",
-      "direção" => "Wachowskis"
+      "direcao" => "Wachowskis"
     }
 
     assert_response :success
@@ -163,7 +163,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # Filters should still be preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal "Wachowskis", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "Wachowskis", props["current_filters"]["direcao"]["filter_value"]
   end
 
   test "search finds movies across different directors" do
@@ -183,7 +183,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
   test "combines director filter with mostra filter" do
     get program_url, params: {
-      "direção" => "João Silva",
+      "direcao" => "João Silva",
       mostra: "competicao-nacional"
     }
 
@@ -195,13 +195,13 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_equal "Cidade Perdida", elements.first["titulo"]
 
     # Verify both filters are preserved
-    assert_equal "João Silva", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "João Silva", props["current_filters"]["direcao"]["filter_value"]
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines director filter with mostra filter with no results" do
     get program_url, params: {
-      "direção" => "Christopher Nolan",
+      "direcao" => "Christopher Nolan",
       mostra: "competicao-nacional"
     }
 
@@ -213,14 +213,14 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_equal 0, elements.length
 
     # Filters should still be preserved
-    assert_equal "Christopher Nolan", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "Christopher Nolan", props["current_filters"]["direcao"]["filter_value"]
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
   test "combines director filter with cinema filter" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
-      "direção" => "João Silva",
+      "direcao" => "João Silva",
       cinema: cinepolis.id
     }
 
@@ -236,12 +236,12 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     end
 
     # Verify both filters are preserved
-    assert_equal "João Silva", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "João Silva", props["current_filters"]["direcao"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
 
   test "director filter affects available dates" do
-    get program_url, params: { "direção" => "Christopher Nolan" }
+    get program_url, params: { "direcao" => "Christopher Nolan" }
 
     assert_response :success
     props = inertia_props
@@ -254,7 +254,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
   test "preserves director filter when navigating dates" do
     get program_url, params: {
-      "direção" => "Wachowskis",
+      "direcao" => "Wachowskis",
       date: "2024-10-07" # Adjust date based on when Wachowskis movies are shown
     }
 
@@ -266,14 +266,14 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     end
 
     # Filter should be preserved
-    assert_equal "Wachowskis", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "Wachowskis", props["current_filters"]["direcao"]["filter_value"]
   end
 
   test "combines all filters - search, director, mostra, cinema, and date" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
       query: "Matrix",
-      "direção" => "Wachowskis",
+      "direcao" => "Wachowskis",
       mostra: "sci-fi", # Adjust based on actual mostra permalink
       cinema: cinepolis.id,
       date: "2024-10-06" # Adjust based on when Matrix is shown at Cinépolis
@@ -290,7 +290,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
 
     # All filters should be preserved
     assert_equal "Matrix", props["current_filters"]["query"]["filter_value"]
-    assert_equal "Wachowskis", props["current_filters"]["direção"]["filter_value"]
+    assert_equal "Wachowskis", props["current_filters"]["direcao"]["filter_value"]
     # Adjust mostra assertion based on actual data structure
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
@@ -327,7 +327,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   end
 
   test "handles empty director filter gracefully" do
-    get program_url, params: { "direção" => "" }
+    get program_url, params: { "direcao" => "" }
 
     assert_response :success
     props = inertia_props
@@ -344,7 +344,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
   test "director filter with special characters" do
     # Test with director that has special characters if any exist in your fixtures
     # This is more relevant if you have international directors with accents, etc.
-    get program_url, params: { "direção" => "Marcos Jorge" }
+    get program_url, params: { "direcao" => "Marcos Jorge" }
 
     assert_response :success
     props = inertia_props
