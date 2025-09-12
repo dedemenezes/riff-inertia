@@ -17,7 +17,8 @@ import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
-import TagFilter from "@/components/common/tags/TagFilter.vue";
+
+import TagFilterBar from "@/components/features/filters/TagFilterBar.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
@@ -130,18 +131,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
 
     <!-- TODO: REFAC into reusable components -->
     <!-- MOBILE TAG FILTER -->
-    <div
-      class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
-      v-if="Object.values(props.current_filters).some((item) => item !== null)"
-    >
-      <TagFilter
-        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
-        :key="key"
-        :filter="value"
-        :text="value.filter_display"
-        @remove-filter="removeQuery"
-      />
-    </div>
+    <TagFilterBar
+      className="flex lg:hidden pt-200 pb-300"
+      :filters="props.current_filters"
+      :onRemove="removeQuery"
+    />
     <!-- filtered tag -->
 
     <div class="grid grid-cols-12">
@@ -155,18 +149,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
         />
 
         <!-- DESKTOP TAG FILTER -->
-        <div
-          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
-          v-if="Object.values(props.current_filters).some((item) => item !== null)"
-        >
-          <TagFilter
-            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
-            :key="value.filter_value"
-            :filter="value"
-            :text="value.filter_display"
-            @remove-filter="removeQuery"
-          />
-        </div>
+        <TagFilterBar
+          className="hidden lg:flex pt-200 pb-300 sticky top-15 z-10 bg-white"
+          :filters="props.current_filters"
+          :onRemove="removeQuery"
+        />
 
         <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
