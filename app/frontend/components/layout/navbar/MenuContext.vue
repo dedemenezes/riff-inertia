@@ -58,7 +58,7 @@ watchEffect(() => {
       :key="item"
       class="flex-shrink-0"
       :content="item.name"
-      :route="item.route"
+      :route="item.path"
       :active="props.activePage === item.name"
     >
       <template #icon="{ active }">
