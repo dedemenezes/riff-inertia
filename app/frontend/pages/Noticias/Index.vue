@@ -1,4 +1,7 @@
 <script setup>
+// TODO: REFACTOR TO HAVE THE SAME STRUCTURE AS PROGRAM FOR FILTERS
+// WE MUST FOLLOW ONE PATTERN ONLY OR I WILL GO CRAZY!
+
 // 1. 📦 Node.js built-ins (if used)
 // 2. 🔌 External packages (npm, libraries)
 import { Head, router } from "@inertiajs/vue3";
