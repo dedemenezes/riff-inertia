@@ -22,6 +22,7 @@ class Mostra < ApplicationRecord
     MOSTRA_MAP.find { |key, _| permalink_pt.include?(key.to_s) }&.last || "tag-default"
   end
 
+  # TODO: utilizar filter_display para incorporar localização
   def display_name
     nome_abreviado.split(/[-:]/).first
   end

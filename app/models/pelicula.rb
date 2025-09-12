@@ -1,6 +1,37 @@
 class Pelicula < ApplicationRecord
   include ActionView::Helpers::TextHelper
 
+  CAROUSEL_IMAGES_AMOUNT = 3
+  METHODS_NEEDED = %i[
+    display_sinopse
+    display_titulo
+    montagem_team
+    diretor_team
+    fotografia_team
+    producaoempresa_team
+    roteiro_team
+    montagem_team
+    imageURL
+    director_image
+    carousel_images
+    display_paises
+    genre
+    mostra_name
+    mostra_tag_class
+  ]
+  COLUMNS_NEEDED = %i[
+    elenco_coord_int
+    edicao_id
+    imagem
+    titulo_ingles_coord_int
+    titulo_portugues_coord_int
+    ano_coord_int
+    duracao_coord_int
+    cor_coord_int
+    catalogo_ficha_2007
+    diretor_coord_int
+  ]
+
   belongs_to :importacao
   belongs_to :edicao
   belongs_to :mostra
@@ -93,6 +124,83 @@ class Pelicula < ApplicationRecord
       all_paises.first
     end
   end
+
+  def display_titulo
+    I18n.locale == :pt ? titulo_portugues_coord_int : titulo_ingles_coord_int
+  end
+
+  def display_sinopse
+    I18n.locale == :pt ? sinopse_port_export : sinopse_ing_export
+  end
+
+  def diretor_team
+    return if diretor_coord_int.nil? || diretor_coord_int.empty?
+
+    diretor_coord_int.split(",").map(&:strip)
+  end
+
+  def fotografia_team
+    return if fotografia_coord_int.nil? || fotografia_coord_int.empty?
+
+    fotografia_coord_int.split(",").map(&:strip)
+  end
+
+  def producaoempresa_team
+    return if producaoempresa_coord_int.nil? || producaoempresa_coord_int.empty?
+
+    producaoempresa_coord_int.split(",").map(&:strip)
+  end
+
+  def roteiro_team
+    return if roteiro_coord_int.nil? || roteiro_coord_int.empty?
+
+    roteiro_coord_int.split(",").map(&:strip)
+  end
+
+  def montagem_team
+    return if montagem_coord_int.nil? || montagem_coord_int.empty?
+
+    montagem_coord_int.split(",").map(&:strip)
+  end
+
+  def mostra_name
+    mostra.filter_display
+  end
+
+  def mostra_tag_class
+    mostra.tag_class
+  end
+
+  def imageURL(image_name = nil)
+    image_name ||= self.imagem
+      # TODO: CACHE
+      # TODO: IF WE WANT DIFFERENT SIZE?
+      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/large/#{image_name}"
+    # end
+  end
+
+  # TODO: RETHINK THIS MAYBE THERE ISN'T TWO IMAGES
+  def carousel_images
+    image_name = imagem
+    return if image_name.nil? || image_name.empty?
+
+    (2..CAROUSEL_IMAGES_AMOUNT + 1).to_a.map do |i|
+      image_number = "0#{i}"
+      digits_after_f_regex = /(\w+_f)\d+/
+      image_name = imagem.gsub(digits_after_f_regex, "\\1#{image_number}")
+      {
+        path: imageURL(image_name)
+      }
+    end.compact_blank
+  end
+
+  def director_image
+    return if imagem_diretor.nil? || imagem_diretor.empty?
+
+    imageURL(imagem_diretor)
+  end
+
 
   # Caches actor names with pelicula id
   def self.actor_to_pelicula_mapping(edicao_id)

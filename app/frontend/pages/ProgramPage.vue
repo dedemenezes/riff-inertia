@@ -16,7 +16,8 @@ import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
-import TagFilter from "@/components/common/tags/TagFilter.vue";
+
+import TagFilterBar from "@/components/features/filters/TagFilterBar.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
 import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
@@ -24,6 +25,7 @@ import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useSti
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import { extractFilterValues } from "@/lib/filterUtils";
+import { slugify } from "@/lib/utils";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -74,11 +76,15 @@ const removeQuery = (what) => {
   if (["Showcase", "Mostra"].includes(what.filter_label)) {
     localFilters.value['mostra'] = null
   }
-  // make new request with the up to date filters
-  debugger
-  if (localFilters.value[what["filter_label"].toLowerCase()]) {
-    localFilters.value[what["filter_label"].toLowerCase()] = null
+
+  // This will remove all special chars
+  // making every localFilters key same as filter_label
+  const keyToRemoveFromQuery = slugify(what["filter_label"]);
+
+  if (localFilters.value[keyToRemoveFromQuery]) {
+    localFilters.value[keyToRemoveFromQuery] = null
   }
+
   Object.entries(localFilters.value).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== "") {
       newParams.set(key, value.filter_value);
@@ -121,18 +127,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
 
     <!-- TODO: REFAC into reusable components -->
     <!-- MOBILE TAG FILTER -->
-    <div
-      class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
-      v-if="Object.values(props.current_filters).some((item) => item !== null)"
-    >
-      <TagFilter
-        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
-        :key="key"
-        :filter="value"
-        :text="value.filter_display"
-        @remove-filter="removeQuery"
-      />
-    </div>
+    <TagFilterBar
+      className="flex lg:hidden pt-200 pb-300"
+      :filters="props.current_filters"
+      :onRemove="removeQuery"
+    />
     <!-- filtered tag -->
 
     <div class="grid grid-cols-12">
@@ -146,18 +145,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
         />
 
         <!-- DESKTOP TAG FILTER -->
-        <div
-          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
-          v-if="Object.values(props.current_filters).some((item) => item !== null)"
-        >
-          <TagFilter
-            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
-            :key="value.filter_value"
-            :filter="value"
-            :text="value.filter_display"
-            @remove-filter="removeQuery"
-          />
-        </div>
+        <TagFilterBar
+          className="hidden lg:flex pt-200 pb-300 sticky top-15 z-10 bg-white"
+          :filters="props.current_filters"
+          :onRemove="removeQuery"
+        />
 
         <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"

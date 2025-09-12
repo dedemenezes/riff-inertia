@@ -17,3 +17,10 @@ export function toHHMM(timeStr) {
   const [hh = "00", mm = "00"] = timeStr.split(":");
   return `${hh}:${mm}`;
 }
+
+export function slugify(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+}

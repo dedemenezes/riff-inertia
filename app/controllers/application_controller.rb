@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-
   before_action :set_locale, :set_root_url
 
   inertia_share flash: -> {
@@ -24,6 +22,11 @@ class ApplicationController < ActionController::Base
 
   inertia_share menuContext: -> {
     set_menu_context
+  }
+  # fixed conflict here remove coment after testing
+
+  inertia_share imageBaseURL: -> {
+    ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
   def set_locale
