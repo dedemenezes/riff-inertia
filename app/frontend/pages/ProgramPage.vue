@@ -115,8 +115,13 @@ const removeQuery = (what) => {
   }
 
   if (["Genre", "Genero"].includes(what.filter_label)) {
-    localFilters.value['genre'] = null
-    filters.value['genre'] = null
+    localFilters.value['genero'] = null
+    filters.value['genero'] = null
+  }
+
+  if (["Cast", "Elenco"].includes(what.filter_label)) {
+    localFilters.value['elenco'] = null
+    filters.value['elenco'] = null
   }
 
   Object.entries(localFilters.value).forEach(([key, value]) => {
@@ -189,8 +194,18 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           :tabs="menuTabs"
           class="h-15"
         />
-
-        <!-- CONTENT -->
+        <div
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          v-if="Object.values(props.current_filters).some((item) => item !== null)"
+        >
+          <TagFilter
+            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            :key="value.filter_value"
+            :filter="value"
+            :text="value.filter_display"
+            @remove-filter="removeQuery"
+          />
+        </div>        <!-- CONTENT -->
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
