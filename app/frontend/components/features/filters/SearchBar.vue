@@ -6,12 +6,14 @@ const props = defineProps({
   modelValue: String,
 });
 
-const emit = defineEmits(["update:modelValue", "search", "clear"]);
+const emit = defineEmits(["update:modelValue", "search", "clear", "input"]);
 
 let debounceTimeout = null
 const handleInput = (event) => {
   const content = event.target.value
   clearTimeout(debounceTimeout)
+
+  emit("input", event.target.value)
 
   debounceTimeout = setTimeout(() => {
     emit("update:modelValue", content)
