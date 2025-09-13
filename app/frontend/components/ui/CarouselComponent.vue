@@ -14,11 +14,21 @@ const props = defineProps({
     required: true,
     default: () => []
   },
-  classNames: Array
+  classNames: Array,
+  fullScreen: { type: Boolean, default: false }
 })
 
 const imageLabel = (image) => {
   return image?.label || null
+}
+
+const navigatorsXPositionClass = (side) => {
+  if (side === "left") {
+    return props.fullScreen ? 'lg:translate-x-2400' : 'lg:translate-x-0'
+  }
+  if (side === "right") {
+    return props.fullScreen ? 'lg:-translate-x-2400' : 'lg:translate-x-0'
+  }
 }
 
 </script>
@@ -39,8 +49,8 @@ const imageLabel = (image) => {
         </figure>
       </CarouselItem>
     </CarouselContent>
-    <CarouselPrevious class="translate-x-[56px] scale-70 lg:translate-x-0 lg:scale-100"/>
-    <CarouselNext class="translate-x-[-56px] scale-70 lg:translate-x-0 lg:scale-100" />
+    <CarouselPrevious :class="['translate-x-[56px] scale-70 lg:scale-100', navigatorsXPositionClass('left')]"/>
+    <CarouselNext :class="['translate-x-[-56px] scale-70 lg:scale-100', navigatorsXPositionClass('right')]" />
   </Carousel>
 </template>
 
