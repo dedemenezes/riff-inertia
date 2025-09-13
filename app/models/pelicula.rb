@@ -1,6 +1,7 @@
 class Pelicula < ApplicationRecord
   include ActionView::Helpers::TextHelper
   include TeamParseable, Filterable
+  include Rails.application.routes.url_helpers
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -18,6 +19,8 @@ class Pelicula < ApplicationRecord
     genre
     mostra_name
     mostra_tag_class
+    url
+    mostra_display_name
   ]
   COLUMNS_NEEDED = %i[
     elenco_coord_int
@@ -116,6 +119,10 @@ class Pelicula < ApplicationRecord
     mostra.filter_display
   end
 
+  def mostra_display_name
+    mostra.filter_display_name
+  end
+
   def mostra_tag_class
     mostra.tag_class
   end
@@ -184,5 +191,9 @@ class Pelicula < ApplicationRecord
     pelicula_ids = mapping[actor_name] || mapping[actor_name.downcase] || []
 
     where(id: pelicula_ids)
+  end
+
+  def url
+    pelicula_path(permalink: self.permalink)
   end
 end

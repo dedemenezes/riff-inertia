@@ -1,6 +1,6 @@
 class MostrasController < ApplicationController
   def index
-    @edicao_atual = Edicao.find_by(descricao: "2024") # TODO: Change to 2025
+    @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
     @mostras = @edicao_atual.mostras.group_by(&:display_name)
     @categorias = @mostras.map { |categoria, mostras| { name: categoria, class: mostras.first.tag_class, path: mostra_path(categoria) } }
 
