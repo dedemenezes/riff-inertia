@@ -36,7 +36,7 @@ const applyFilters = () => {
 
 const clearAllFilters = () => {
   const cleared = Object.fromEntries(
-    Object.keys(props.modelValue).map((key) => [key, null]),
+    Object.keys(props.modelValue).map(clearField),
   );
   emit("update:modelValue", cleared);
   emit("filtersCleared", cleared);
@@ -53,8 +53,16 @@ const hasActiveFilters = computed(() => {
   // return Object.values(props.modelValue).some((value) => value !== null);
 
 const updateField = (key, value) => {
+  console.log(`SearchFilter updating ${key}:`, value); // Move console.log here
   emit("update:modelValue", { ...props.modelValue, [key]: value });
 };
+
+// ENHANCE: Add clear individual field method
+const clearField = (key) => {
+  console.log(`SearchFilter clearing ${key}`);
+  updateField(key, null);
+};
+
 </script>
 
 <template>
@@ -69,6 +77,8 @@ const updateField = (key, value) => {
       name="filters"
       :modelValue="props.modelValue"
       :updateField="updateField"
+      :clearField="clearField"
+      :hasActiveFilters="hasActiveFilters"
     >
       <!-- Default content -->
        <p class="text-gradient text-header-lg text-center">No content passed</p>

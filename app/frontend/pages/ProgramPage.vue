@@ -87,16 +87,6 @@ watch(() => props.current_filters, (newFilters) => {
   filters.value = overrideFiltersValues()
 }, { immediate: true, deep: true })
 
-// Update field function to pass to the form
-// if we are defining and passin we dont need it there
-// but in my mind it should be inside searchfilter
-// i said smth related to this
-// inside responsivefiltermenu comments
-const updateField = (fieldName, value) => {
-  console.log(`Updating ${fieldName}:`, value)
-  filters.value[fieldName] = value
-}
-
 // Called when user clears search bar
 const handleClear = () => {
   debugger
@@ -255,10 +245,11 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
         >
-          <template #filters="{ modelValue, updateField: updateFromMenu }">
+          <template #filters="searchFilterProps">
+            <!-- v-bind="searchFilterProps" -->
             <ProgramsFilterForm
-              :model-value="modelValue"
-              :update-field="updateFromMenu || updateField"
+              :model-value="searchFilterProps.modelValue"
+              :update-field="searchFilterProps.updateField"
               :mostras="props.mostras"
               :cinemas="props.cinemas"
               :paises="props.paises"

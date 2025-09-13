@@ -42,34 +42,6 @@ const emit = defineEmits([
 ]);
 
 const closeBtn = useTemplateRef('close-btn');
-
-// Unified update function that emits changes back to parent
-const updateField = (field, value) => {
-  console.log(`ResponsiveFilterMenu updating ${field}:`, value);
-  // Emit the change back to parent
-  const updatedFilters = { ...props.modelValue, [field]: value };
-  emit('update:modelValue', updatedFilters);
-};
-
-// Handle filter application
-const handleFiltersApplied = () => {
-  console.log('Filters applied:', props.modelValue);
-  emit('filtersApplied', props.modelValue);
-};
-
-// Handle filter clearing
-const handleFiltersCleared = () => {
-  console.log('Clearing Filters...');
-  // Reset internal filters = RESET MODELVALUE
-  const clearedFilters = Object.keys(props.modelValue).reduce((acc, key) => {
-    acc[key] = null;
-    return acc;
-  }, {});
-  console.log('Filters cleared', clearedFilters);
-
-  emit('update:modelValue', clearedFilters);
-  emit('filtersCleared');
-};
 </script>
 
 <template>
@@ -98,17 +70,13 @@ const handleFiltersCleared = () => {
         <!-- Desktop Filter Content -->
         <SearchFilter
           :modelValue="props.modelValue"
-          @update:modelValue="emit('update:modelValue', $event)"
-          @filtersApplied="handleFiltersApplied"
-          @filtersCleared="handleFiltersCleared"
-          @close-filter-menu="emit('close-filter-menu')"
+          @update:modelValue="$emit('update:modelValue', $event)"
+          @filtersApplied="$emit('filtersApplied', $event)"
+          @filtersCleared="$emit('filtersCleared', $event)"
+          @close-filter-menu="$emit('close-filter-menu')"
         >
-          <template #filters="slotProps">
-            <slot
-              name="filters"
-              :modelValue="modelValue"
-              :updateField="updateField"
-            />
+          <template #filters="searchFilterProps">
+            <slot name="filters" v-bind="searchFilterProps" />
           </template>
         </SearchFilter>
       </div>
@@ -151,18 +119,14 @@ const handleFiltersCleared = () => {
 
             <!-- Mobile Filter Content -->
             <SearchFilter
-              :modelValue="modelValue"
-              @update:modelValue="(val) => emit('update:modelValue', val)"
-              @filtersApplied="handleFiltersApplied"
-              @filtersCleared="handleFiltersCleared"
-              @close-filter-menu="emit('close-filter-menu')"
+              :modelValue="props.modelValue"
+              @update:modelValue="$emit('update:modelValue', $event)"
+              @filtersApplied="$emit('filtersApplied', $event)"
+              @filtersCleared="$emit('filtersCleared', $event)"
+              @close-filter-menu="$emit('close-filter-menu')"
             >
-              <template #filters="slotProps">
-                <slot
-                  name="filters"
-                  :modelValue="modelValue"
-                  :updateField="updateField"
-                />
+              <template #filters="searchFilterProps">
+                <slot name="filters" v-bind="searchFilterProps" />
               </template>
             </SearchFilter>
           </div>
