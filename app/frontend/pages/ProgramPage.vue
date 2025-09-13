@@ -1,7 +1,4 @@
 <script setup>
-// TODO: Close form filter only after success submit?
-// TODO: CHANGE TEXT WHEN NO RESULT FOR FILTERING
-// TODO: FIX LIMPAR FILTRO
 // TODO: Click cleansearchbar should close mobile filter menu?
 // TODO: Click cleansearchbar should make new request to remove query param
 // TODO: Add icon for menu tabs scroll
@@ -128,7 +125,7 @@ const removeQuery = (what) => {
     filters.value['genero'] = null
   }
 
-  if (["Country", "Pais"].includes(what.filter_label)) {
+  if (["Country", "País"].includes(what.filter_label)) {
     filters.value['pais'] = null
   }
 

@@ -92,7 +92,7 @@ const getQueryObject = (filter_value) => {
    <!-- MOSTRAS -->
    <AccordionGroup
    :text="mostraLabel"
-   :isOpen="!!props.modelValue.mostrasFilter"
+   :isOpen="!!props.modelValue.mostra"
    >
    <template v-slot:content>
      <div class="overflow-hidden w-full">
