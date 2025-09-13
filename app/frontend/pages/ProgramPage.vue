@@ -168,12 +168,14 @@ const removeQuery = (what) => {
 const clearSearchQuery = () => {
   const clearedFilters = initializeFilters()
   filters.value = clearedFilters
-  debugger
-  // MUST ACTIVATE IT
-  // router.get(props.tabBaseUrl, {}, {
-  //   preserveScroll: true,
-  //   only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
-  // });
+  const hasFiltersApplied = Object.entries(props.current_filters).some(([key, value]) => value != null)
+  if (hasFiltersApplied) {
+    router.get(props.tabBaseUrl, {}, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+    });
+  }
 };
 
 // sticket menutabs
