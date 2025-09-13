@@ -120,7 +120,7 @@ class Pelicula < ApplicationRecord
   end
 
   def mostra_display_name
-    mostra.display_name
+    mostra.filter_display_name
   end
 
   def mostra_tag_class

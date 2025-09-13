@@ -27,6 +27,14 @@ class Mostra < ApplicationRecord
     nome_abreviado.split(/[-:]/).first
   end
 
+  def filter_display_name
+    if I18n.locale == :pt
+      nome_pt.split(/[-:]/).first
+    else
+      nome_en.split(/[-:]/).first
+    end
+  end
+
   def filter_value
     permalink_pt
   end

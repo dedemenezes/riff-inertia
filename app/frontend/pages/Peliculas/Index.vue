@@ -32,7 +32,7 @@ const filterPeliculas = (value) => {
   />
 
   <TwContainer
-    class="grid grid-cols-3 gap-800"
+    class="grid grid-cols-1 lg:grid-cols-3 gap-800"
   >
     <SearchBar
       class="py-400"
@@ -43,7 +43,7 @@ const filterPeliculas = (value) => {
   <hr class="text-neutrals-300">
 
   <TwContainer>
-    <ul class="grid grid-cols-2 lg:grid-cols-3 py-1200 gap-800">
+    <ul class="grid grid-cols-1 lg:grid-cols-3 py-1200 gap-800">
       <PeliculaCard
         v-for="pelicula in peliculas"
         :pelicula="pelicula"
