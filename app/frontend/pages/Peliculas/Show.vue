@@ -16,6 +16,8 @@ const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwCon
 const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
 const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
 
+import { useUpdateWindowWidth } from '@/lib/utils';
+
 const props = defineProps({
   rootUrl: { type: String, required: true },
   crumbs: { type: Array, required: true, default: () => []},
@@ -30,13 +32,7 @@ const tabs = [
 ]
 const activeTab = ref(tabs[0].id)
 
-const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
-const isDesktop = computed(() => width.value >= 740)
-
-const updateWidth = () => width.value = window.innerWidth
-
-onMounted(() => window.addEventListener('resize', updateWidth))
-onUnmounted(() => window.removeEventListener('resize', updateWidth))
+const isDesktop = useUpdateWindowWidth();
 </script>
 
 <template>
@@ -110,7 +106,7 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
     <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
 
-      <section v-show="activeTab === 'creditos' || isDesktop" class="w-full sm:w-1/3">
+      <section v-if="activeTab === 'creditos' || isDesktop" class="w-full sm:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         <Suspense>
           <CreditosContent
@@ -128,7 +124,7 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
         </Suspense>
       </section>
 
-      <section v-show="activeTab === 'informacoes' || isDesktop" class="w-full sm:w-2/3">
+      <section v-if="activeTab === 'informacoes' || isDesktop" class="w-full sm:w-2/3">
         <Suspense>
           <InformacoesContent
             :display_sinopse="props.pelicula.display_sinopse"
@@ -144,7 +140,7 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
         </Suspense>
       </section>
 
-      <section v-show="activeTab === 'sessoes' || isDesktop" class="w-full sm:w-1/3 space-y-400">
+      <section v-if="activeTab === 'sessoes' || isDesktop" class="w-full sm:w-1/3 space-y-400">
         <Suspense>
           <SessoesContent />
           <template #fallback>
