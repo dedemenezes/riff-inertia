@@ -105,6 +105,8 @@ const filterSearch = (filtersFromChild) => {
 const removeQuery = (what) => {
   const newParams = new URLSearchParams()
 
+const removeQuery = (filterToRemove) => {
+  const newParams = new URLSearchParams()
   // Clear the specific filter
   // TODO: REFAC TIP ADD FILTER_KEY FROM CONTROLLER
   // IT SHOULD MAKE AGNOSTIC
