@@ -195,7 +195,7 @@ const handleClear = () => {
 // sticket menutabs
 const { sentinel, isSticky } = useStickyMenuTabs();
 
-// const debugMode = false;
+const debugMode = false;
 </script>
 
 <template>
@@ -272,7 +272,7 @@ const { sentinel, isSticky } = useStickyMenuTabs();
           @filtersApplied="filterSearch"
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
-          :debugMode="debugMode || false"
+          :debugMode="debugMode"
           >
           <template #filters="searchFilterProps">
             <!-- v-bind="searchFilterProps" -->
