@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
         { name: "Mudanças na programação", path: "" }
       ],
       "Edição 2024": [
-        { name: "Todos os filmes", path: "" },
+        { name: "Todos os filmes", path: peliculas_path },
         { name: "Mostras", path: mostras_path },
         { name: "Cinemas", path: "" },
         { name: "Júri", path: "" },
@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
         { name: "Programação Gratuita", path: "", icon: "ticket" }
       ],
       "edicao" => [
-        { name: "Todos os Filmes", path: "", icon: "program" },
+        { name: "Todos os Filmes", path: peliculas_path, icon: "program" },
         { name: "Mostras", path: mostras_path, icon: "grid" },
         { name: "Cinemas", path: "", icon: "pin" },
         { name: "Juri", path: "", icon: "trophy" },
@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
       "sobre" => [
         { name: "O Festival", path: "", icon: "logoFest" },
         { name: "Edições Anteriores", path: edicoes_anteriores_url, icon: "calendar" },
-        { name: "Talent Press", path: "", icon: "talentPress" },
+        { name: "Talent Rio", path: "", icon: "talentPress" },
         { name: "Parceiros", path: "", icon: "handshake" }
       ],
       "midias" => [
