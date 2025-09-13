@@ -1,29 +1,14 @@
+
 <!--
-// WE REMOVED EVERYHTING BELOW
-// AND NOW THE WHOLE DATA FLOW
-// INSIDE THIS COMPONENT RELIES
-// ON THE MODELVALUE PROPS PASSED FROM THE PARENT
-// IT WILL FORWARD THE MODELVALUE
-// TO THE SEARCHFILTER COMPONENT
-// AS PROP :modelValue AND RECEIVE
-// IT BACK IN THE TEMPLATE THROUGH
-// MODELVALUE :modelValue
-
-// WHEN SEARCHFILTER UPDATES MODELVALUE
-// IT WILL FORWARD THE EVENT UPDATE:MODELVALUE
-// WE RECEIVE HERE, UPDATE THE KEY FILTER
-// INSIDE MODELVALUE WITH THE USER SELECTED OPTION
-// AND FORWARD AN UPDATE:MODELVALUE EVENT
-
-// THIS LAST EMIT IS NOT RECEIVED HERE BUT IN THE PARENT
-// AND THEN WE SUBMIT THE FILTER IN THE PARENT
-
-// A HUGE CHAIN THAT FOR SURE CAN BE SIMPLIFIED
-// BECAUSE THE SEARCHFILTER ALSO HAS AN UPDATEFIELD FUNCTION
-// THIS SHOULD BE ONLY IN ONE PLACE.
- -->
+REFACTORED: ResponsiveFilterMenu is now a PURE LAYOUT COMPONENT
+- No more updateField logic (moved to SearchFilter)
+- No more filter handling logic (moved to SearchFilter)
+- No more console.logs (moved to SearchFilter)
+- Just responsive layout and event pass-through
+- 100% reusable for any filter system
+-->
 <script setup>
-import { ref, watch, useTemplateRef } from "vue";
+import { useTemplateRef } from "vue";
 import { IconClose } from "@/components/common/icons";
 import SearchFilter from "@/components/features/filters/SearchFilter.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
@@ -42,6 +27,13 @@ const emit = defineEmits([
 ]);
 
 const closeBtn = useTemplateRef('close-btn');
+
+// ============================================================================
+// PURE PASS-THROUGH COMPONENT - NO FILTER LOGIC HERE
+// All events are forwarded directly to SearchFilter
+// All filter logic happens in SearchFilter
+// This component only handles layout and UI state
+// ============================================================================
 </script>
 
 <template>
@@ -67,7 +59,7 @@ const closeBtn = useTemplateRef('close-btn');
           </p>
         </div>
 
-        <!-- Desktop Filter Content -->
+        <!-- Desktop Filter Content - SearchFilter handles all logic -->
         <SearchFilter
           :modelValue="props.modelValue"
           @update:modelValue="$emit('update:modelValue', $event)"
@@ -75,8 +67,16 @@ const closeBtn = useTemplateRef('close-btn');
           @filtersCleared="$emit('filtersCleared', $event)"
           @close-filter-menu="$emit('close-filter-menu')"
         >
+          <!-- Pass all SearchFilter slot props directly to our slot -->
           <template #filters="searchFilterProps">
             <slot name="filters" v-bind="searchFilterProps" />
+          </template>
+
+          <!-- Pass action slot props if needed -->
+          <template #actions="actionProps">
+            <slot name="actions" v-bind="actionProps">
+              <!-- SearchFilter provides default actions if no slot given -->
+            </slot>
           </template>
         </SearchFilter>
       </div>
@@ -112,6 +112,7 @@ const closeBtn = useTemplateRef('close-btn');
                 ref="closeBtn"
                 @click="emit('close-filter-menu')"
                 class="text-neutrals-900 cursor-pointer absolute -right-[.425rem]"
+                aria-label="Fechar filtros"
               >
                 <IconClose height="32px" width="32px" />
               </button>
