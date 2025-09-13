@@ -15,8 +15,8 @@ import TwContainer from "@/components/layout/TwContainer.vue";
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
-  // initialFilters: { type: Object, required: true },
   modelValue: { type: Object, required: true },
+  debugMode: { type: Boolean, default: false },
 });
 
 const emit = defineEmits([
@@ -38,7 +38,7 @@ const closeBtn = useTemplateRef('close-btn');
 
 <template>
   <!-- Debug info -->
-  <div class="bg-blue-50 p-2 mb-4 text-xs">
+  <div v-if="props.debugMode" class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">
     <p><strong>ResponsiveFilterMenu modelValue:</strong> {{ modelValue }}</p>
   </div>
 

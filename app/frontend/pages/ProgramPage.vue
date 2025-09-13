@@ -193,13 +193,16 @@ const handleClear = () => {
 // ============================================================================
 
 // sticket menutabs
-const { sentinel, isSticky } = useStickyMenuTabs()
+const { sentinel, isSticky } = useStickyMenuTabs();
+
+// const debugMode = false;
 </script>
 
 <template>
-  <p class="text-neutrals-900">current_filters: {{ props.current_filters }}</p>
-  <!-- <p class="text-neutrals-700">localFilters: {{ localFilters }}</p> -->
-  <p class="text-neutrals-500">filters: {{ filters }}</p>
+  <div v-if="debugMode">
+    <p class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">current_filters: {{ props.current_filters }}</p>
+    <p class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">filters: {{ filters }}</p>
+  </div>
 
   <TwContainer>
     <Breadcrumb :crumbs="props.crumbs" />
@@ -269,7 +272,8 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           @filtersApplied="filterSearch"
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
-        >
+          :debugMode="debugMode || false"
+          >
           <template #filters="searchFilterProps">
             <!-- v-bind="searchFilterProps" -->
             <ProgramsFilterForm
