@@ -74,9 +74,9 @@ const handleFiltersCleared = () => {
 
 <template>
   <!-- Debug info -->
-  <!-- <div class="bg-blue-50 p-2 mb-4 text-xs">
+  <div class="bg-blue-50 p-2 mb-4 text-xs">
     <p><strong>ResponsiveFilterMenu modelValue:</strong> {{ modelValue }}</p>
-  </div> -->
+  </div>
 
   <!-- Desktop Layout: Sticky sidebar (always visible) -->
    <!-- add js to isDesktop -->
