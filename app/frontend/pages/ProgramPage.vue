@@ -73,8 +73,7 @@ const initializeFilters = () => ({
 // current filtered values in case
 // there are any coming from controller
 const overrideFiltersValues = () => {
-  const emptyFilters = initializeFilters()
-  return {emptyFilters, ...props.current_filters}
+  return {...initializeFilters(), ...props.current_filters}
 }
 
 const filters = ref(overrideFiltersValues())
