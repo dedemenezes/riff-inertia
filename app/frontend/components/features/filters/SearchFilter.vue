@@ -58,6 +58,12 @@ const updateField = (key, value) => {
 </script>
 
 <template>
+  <!-- Debug info -->
+  <div class="bg-blue-50 p-2 mb-4 text-xs">
+    <p><strong>SearchFilter modelValue :</strong> {{ modelValue }} </p>
+    <p><strong>SearchFilter and hasActiveFilter.value:</strong> {{ hasActiveFilters.value }}</p>
+    <p><strong>SearchFilter and hasActiveFilter:</strong> {{ hasActiveFilters }}</p>
+  </div>
   <div class="flex-grow flex flex-col space-y-600 overflow-y-auto">
     <slot
       name="filters"
