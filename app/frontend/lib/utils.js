@@ -30,7 +30,7 @@ export function useUpdateWindowWidth() {
   const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
   const updateWidth = () => width.value = window.innerWidth
 
-  const isDesktop = computed(() => width.value >= 740)
+  const isDesktop = computed(() => width.value >= 1024)
 
   onMounted(() => window.addEventListener('resize', updateWidth))
   onUnmounted(() => window.removeEventListener('resize', updateWidth))

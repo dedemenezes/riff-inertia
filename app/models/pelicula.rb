@@ -120,12 +120,12 @@ class Pelicula < ApplicationRecord
     mostra.tag_class
   end
 
-  def imageURL(image_name = nil)
+  def imageURL(image_name = nil, size = "original")
     image_name ||= self.imagem
       # TODO: CACHE
       # TODO: IF WE WANT DIFFERENT SIZE?
       # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
-      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/large/#{image_name}"
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
     # end
   end
 
