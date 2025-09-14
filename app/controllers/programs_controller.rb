@@ -1,10 +1,11 @@
 class ProgramsController < ApplicationController
   EDICAO_ATUAL = 12
+  DATES_PER_PAGE = 1
   # TODO: MAKE THIS ENV VARIABLE?
 
-  include BreadcrumbsHelper
-  DATES_PER_PAGE = 1
-  include Pagy::Backend
+  include BreadcrumbsHelper, Pagy::Backend
+
+  before_action :set_pelicula_collection_service
 
   def index
     selected_filters = {}
@@ -111,7 +112,7 @@ class ProgramsController < ApplicationController
       actor_query = params[:elenco]
 
       # Find peliculas with this actor
-      pelicula_ids = Pelicula.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
+      pelicula_ids = @pelicula_collection_service.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
       if pelicula_ids.any?
         selected_actor = {
           "filter_display" => actor_query,
@@ -279,9 +280,12 @@ class ProgramsController < ApplicationController
       methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
-    collection_service = PeliculaCollectionService.new
-    @genres_filter = collection_service.collection_for_genres
-    @directors_filter = collection_service.collection_for_directors
-    @actors_filter = collection_service.collection_for_actors
+    @genres_filter = @pelicula_collection_service.collection_for_genres
+    @directors_filter = @pelicula_collection_service.collection_for_directors
+    @actors_filter = @pelicula_collection_service.collection_for_actors
+  end
+
+  def set_pelicula_collection_service
+    @pelicula_collection_service = PeliculaCollectionService.new
   end
 end
