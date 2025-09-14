@@ -4,14 +4,14 @@ import { IconPin } from '@/components/common/icons';
 import TagScreening from '@/components/common/tags/TagScreening.vue';
 
 const props = defineProps({
-  session: { type: Object, required: true}
+  session: { type: Object, required: true }
 })
 
 // TODO: date display
 </script>
 
 <template>
-  <div class="bg-neutrals-200 p-400 flex flex-col gap-400 rounded-200">
+  <div class="bg-neutrals-200 p-400 flex flex-col gap-400 rounded-200 mb-400">
     <h3 class="text-header-medium-sm">{{ props.session.data}}</h3>
     <div>
       <div class="flex items-center gap-200 pb-100">
@@ -23,7 +23,7 @@ const props = defineProps({
       <img src="@/assets/icons/icon_info.svg" alt="Ícone de informação">
       <p class="font-body text-xs leading-[140%] font-regular italic">Venda de ingressos limitada</p>
     </div>
-    <TagScreening state="default" time="21h15"/>
+    <TagScreening state="default" :time="props.session.sessao"/>
     <BaseButton size="sm" class="border-neutrals-900 border-2">Comprar ingressos</BaseButton>
   </div>
 </template>

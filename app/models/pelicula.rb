@@ -66,10 +66,17 @@ class Pelicula < ApplicationRecord
   end
 
   def programacoesAsJson
-    JSON.parse(programacoes.to_json(
-      only: [ :id, :data, :sessao, :ingresso_url_venda ],
-      methods: [ :display_sessao, :cinema_name, :cinema_address ]
-    ))
+    programacoes.order(:data).each_slice(3).map do |programacoes_slice|
+      programacoes_slice.map do |prog|
+        {
+          data: prog.display_date,
+          sessao: prog.display_sessao,
+          ingresso_url_venda: prog.ingresso_url_venda,
+          cinema_name: prog.cinema_name,
+          cinema_address: prog.cinema_address
+        }
+      end
+    end
   end
 
   def genre
