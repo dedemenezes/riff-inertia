@@ -19,6 +19,7 @@ class Pelicula < ApplicationRecord
     genre
     mostra_name
     mostra_tag_class
+    programacoesAsJson
   ]
   COLUMNS_NEEDED = %i[
     elenco_coord_int
@@ -62,6 +63,13 @@ class Pelicula < ApplicationRecord
     collection_for(:elenco_coord_int, :elenco) do |actors|
       actors.flat_map { |cast| cast.split(",").map(&:strip) }
     end
+  end
+
+  def programacoesAsJson
+    JSON.parse(programacoes.to_json(
+      only: [ :id, :data, :sessao, :ingresso_url_venda ],
+      methods: [ :display_sessao, :cinema_name, :cinema_address ]
+    ))
   end
 
   def genre

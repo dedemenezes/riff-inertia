@@ -11,6 +11,14 @@ class Programacao < ApplicationRecord
     sessao.strftime("%H:%M")
   end
 
+  def cinema_name
+    cinema.nome
+  end
+
+  def cinema_address
+    cinema.endereco
+  end
+
   def filter_value
     sessao.strftime("%Hh%M")
   end
