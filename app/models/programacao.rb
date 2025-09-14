@@ -11,6 +11,14 @@ class Programacao < ApplicationRecord
     sessao.strftime("%H:%M")
   end
 
+  def display_date
+    if I18n.locale == :pt
+      I18n.l(self.data, format: "%a, %e %b", locale: :pt).split(" ").map(&:strip).join(" ")
+    else
+      I18n.l(self.data, format: "%a, %b %e", locale: :en).split(" ").map(&:strip).join(" ")
+    end
+  end
+
   def cinema_name
     cinema.nome
   end
