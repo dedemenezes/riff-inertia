@@ -12,6 +12,7 @@ class Pelicula < ApplicationRecord
     roteiro_team
     montagem_team
     imageURL
+    posterImageURL
     director_image
     carousel_images
     display_paises
@@ -118,6 +119,15 @@ class Pelicula < ApplicationRecord
 
   def mostra_tag_class
     mostra.tag_class
+  end
+
+  def posterImageURL(image_name = nil, size = "original")
+    image_name ||= self.imagem_producao
+      # TODO: CACHE
+      # TODO: IF WE WANT DIFFERENT SIZE?
+      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
+    # end
   end
 
   def imageURL(image_name = nil, size = "original")

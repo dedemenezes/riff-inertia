@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <div class="flex flex-col gap-400 py-400 items-center justify-center">
     <img
-      :src="props.pelicula.imageURL"
+      :src="props.pelicula.posterImageURL"
       class="h-[251px] w-[201px] object-cover"
       :alt="`${props.pelicula.display_titulo} banner`"
       loading="lazy"
