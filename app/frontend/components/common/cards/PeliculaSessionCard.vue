@@ -1,18 +1,23 @@
 <script setup>
-// TODO: ADD PROPS AND EVERYTHING
 import { BaseButton } from '@/components/common/buttons';
 import { IconPin } from '@/components/common/icons';
 import TagScreening from '@/components/common/tags/TagScreening.vue';
+
+const props = defineProps({
+  session: { type: Object, required: true}
+})
+
+// TODO: date display
 </script>
 
 <template>
   <div class="bg-neutrals-200 p-400 flex flex-col gap-400 rounded-200">
-    <h3 class="text-header-medium-sm">Qua, 9 Set</h3>
+    <h3 class="text-header-medium-sm">{{ props.session.data}}</h3>
     <div>
       <div class="flex items-center gap-200 pb-100">
-        <IconPin height="16" width="16" color="text-neutrals-900"/> <p class="text-body-regular-line-small">Cine Odeon - CCLSR</p>
+        <IconPin height="16" width="16" color="text-neutrals-900"/> <p class="text-body-regular-line-small"> {{ props.session.cinema_name }}</p>
       </div>
-      <p class="text-body-regular-xs">Praça Floriano, 7 - Centro</p>
+      <p class="text-body-regular-xs">{{ props.session.cinema_address }}</p>
     </div>
     <div class="flex items-center gap-200">
       <img src="@/assets/icons/icon_info.svg" alt="Ícone de informação">
