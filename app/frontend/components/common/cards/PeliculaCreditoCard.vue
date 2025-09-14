@@ -24,10 +24,10 @@ console.log(props.pelicula);
 
 <template>
   <div class="credito__card">
-    <div class="py-600 md:pt-0">
+    <div class="pb-600">
       <h3 class="text-overline text-neutrals-700 uppercase pb-300">{{ header }}</h3>
       <!-- TODO: TRANSLATE -->
-      <div class="card__director rounded-200 w-1/2">
+      <div class="card__director rounded-200 w-1/2 sm:w-1/3">
         <img
           :src="pelicula.director_image"
           :alt="`Foto de ${pelicula.diretor_coord_int}`"
@@ -42,7 +42,7 @@ console.log(props.pelicula);
     <hr class="text-neutrals-300">
     <div class="space-y-400 pt-400">
       <!-- { roteiro: [], fotografia: [], montagem: [],  direção: [], producaoempresa: []} -->
-      <div class="grid grid-cols-3" v-for="([name, members]) in Object.entries(teams)">
+      <div class="grid grid-cols-4" v-for="([name, members]) in Object.entries(teams)">
         <p class="text-overline text-neutrals-700 uppercase pb-200">{{ name }}</p>
         <ul class="col-span-2 flex flex-col">
           <li v-for="member in members" :key="member">

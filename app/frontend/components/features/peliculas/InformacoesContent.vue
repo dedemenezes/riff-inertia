@@ -13,9 +13,14 @@ const isDesktop =  useUpdateWindowWidth()
 </script>
 
 <template>
-  <div>
-    <h3 class="text-overline text-neutrals-700 uppercase pb-200">sobre o filme</h3>
-    <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
+  <div class="space-y-600">
+    <div class="">
+      <h3 class="text-overline text-neutrals-700 uppercase pb-200">sobre o filme</h3>
+      <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
+    </div>
+
+    <hr class="text-neutrals-300">
+
     <div v-if="isDesktop">
       <!-- desktop display policula creditos -->
       <PeliculaCreditoCard
@@ -27,6 +32,8 @@ const isDesktop =  useUpdateWindowWidth()
     <div v-else>
       <PeliculaPosterCard :pelicula="props.pelicula" />
     </div>
+
+    <hr class="text-neutrals-300">
 
     <div :class="`border-s-8 border-${props.pelicula.mostra_tag_class} rounded-100 px-400 py-300 flex flex-col gap-200 col-span-2 h-fit`">
       <h2 class="text-header-medium-sm text-neutrals-900">{{ props.pelicula.mostra_name }}</h2>

@@ -110,7 +110,7 @@ const isDesktop = useUpdateWindowWidth();
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
     <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
 
-      <section v-if="activeTab === 'third' || isDesktop" class="w-full sm:w-1/3">
+      <section v-if="activeTab === 'third' || isDesktop" class="w-full lg:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         <Suspense>
           <CreditosContent :pelicula="pelicula"/>
@@ -120,7 +120,7 @@ const isDesktop = useUpdateWindowWidth();
         </Suspense>
       </section>
 
-      <section v-if="activeTab === 'first' || isDesktop" class="w-full sm:w-2/3">
+      <section v-if="activeTab === 'first' || isDesktop" class="w-full lg:w-2/3">
 
           <Suspense>
             <InformacoesContent :pelicula="pelicula"
@@ -131,7 +131,7 @@ const isDesktop = useUpdateWindowWidth();
           </Suspense>
         </section>
 
-      <section v-if="activeTab === 'second' || isDesktop" class="w-full sm:w-1/3 space-y-400">
+      <section v-if="activeTab === 'second' || isDesktop" class="w-full lg:w-1/3 space-y-400">
         <Suspense>
           <SessoesContent />
           <template #fallback>
