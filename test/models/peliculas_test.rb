@@ -1,6 +1,19 @@
 require "test_helper"
 
 class PeliculaTest < ActiveSupport::TestCase
+  test "display_titulo returns Portuguese title when locale is pt" do
+    pelicula = peliculas(:amor_brasilia)
+    I18n.with_locale(:pt) do
+      assert_equal "Amor em Brasília", pelicula.display_titulo
+    end
+  end
+
+  test "display_titulo returns English title when locale is en" do
+    pelicula = peliculas(:amor_brasilia)
+    I18n.with_locale(:en) do
+      assert_equal "Love in Brasilia", pelicula.display_titulo
+    end
+  end
   test "actor_to_pelicula_mapping returns hash with actor names as keys" do
     pelicula = peliculas(:batman)
 

@@ -1,11 +1,12 @@
 class Pelicula < ApplicationRecord
-  include ActionView::Helpers::TextHelper
-  include TeamParseable, Filterable
+  include TeamParseable, Filterable, Displayable
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
-    display_sinopse
     display_titulo
+    display_sinopse
+    genre
+    display_paises
     diretor_team
     fotografia_team
     producaoempresa_team
@@ -15,8 +16,6 @@ class Pelicula < ApplicationRecord
     posterImageURL
     director_image
     carousel_images
-    display_paises
-    genre
     mostra_name
     mostra_tag_class
     programacoesAsJson
@@ -77,35 +76,6 @@ class Pelicula < ApplicationRecord
         }
       end
     end
-  end
-
-  def genre
-    return "TBD" unless catalogo_ficha_2007
-
-    locales = {
-      "pt": 0,
-      "en": 1
-    }
-    catalogo_ficha_2007.split(" ")&.first.split("/")[locales[I18n.locale]] || "TBD"
-  end
-
-  def display_paises
-    all_paises = paises.map { |it| it.nome_pais }
-    # TODO: ORDER HOW?
-    counter = all_paises.length
-    if counter > 1
-      "#{all_paises.first} + #{pluralize(counter - 1, "país", "países")}"
-    else
-      all_paises.first
-    end
-  end
-
-  def display_titulo
-    I18n.locale == :pt ? titulo_portugues_coord_int : titulo_ingles_coord_int
-  end
-
-  def display_sinopse
-    I18n.locale == :pt ? sinopse_port_export : sinopse_ing_export
   end
 
   def diretor_team
