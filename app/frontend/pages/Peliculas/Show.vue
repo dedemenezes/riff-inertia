@@ -133,7 +133,7 @@ const isDesktop = useUpdateWindowWidth();
 
       <section v-if="activeTab === 'second' || isDesktop" class="w-full lg:w-1/3 space-y-400">
         <Suspense>
-          <SessoesContent />
+          <SessoesContent :sessions="pelicula.programacoesAsJson"/>
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
