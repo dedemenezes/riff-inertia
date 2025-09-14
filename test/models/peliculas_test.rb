@@ -1,6 +1,13 @@
 require "test_helper"
 
 class PeliculaTest < ActiveSupport::TestCase
+  test "posterImageURL returns correct url" do
+    pelicula = peliculas(:batman)
+    base_url = ENV.fetch("IMAGES_BASE_URL")
+    expected_url = "#{base_url}/2024/site/peliculas/large/p01_batman.jpg"
+    assert_equal expected_url, pelicula.posterImageURL
+  end
+
   test "display_titulo returns Portuguese title when locale is pt" do
     pelicula = peliculas(:amor_brasilia)
     I18n.with_locale(:pt) do

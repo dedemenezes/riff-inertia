@@ -1,5 +1,5 @@
 class Pelicula < ApplicationRecord
-  include TeamParseable, Filterable, Displayable
+  include TeamParseable, Filterable, Displayable, Imageable
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -104,40 +104,6 @@ class Pelicula < ApplicationRecord
 
   def mostra_tag_class
     mostra.tag_class
-  end
-
-  # TODO: Define default size for all images in the website
-  def posterImageURL(image_name = nil, size = "large")
-    image_name ||= self.imagem_producao
-      # TODO: CACHE
-      # TODO: IF WE WANT DIFFERENT SIZE?
-      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
-      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
-    # end
-  end
-
-  def imageURL(image_name = nil, size = "original")
-    image_name ||= self.imagem
-      # TODO: CACHE
-      # TODO: IF WE WANT DIFFERENT SIZE?
-      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
-      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
-    # end
-  end
-
-  # TODO: RETHINK THIS MAYBE THERE ISN'T TWO IMAGES
-  def carousel_images
-    image_name = imagem
-    return if image_name.nil? || image_name.empty?
-
-    (2..CAROUSEL_IMAGES_AMOUNT + 1).to_a.map do |i|
-      image_number = "0#{i}"
-      digits_after_f_regex = /(\w+_f)\d+/
-      image_name = imagem.gsub(digits_after_f_regex, "\\1#{image_number}")
-      {
-        path: imageURL(image_name)
-      }
-    end.compact_blank
   end
 
   def director_image
