@@ -279,8 +279,9 @@ class ProgramsController < ApplicationController
       methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
-    @genres_filter = Pelicula.collection_for_genres
-    @directors_filter = Pelicula.collection_for_directors
-    @actors_filter = Pelicula.collection_for_actors
+    collection_service = PeliculaCollectionService.new
+    @genres_filter = collection_service.collection_for_genres
+    @directors_filter = collection_service.collection_for_directors
+    @actors_filter = collection_service.collection_for_actors
   end
 end
