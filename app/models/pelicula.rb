@@ -129,7 +129,8 @@ class Pelicula < ApplicationRecord
     mostra.tag_class
   end
 
-  def posterImageURL(image_name = nil, size = "original")
+  # TODO: Define default size for all images in the website
+  def posterImageURL(image_name = nil, size = "large")
     image_name ||= self.imagem_producao
       # TODO: CACHE
       # TODO: IF WE WANT DIFFERENT SIZE?
