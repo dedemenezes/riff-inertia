@@ -39,8 +39,6 @@ class PeliculaCollectionService
     @klass.where(id: pelicula_ids)
   end
 
-  private
-
   def actor_to_pelicula_mapping(edicao_id)
     cache_key = "actor-pelicula-mapping-#{edicao_id}"
 
