@@ -1,37 +1,22 @@
+
 <!--
-// WE REMOVED EVERYHTING BELOW
-// AND NOW THE WHOLE DATA FLOW
-// INSIDE THIS COMPONENT RELIES
-// ON THE MODELVALUE PROPS PASSED FROM THE PARENT
-// IT WILL FORWARD THE MODELVALUE
-// TO THE SEARCHFILTER COMPONENT
-// AS PROP :modelValue AND RECEIVE
-// IT BACK IN THE TEMPLATE THROUGH
-// MODELVALUE :modelValue
-
-// WHEN SEARCHFILTER UPDATES MODELVALUE
-// IT WILL FORWARD THE EVENT UPDATE:MODELVALUE
-// WE RECEIVE HERE, UPDATE THE KEY FILTER
-// INSIDE MODELVALUE WITH THE USER SELECTED OPTION
-// AND FORWARD AN UPDATE:MODELVALUE EVENT
-
-// THIS LAST EMIT IS NOT RECEIVED HERE BUT IN THE PARENT
-// AND THEN WE SUBMIT THE FILTER IN THE PARENT
-
-// A HUGE CHAIN THAT FOR SURE CAN BE SIMPLIFIED
-// BECAUSE THE SEARCHFILTER ALSO HAS AN UPDATEFIELD FUNCTION
-// THIS SHOULD BE ONLY IN ONE PLACE.
- -->
+REFACTORED: ResponsiveFilterMenu is now a PURE LAYOUT COMPONENT
+- No more updateField logic (moved to SearchFilter)
+- No more filter handling logic (moved to SearchFilter)
+- No more console.logs (moved to SearchFilter)
+- Just responsive layout and event pass-through
+- 100% reusable for any filter system
+-->
 <script setup>
-import { ref, watch, useTemplateRef } from "vue";
+import { useTemplateRef } from "vue";
 import { IconClose } from "@/components/common/icons";
 import SearchFilter from "@/components/features/filters/SearchFilter.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
-  // initialFilters: { type: Object, required: true },
   modelValue: { type: Object, required: true },
+  debugMode: { type: Boolean, default: false },
 });
 
 const emit = defineEmits([
@@ -43,40 +28,19 @@ const emit = defineEmits([
 
 const closeBtn = useTemplateRef('close-btn');
 
-// Unified update function that emits changes back to parent
-const updateField = (field, value) => {
-  console.log(`ResponsiveFilterMenu updating ${field}:`, value);
-  // Emit the change back to parent
-  const updatedFilters = { ...props.modelValue, [field]: value };
-  emit('update:modelValue', updatedFilters);
-};
-
-// Handle filter application
-const handleFiltersApplied = () => {
-  console.log('Filters applied:', props.modelValue);
-  emit('filtersApplied', props.modelValue);
-};
-
-// Handle filter clearing
-const handleFiltersCleared = () => {
-  console.log('Clearing Filters...');
-  // Reset internal filters = RESET MODELVALUE
-  const clearedFilters = Object.keys(props.modelValue).reduce((acc, key) => {
-    acc[key] = null;
-    return acc;
-  }, {});
-  console.log('Filters cleared', clearedFilters);
-
-  emit('update:modelValue', clearedFilters);
-  emit('filtersCleared');
-};
+// ============================================================================
+// PURE PASS-THROUGH COMPONENT - NO FILTER LOGIC HERE
+// All events are forwarded directly to SearchFilter
+// All filter logic happens in SearchFilter
+// This component only handles layout and UI state
+// ============================================================================
 </script>
 
 <template>
   <!-- Debug info -->
-  <!-- <div class="bg-blue-50 p-2 mb-4 text-xs">
+  <div v-if="props.debugMode" class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">
     <p><strong>ResponsiveFilterMenu modelValue:</strong> {{ modelValue }}</p>
-  </div> -->
+  </div>
 
   <!-- Desktop Layout: Sticky sidebar (always visible) -->
    <!-- add js to isDesktop -->
@@ -95,20 +59,24 @@ const handleFiltersCleared = () => {
           </p>
         </div>
 
-        <!-- Desktop Filter Content -->
+        <!-- Desktop Filter Content - SearchFilter handles all logic -->
         <SearchFilter
           :modelValue="props.modelValue"
-          @update:modelValue="emit('update:modelValue', $event)"
-          @filtersApplied="handleFiltersApplied"
-          @filtersCleared="handleFiltersCleared"
-          @close-filter-menu="emit('close-filter-menu')"
+          @update:modelValue="$emit('update:modelValue', $event)"
+          @filtersApplied="$emit('filtersApplied', $event)"
+          @filtersCleared="$emit('filtersCleared', $event)"
+          @close-filter-menu="$emit('close-filter-menu')"
         >
-          <template #filters="slotProps">
-            <slot
-              name="filters"
-              :modelValue="modelValue"
-              :updateField="updateField"
-            />
+          <!-- Pass all SearchFilter slot props directly to our slot -->
+          <template #filters="searchFilterProps">
+            <slot name="filters" v-bind="searchFilterProps" />
+          </template>
+
+          <!-- Pass action slot props if needed -->
+          <template #actions="actionProps">
+            <slot name="actions" v-bind="actionProps">
+              <!-- SearchFilter provides default actions if no slot given -->
+            </slot>
           </template>
         </SearchFilter>
       </div>
@@ -144,6 +112,7 @@ const handleFiltersCleared = () => {
                 ref="closeBtn"
                 @click="emit('close-filter-menu')"
                 class="text-neutrals-900 cursor-pointer absolute -right-[.425rem]"
+                aria-label="Fechar filtros"
               >
                 <IconClose height="32px" width="32px" />
               </button>
@@ -151,18 +120,14 @@ const handleFiltersCleared = () => {
 
             <!-- Mobile Filter Content -->
             <SearchFilter
-              :modelValue="modelValue"
-              @update:modelValue="(val) => emit('update:modelValue', val)"
-              @filtersApplied="handleFiltersApplied"
-              @filtersCleared="handleFiltersCleared"
-              @close-filter-menu="emit('close-filter-menu')"
+              :modelValue="props.modelValue"
+              @update:modelValue="$emit('update:modelValue', $event)"
+              @filtersApplied="$emit('filtersApplied', $event)"
+              @filtersCleared="$emit('filtersCleared', $event)"
+              @close-filter-menu="$emit('close-filter-menu')"
             >
-              <template #filters="slotProps">
-                <slot
-                  name="filters"
-                  :modelValue="modelValue"
-                  :updateField="updateField"
-                />
+              <template #filters="searchFilterProps">
+                <slot name="filters" v-bind="searchFilterProps" />
               </template>
             </SearchFilter>
           </div>

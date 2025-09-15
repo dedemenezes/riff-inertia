@@ -1,7 +1,4 @@
 <script setup>
-// TODO: Close form filter only after success submit?
-// TODO: CHANGE TEXT WHEN NO RESULT FOR FILTERING
-// TODO: FIX LIMPAR FILTRO
 // TODO: Click cleansearchbar should close mobile filter menu?
 // TODO: Click cleansearchbar should make new request to remove query param
 // TODO: Add icon for menu tabs scroll
@@ -57,7 +54,13 @@ const props = defineProps({
   ,crumbs: { type: Array, required: true }
 })
 
-// Initialize with proper structure
+// ============================================================================
+// FILTER STATE MANAGEMENT - SINGLE SOURCE OF TRUTH
+// ============================================================================
+
+/**
+ * Initialize empty filter structure
+ */
 const initializeFilters = () => ({
   query: null,
   sessao: null,
@@ -69,121 +72,137 @@ const initializeFilters = () => ({
   elenco: null,
 })
 
-// Override with reactive filter with
-// current filtered values in case
-// there are any coming from controller
+/**
+ * Override empty filters with current filter values from controller
+ */
 const overrideFiltersValues = () => {
-  const emptyFilters = initializeFilters()
-  return {emptyFilters, ...props.current_filters}
+  return { ...initializeFilters(), ...props.current_filters }
 }
 
+
+// Main filter state - this is passed to SearchFilter via ResponsiveFilterMenu
 const filters = ref(overrideFiltersValues())
 
-// Watch for prop changes and update our local state
-// DONT THINK WE NEED AS THE PROP COMES FROM THE CONTROLLER
-// WHEN WE CHANGE A FILTER WE WILL AND SHOULD
-// ALWAYS UPDATE FILTERS REACTIVE AND NOT PROPS
-// PROPS DONT CHANGE VALUE
+// Watch for prop changes from server (shouldn't happen often but good to have)
 watch(() => props.current_filters, (newFilters) => {
+  console.log('ProgramPage: current_filters changed from server:', newFilters);
   filters.value = overrideFiltersValues()
 }, { immediate: true, deep: true })
 
-// Update field function to pass to the form
-// if we are defining and passin we dont need it there
-// but in my mind it should be inside searchfilter
-// i said smth related to this
-// inside responsivefiltermenu comments
-const updateField = (fieldName, value) => {
-  console.log(`Updating ${fieldName}:`, value)
-  filters.value[fieldName] = value
-}
+// ============================================================================
+// FILTER OPERATIONS - CALLED BY SEARCHFILTER VIA EVENTS
+// ============================================================================
 
-// Called when user clears search bar
-const handleClear = () => {
-  debugger
-  filters.value.query = null;
-  submit(props.tabBaseUrl);
-};
+/**
+ * Called when SearchFilter emits filtersApplied
+ * This makes the actual router call to update the page
+ */
 
-// Called when filters applied through button inside filter
-const filterSearch = (filtersFromChild) => {
-  // this function extract actually
-  // build the query params ignoring null filters
-  const cleanedFilters = extractFilterValues(filtersFromChild || filters.value)
+const filterSearch = (filtersFromSearchFilter) => {
+  console.log('ProgramPage: Applying filters from SearchFilter:', filtersFromSearchFilter);
+
+  // Build query params by rejecting any filter: null or ""
+  const cleanedFilters = extractFilterValues(filtersFromSearchFilter || filters.value)
+
+  // MAke search request and says which prop to update
   router.get(props.tabBaseUrl, cleanedFilters, {
     preserveScroll: true,
     only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
   })
 };
 
-const removeQuery = (what) => {
-  const newParams = new URLSearchParams()
+/**
+ * Called when user clicks a filter tag to remove it
+ * This updates the filters state and makes a router call
+ */
 
+const removeQuery = (filterToRemove) => {
+  const newParams = new URLSearchParams()
   // Clear the specific filter
   // TODO: REFAC TIP ADD FILTER_KEY FROM CONTROLLER
   // IT SHOULD MAKE AGNOSTIC
-  if (["Time", "Sessão"].includes(what.filter_label)) {
-    filters.value['sessao'] = null
+  // Map filter labels to filter keys (could be improved with a filter_key from controller)
+  const filterKeyMap = {
+    'Time': 'sessao',
+    'Sessão': 'sessao',
+    'Showcase': 'mostra',
+    'Mostra': 'mostra',
+    'Cinema': 'cinema',
+    'Genre': 'genero',
+    'Genero': 'genero',
+    'Country': 'pais',
+    'Pais': 'pais',
+    'Director': 'direcao',
+    'Direção': 'direcao',
+    'Cast': 'elenco',
+    'Elenco': 'elenco'
+  };
+  const filterKey = filterKeyMap[filterToRemove.filter_label];
+  if (filterKey) {
+    // Updated local filter state
+    filters.value[filterKey] = null;
+
+    // Build new URL params from remaining filters
+    const newParams = new URLSearchParams();
+    Object.entries(filters.value).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== "" && value?.filter_value) {
+        newParams.set(key, value.filter_value);
+      }
+    });
+
+    router.get(props.tabBaseUrl, newParams, {
+      preserveScroll: true,
+      only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+    })
+  } else {
+    console.warn('ProgramPage: Unknown filter label:', filterToRemove.filter_label);
   }
-
-  if (["Showcase", "Mostra"].includes(what.filter_label)) {
-    filters.value['mostra'] = null
-  }
-
-  // Add other filter types as needed
-  if (["Cinema"].includes(what.filter_label)) {
-    filters.value['cinema'] = null
-  }
-
-  if (["Genre", "Genero"].includes(what.filter_label)) {
-    filters.value['genero'] = null
-  }
-
-  if (["Country", "Pais"].includes(what.filter_label)) {
-    filters.value['pais'] = null
-  }
-
-  if (["Director", "Direção"].includes(what.filter_label)) {
-    filters.value['direcao'] = null
-  }
-
-
-  if (["Cast", "Elenco"].includes(what.filter_label)) {
-    filters.value['elenco'] = null
-  }
-
-  Object.entries(filters.value).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== "" && value?.filter_value) {
-      newParams.set(key, value.filter_value);
-    }
-  })
-
-  router.get(props.tabBaseUrl, newParams, {
-    preserveScroll: true,
-    only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
-  })
 }
 
-// Called when filters cleared from Limpar Todos btn
+/**
+ * Called when SearchFilter emits filtersCleared
+ * This clears all filters and optionally makes a router call
+ */
 const clearSearchQuery = () => {
+  console.log('ProgramPage: Clearing all filters');
+
   const clearedFilters = initializeFilters()
   filters.value = clearedFilters
-  debugger
-  // MUST ACTIVATE IT
-  // router.get(props.tabBaseUrl, {}, {
-  //   preserveScroll: true,
-  //   only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
-  // });
+  // Only make router call if there were actually filters applied
+  const hasFiltersApplied = Object.entries(props.current_filters).some(([key, value]) => value != null)
+  if (hasFiltersApplied) {
+    router.get(props.tabBaseUrl, {}, {
+      preserveState: true,
+      preserveScroll: true,
+      only: ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+    });
+  }
 };
 
+/**
+ * Called when user clears search bar directly (if needed)
+ */
+const handleClear = () => {
+  console.log('ProgramPage: Clearing search query');
+  filters.value.query = null;
+  filterSearch(filters.value);
+};
+
+// ============================================================================
+// UI UTILITIES
+// ============================================================================
+
 // sticket menutabs
-const { sentinel, isSticky } = useStickyMenuTabs()
+const { sentinel, isSticky } = useStickyMenuTabs();
+
+// const debugMode = false;
 </script>
 
 <template>
-  <p class="text-neutrals-900">current_filters: {{ props.current_filters }}</p>
-  <!-- <p class="text-neutrals-700">localFilters: {{ localFilters }}</p> -->
-  <p class="text-neutrals-500">filters: {{ filters }}</p>
+  <div v-if="debugMode">
+    <p class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">current_filters: {{ props.current_filters }}</p>
+    <p class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">filters: {{ filters }}</p>
+  </div>
 
   <TwContainer>
     <Breadcrumb :crumbs="props.crumbs" />
@@ -253,11 +272,13 @@ const { sentinel, isSticky } = useStickyMenuTabs()
           @filtersApplied="filterSearch"
           @filtersCleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
-        >
-          <template #filters="{ modelValue, updateField: updateFromMenu }">
+          :debugMode="debugMode || false"
+          >
+          <template #filters="searchFilterProps">
+            <!-- v-bind="searchFilterProps" -->
             <ProgramsFilterForm
-              :model-value="modelValue"
-              :update-field="updateFromMenu || updateField"
+              :model-value="searchFilterProps.modelValue"
+              :update-field="searchFilterProps.updateField"
               :mostras="props.mostras"
               :cinemas="props.cinemas"
               :paises="props.paises"
