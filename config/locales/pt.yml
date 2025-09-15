@@ -31,7 +31,7 @@ pt:
 
   filter:
     title: "Filtros"
-    date: "Data"
+    date: "Data de publicação"
     time: "Sessão"
     submostra: "Mostra"
     cinema: "Cinema"

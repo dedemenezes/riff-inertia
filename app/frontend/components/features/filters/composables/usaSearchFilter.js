@@ -80,7 +80,9 @@ export function useSearchFilter(props, filtersFromController = {}) {
       'Cast': 'elenco',
       'Elenco': 'elenco',
       "Caderno": "caderno",
-      "Category": "caderno"
+      "Category": "caderno",
+      "Data de publicação": "data",
+      "Publication date": "data"
     };
     const filterKey = filterKeyMap[filterToRemove.filter_label];
     if (filterKey) {

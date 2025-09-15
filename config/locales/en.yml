@@ -31,7 +31,7 @@ en:
 
   filter:
     title: "Filters"
-    date: "Date"
+    date: "Publication date"
     time: "Time"
     submostra: "Showcase"
     cinema: "Theater"

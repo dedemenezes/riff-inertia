@@ -25,6 +25,7 @@ import { useSearchFilter } from "@/components/features/filters/composables/usaSe
 const props = defineProps({
   breadcrumbs: { type: Array, default: () => []},
   tabBaseUrl: { type: String, default: "MISSING" },
+  dataLabel: { type: String, required: true },
   elements: { type: Array, default: () => []},
   cadernos: { type: Array, required: true },
   current_filters: { type: Object, default: () => {} },
@@ -39,6 +40,10 @@ console.log(filters);
 </script>
 
 <template>
+  <!-- DEBUGGER -->
+  <div v-if="false" class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">
+    <p><strong>Noticias.Index current_filters:</strong> {{ current_filters }}</p>
+  </div>
   <Head>
     <title>Noticias - Festival do Rio</title>
     <!-- TODO: Add metatags into all pages! -->
@@ -107,6 +112,7 @@ console.log(filters);
             <NoticiasFilterForm
               :model-value="modelValue"
               :update-field="updateField"
+              :data-label="props.dataLabel"
               :cadernos="props.cadernos"
             />
           </template>

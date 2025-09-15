@@ -17,6 +17,12 @@ class NoticiasController < ApplicationController
     #   )
     # end
 
+    if params[:data]
+      selected_date = { filter_display: params[:data], filter_value: params[:data], filter_label: I18n.t("filter.date") }
+      date_range = (Date.parse(selected_date[:filter_value])..Date.today)
+      scope = scope.where(data: date_range)
+    end
+
     if params[:caderno].present?
       selected_caderno = @cadernos.find { |c| c["filter_value"] == params[:caderno] }
       selected_filters[:caderno] = selected_caderno if selected_caderno
@@ -32,13 +38,10 @@ class NoticiasController < ApplicationController
     ordered = scope.order(created: :desc)
     @pagy, @noticias = pagy_infinite(ordered, current_page)
 
-    # Only set selectedCadernos if the param exists
-
-    # tabBaseUrl must be defined with path + selected filters
-
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
       tabBaseUrl: noticias_url,
+      dataLabel: I18n.t("filter.date"),
       cadernos: @cadernos,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
@@ -54,6 +57,7 @@ class NoticiasController < ApplicationController
         last: @pagy.last
       },
       current_filters: {
+        data: selected_date,
         caderno: selected_caderno
       }
     }
