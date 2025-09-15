@@ -41,12 +41,6 @@ const applyFilters = () => {
   const rawFilters = toRaw(props.modelValue);
   const cleanedFilters = cleanObject(rawFilters);
   // TODO: THINK. time processing maybe helper ✅ NOT USING
-  // if (cleanedFilters.startTime) {
-  //   cleanedFilters.startTime = toHHMM(cleanedFilters.startTime);
-  // }
-  // if (cleanedFilters.endTime) {
-  //   cleanedFilters.endTime = toHHMM(cleanedFilters.endTime);
-  // }
   emit("filtersApplied", cleanedFilters);
   closeMenu();
 };
