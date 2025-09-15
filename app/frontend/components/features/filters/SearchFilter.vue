@@ -92,40 +92,43 @@ const clearField = (key) => {
     <p><strong>SearchFilter and hasActiveFilter:</strong> {{ hasActiveFilters }}</p>
   </div>
 
-  <!-- Main filter content area -->
-  <div class="flex-grow flex flex-col space-y-600 overflow-y-auto">
-    <slot
-      name="filters"
-      :modelValue="props.modelValue"
-      :updateField="updateField"
-      :clearField="clearField"
-      :hasActiveFilters="hasActiveFilters"
-    >
-      <!-- Default content -->
-      <div class="text-center py-8">
-        <p class="text-gradient text-header-lg">No filter content provided</p>
-        <p class="text-sm text-gray-500 mt-2">
-          Use the #filters slot to add your filter form
-        </p>
-      </div>
-    </slot>
-  </div>
-  <div
-    class="shrink-0 py-400 actions justify-self-end sticky bottom-0 bg-white-transp-1000 z-10"
-  >
-    <!-- Action buttons (Apply/Clear) -->
-    <slot
-      name="actions"
-      :hasActiveFilters="hasActiveFilters"
-      :applyFilters="applyFilters"
-      :clearAllFilters="clearAllFilters"
-    >
-      <!-- DFAULT -->
-      <FilterActions
-        @clear="clearAllFilters"
-        @apply="applyFilters"
+  <!-- FULL HEIGHT CONTAINER -->
+  <div class="flex flex-col h-[100dvh]">
+
+    <!-- FILTER CONTENT SCROLLS -->
+    <div class="flex-grow overflow-y-auto space-y-600">
+      <slot
+        name="filters"
+        :modelValue="props.modelValue"
+        :updateField="updateField"
+        :clearField="clearField"
         :hasActiveFilters="hasActiveFilters"
-      />
-    </slot>
+      >
+        <div class="text-center py-8">
+          <p class="text-gradient text-header-lg">No filter content provided</p>
+          <p class="text-sm text-gray-500 mt-2">
+            Use the #filters slot to add your filter form
+          </p>
+        </div>
+      </slot>
+    </div>
+
+    <!-- STICKY ACTIONS (ALWAYS VISIBLE) -->
+    <div
+      class="shrink-0 sticky bottom-0 bg-white-transp-1000 z-50 py-400 z-100"
+    >
+      <slot
+        name="actions"
+        :hasActiveFilters="hasActiveFilters"
+        :applyFilters="applyFilters"
+        :clearAllFilters="clearAllFilters"
+      >
+        <FilterActions
+          @clear="clearAllFilters"
+          @apply="applyFilters"
+          :hasActiveFilters="hasActiveFilters"
+        />
+      </slot>
+    </div>
   </div>
 </template>
