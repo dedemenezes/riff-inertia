@@ -45,7 +45,7 @@ class NoticiasController < ApplicationController
         pages: @pagy.pages,
         last: @pagy.last
       },
-      selectedFilters: selected_filters
+      current_filters: selected_filters
     }
   end
 
