@@ -12,28 +12,29 @@ const props = defineProps({
 // Transform cadernos prop for ComboboxComponent format
 const cadernosOptions = computed(() => {
   return props.cadernos.map(caderno => ({
-    label: caderno.nome_pt,
-    value: caderno.permalink_pt,
+    label: caderno.filter_display,
+    value: caderno.filter_value,
   }));
 });
+const cadernoLabel = computed(() => props.cadernos[0].filter_label)
 
-const getCadernoObjectFromPermalink = (permalink) => {
-  return props.cadernos.find(c => c.permalink_pt === permalink) || null;
+const getCadernoObjectFromPermalink = (inputValue) => {
+  return props.cadernos.find(c => c.filter_value === inputValue) || null;
 };
 </script>
 
 <template>
   <!-- Article-specific filter content -->
   <AccordionGroup
-    text="Cadernos"
-    :isOpen="!!props.modelValue.cadernos"
+    :text="cadernoLabel"
+    :isOpen="!!props.modelValue.caderno"
   >
     <template v-slot:content>
       <div class="pt-400 overflow-hidden w-full">
         <ComboboxComponent
           :collection="cadernosOptions"
-          :modelValue="props.modelValue.cadernos?.permalink_pt || null"
-          @update:modelValue="(val) => props.updateField('cadernos', getCadernoObjectFromPermalink(val))"
+          :modelValue="props.modelValue.caderno?.filter_value || null"
+          @update:modelValue="(val) => props.updateField('caderno', getCadernoObjectFromPermalink(val))"
         />
       </div>
     </template>

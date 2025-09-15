@@ -4,39 +4,47 @@ class NoticiasController < ApplicationController
   include InfiniteScrollable
   # TODO: Breakdown into smaller,
   # more readable methods
+  before_action :set_filter_options, only: :index
+
   def index
     scope = Noticia.includes(:caderno).published
+    selected_filters = {}
 
-    if params[:search].present?
-      term = "%#{params[:search].downcase}%"
-      scope = scope.where(
-        "LOWER(titulo) LIKE ? OR LOWER(chamada) LIKE ?", term, term
-      )
+    # if params[:search].present?
+    #   term = "%#{params[:search].downcase}%"
+    #   scope = scope.where(
+    #     "LOWER(titulo) LIKE ? OR LOWER(chamada) LIKE ?", term, term
+    #   )
+    # end
+
+    if params[:caderno].present?
+      selected_caderno = @cadernos.find { |c| c["filter_value"] == params[:caderno] }
+      selected_filters[:caderno] = selected_caderno if selected_caderno
+      if I18n.locale == :pt
+        scope = scope.where(caderno: { permalink_pt: params[:caderno] })
+      else
+        scope = scope.where(caderno: { permalink_en: params[:caderno] })
+      end
     end
 
-    if params[:cadernos].present?
-      scope = scope.where(caderno: { permalink_pt: params[:cadernos] })
-    end
+    current_page = params[:page].to_i ||= 1
 
     ordered = scope.order(created: :desc)
-    @pagy, @noticias = pagy_infinite(ordered, params[:page])
+    @pagy, @noticias = pagy_infinite(ordered, current_page)
 
-    cadernos = Caderno.for_filters
     # Only set selectedCadernos if the param exists
-    selected_filters = {}
-    if params[:cadernos].present?
-      selected_caderno = cadernos.find { |c| c["permalink_pt"] == params[:cadernos] }
-      selected_filters[:cadernos] = selected_caderno if selected_caderno
-    end
+
+    # tabBaseUrl must be defined with path + selected filters
 
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
-      cadernos: cadernos,
+      tabBaseUrl: noticias_url,
+      cadernos: @cadernos,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Notícias", "" ],
       ),
-      noticias: @noticias.as_json(
+      elements: @noticias.as_json(
                 only: %i[id titulo permalink chamada imagem],
                 methods: [ :caderno_nome, :display_date ]
               ),
@@ -45,7 +53,9 @@ class NoticiasController < ApplicationController
         pages: @pagy.pages,
         last: @pagy.last
       },
-      current_filters: selected_filters
+      current_filters: {
+        caderno: selected_caderno
+      }
     }
   end
 
@@ -62,5 +72,16 @@ class NoticiasController < ApplicationController
         [ @noticia.breadcrumb_title, "" ]
       )
     }
+  end
+
+  private
+
+  def set_filter_options
+    # cadernos = Caderno.for_filters
+    if I18n.locale == :pt
+      @cadernos = Caderno.collection_without_edition_for(:permalink_pt, :nome_pt, :caderno)
+    else
+      @cadernos = Caderno.collection_without_edition_for(:permalink_en, :nome_en, :caderno)
+    end
   end
 end

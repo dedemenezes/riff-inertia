@@ -46,7 +46,7 @@ export function useSearchFilter(props, filtersFromController = {}) {
 
     // Build query params by rejecting any filter: null or ""
     const cleanedFilters = extractFilterValues(filtersFromSearchFilter || filters.value)
-
+    debugger
     // MAke search request and says which prop to update
     router.get(props.tabBaseUrl, cleanedFilters, {
       preserveScroll: true,
@@ -78,7 +78,9 @@ export function useSearchFilter(props, filtersFromController = {}) {
       'Director': 'direcao',
       'Direção': 'direcao',
       'Cast': 'elenco',
-      'Elenco': 'elenco'
+      'Elenco': 'elenco',
+      "Caderno": "caderno",
+      "Category": "caderno"
     };
     const filterKey = filterKeyMap[filterToRemove.filter_label];
     if (filterKey) {

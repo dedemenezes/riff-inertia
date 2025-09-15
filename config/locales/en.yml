@@ -43,7 +43,7 @@ en:
     festivais: "Festivals"
     premios: "Awards"
     palavras_chaves: "Keywords"
-
+    caderno: "Category"
   filter_by:
     date: "by date"
     time: "by time"
