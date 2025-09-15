@@ -1,10 +1,13 @@
 class ProgramsController < ApplicationController
+  include InfiniteScrollable
+
   EDICAO_ATUAL = 12
+  DATES_PER_PAGE = 1
   # TODO: MAKE THIS ENV VARIABLE?
 
-  include BreadcrumbsHelper
-  DATES_PER_PAGE = 1
-  include Pagy::Backend
+  include BreadcrumbsHelper, Pagy::Backend
+
+  before_action :set_pelicula_collection_service
 
   def index
     selected_filters = {}
@@ -111,7 +114,7 @@ class ProgramsController < ApplicationController
       actor_query = params[:elenco]
 
       # Find peliculas with this actor
-      pelicula_ids = Pelicula.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
+      pelicula_ids = @pelicula_collection_service.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
       if pelicula_ids.any?
         selected_actor = {
           "filter_display" => actor_query,
@@ -203,36 +206,6 @@ class ProgramsController < ApplicationController
 
   private
 
-  # TODO: Relocate this piece into a concern or helper
-  def pagy_infinite(collection, page_param)
-    current_page = (page_param || params[:page] || 1).to_i
-    limit = Pagy::DEFAULT[:limit] || 5
-
-    if current_page <= 1
-      # First page - normal pagination
-      pagy_result = pagy(collection, limit: limit)
-      pagy_result
-    else
-      # Infinite scroll - load all items from page 1 to current page
-      total_items_needed = current_page * limit
-
-      # Get the actual items
-      items = collection.limit(total_items_needed)
-
-      # Create proper pagy object with
-      # all the metadata need in the frontend
-      total_count = collection.count
-      pagy_obj = Pagy.new(
-        count: total_count,
-        limit: limit,
-        page: current_page,
-        # overflow: :last_page
-      )
-
-      [ pagy_obj, items ]
-    end
-  end
-
   def build_tab_url(date, filters)
     query_params = {}
     query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
@@ -279,8 +252,12 @@ class ProgramsController < ApplicationController
       methods: %i[display_sessao filter_value filter_display filter_label]
     )
 
-    @genres_filter = Pelicula.collection_for_genres
-    @directors_filter = Pelicula.collection_for_directors
-    @actors_filter = Pelicula.collection_for_actors
+    @genres_filter = @pelicula_collection_service.collection_for_genres
+    @directors_filter = @pelicula_collection_service.collection_for_directors
+    @actors_filter = @pelicula_collection_service.collection_for_actors
+  end
+
+  def set_pelicula_collection_service
+    @pelicula_collection_service = PeliculaCollectionService.new
   end
 end
