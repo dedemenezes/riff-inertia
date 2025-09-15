@@ -1,10 +1,11 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
 import { computed, defineAsyncComponent } from "vue";
-import AccordionGroup from "@/components/AccordionGroup.vue";
-const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
+const AccordionGroup = defineAsyncComponent(() => import("@/components/AccordionGroup.vue"));
+const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'));
+const SelectComponent = defineAsyncComponent(() => import("@/components/ui/SelectComponent.vue"));
 import SearchBar from "@/components/features/filters/SearchBar.vue";
-import SelectComponent from "@/components/ui/SelectComponent.vue";
+import { displayFormattedTime } from "@/lib/utils";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -43,28 +44,14 @@ const genreLabel = computed(() => props.genres[0].filter_label)
 const directorsOptions = computed(() => mapFilterOptions(props.directors));
 const directorLabel = computed(() => props.directors[0].filter_label)
 
-const page = usePage();
-
 const sessoesFilterOptions = computed(() => {
   // TODO: TRANSLATE ✅
+  const page = usePage();
+
   const locale = page.props.currentLocale  // or inject it however you're doing it
-
   return props.sessoes.map(sessao => {
-    // Convert "14h30" → "14:30"
-    const timeStr = sessao.filter_display.replace('h', ':');
-
-    // Create a Date object with today's date and the session time
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-
-    // Format the time
-    const formattedTime = new Intl.DateTimeFormat(locale, {
-      hour: 'numeric',
-      minute: 'numeric',
-    }).format(date);
-
-   return  {
+    const formattedTime = displayFormattedTime(sessao.filter_display)
+    return  {
       label: `${locale === 'pt' ? 'Início às' : 'Starts at'} ${formattedTime}`,
       value: sessao.filter_value,
     }
