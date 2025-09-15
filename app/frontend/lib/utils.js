@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -23,4 +24,16 @@ export function slugify(str) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
+}
+
+export function useUpdateWindowWidth() {
+  const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
+  const updateWidth = () => width.value = window.innerWidth
+
+  const isDesktop = computed(() => width.value >= 1024)
+
+  onMounted(() => window.addEventListener('resize', updateWidth))
+  onUnmounted(() => window.removeEventListener('resize', updateWidth))
+
+  return isDesktop
 }

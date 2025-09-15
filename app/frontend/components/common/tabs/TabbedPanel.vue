@@ -13,29 +13,32 @@ function select(tabId) {
 
 <template>
   <nav role="tablist" class="bg-white-transp-1000 flex gap-300 overflow-x-auto no-scroll-bar py-3">
-    <button
-      v-for="(tab, index) in props.tabs"
-      :key="tab.id"
-      @click="select(tab.id)"
-      class="p-0"
-    >
-      <!-- Border gradient wrapper -->
-      <div
-        :class="[
-          'pb-[2px]',
-          modelValue === tab.id
-            ? 'bg-gradient-to-r from-magenta-600 to-laranja-600'
-            : 'bg-neutrals-200'
-        ]"
+    <div class="w-full flex items-center justify-around md:justify-evenly">
+      <button
+        v-for="(tab, index) in props.tabs"
+        :key="tab.id"
+        @click="select(tab.id)"
+        class="p-0"
       >
-        <!-- Inner tab content -->
+        <!-- Border gradient wrapper -->
         <div
-          class="bg-white px-[7.3px] lg:px-[33.3px] pt-[6px] flex items-center justify-center text-body-strong-sm uppercase"
-          :class="modelValue === tab.id ? 'text-neutrals-900' : 'text-neutrals-700'"
+          :class="[
+            'pb-[2px]',
+            modelValue === tab.id
+              ? 'bg-gradient-to-r from-magenta-600 to-laranja-600'
+              : 'bg-neutrals-200'
+          ]"
         >
-          {{ tab.label }}
+          <!-- Inner tab content -->
+          <div
+            class="bg-white px-[7.3px] lg:px-[33.3px] pt-[6px] flex items-center justify-center text-body-strong-sm uppercase"
+            :class="modelValue === tab.id ? 'text-neutrals-900' : 'text-neutrals-700'"
+          >
+            {{ tab.label }}
+          </div>
         </div>
-      </div>
-    </button>
+      </button>
+
+    </div>
   </nav>
 </template>

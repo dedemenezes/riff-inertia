@@ -1,0 +1,27 @@
+<script setup>
+import IconChevronRight from '@/components/common/icons/navigation/IconChevronRight.vue';
+import ButtonText from '@/components/common/buttons/ButtonText.vue';
+
+const props = defineProps({
+  pelicula: { type: Object, required: true }
+})
+</script>
+
+<template>
+  <div class="flex flex-col gap-400 items-center justify-center">
+    <img
+      :src="props.pelicula.posterImageURL"
+      class="h-[251px] w-[201px] object-cover"
+      :alt="`${props.pelicula.display_titulo} banner`"
+      loading="lazy"
+    >
+    <!-- TRanslate website -->
+    <ButtonText variant="dark" class="gap-200" text="Ver fotos de imprensa" tag="a">
+      <template #icon>
+        <IconChevronRight height="16" width="16" color="inherit order-2"/>
+      </template>
+    </ButtonText>
+  </div>
+</template>
+
+<style scoped></style>

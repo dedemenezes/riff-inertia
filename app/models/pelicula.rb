@@ -13,15 +13,18 @@ class Pelicula < ApplicationRecord
     roteiro_team
     montagem_team
     imageURL
+    posterImageURL
     director_image
     carousel_images
     display_paises
     genre
     mostra_name
     mostra_tag_class
+    programacoesAsJson
     url
     mostra_display_name
   ]
+
   COLUMNS_NEEDED = %i[
     elenco_coord_int
     edicao_id
@@ -63,6 +66,20 @@ class Pelicula < ApplicationRecord
   def self.collection_for_actors
     collection_for(:elenco_coord_int, :elenco) do |actors|
       actors.flat_map { |cast| cast.split(",").map(&:strip) }
+    end
+  end
+
+  def programacoesAsJson
+    programacoes.order(:data).each_slice(3).map do |programacoes_slice|
+      programacoes_slice.map do |prog|
+        {
+          data: prog.display_date,
+          sessao: prog.display_sessao,
+          ingresso_url_venda: prog.ingresso_url_venda,
+          cinema_name: prog.cinema_name,
+          cinema_address: prog.cinema_address
+        }
+      end
     end
   end
 
@@ -127,12 +144,22 @@ class Pelicula < ApplicationRecord
     mostra.tag_class
   end
 
-  def imageURL(image_name = nil)
+  # TODO: Define default size for all images in the website
+  def posterImageURL(image_name = nil, size = "large")
+    image_name ||= self.imagem_producao
+      # TODO: CACHE
+      # TODO: IF WE WANT DIFFERENT SIZE?
+      # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
+    # end
+  end
+
+  def imageURL(image_name = nil, size = "original")
     image_name ||= self.imagem
       # TODO: CACHE
       # TODO: IF WE WANT DIFFERENT SIZE?
       # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
-      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/large/#{image_name}"
+      "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{size}/#{image_name}"
     # end
   end
 

@@ -4,7 +4,7 @@
 // TODO: Fix carousel só se tiver imagem para mostrar
 // TODO: E se filme nao tiver imagem na db?
 
-import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 
 const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
 const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
@@ -15,6 +15,9 @@ const IconChevronLeft = defineAsyncComponent(() => import('@/components/common/i
 const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
 const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
 const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
+const CarouselComponent = defineAsyncComponent(() => import('@/components/ui/CarouselComponent.vue'));
+
+import { useUpdateWindowWidth } from '@/lib/utils';
 
 const props = defineProps({
   rootUrl: { type: String, required: true },
@@ -24,19 +27,15 @@ const props = defineProps({
 });
 
 const tabs = [
-  { id: 'informacoes', label: 'Informações' },
-  { id: 'sessoes', label: 'Sessões' },
-  { id: 'creditos', label: 'Créditos' }
+  { id: 'first', label: 'Informações' },
+  { id: 'second', label: 'Sessões' },
+  { id: 'third', label: 'Créditos' }
 ]
-const activeTab = ref(tabs[0].id)
 
-const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
-const isDesktop = computed(() => width.value >= 740)
+const startingTab = 0
+const activeTab = ref(tabs[startingTab].id)
 
-const updateWidth = () => width.value = window.innerWidth
-
-onMounted(() => window.addEventListener('resize', updateWidth))
-onUnmounted(() => window.removeEventListener('resize', updateWidth))
+const isDesktop = useUpdateWindowWidth();
 </script>
 
 <template>
@@ -102,7 +101,8 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
       </TwContainer>
     </div>
   </header>
-     <!-- Tabs -->
+
+  <!-- Tabs -->
   <TwContainer>
 
     <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center lg:hidden" />
@@ -110,43 +110,30 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
     <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
 
-      <section v-show="activeTab === 'creditos' || isDesktop" class="w-full sm:w-1/3">
+      <section v-if="activeTab === 'third' || isDesktop" class="w-full lg:w-1/3">
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         <Suspense>
-          <CreditosContent
-            :director_image="props.pelicula.director_image"
-            :diretor_coord_int="props.pelicula.diretor_coord_int"
-            :roteiro_team="props.pelicula.roteiro_team"
-            :fotografia_team="props.pelicula.fotografia_team"
-            :montagem_team="props.pelicula.montagem_team"
-            :diretor_team="props.pelicula.diretor_team"
-            :producaoempresa_team="props.pelicula.producaoempresa_team"
-          />
+          <CreditosContent :pelicula="pelicula"/>
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
         </Suspense>
       </section>
 
-      <section v-show="activeTab === 'informacoes' || isDesktop" class="w-full sm:w-2/3">
-        <Suspense>
-          <InformacoesContent
-            :display_sinopse="props.pelicula.display_sinopse"
-            :imageURL="props.pelicula.imageURL"
-            :display_titulo="props.pelicula.display_titulo"
-            :mostra_tag_class="props.pelicula.mostra_tag_class"
-            :mostra_name="props.pelicula.mostra_name"
-            :carousel_images="props.pelicula.carousel_images"
-          />
-          <template #fallback>
-            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
-          </template>
-        </Suspense>
-      </section>
+      <section v-if="activeTab === 'first' || isDesktop" class="w-full lg:w-2/3">
 
-      <section v-show="activeTab === 'sessoes' || isDesktop" class="w-full sm:w-1/3 space-y-400">
+          <Suspense>
+            <InformacoesContent :pelicula="pelicula"
+            />
+            <template #fallback>
+              <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+            </template>
+          </Suspense>
+        </section>
+
+      <section v-if="activeTab === 'second' || isDesktop" class="w-full lg:w-1/3 space-y-400">
         <Suspense>
-          <SessoesContent />
+          <SessoesContent :sessions="pelicula.programacoesAsJson"/>
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
@@ -154,6 +141,13 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth))
       </section>
     </div>
   </TwContainer>
+
+  <Suspense v-if="isDesktop">
+    <CarouselComponent :full-screen="true" :imageCollection="props.pelicula.carousel_images" :class-names="['pt-800']" />
+    <template #fallback>
+      <div class="h-48 bg-gray-200 animate-pulse rounded pt-800"></div>
+    </template>
+  </Suspense>
 </template>
 
 <style scoped>
