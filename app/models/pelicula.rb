@@ -1,5 +1,6 @@
 class Pelicula < ApplicationRecord
   include TeamParseable, Filterable, Displayable, Imageable
+  include Rails.application.routes.url_helpers
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -19,7 +20,10 @@ class Pelicula < ApplicationRecord
     mostra_name
     mostra_tag_class
     programacoesAsJson
+    url
+    mostra_display_name
   ]
+
   COLUMNS_NEEDED = %i[
     elenco_coord_int
     edicao_id
@@ -102,6 +106,10 @@ class Pelicula < ApplicationRecord
     mostra.filter_display
   end
 
+  def mostra_display_name
+    mostra.filter_display_name
+  end
+
   def mostra_tag_class
     mostra.tag_class
   end
@@ -111,7 +119,6 @@ class Pelicula < ApplicationRecord
 
     imageURL(imagem_diretor)
   end
-
 
   # # Caches actor names with pelicula id
   # def self.actor_to_pelicula_mapping(edicao_id)
@@ -147,4 +154,8 @@ class Pelicula < ApplicationRecord
 
   #   where(id: pelicula_ids)
   # end
+
+  def url
+    pelicula_path(permalink: self.permalink)
+  end
 end
