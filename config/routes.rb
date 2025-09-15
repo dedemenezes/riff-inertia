@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :edicoes_anteriores, only: %i[ index ]
     resources :mostras, only: %i[ index show ], param: :category
     resources :peliculas, only: %i[ index show ], param: :permalink
+    resources :cinemas, only: :index
   end
 
 

@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
       "Edição 2024": [
         { name: "Todos os filmes", path: peliculas_path },
         { name: "Mostras", path: mostras_path },
-        { name: "Cinemas", path: "" },
+        { name: "Cinemas", path: cinemas_path },
         { name: "Júri", path: "" },
         { name: "Equipe", path: "" }
       ],
@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
       "edicao" => [
         { name: "Todos os Filmes", path: peliculas_path, icon: "program" },
         { name: "Mostras", path: mostras_path, icon: "grid" },
-        { name: "Cinemas", path: "", icon: "pin" },
+        { name: "Cinemas", path: cinemas_path, icon: "pin" },
         { name: "Juri", path: "", icon: "trophy" },
         { name: "Equipe", path: "", icon: "people" }
       ],

@@ -22,6 +22,7 @@ export { default as IconBoxArrowUp } from "./navigation/IconBoxArrowUp.vue";
 // export { default as IconInfo } from "./misc/IconInfo.vue";
 export { default as IconClock } from "./misc/IconClock.vue";
 export { default as IconLink } from "./misc/IconLink.vue";
+export { default as IconSeat } from "./misc/IconSeat.vue";
 
 // Programação
 export { default as IconProgram } from "./misc/IconProgram.vue";
