@@ -69,12 +69,12 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, elements.length
 
     elements.each do |element|
-      assert_includes [ "TEST FELIX TWO titulo" ], element["titulo"]
+      assert_includes [ "ENGLISH TEST FELIX ONE titulo" ], element["titulo"]
     end
   end
 
   test "filters by date - 2025-08-05 - returns all" do
-    get noticias_url(locale: :en), params: { data: "2025-08-05" }
+    get noticias_url(locale: :pt), params: { data: "2025-08-05" }
 
     assert_response :success
     props = inertia_props
@@ -90,7 +90,7 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "filters by date in PT - 2025-08-11 returns only one" do
-    get noticias_url(locale: :en), params: { data: "2025-08-11" }
+    get noticias_url(locale: :pt), params: { data: "2025-08-11" }
 
     assert_response :success
     props = inertia_props
@@ -136,7 +136,7 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
 
     elements = props["elements"]
     assert_equal 1, elements.length
-    assert_equal "TEST FELIX TWO titulo", elements.first["titulo"]
+    assert_equal "ENGLISH TEST FELIX ONE titulo", elements.first["titulo"]
 
     # Filters preserved
     assert_equal "2025-08-11", props["current_filters"]["data"]["filter_value"]
