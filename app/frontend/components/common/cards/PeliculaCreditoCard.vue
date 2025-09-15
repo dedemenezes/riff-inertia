@@ -1,28 +1,16 @@
 <script setup>
-import { computed } from 'vue';
 const props = defineProps({
   header: { type: String, default: "direção"},
   pelicula: { type: Object, required: true }
 })
-
-// TODO: Think about sending it
-// from controller in order
-// to trasnlate keys. Those are used
-// to display the team name in the view
-const teams = computed(() => {
-  return { roteiro: props.pelicula.roteiro_team,
-    "direção": props.pelicula.diretor_team,
-    fotografia: props.pelicula.fotografia_team,
-    "Produção Empresa": props.pelicula.producaoempresa_team,
-    montagem: props.pelicula.montagem_team
-  }
-})
-
-console.log(props.pelicula);
-
 </script>
 
 <template>
+  <!-- Debug info -->
+  <div v-if="false" class="bg-amarelo-200 p-2 mb-4 text-xs">
+    <p><strong>PeliculaCreditoCard teams :</strong> {{ teams }} </p>
+    <p><strong>PeliculaCreditoCard teamsfromController :</strong> {{ props.pelicula.teams }} </p>
+  </div>
   <div class="credito__card">
     <div class="pb-600">
       <h3 class="text-overline text-neutrals-700 uppercase pb-300">{{ header }}</h3>
@@ -42,7 +30,7 @@ console.log(props.pelicula);
     <hr class="text-neutrals-300">
     <div class="space-y-400 pt-400">
       <!-- { roteiro: [], fotografia: [], montagem: [],  direção: [], producaoempresa: []} -->
-      <div class="grid grid-cols-4" v-for="([name, members]) in Object.entries(teams)">
+      <div class="grid grid-cols-4" v-for="([name, members]) in Object.entries(props.pelicula.teams)">
         <p class="text-overline text-neutrals-700 uppercase pb-200">{{ name }}</p>
         <ul class="col-span-2 flex flex-col">
           <li v-for="member in members" :key="member">
