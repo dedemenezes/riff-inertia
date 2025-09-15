@@ -1,4 +1,5 @@
 <script setup>
+import { usePage } from "@inertiajs/vue3";
 import { computed, defineAsyncComponent } from "vue";
 import AccordionGroup from "@/components/AccordionGroup.vue";
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
@@ -42,14 +43,32 @@ const genreLabel = computed(() => props.genres[0].filter_label)
 const directorsOptions = computed(() => mapFilterOptions(props.directors));
 const directorLabel = computed(() => props.directors[0].filter_label)
 
+const page = usePage();
 
-// Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
-  // TODO: TRANSLATE
-  return props.sessoes.map(sessao => ({
-    label: `Início às ${sessao.filter_display}`,
-    value: sessao.filter_value,
-  }));
+  // TODO: TRANSLATE ✅
+  const locale = page.props.currentLocale  // or inject it however you're doing it
+
+  return props.sessoes.map(sessao => {
+    // Convert "14h30" → "14:30"
+    const timeStr = sessao.filter_display.replace('h', ':');
+
+    // Create a Date object with today's date and the session time
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+
+    // Format the time
+    const formattedTime = new Intl.DateTimeFormat(locale, {
+      hour: 'numeric',
+      minute: 'numeric',
+    }).format(date);
+
+   return  {
+      label: `${locale === 'pt' ? 'Início às' : 'Starts at'} ${formattedTime}`,
+      value: sessao.filter_value,
+    }
+  })
 });
 const sessaoLabel = computed(() => props.sessoes[0].filter_label)
 
@@ -58,7 +77,7 @@ const getSelectedFrom = (collectionName, value) => {
 }
 
 const getQueryObject = (filter_value) => {
-  // TODO: REFACTOR
+  // TODO: REFACTOR ⏭️
   // I'm building here beause the other get here as collection
   // everything gets here from controller current_filters prop
   // this is just one so i cant search for it so we build

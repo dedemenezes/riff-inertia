@@ -14,7 +14,7 @@ const props = defineProps({
   <div class="credito__card">
     <div class="pb-600">
       <h3 class="text-overline text-neutrals-700 uppercase pb-300">{{ header }}</h3>
-      <!-- TODO: TRANSLATE -->
+      <!-- TODO: TRANSLATE ✅ -->
       <div class="card__director rounded-200 w-1/2 sm:w-1/3">
         <img
           :src="pelicula.director_image"

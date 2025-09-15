@@ -8,6 +8,7 @@ class Pelicula < ApplicationRecord
     display_sinopse
     genre
     display_paises
+    displayTeamsHeader
     teams
     imageURL
     posterImageURL

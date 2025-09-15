@@ -7,7 +7,7 @@ const props = defineProps({
   session: { type: Object, required: true }
 })
 
-// TODO: date display
+// TODO: date display ✅
 </script>
 
 <template>
