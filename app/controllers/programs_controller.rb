@@ -246,7 +246,7 @@ class ProgramsController < ApplicationController
                               methods: %i[filter_display filter_value filter_label]
                             )
 
-    @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort.as_json(
+    @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort_by { |it| it.sessao }.as_json(
       only: %i[sessao],
       methods: %i[display_sessao filter_value filter_display filter_label]
     )
