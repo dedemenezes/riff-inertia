@@ -115,7 +115,7 @@ const clearField = (key) => {
 
     <!-- STICKY ACTIONS (ALWAYS VISIBLE) -->
     <div
-      class="shrink-0 sticky bottom-0 bg-white-transp-1000 z-50 py-400 z-100"
+      class="shrink-0 sticky bottom-0 bg-white-transp-1000 z-50 py-400"
     >
       <slot
         name="actions"
