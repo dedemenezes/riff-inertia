@@ -1,5 +1,6 @@
 class Pelicula < ApplicationRecord
   include TeamParseable, Filterable, Displayable, Imageable
+  include Rails.application.routes.url_helpers
 
   CAROUSEL_IMAGES_AMOUNT = 3
   METHODS_NEEDED = %i[
@@ -19,7 +20,10 @@ class Pelicula < ApplicationRecord
     mostra_name
     mostra_tag_class
     programacoesAsJson
+    url
+    mostra_display_name
   ]
+
   COLUMNS_NEEDED = %i[
     elenco_coord_int
     edicao_id
@@ -102,6 +106,10 @@ class Pelicula < ApplicationRecord
     mostra.filter_display
   end
 
+  def mostra_display_name
+    mostra.filter_display_name
+  end
+
   def mostra_tag_class
     mostra.tag_class
   end
@@ -112,39 +120,7 @@ class Pelicula < ApplicationRecord
     imageURL(imagem_diretor)
   end
 
-
-  # # Caches actor names with pelicula id
-  # def self.actor_to_pelicula_mapping(edicao_id)
-  #   Rails.cache.fetch("actor-pelicula-mapping-#{edicao_id}", expires_in: 6.hours) do
-  #     mapping = {}
-
-  #     where(edicao_id: edicao_id)
-  #       .where.not(elenco_coord_int: [ nil, "" ])
-  #       .pluck(:id, :elenco_coord_int)
-  #       .each do |pelicula_id, cast_string|
-  #         cast_string.split(",").each do |actor|
-  #           clean_actor = actor.strip
-  #           next if clean_actor.blank?
-
-  #           mapping[clean_actor] ||= []
-  #           mapping[clean_actor.downcase] ||= []
-  #           # Store both exact name and normalized version
-  #           mapping[clean_actor] << pelicula_id
-  #           mapping[clean_actor.downcase] << pelicula_id
-  #         end
-  #       end
-
-  #     # Remove duplicates and return
-  #     mapping.each { |ky, value| mapping[ky] = value.uniq }
-  #     mapping
-  #   end
-  # end
-
-  # # get from cache and search for pelicula ids
-  # def self.with_actor(actor_name, edicao_id)
-  #   mapping = actor_to_pelicula_mapping(edicao_id)
-  #   pelicula_ids = mapping[actor_name] || mapping[actor_name.downcase] || []
-
-  #   where(id: pelicula_ids)
-  # end
+  def url
+    pelicula_path(permalink: self.permalink)
+  end
 end
