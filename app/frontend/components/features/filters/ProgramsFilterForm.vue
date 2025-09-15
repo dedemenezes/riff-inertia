@@ -1,10 +1,11 @@
 <script setup>
+// TODO: REFAC SIMPLE TRANSLATIONS BUT AFTER RELEASE
 import { computed, defineAsyncComponent } from "vue";
 const AccordionGroup = defineAsyncComponent(() => import("@/components/AccordionGroup.vue"));
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'));
 const SelectComponent = defineAsyncComponent(() => import("@/components/ui/SelectComponent.vue"));
 import SearchBar from "@/components/features/filters/SearchBar.vue";
-import { displayFormattedTime } from "@/lib/utils";
+import { displayFormattedTime, simpleTranslation } from "@/lib/utils";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -78,6 +79,7 @@ const getQueryObject = (filter_value) => {
      <SearchBar
        :modelValue="props.modelValue.query?.filter_value"
        @update:modelValue="(val) => props.updateField('query', getQueryObject(val))"
+
        />
    </div>
 
@@ -106,6 +108,7 @@ const getQueryObject = (filter_value) => {
        :collection="mostrasFilterOptions"
        :modelValue="props.modelValue.mostra?.filter_value || null"
        @update:modelValue="(val) => props.updateField('mostra', getSelectedFrom('mostras', val))"
+       :placeholder="simpleTranslation('Selecione uma mostra', 'Choose a showcase')"
        />
       </div>
     </template>
@@ -122,6 +125,7 @@ const getQueryObject = (filter_value) => {
         :collection="cinemasFilterOptions"
         :modelValue="props.modelValue.cinema?.filter_value || null"
         @update:modelValue="(val) => props.updateField('cinema', getSelectedFrom('cinemas', val))"
+        :placeholder="simpleTranslation('Selecione um cinema', 'Choose a theater')"
         />
       </div>
     </template>
@@ -138,6 +142,7 @@ const getQueryObject = (filter_value) => {
         :collection="genresFilterOptions"
         :modelValue="props.modelValue.genero?.filter_value || null"
         @update:modelValue="(val) => props.updateField('genero', getSelectedFrom('genres', val))"
+       :placeholder="simpleTranslation('Selecione um gênero', 'Choose a genre')"
         />
       </div>
     </template>
@@ -154,6 +159,7 @@ const getQueryObject = (filter_value) => {
         :collection="paisesFilterOptions"
         :modelValue="props.modelValue.pais?.filter_value || null"
         @update:modelValue="(val) => props.updateField('pais', getSelectedFrom('paises', val))"
+       :placeholder="simpleTranslation('Selecione um país', 'Choose a country')"
         />
       </div>
     </template>
@@ -170,6 +176,7 @@ const getQueryObject = (filter_value) => {
         :collection="directorsOptions"
         :modelValue="props.modelValue.direcao?.filter_value || null"
         @update:modelValue="(val) => props.updateField('direcao', getSelectedFrom('directors', val))"
+       :placeholder="simpleTranslation('Selecione um diretor', 'Choose a director')"
         />
       </div>
     </template>
@@ -186,6 +193,7 @@ const getQueryObject = (filter_value) => {
         :collection="actorsFilterOptions"
         :modelValue="props.modelValue.elenco?.filter_value || null"
         @update:modelValue="(val) => props.updateField('elenco', getSelectedFrom('actors', val))"
+       :placeholder="simpleTranslation('Selecione um ator(a)', 'Choose an actor')"
         />
       </div>
     </template>
