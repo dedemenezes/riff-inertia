@@ -10,6 +10,7 @@ batman:
   edicao_id: 12
   mostra: sci_fi
   imagem: "batman.jpg"
+  imagem_producao: "p01_batman.jpg"
   duracao_coord_int: 140
   diretor_coord_int: "Christopher Nolan"
   elenco_coord_int: "Christian Bale, Michael Caine"
@@ -31,6 +32,7 @@ special_char:
   edicao_id: 12
   mostra: sci_fi
   imagem: "sao-paulo.jpg"
+  imagem_producao: "p01_sao-paulo.jpg"
   duracao_coord_int: 140
   diretor_coord_int: "Marcos Jorge"
   elenco_coord_int: "Babu Santana, Fabiula Nascimento"
@@ -52,6 +54,7 @@ matrix:
   edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
+  imagem_producao: "p01_matrix.jpg"
   duracao_coord_int: 136
   diretor_coord_int: "Wachowskis"
   elenco_coord_int: "Keanu Reeves, Laurence Fishburne"
@@ -74,6 +77,7 @@ test_<%= i %>:
   edicao_id: 12
   mostra: sci_fi
   imagem: "matrix.jpg"
+  imagem_producao: "p01_matrix.jpg"
   duracao_coord_int: 136
   diretor_coord_int: "Wachowskis"
   elenco_coord_int: "Keanu Reeves, Laurence Fishburne"
@@ -99,6 +103,7 @@ cidade_perdida:
   edicao_id: 12
   mostra: competicao_nacional
   imagem: "cidade_perdida.jpg"
+  imagem_producao: "p01_cidade_perdida.jpg"
   duracao_coord_int: 120
   diretor_coord_int: "João Silva"
   elenco_coord_int: "Maria Santos , Pedro Costa "
@@ -120,6 +125,7 @@ amor_brasilia:
   edicao_id: 12
   mostra: competicao_nacional
   imagem: "amor_brasilia.jpg"
+  imagem_producao: "p01_amor_brasilia.jpg"
   duracao_coord_int: 95
   diretor_coord_int: "Ana Pereira"
   elenco_coord_int: "Carlos Lima, Fernanda Rocha"
@@ -141,6 +147,7 @@ berlin_nights:
   edicao_id: 12
   mostra: mostra_internacional
   imagem: "berlin_nights.jpg"
+  imagem_producao: "p01_berlin_nights.jpg"
   duracao_coord_int: 110
   diretor_coord_int: "Hans Mueller"
   elenco_coord_int: "Klaus Weber, Ingrid Schmidt"
@@ -162,6 +169,7 @@ paris_stories:
   edicao_id: 12
   mostra: mostra_internacional
   imagem: "paris_stories.jpg"
+  imagem_producao: "p01_paris_stories.jpg"
   duracao_coord_int: 105
   diretor_coord_int: "Pierre Dubois"
   elenco_coord_int: "Jean Martin, Sophie Laurent, François Truffaut, Jean-Luc Godard"
@@ -183,6 +191,7 @@ amazonia_selvagem:
   edicao_id: 12
   mostra: documentarios
   imagem: "amazonia.jpg"
+  imagem_producao: "p01_amazonia.jpg"
   duracao_coord_int: 85
   diretor_coord_int: "Roberto Oliveira"
   elenco_coord_int: "Ailton Krenak"
@@ -204,6 +213,7 @@ cidade_transformacao:
   edicao_id: 12
   mostra: documentarios
   imagem: "cidade_transformacao.jpg"
+  imagem_producao: "p01_cidade_transformacao.jpg"
   duracao_coord_int: 75
   diretor_coord_int: "Marina Costa"
   elenco_coord_int: ""

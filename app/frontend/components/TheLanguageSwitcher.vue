@@ -7,7 +7,6 @@ const LANGUAGES = [
   { code: 'pt', name: 'Portuguese' }
 ]
 
-
 const page = usePage()
 
 const currentLocale = computed(() => {
@@ -20,7 +19,8 @@ const currentLocale = computed(() => {
 const switchLanguage = (targetLocale) => {
   if (targetLocale === currentLocale.value) return
 
-  window.location.href = `/${targetLocale}`
+  const newPath = window.location.pathname.replace(new RegExp("/(pt|en)"), `/${targetLocale}`)
+  window.location.href = newPath
 }
 
 const isCurrentLanguage = (languageCode) => languageCode === currentLocale.value

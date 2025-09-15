@@ -1,42 +1,53 @@
 class NoticiasController < ApplicationController
   include BreadcrumbsHelper
   include Pagy::Backend
-
+  include InfiniteScrollable
   # TODO: Breakdown into smaller,
   # more readable methods
+  before_action :set_filter_options, only: :index
+
   def index
     scope = Noticia.includes(:caderno).published
+    selected_filters = {}
 
-    if params[:search].present?
-      term = "%#{params[:search].downcase}%"
-      scope = scope.where(
-        "LOWER(titulo) LIKE ? OR LOWER(chamada) LIKE ?", term, term
-      )
+    # if params[:search].present?
+    #   term = "%#{params[:search].downcase}%"
+    #   scope = scope.where(
+    #     "LOWER(titulo) LIKE ? OR LOWER(chamada) LIKE ?", term, term
+    #   )
+    # end
+
+    if params[:data]
+      selected_date = { filter_display: params[:data], filter_value: params[:data], filter_label: I18n.t("filter.date") }
+      date_range = (Date.parse(selected_date[:filter_value])..Date.today)
+      scope = scope.where(data: date_range)
     end
 
-    if params[:cadernos].present?
-      scope = scope.where(caderno: { permalink_pt: params[:cadernos] })
+    if params[:caderno].present?
+      selected_caderno = @cadernos.find { |c| c["filter_value"] == params[:caderno] }
+      selected_filters[:caderno] = selected_caderno if selected_caderno
+      if I18n.locale == :pt
+        scope = scope.where(caderno: { permalink_pt: params[:caderno] })
+      else
+        scope = scope.where(caderno: { permalink_en: params[:caderno] })
+      end
     end
+
+    current_page = params[:page].to_i ||= 1
 
     ordered = scope.order(created: :desc)
-    @pagy, @noticias = pagy_infinite(ordered, params[:page])
-
-    cadernos = Caderno.for_filters
-    # Only set selectedCadernos if the param exists
-    selected_filters = {}
-    if params[:cadernos].present?
-      selected_caderno = cadernos.find { |c| c["permalink_pt"] == params[:cadernos] }
-      selected_filters[:cadernos] = selected_caderno if selected_caderno
-    end
+    @pagy, @noticias = pagy_infinite(ordered, current_page)
 
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
-      cadernos: cadernos,
+      tabBaseUrl: noticias_url,
+      dataLabel: I18n.t("filter.date"),
+      cadernos: @cadernos,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Notícias", "" ],
       ),
-      noticias: @noticias.as_json(
+      elements: @noticias.as_json(
                 only: %i[id titulo permalink chamada imagem],
                 methods: [ :caderno_nome, :display_date ]
               ),
@@ -45,7 +56,10 @@ class NoticiasController < ApplicationController
         pages: @pagy.pages,
         last: @pagy.last
       },
-      selectedFilters: selected_filters
+      current_filters: {
+        data: selected_date,
+        caderno: selected_caderno
+      }
     }
   end
 
@@ -64,32 +78,14 @@ class NoticiasController < ApplicationController
     }
   end
 
-  # TODO: Relocate this piece into a concern or helper
-  def pagy_infinite(collection, page_param)
-    current_page = (page_param || params[:page] || 1).to_i
-    limit = Pagy::DEFAULT[:limit] || 20
+  private
 
-    if current_page <= 1
-      # First page - normal pagination
-      pagy_result = pagy(collection, limit: limit)
-      pagy_result
+  def set_filter_options
+    # cadernos = Caderno.for_filters
+    if I18n.locale == :pt
+      @cadernos = Caderno.collection_without_edition_for(:permalink_pt, :nome_pt, :caderno)
     else
-      # Infinite scroll - load all items from page 1 to current page
-      total_items_needed = current_page * limit
-
-      # Get the actual items
-      items = collection.limit(total_items_needed)
-
-      # Create proper pagy object with
-      # all the metadata need in the frontend
-      total_count = collection.count
-      pagy_obj = Pagy.new(
-        count: total_count,
-        limit: limit,
-        page: current_page
-      )
-
-      [ pagy_obj, items ]
+      @cadernos = Caderno.collection_without_edition_for(:permalink_en, :nome_en, :caderno)
     end
   end
 end

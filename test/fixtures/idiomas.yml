@@ -1,0 +1,7 @@
+port:
+  nome: "Português"
+  locale: "pt-br"
+
+ing:
+  nome: "Inglês"
+  locale: "en"

@@ -83,7 +83,7 @@ const isDesktop = useUpdateWindowWidth();
               aria-hidden="true"
               class="h-[16px] select-none"
             />
-            <p class="text-overline">{{ props.pelicula.duracao_coord_int }}</p>
+            <p class="text-overline">{{ props.pelicula.duracao_coord_int }}'</p>
             <img
               src="@assets/icons/divisor_black.svg"
               alt=""

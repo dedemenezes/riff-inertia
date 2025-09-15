@@ -107,7 +107,7 @@ onUnmounted(() => {
               :key="navText"
               :text="navText"
             >
-              <template v-slot:content>
+            <template v-slot:content>
                 <ul class="ps-600 pt-400 space-y-800">
                   <li
                     v-for="item in subItems"
@@ -117,7 +117,7 @@ onUnmounted(() => {
                       @click="closeMenu"
                       :href="item.path"
                     >
-                      {{ item.description }}
+                      {{ item.name }}
                     </Link>
                   </li>
                 </ul>

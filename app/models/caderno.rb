@@ -1,4 +1,5 @@
 class Caderno < ApplicationRecord
+  include Filterable
   has_many :noticias
 
   def self.for_filters

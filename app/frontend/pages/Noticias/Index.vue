@@ -4,9 +4,8 @@
 
 // 1. 📦 Node.js built-ins (if used)
 // 2. 🔌 External packages (npm, libraries)
-import { Head, router } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 // 3. 🧠 Internal libs/helpers/utilities
-import { applyFiltersToQuery } from "@/lib/applyFiltersToQuery";
 
 // 4. 🧩 Global components / shared UI
 import TwContainer from "@/components/layout/TwContainer.vue";
@@ -15,156 +14,111 @@ import TagFilter from "@/components/common/tags/TagFilter.vue";
 
 // 5. 🧱 Feature-specific components
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
-import MobileFilterMenu from "@/components/features/filters/MobileFilterMenu.vue";
+import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import NoticiasFilterForm from "@/components/features/filters/NoticiasFilterForm.vue";
-import PagyPagination from "../PagyPagination.vue"; // relative path (usually for siblings only)
+import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
+import IndexArticleCard from "@/components/common/cards/IndexArticleCard.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
+import { useSearchFilter } from "@/components/features/filters/composables/usaSearchFilter";
 
 const props = defineProps({
   breadcrumbs: { type: Array, default: () => []},
-  noticias: { type: Array, default: () => []},
+  tabBaseUrl: { type: String, default: "MISSING" },
+  dataLabel: { type: String, required: true },
+  elements: { type: Array, default: () => []},
   cadernos: { type: Array, required: true },
-  selectedFilters: { type: Object, default: () => {} },
+  current_filters: { type: Object, default: () => {} },
   pagy: { type: Object, required: true }
 })
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
+const { filters, filterSearch, removeQuery } = useSearchFilter(props)
+console.log(filters);
 
-const filterSearch = (filtersFromChild) => {
-  // console.log("Filters from MobileFilterMenu:", filtersFromChild);
-
-  const params = applyFiltersToQuery(filtersFromChild)
-  const query = params.toString()
-  router.visit(`/noticias?${query}`, {
-    preserveScroll: true,
-    preserveState: true,
-    only: ["noticias", "selectedFilters"],
-  });
-};
-
-const removeQuery = (item) => {
-  const newFilters = { ...props.selectedFilters };
-
-  for (const [key, value] of Object.entries(newFilters)) {
-    if (value?.permalink_pt === item) {
-      newFilters[key] = null;
-    }
-  }
-
-  const params = applyFiltersToQuery(newFilters)
-  const query = params.toString()
-
-  router.visit(`/noticias?${query}`, {
-    preserveScroll: true,
-    preserveState: false, // full reset
-    only: ["noticias", "selectedFilters"],
-  });
-}
-
-const clearSearchQuery = () => {
-  const currentUrl = new URL(window.location.href);
-  const hasUrlParams = currentUrl.searchParams.toString() !== "";
-
-  if (!hasUrlParams) {
-    // console.log("Already clean - no request needed");
-    return;
-  }
-
-  router.visit(`/noticias`, {
-    preserveScroll: true,
-    preserveState: true,
-    only: [ "noticias", "selectedFilters" ]
-  })
-}
 </script>
 
 <template>
+  <!-- DEBUGGER -->
+  <div v-if="false" class="bg-amarelo-200 p-2 mb-4 text-md text-neutrals-900">
+    <p><strong>Noticias.Index current_filters:</strong> {{ current_filters }}</p>
+  </div>
   <Head>
     <title>Noticias - Festival do Rio</title>
     <!-- TODO: Add metatags into all pages! -->
   </Head>
+    <!-- <Breadcrumb  :crumbs="props.breadcrumbs"/> -->
   <TwContainer>
-    <Breadcrumb  :crumbs="props.breadcrumbs"/>
-    <!-- search & ordering -->
-    <div
-      class="filter flex items-center justify-between md:gap-800 lg:gap-1200 py-300"
-    >
+    <Breadcrumb :crumbs="props.breadcrumbs" />
+  </TwContainer>
+  <TwContainer class="relative">
+    <div class="filter flex lg:hidden items-center justify-end py-300 bg-white">
       <MobileTrigger @open-menu="openMenu" />
-
-      <!-- Ordering -->
-      <div class="flex items-center gap-300">
-        <span class="text-body-strong-sm uppercase text-secondary-gray"
-          >A - Z</span
-        >
-        <img
-          src="@assets/icons/divisor.svg"
-          alt="divisor"
-          height="16px"
-          width="1px"
-        />
-        <span class="text-body-strong-sm uppercase text-neutrals-900">
-          <!-- {{$t("filter_by.date")}} -->
-           por Data
-        </span>
-      </div>
-      <!-- Ordering -->
     </div>
-    <!-- search & ordering -->
 
-    <!-- mobile filter content -->
-    <transition name="slide-left">
-      <MobileFilterMenu
-        :is-open="isFilterMenuOpen"
-        :initialFilters="props.selectedFilters"
-        @filtersApplied="filterSearch"
-        @filtersCleared="clearSearchQuery"
-        @close-filter-menu="closeMenu"
-      >
-        <template #filters="{ modelValue, updateField }">
-          <!-- class="py-600" -->
-          <NoticiasFilterForm
-            :model-value="modelValue"
-            :update-field="updateField"
-            :cadernos="props.cadernos"
-          />
-        </template>
-      </MobileFilterMenu>
-        <!-- input -->
-    </transition>
-    <!-- mobile filter content -->
-
-    <!-- filtered tag -->
+    <!-- MOBILE TAG FILTER -->
     <div
-      class="flex gap-300 pt-200 pb-300"
-      v-show="Object.values(props.selectedFilters).some((item) => item !== null)"
+      class="flex lg:hidden gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar"
+      v-if="Object.values(props.current_filters).some((item) => item !== null)"
     >
-    <TagFilter
-      v-for="(value, key) in props.selectedFilters"
-      :key="key"
-      :filter="{label: value.nome_pt, value: value.permalink_pt }"
-      :text="value.nome_pt"
-      @remove-filter="removeQuery"
-    />
+      <TagFilter
+        v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+        :key="key"
+        :filter="value"
+        :text="value.filter_display"
+        @remove-filter="removeQuery"
+      />
     </div>
-    <!-- filtered tag -->
-
-    <!-- list -->
     <div class="grid grid-cols-12">
-      <div class="col-span-12">
-        <PagyPagination
-          :noticias="props.noticias"
+      <div class="col-span-12 md:col-span-6">
+        <div
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          v-if="Object.values(props.current_filters).some((item) => item !== null)"
+        >
+          <TagFilter
+            v-for="[key, value] in Object.entries(props.current_filters).filter(([k, v]) => v !== null)"
+            :key="value.filter_value"
+            :filter="value"
+            :text="value.filter_display"
+            @remove-filter="removeQuery"
+          />
+        </div>
+        <InfiniteScrollLayout #content="{ allElements }"
+          :elements="props.elements"
           :pagy="props.pagy"
-          >
-          <!-- :filters="props.filters" -->
-        </PagyPagination>
+        >
+        <IndexArticleCard
+          v-for="article in allElements"
+          :key="article.id"
+          :title="article.titulo"
+          :permalink="article.permalink"
+          :chamada="article.chamada"
+          :imagem="article.imagem"
+          :category="article.caderno_nome"
+          :date="article.display_date"
+        />
+        </InfiniteScrollLayout>
       </div>
-      <div class="hidden col-span-5 col-start-8">
-        <p>Flamengo</p>
+      <div class="col-start-8 col-span-6 sticky top-0 z-50">
+        <div ref="sentinel" class="h-1"></div>
+        <ResponsiveFilterMenu
+          v-model="filters"
+          :is-open="isFilterMenuOpen"
+          @filtersApplied="filterSearch"
+          @close-filter-menu="closeMenu"
+        >
+          <template #filters="{ modelValue, updateField }">
+            <NoticiasFilterForm
+              :model-value="modelValue"
+              :update-field="updateField"
+              :data-label="props.dataLabel"
+              :cadernos="props.cadernos"
+            />
+          </template>
+        </ResponsiveFilterMenu>
       </div>
     </div>
-    <!-- list -->
   </TwContainer>
 </template>
 

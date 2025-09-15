@@ -31,7 +31,7 @@ pt:
 
   filter:
     title: "Filtros"
-    date: "Data"
+    date: "Data de publicação"
     time: "Sessão"
     submostra: "Mostra"
     cinema: "Cinema"
@@ -43,6 +43,7 @@ pt:
     festivais: "Festivais"
     premios: "Prêmios"
     palavras_chaves: "Palavras chaves"
+    caderno: "Caderno"
 
   filtro: "Filtro | Filtros"
 
