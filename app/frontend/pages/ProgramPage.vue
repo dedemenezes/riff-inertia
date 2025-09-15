@@ -29,7 +29,7 @@ import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useSti
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 // import { slugify } from "@/lib/utils";
-import { useSarchFilter } from "@/components/features/filters/composables/usaSearchFilter";
+import { useSearchFilter } from "@/components/features/filters/composables/usaSearchFilter";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
@@ -71,7 +71,7 @@ const {
     removeQuery,
     clearSearchQuery,
     handleClear
-}  = useSarchFilter(props)
+}  = useSearchFilter(props)
 
 // ============================================================================
 // UI UTILITIES

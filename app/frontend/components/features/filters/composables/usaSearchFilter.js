@@ -5,7 +5,7 @@ import { extractFilterValues } from "@/lib/filterUtils";
 /**
  * FILTER STATE MANAGEMENT - SINGLE SOURCE OF TRUTH
  */
-export function useSarchFilter(props, filtersFromController = {}) {
+export function useSearchFilter(props, filtersFromController = {}) {
   /**
    * Initialize empty filter structure
    */
