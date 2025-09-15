@@ -27,7 +27,7 @@ const imageUrl = computed(() => {
       <img
         :src="imageUrl"
         :alt="props.title"
-        class="w-full aspect-[4/3] md:aspect-square md:w-48 object-cover rounded-200"
+        class="w-full aspect-[16/9] md:aspect-square md:w-48 object-cover rounded-200"
       />
     </Link>
     <div class="content grid grid-rows gap-200 md:flex-1">
