@@ -37,7 +37,7 @@ class Cinema < ApplicationRecord
     cinemas_and_salas.map do |cas|
       result = {
         name: cas[:name],
-        cinema: cas[:salas].first,
+        cinema: cas[:salas].first
       }
 
       if cas[:salas].length > 1
