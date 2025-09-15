@@ -11,7 +11,7 @@ const props = defineProps({
   <div class="flex flex-col gap-400 items-center justify-center">
     <img
       :src="props.pelicula.posterImageURL"
-      class="h-[251px] w-[201px] object-cover"
+      class="aspect-[4/5]  max-h-[251px] max-w-[201px] w-full object-cover"
       :alt="`${props.pelicula.display_titulo} banner`"
       loading="lazy"
     >

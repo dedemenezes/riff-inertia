@@ -86,7 +86,7 @@ const iconColor = (value) =>
           {{
             value
               ? props.collection.find((item) => item.value === value)?.label
-              : "PLACEHOLDER"
+              : props.placeholder
           }}
         </div>
         <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />

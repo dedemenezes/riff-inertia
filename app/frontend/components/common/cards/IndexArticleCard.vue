@@ -22,11 +22,15 @@ const imageUrl = computed(() => {
     <!-- TODO: Review for locale ✅ filtering from controller by idioma -->
     <Link
       :href="`/${page.props.currentLocale}/noticias/${props.permalink}`"
-      class="w-full"
+      class="w-full md:w-auto md:flex-shrink-0"
     >
-      <img :src="imageUrl" class="w-full h-[216px] md:h-[155px] object-cover rounded-200" />
+      <img
+        :src="imageUrl"
+        :alt="props.title"
+        class="w-full aspect-[16/9] md:aspect-square md:w-48 object-cover rounded-200"
+      />
     </Link>
-    <div class="content grid grid-rows gap-200">
+    <div class="content grid grid-rows gap-200 md:flex-1">
       <div class="flex gap-x-200 items-center self-start">
         <span class="text-overline text-primary">
           {{ props.date }}

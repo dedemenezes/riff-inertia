@@ -12,6 +12,20 @@ one_talents:
   created: "2025-08-08 18:54:10.000000000 +0000"
   updated: "2025-08-11 19:36:02.000000000 +0000"
 
+one_talents_en:
+  idioma: ing
+  caderno: felix
+  data: "2025-08-12"
+  hora: "2000-01-01 10:00:00.000000000 +0000"
+  titulo: "ENGLISH TEST FELIX ONE titulo"
+  permalink: "english-test-talents-one-titulo"
+  imagem: "3281cf9b6dd1fc05aa42e9d0c47ba471.jpg"
+  chamada: "ENGLISH test FELIX ONE chamada"
+  conteudo: "<p>english test FELIX ONE conteudo</p>"
+  ativo: 1
+  created: "2025-08-08 18:54:10.000000000 +0000"
+  updated: "2025-08-11 19:36:02.000000000 +0000"
+
 one_felix:
   idioma: port
   caderno: felix
