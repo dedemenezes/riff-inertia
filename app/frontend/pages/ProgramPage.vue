@@ -35,9 +35,9 @@ import { slugify } from "@/lib/utils";
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
 
+// items: { type: Array, required: true }
 const props = defineProps({
-  tabBaseUrl: { type: String, required: true },
-  items: { type: Array, required: true }
+  tabBaseUrl: { type: String, required: true }
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
   ,mostras: { type: Array, default: () => [] }
