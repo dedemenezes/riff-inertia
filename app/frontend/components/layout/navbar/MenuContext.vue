@@ -1,7 +1,11 @@
 <script setup>
 import NavButtonContext from "@components/common/buttons/NavButtonContext.vue";
-import { defineAsyncComponent, watchEffect } from 'vue'
+import { ref, defineAsyncComponent, watchEffect } from 'vue'
 import { usePage } from "@inertiajs/vue3"
+
+const IconChevronRight = defineAsyncComponent(() => import("@/components/common/icons/navigation/IconChevronRight.vue"))
+const IconChevronLeft = defineAsyncComponent(() => import("@/components/common/icons/navigation/IconChevronLeft.vue"))
+
 
 const page = usePage()
 
@@ -47,37 +51,75 @@ function getIconComp(name) {
 watchEffect(() => {
   loadersPerNav[props.nav]?.forEach((k) => { void loaders[k]?.() })
 })
+
+
+const scrollContainer = ref(null);
+
+const scrollLeft = () => {
+  scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
+};
+
+const scrollRight = () => {
+  scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
+};
 </script>
 
 <template>
-  <div
-    class="flex gap-600 px-400 py-200 lg:gap-1600 lg:py-800 lg:justify-center overflow-x-auto no-scroll-bar"
-  >
-    <NavButtonContext
-      v-for="item in menuContext[props.nav]"
-      :key="item"
-      class="flex-shrink-0"
-      :content="item.name"
-      :route="item.path"
-      :active="props.activePage === item.name"
+  <div class="relative">
+    <!-- Left scroll button -->
+    <button
+      @click="scrollLeft"
+      class="absolute left-0 top-1/2 -translate-y-2/3 z-10 p-2 hover:bg-gray-50 md:hidden"
+      aria-label="Scroll left"
     >
-      <template #icon="{ active }">
-        <Suspense>
-          <component
-            :is="getIconComp(item.icon)"
-            height="30px"
-            width="30px"
-            :active="active"
-          />
+      <IconChevronLeft class="w-4 h-4 text-neutrals-900" />
+    </button>
+    <div
+      class="flex gap-600 px-1200 py-200 lg:gap-1600 lg:py-800 lg:justify-center overflow-x-auto no-scroll-bar fade-out--left fade-out--right"
+      ref="scrollContainer"
+    >
+      <NavButtonContext
+        v-for="item in menuContext[props.nav]"
+        :key="item"
+        class="flex-shrink-0"
+        :content="item.name"
+        :route="item.path"
+        :active="props.activePage === item.name"
+      >
+        <template #icon="{ active }">
+          <Suspense>
+            <component
+              :is="getIconComp(item.icon)"
+              height="30px"
+              width="30px"
+              :active="active"
+            />
 
-          <template #fallback>
-            <span class="inline-block h-[20px] w-[20px] rounded bg-neutral-200/70" />
-          </template>
-        </Suspense>
+            <template #fallback>
+              <span class="inline-block h-[20px] w-[20px] rounded bg-neutral-200/70" />
+            </template>
+          </Suspense>
 
-      </template>
-    </NavButtonContext>
+        </template>
+      </NavButtonContext>
+      <!-- Right scroll button -->
+    </div>
+    <button
+      @click="scrollRight"
+      class="absolute right-0 top-1/2 -translate-y-2/3 z-10 p-2 bg-transparent hover:bg-gray-50 md:hidden"
+      aria-label="Scroll right"
+    >
+      <IconChevronRight class="w-4 h-4 text-neutrals-900" />
+    </button>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-out--left.fade-out--right {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+</style>
