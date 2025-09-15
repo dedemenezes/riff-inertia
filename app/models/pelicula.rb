@@ -8,11 +8,8 @@ class Pelicula < ApplicationRecord
     display_sinopse
     genre
     display_paises
-    diretor_team
-    fotografia_team
-    producaoempresa_team
-    roteiro_team
-    montagem_team
+    displayTeamsHeader
+    teams
     imageURL
     posterImageURL
     director_image
@@ -80,26 +77,6 @@ class Pelicula < ApplicationRecord
         }
       end
     end
-  end
-
-  def diretor_team
-    parse_team(diretor_coord_int)
-  end
-
-  def fotografia_team
-    parse_team(fotografia_coord_int)
-  end
-
-  def producaoempresa_team
-    parse_team(producaoempresa_coord_int)
-  end
-
-  def roteiro_team
-    parse_team(roteiro_coord_int)
-  end
-
-  def montagem_team
-    parse_team(montagem_coord_int)
   end
 
   def mostra_name

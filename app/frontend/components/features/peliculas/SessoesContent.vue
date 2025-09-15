@@ -2,6 +2,8 @@
 import { defineAsyncComponent, ref } from 'vue';
 import BaseButton from '@/components/common/buttons/BaseButton.vue';
 import { IconChevronLeft, IconChevronRight } from '@/components/common/icons';
+import { simpleTranslation } from '@/lib/utils';
+
 const PeliculaSessionCard = defineAsyncComponent(() => import('@/components/common/cards/PeliculaSessionCard.vue'));
 const props = defineProps({
   sessions: { type: Array, default: () => [] }
@@ -16,12 +18,11 @@ function scrollToTopOfSessions() {
   sessionWrapper.value?.scrollIntoView({ behavior: 'smooth' });
 }
 
-console.log(props.sessions)
 </script>
-<!-- TODO: TRADUZIR -->
+<!-- TODO: TRADUZIR ✅ -->
 <template>
   <div ref="sessionWrapper" class="flex flex-col gap-400">
-    <BaseButton variant="dark" class="w-full">Comprar pacote de ingressos</BaseButton>
+    <BaseButton variant="dark" class="w-full">{{ simpleTranslation("Comprar pacote de ingressos", "Buy Festival Pass") }}</BaseButton>
     <div v-for="(session, index) in props.sessions[activePage]">
       <PeliculaSessionCard class="mb-400" :session="session" />
       <hr v-show="index < 2" class="text-neutrals-300">

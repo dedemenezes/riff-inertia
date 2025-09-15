@@ -3,6 +3,13 @@ pt:
     banner_title: "A 26ª edição do Festival do Rio vem aí!"
     banner_subtitle: "De 2 a 12 de outubro o cinema estará sob a luz do Rio"
 
+  pelicula:
+    roteiro: Roteiro
+    diretor: Direção
+    fotografia: Fotografia
+    producao: Produção Empresa
+    montagem: Montagem
+
   quickLinks:
     programming:
       title: "PROGRAMAÇÃO"

@@ -24,7 +24,7 @@ const isDesktop =  useUpdateWindowWidth()
     <div v-if="isDesktop">
       <!-- desktop display policula creditos -->
       <PeliculaCreditoCard
-        header="direção"
+        :header="props.pelicula.displayTeamsHeader"
         :pelicula="props.pelicula"
       />
     </div>

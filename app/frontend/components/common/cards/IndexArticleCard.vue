@@ -1,7 +1,8 @@
 <script setup>
-import { Link } from "@inertiajs/vue3"
+import { Link, usePage } from "@inertiajs/vue3"
 import { computed } from "vue";
 
+const page = usePage();
 const props = defineProps({
   date: { type: String, required: true },
   category: { type: String, required: true },
@@ -18,9 +19,9 @@ const imageUrl = computed(() => {
 
 <template>
   <div class="flex flex-col gap-200 md:flex-row md:gap-400">
-    <!-- TODO: Review for locale -->
+    <!-- TODO: Review for locale ✅ filtering from controller by idioma -->
     <Link
-      :href="`/pt/noticias/${props.permalink}`"
+      :href="`/${page.props.currentLocale}/noticias/${props.permalink}`"
       class="w-full"
     >
       <img :src="imageUrl" class="w-full h-[216px] md:h-[155px] object-cover rounded-200" />

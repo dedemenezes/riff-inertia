@@ -2,12 +2,13 @@
 import { BaseButton } from '@/components/common/buttons';
 import { IconPin } from '@/components/common/icons';
 import TagScreening from '@/components/common/tags/TagScreening.vue';
+import { displayFormattedTime, simpleTranslation } from '@/lib/utils';
 
 const props = defineProps({
   session: { type: Object, required: true }
 })
 
-// TODO: date display
+// TODO: date display ✅
 </script>
 
 <template>
@@ -21,10 +22,10 @@ const props = defineProps({
     </div>
     <div class="flex items-center gap-200">
       <img src="@/assets/icons/icon_info.svg" alt="Ícone de informação">
-      <p class="font-body text-xs leading-[140%] font-regular italic">Venda de ingressos limitada</p>
+      <p class="font-body text-xs leading-[140%] font-regular italic">{{ simpleTranslation("Venda de ingressos limitada", "Limited ticket sales") }}</p>
     </div>
-    <TagScreening state="default" :time="props.session.sessao"/>
-    <BaseButton size="sm" class="border-neutrals-900 border-2">Comprar ingressos</BaseButton>
+    <TagScreening state="default" :time="displayFormattedTime(props.session.sessao)"/>
+    <BaseButton size="sm" class="border-neutrals-900 border-2">{{ simpleTranslation("Comprar ingressos", "Buy tickets") }}</BaseButton>
   </div>
 </template>
 <style scoped>

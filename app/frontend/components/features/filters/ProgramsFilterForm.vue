@@ -1,9 +1,11 @@
 <script setup>
 import { computed, defineAsyncComponent } from "vue";
-import AccordionGroup from "@/components/AccordionGroup.vue";
-const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
+const AccordionGroup = defineAsyncComponent(() => import("@/components/AccordionGroup.vue"));
+const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'));
+const SelectComponent = defineAsyncComponent(() => import("@/components/ui/SelectComponent.vue"));
 import SearchBar from "@/components/features/filters/SearchBar.vue";
-import SelectComponent from "@/components/ui/SelectComponent.vue";
+import { displayFormattedTime } from "@/lib/utils";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
   modelValue: { type: Object, required: true },
@@ -42,14 +44,18 @@ const genreLabel = computed(() => props.genres[0].filter_label)
 const directorsOptions = computed(() => mapFilterOptions(props.directors));
 const directorLabel = computed(() => props.directors[0].filter_label)
 
-
-// Transform cinema prop for ComboboxComponent format
 const sessoesFilterOptions = computed(() => {
-  // TODO: TRANSLATE
-  return props.sessoes.map(sessao => ({
-    label: `Início às ${sessao.filter_display}`,
-    value: sessao.filter_value,
-  }));
+  // TODO: TRANSLATE ✅
+  const page = usePage();
+
+  const locale = page.props.currentLocale  // or inject it however you're doing it
+  return props.sessoes.map(sessao => {
+    const formattedTime = displayFormattedTime(sessao.filter_display)
+    return  {
+      label: `${locale === 'pt' ? 'Início às' : 'Starts at'} ${formattedTime}`,
+      value: sessao.filter_value,
+    }
+  })
 });
 const sessaoLabel = computed(() => props.sessoes[0].filter_label)
 
@@ -58,7 +64,7 @@ const getSelectedFrom = (collectionName, value) => {
 }
 
 const getQueryObject = (filter_value) => {
-  // TODO: REFACTOR
+  // TODO: REFACTOR ⏭️
   // I'm building here beause the other get here as collection
   // everything gets here from controller current_filters prop
   // this is just one so i cant search for it so we build

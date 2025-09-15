@@ -96,8 +96,7 @@ const closeBtn = useTemplateRef('close-btn');
     >
       <div
         v-show="props.isOpen"
-        style="margin-top: 0"
-        class="fixed inset-0 z-50 bg-white flex md:hidden flex-col w-full max-w-full h-[100vh] right-0 shadow-lg overflow-y-auto"
+        class="fixed inset-0 z-50 bg-white flex md:hidden flex-col w-full max-w-full h-[100dvh] right-0 shadow-lg"
       >
         <TwContainer class="h-full">
           <div class="flex flex-col h-full">
@@ -117,19 +116,20 @@ const closeBtn = useTemplateRef('close-btn');
                 <IconClose height="32px" width="32px" />
               </button>
             </div>
-
             <!-- Mobile Filter Content -->
-            <SearchFilter
-              :modelValue="props.modelValue"
-              @update:modelValue="$emit('update:modelValue', $event)"
-              @filtersApplied="$emit('filtersApplied', $event)"
-              @filtersCleared="$emit('filtersCleared', $event)"
-              @close-filter-menu="$emit('close-filter-menu')"
-            >
-              <template #filters="searchFilterProps">
-                <slot name="filters" v-bind="searchFilterProps" />
-              </template>
-            </SearchFilter>
+             <div class="flex-grow flex flex-col justify-between">
+               <SearchFilter
+                 :modelValue="props.modelValue"
+                 @update:modelValue="$emit('update:modelValue', $event)"
+                 @filtersApplied="$emit('filtersApplied', $event)"
+                 @filtersCleared="$emit('filtersCleared', $event)"
+                 @close-filter-menu="$emit('close-filter-menu')"
+               >
+                 <template #filters="searchFilterProps">
+                   <slot name="filters" v-bind="searchFilterProps" />
+                 </template>
+               </SearchFilter>
+             </div>
           </div>
         </TwContainer>
       </div>

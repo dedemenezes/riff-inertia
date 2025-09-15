@@ -1,7 +1,6 @@
 module InfiniteScrollable
   extend ActiveSupport::Concern
 
-  # TODO: Relocate this piece into a concern or helper
   def pagy_infinite(collection, page_param)
     current_page = (page_param || params[:page] || 1).to_i
     limit = Pagy::DEFAULT[:limit] || 5

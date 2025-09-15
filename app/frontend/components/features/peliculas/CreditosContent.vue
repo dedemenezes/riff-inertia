@@ -20,7 +20,7 @@ console.log(isDesktop.value);
   </div>
   <div v-else>
     <PeliculaCreditoCard
-      header="direção"
+      :header="props.pelicula.displayTeamsHeader"
       :pelicula="props.pelicula"
     />
   </div>

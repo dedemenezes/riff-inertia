@@ -30,4 +30,8 @@ module Displayable
       all_paises.first
     end
   end
+
+  def displayTeamsHeader
+    I18n.t("pelicula.diretor")
+  end
 end

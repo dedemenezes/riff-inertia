@@ -7,7 +7,8 @@ class NoticiasController < ApplicationController
   before_action :set_filter_options, only: :index
 
   def index
-    scope = Noticia.includes(:caderno).published
+    @idioma = Idioma.find_by("locale LIKE ?", "#{I18n.locale}%")
+    scope = Noticia.includes(:caderno).where(idioma: @idioma).published
     selected_filters = {}
 
     # if params[:search].present?

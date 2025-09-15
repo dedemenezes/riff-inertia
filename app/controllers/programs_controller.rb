@@ -1,9 +1,8 @@
 class ProgramsController < ApplicationController
   include InfiniteScrollable
 
-  EDICAO_ATUAL = 12
+  EDICAO_ATUAL = ApplicationRecord::EDICAO_ATUAL
   DATES_PER_PAGE = 1
-  # TODO: MAKE THIS ENV VARIABLE?
 
   include BreadcrumbsHelper, Pagy::Backend
 
