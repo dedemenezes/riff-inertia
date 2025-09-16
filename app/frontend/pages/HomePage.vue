@@ -35,7 +35,7 @@ const scrollLeft = () => {
 const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
 
 const scrollRight = () => {
-  scrollContainer.value.scrollBy({ left: width.value, behavior: 'smooth' });
+  scrollContainer.value.scrollBy({ left: width.value*0.80, behavior: 'smooth' });
 };
 </script>
 
@@ -53,10 +53,11 @@ const scrollRight = () => {
 
   <div class="py-1600">
     <div class="relative flex flex-col gap-600">
-      <h3 class="text-header-xxl text-neutrals-900 ml-4 lg:ml-16 xl:ml-18 xxl:ml-20">{{ simpleTranslation("Próximas sessões", "Upcoming sessions") }}</h3>
-      <div ref="scrollContainer" class="flex overflow-x-auto no-scroll-bar gap-800 pb-4">
+      <TwContainer>
+        <h3 class="text-header-xxl text-neutrals-900">{{ simpleTranslation("Próximas sessões", "Upcoming sessions") }}</h3>
+      </TwContainer>
+      <div ref="scrollContainer" class="flex overflow-x-auto no-scroll-bar gap-800">
         <div class="flex-shrink-0 w-[calc(80%-0.75rem)] sm:w-[calc(30%-0.75rem)] sm:min-w-[300px]"
-             :class="{ 'ml-4 lg:ml-16 xl:ml-18 xxl:ml-20': index === 0, 'mr-4': index === props.nextSessions.length - 1 }"
              v-for="(session, index) in props.nextSessions" :key="session.id">
           <SessionCard :session="session" />
         </div>
