@@ -89,13 +89,13 @@ const playVideo = () => {
   </div>
 
   <!-- Video banner wrapper -->
-  <div v-else class="relative w-full aspect-video rounded-200">
+  <div v-else class="relative w-full aspect-video lg:w-2/3 lg:mx-auto rounded-200">
 
     <!-- Iframe layer: mounted when playing -->
     <iframe
       v-if="isPlaying"
       :src="embedUrl"
-      class="absolute inset-0 z-[100] w-full h-full"
+      class="absolute inset-0 z-[100] w-full h-full rounded-200"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
