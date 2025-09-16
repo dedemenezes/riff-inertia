@@ -7,6 +7,7 @@ import IconPin from "@/components/common/icons/misc/IconPin.vue";
 import IconPhone from "@/components/common/icons/misc/IconPhone.vue";
 import IconWholeTicket from "@/components/common/icons/misc/IconWholeTicket.vue";
 import IconSeat from "@/components/common/icons/misc/IconSeat.vue";
+import IconArrowDown from "@/components/common/icons/navigation/IconArrowDown.vue";
 import { ref, reactive } from "vue";
 
 const props = defineProps({
@@ -17,6 +18,7 @@ const props = defineProps({
 const cinemas = reactive([...props.cinemas])
 const asc = ref(true)
 const query = ref('')
+const arrowClass = ref('')
 
 const fold = (s) => {
   return s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim()
@@ -57,6 +59,7 @@ const onInput = (e) => {
 const toggleOrder = () => {
   asc.value = !asc.value
   apply()
+  arrowClass.value = arrowClass.value === "" ? "up" : ""
 }
 </script>
 
@@ -76,13 +79,18 @@ const toggleOrder = () => {
       @input="onInput"
     />
 
-    <button
-      type="button"
-      @click="toggleOrder"
-      class="col-start-3"
-    >
-      {{ asc ? 'A–Z' : 'Z–A' }}
-    </button>
+    <div class="col-start-3 flex justify-end items-center">
+      <button
+        type="button"
+        @click="toggleOrder"
+        class="cursor-pointer flex items-center gap-200 p-200"
+      >
+        <IconArrowDown
+          :className="arrowClass"
+        ></IconArrowDown>
+        {{ asc ? 'A–Z' : 'Z–A' }}
+      </button>
+    </div>
   </TwContainer>
 
   <hr class="text-neutrals-300">
