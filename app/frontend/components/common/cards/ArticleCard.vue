@@ -41,8 +41,9 @@ const props = defineProps({
       </Link>
     </h3>
     <p
-      v-if="props.variant === 'primary'"
+      v-if="props.variant === 'primary' || props.variant === 'simple'"
       class="text-body-regular text-primary"
+      :class="props.variant === 'simple' ? 'hidden lg:block' : ''"
     >
       {{ props.content }}
     </p>

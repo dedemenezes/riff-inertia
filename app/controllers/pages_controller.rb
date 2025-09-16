@@ -46,27 +46,28 @@ class PagesController < ApplicationController
 
     # Get next programacoes
     @programacoes = Programacao
-      .where(edicao_id: 12)
-      .where("TIME(sessao) > ?", Time.now.strftime("%H:%M:%S"))
-      .order([ :data, :sessao ])
-      .limit(9)
+    .where(edicao_id: 12)
+    .where("TIME(sessao) > ? AND TIME(sessao) < ?", Time.now.strftime("%H:%M:%S"), Time.now.end_of_day.strftime("%H:%M:%S"))
+    .order([ :data, :sessao ])
+    .limit(9)
 
-      @programacoes = @programacoes.map do |programacao|
-        {
-          id: programacao.id,
-          data: programacao.data,
-          sessao: [ programacao.display_sessao ],
-          cinema: programacao.cinema&.nome,
-          titulo: programacao.pelicula&.titulo_portugues_coord_int,
-          duracao: programacao.pelicula&.duracao_coord_int,
-          imagem: programacao.pelicula&.imagem,
-          genero: programacao.pelicula&.genre,
-          paises: programacao.pelicula&.display_paises,
-          mostra: programacao.pelicula&.mostra&.display_name,
-          mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
-          pelicula_url: pelicula_path(programacao.pelicula.permalink)
-        }
-      end
+    @programacoes.includes(:cinema, pelicula: :mostra)
+    @programacoes = @programacoes.map do |programacao|
+      {
+        id: programacao.id,
+        data: programacao.data,
+        sessao: [ programacao.display_sessao ],
+        cinema: programacao.cinema&.nome,
+        titulo: programacao.pelicula&.titulo_portugues_coord_int,
+        duracao: programacao.pelicula&.duracao_coord_int,
+        imagem: programacao.pelicula&.imagem,
+        genero: programacao.pelicula&.genre,
+        paises: programacao.pelicula&.display_paises,
+        mostra: programacao.pelicula&.mostra&.display_name,
+        mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
+        pelicula_url: pelicula_path(programacao.pelicula.permalink)
+      }
+    end
 
 
     render inertia: "HomePage", props: {

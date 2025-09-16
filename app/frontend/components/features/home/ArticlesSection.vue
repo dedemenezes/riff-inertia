@@ -34,7 +34,7 @@ const backgroundImageUrl = (fileName) => {
   <div class="flex flex-col gap-y-800">
     <h2 class="text-header-base text-3xl text-primary">Últimas notícias</h2>
     <div
-      class="grid lg:grid-flow-col lg:grid-rows-3 items-start gap-800"
+      class="grid lg:grid-flow-col lg:grid-rows-4 items-start gap-800"
       style="grid-auto-rows: min-content;"
     >
       <!-- Main two articles. First is bigger -->
@@ -47,14 +47,14 @@ const backgroundImageUrl = (fileName) => {
         :category="article.caderno_nome"
         :background-image="backgroundImageUrl(article.imagem)"
         :permalink="article.permalink"
-        :variant="index === 0 ? 'primary' : 'secondary'"
-        :heightClass="[index === 0 ? 'lg:row-span-3 lg:col-span-2' : 'lg:row-span-2']"
+        :variant="index === 0 ? 'primary' : 'simple'"
+        :heightClass="[index === 0 ? 'lg:row-span-4 lg:col-span-2' : 'lg:row-span-3']"
         />
     </div>
 
     <!-- Small 4 articles -->
     <div
-      class="flex flex-col gap-y-800 lg:-mt-20 lg:grid lg:gap-x-800 lg:grid-cols-4"
+      class="flex flex-col gap-y-800 lg:grid lg:gap-x-800 lg:grid-cols-4"
     >
       <ArticleCard
         v-for="article in articles.slice(2,6)"
