@@ -77,6 +77,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install JavaScript dependencies
         run: npm install  # or yarn install
