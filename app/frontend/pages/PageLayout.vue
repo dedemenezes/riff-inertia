@@ -4,6 +4,7 @@ import SponsorHeader from '@/components/layout/headers/SponsorHeader.vue';
 import NavbarSecondary from '@/components/layout/navbar/NavbarSecondary.vue';
 import { usePage } from "@inertiajs/vue3"
 import Flashes from '@/components/shared/Flashes.vue';
+import Footer from '@/components/layout/headers/Footer.vue'
 
 const page = usePage()
 // Define the rootUrl prop to receive data passed from the controller
@@ -13,12 +14,18 @@ const props = defineProps({
 </script>
 
 <template>
-  <SponsorHeader class="bg-azul-400" />
-  <NavbarMain :root-url="props.rootUrl"/>
-  <NavbarSecondary />
-  <Flashes />
+  <div class="flex flex-col justify-between min-h-[100vh]">
+    <div>
+      <SponsorHeader class="bg-azul-400" />
+      <NavbarMain :root-url="props.rootUrl"/>
+      <NavbarSecondary />
+      <Flashes />
 
-  <main>
-    <slot />
-  </main>
+      <main>
+        <slot />
+      </main>
+    </div>
+
+    <Footer />
+  </div>
 </template>
