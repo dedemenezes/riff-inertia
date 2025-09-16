@@ -2,6 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "vite build",
+    "dev": "bin/vite dev",
     "test": "vitest"
   },
   "devDependencies": {
