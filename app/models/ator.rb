@@ -1,3 +1,3 @@
 class Ator < ApplicationRecord
-  has_mane :atores_peliculas
+  has_many :atores_peliculas
 end
