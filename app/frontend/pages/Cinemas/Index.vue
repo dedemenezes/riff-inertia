@@ -47,7 +47,7 @@ const filterCinemas = (value) => {
   <hr class="text-neutrals-300">
 
   <TwContainer>
-    <ul class="flex flex-col py-1200 gap-800">
+    <ul class="flex flex-col py-1200 gap-800 text-body-regular">
       <li
         v-for="cinema in cinemas"
 
