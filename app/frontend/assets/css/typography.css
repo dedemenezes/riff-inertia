@@ -62,6 +62,10 @@
   }
 
   /* Header variants */
+  .text-header-xxl {
+    @apply font-heading font-regular text-3xl leading-[120%]
+  }
+
   .text-header-base {
     @apply font-heading font-semibold leading-[120%];
   }
