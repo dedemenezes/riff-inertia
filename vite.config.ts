@@ -22,4 +22,15 @@ export default defineConfig({
       "@pages": fileURLToPath(new URL('./app/frontend/pages', import.meta.url)),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase limit to 1MB
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', '@inertiajs/vue3'],
+          // Add other large dependencies here
+        }
+      }
+    }
+  },
 })
