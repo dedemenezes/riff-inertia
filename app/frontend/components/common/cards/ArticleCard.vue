@@ -21,27 +21,11 @@ const props = defineProps({
   category: { type: String, required: true },
   permalink: { type: String, required: true },
 });
-
-const backgroundImageStyle = computed(() => ({
-  backgroundImage: `url(${props.backgroundImage})`
-}));
-
-// Added to fix responsivenes in the home page
-const secondaryImageHeightClass = computed(() => {
-  if (props.variant === "secondary") {
-    return "lg:mix-h-[182px] lg:max-h-[182px]"
-  }
-  return ""
-})
 </script>
 
 <template>
   <div class="flex flex-col gap-y-200" :class="heightClass">
-    <div
-      class="flex-grow self-stretch bg-no-repeat bg-cover bg-center rounded-200"
-      :class="secondaryImageHeightClass"
-      :style="backgroundImageStyle"
-    ></div>
+    <img :src="props.backgroundImage" class="aspect-16/9 object-cover rounded-200" alt="">
     <div v-if="date && category" class="flex gap-x-200 items-center">
       <span class="text-overline text-primary">
         {{ date }}
