@@ -89,7 +89,7 @@ const playVideo = () => {
   </div>
 
   <!-- Video banner wrapper -->
-  <div v-else class="relative w-full aspect-video lg:w-2/3 lg:mx-auto rounded-200">
+  <div v-else class="relative w-full aspect-video lg:mx-auto rounded-200">
 
     <!-- Iframe layer: mounted when playing -->
     <iframe
@@ -100,7 +100,6 @@ const playVideo = () => {
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
     ></iframe>
-
     <!-- Thumbnail + play button overlay -->
     <div
       v-if="!isPlaying"
@@ -126,8 +125,10 @@ const playVideo = () => {
         </div>
       </div>
     </div>
+    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 z-10">
+      <p class="text-white text-md leading-[140%] font-body font-regular">
+        {{ title }}
+      </p>
+    </div>
   </div>
-
-  <!-- Title -->
-  <p class="px-200 py-300 text-md text-white-transp-1000 leading-[140%] font-body font-regular">{{ title }}</p>
 </template>

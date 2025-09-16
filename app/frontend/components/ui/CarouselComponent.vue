@@ -11,7 +11,7 @@ import {
 const props = defineProps({
   imageCollection: { // [{imagePath: "", imageLabel: "" (optional)}]
     type: Array,
-    required: true,
+    required: false,
     default: () => []
   },
   classNames: Array,
@@ -36,6 +36,8 @@ const navigatorsXPositionClass = (side) => {
 <template>
   <Carousel class="w-[100%]" :class="[props.classNames]">
     <CarouselContent>
+      <slot name="items"/>
+      <!-- DEFAULT -->
       <CarouselItem
         v-for="image in props.imageCollection"
         :key="image.path"

@@ -9,6 +9,8 @@ import QuickLinkSection from '@components/common/cards/QuickLinkSection.vue';
 import ArticlesSection from '@components/features/home/ArticlesSection.vue';
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
 import VideoBanner from "@/components/features/peliculas/VideoBanner.vue";
+import CarouselComponent from "@/components/ui/CarouselComponent.vue";
+import { CarouselItem } from "@/components/ui/carousel";
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
@@ -42,13 +44,17 @@ const props = defineProps({
     <TwContainer>
       <div class="flex flex-col gap-800">
         <h3 class="text-white-transp-1000 leading-[120%] font-regular text-3xl">TV Festival do Rio</h3>
-        <div class="">
-          <!-- :youtube-link-trailer="'https://www.youtube.com/watch?v=FDIGvf3xzbU'" -->
-          <VideoBanner
-            :youtube-video-id="props.youtubeVideos[0]['snippet']['resourceId']['videoId']"
-            :title="props.youtubeVideos[0]['snippet']['title']"
-          />
-        </div>
+
+        <CarouselComponent>
+          <template v-slot:items>
+            <CarouselItem v-for="(youtubeVideo, index) in props.youtubeVideos" :key="youtubeVideo['id']">
+              <VideoBanner
+                :youtube-video-id="youtubeVideo['snippet']['resourceId']['videoId']"
+                :title="youtubeVideo['snippet']['title']"
+                />
+            </CarouselItem>
+          </template>
+        </CarouselComponent>
       </div>
     </TwContainer>
   </div>
