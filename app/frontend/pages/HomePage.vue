@@ -1,5 +1,6 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
+import { defineAsyncComponent } from "vue";
 import TwContainer from "@components/layout/TwContainer.vue"
 
 import HomeBanner from '@/components/features/home/HomeBanner.vue';
@@ -8,6 +9,7 @@ import banneImagePath from "@assets/images/mobile-banner.png";
 import QuickLinkSection from '@components/common/cards/QuickLinkSection.vue';
 import ArticlesSection from '@components/features/home/ArticlesSection.vue';
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
+const TvFestival = defineAsyncComponent(() => import("@/components/layout/TvFestival.vue"));
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
@@ -15,6 +17,7 @@ const props = defineProps({
   secondaryItems: { type: Array },
   noticias: { type: Array },
   noticasUrl: { type: String },
+  youtubeVideos: { type: Array }
 })
 </script>
 
@@ -34,7 +37,9 @@ const props = defineProps({
     <div class="py-1200">
       <ArticlesSection :articles="props.noticias" :noticiasUrl="props.noticasUrl"/>
     </div>
+
   </TwContainer>
+  <TvFestival :youtube-videos="props.youtubeVideos" />
 </template>
 
 <style scoped></style>

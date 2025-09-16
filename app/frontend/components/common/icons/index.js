@@ -5,6 +5,7 @@ export { default as IconClose } from "./actions/IconClose.vue";
 export { default as IconFilter } from "./actions/IconFilter.vue";
 export { default as IconPlus } from "./actions/IconPlus.vue";
 export { default as IconSearch } from "./actions/IconSearch.vue";
+export { default as IconPlay } from "./actions/IconPlay.vue";
 
 // Navigation
 export { default as IconCarretUp } from "./navigation/IconCarretUp.vue";
