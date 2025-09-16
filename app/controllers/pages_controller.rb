@@ -32,6 +32,8 @@ class PagesController < ApplicationController
               )
     # root_url = request.base_url
 
+    # TODO: Refac move to service
+    # TODO: Rails Cache
     # Get youtube videos from Festival do Rio
     playlist_response = HTTParty.get("#{ENV.fetch("YT_BASE_URL")}/playlistItems", {
       query: {
