@@ -14,7 +14,7 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: rails_user
-  password: <%= ENV.fetch("DB_PASSWORD") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "") %>
   host: 127.0.0.1
   port: 3306
 
