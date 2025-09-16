@@ -24,6 +24,15 @@ export { default as IconBoxArrowUp } from "./navigation/IconBoxArrowUp.vue";
 export { default as IconClock } from "./misc/IconClock.vue";
 export { default as IconLink } from "./misc/IconLink.vue";
 export { default as IconSeat } from "./misc/IconSeat.vue";
+export { default as IconInstagram } from "./misc/IconInstagram.vue";
+export { default as IconFacebook } from "./misc/IconFacebook.vue";
+export { default as IconTikTok } from "./misc/IconTikTok.vue";
+export { default as IconYoutube } from "./misc/IconYoutube.vue";
+export { default as IconLetterboxd } from "./misc/IconLetterboxd.vue";
+export { default as IconX } from "./misc/IconX.vue";
+export { default as IconThreads } from "./misc/IconThreads.vue";
+export { default as IconBlueSky } from "./misc/IconBlueSky.vue";
+export { default as IconFlickr } from "./misc/IconFlickr.vue";
 
 // Programação
 export { default as IconProgram } from "./misc/IconProgram.vue";
