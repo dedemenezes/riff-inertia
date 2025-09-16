@@ -117,12 +117,12 @@ const playVideo = () => {
       <div v-else class="w-full h-full bg-gradient-to-br from-primary to-secondary"></div>
 
       <!-- Dark overlay -->
-      <div class="absolute inset-0 bg-black/30"></div>
+      <div class="absolute inset-0 bg-black/40"></div>
 
       <!-- Play button -->
       <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-vermelho-400/70 rounded-full p-4 group-hover:bg-vermelho-400/100 transition-all duration-300 group-hover:scale-110">
-          <IconPlay class="w-8 h-8 text-violeta-200 ml-1" />
+        <div class="bg-white-transp-1000/70 rounded-200 p-4 group-hover:bg-white-transp-1000/100 transition-all duration-300 group-hover:scale-105">
+          <IconPlay class="w-8 h-8 text-neutrals-900 ml-1" />
         </div>
       </div>
     </div>
