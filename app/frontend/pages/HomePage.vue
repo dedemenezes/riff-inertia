@@ -1,5 +1,6 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
+import { defineAsyncComponent } from "vue";
 import TwContainer from "@components/layout/TwContainer.vue"
 
 import HomeBanner from '@/components/features/home/HomeBanner.vue';
@@ -8,9 +9,7 @@ import banneImagePath from "@assets/images/mobile-banner.png";
 import QuickLinkSection from '@components/common/cards/QuickLinkSection.vue';
 import ArticlesSection from '@components/features/home/ArticlesSection.vue';
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
-import VideoBanner from "@/components/features/peliculas/VideoBanner.vue";
-import CarouselComponent from "@/components/ui/CarouselComponent.vue";
-import { CarouselItem } from "@/components/ui/carousel";
+const TvFestival = defineAsyncComponent(() => import("@/components/layout/TvFestival.vue"));
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
@@ -40,24 +39,7 @@ const props = defineProps({
     </div>
 
   </TwContainer>
-  <div class="tv-festival bg-neutrals-1000 py-1600">
-    <TwContainer>
-      <div class="flex flex-col gap-800">
-        <h3 class="text-white-transp-1000 leading-[120%] font-regular text-3xl">TV Festival do Rio</h3>
-
-        <CarouselComponent>
-          <template v-slot:items>
-            <CarouselItem v-for="(youtubeVideo, index) in props.youtubeVideos" :key="youtubeVideo['id']">
-              <VideoBanner
-                :youtube-video-id="youtubeVideo['snippet']['resourceId']['videoId']"
-                :title="youtubeVideo['snippet']['title']"
-                />
-            </CarouselItem>
-          </template>
-        </CarouselComponent>
-      </div>
-    </TwContainer>
-  </div>
+  <TvFestival :youtube-videos="props.youtubeVideos" />
 </template>
 
 <style scoped></style>
