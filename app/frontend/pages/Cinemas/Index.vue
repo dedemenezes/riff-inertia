@@ -7,23 +7,56 @@ import IconPin from "@/components/common/icons/misc/IconPin.vue";
 import IconPhone from "@/components/common/icons/misc/IconPhone.vue";
 import IconWholeTicket from "@/components/common/icons/misc/IconWholeTicket.vue";
 import IconSeat from "@/components/common/icons/misc/IconSeat.vue";
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 
 const props = defineProps({
   cinemas: { type: Object, default: () => []},
   crumbs: { type: Array, required: true}
 })
 
-console.log(props.cinemas)
-
 const cinemas = reactive([...props.cinemas])
+const asc = ref(true)
+const query = ref('')
 
-const filterCinemas = (value) => {
-  const v = value.trim().toLowerCase()
-  const filtered = props.cinemas.filter(cinema =>
-    cinema.name.toLowerCase().startsWith(v)
+const fold = (s) => {
+  return s.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim()
+}
+
+const filterList = (src, q) => {
+  const v = fold(q)
+  if (!v) return src.slice()
+
+  return src.filter(p => fold(p.name).includes(v))
+}
+
+const apply = () => {
+  const filtered = filterList(props.cinemas, query.value)
+
+  // ordena pt-BR ignorando acentos; inverte se asc=false
+  filtered.sort((a, b) =>
+    asc.value
+      ? a.name.localeCompare(b.name, 'pt', { sensitivity: 'base' })
+      : b.name.localeCompare(a.name, 'pt', { sensitivity: 'base' })
   )
+
+  // atualiza o array reativo SEM trocar a referência
   cinemas.splice(0, cinemas.length, ...filtered)
+}
+
+const onInput = (e) => {
+  const v =
+    typeof e === 'string'
+      ? e
+      : (e && e.target && typeof e.target.value === 'string')
+      ? e.target.value
+      : ''
+  query.value = v
+  apply()
+}
+
+const toggleOrder = () => {
+  asc.value = !asc.value
+  apply()
 }
 </script>
 
@@ -36,12 +69,20 @@ const filterCinemas = (value) => {
   />
 
   <TwContainer
-    class="grid grid-cols-1 lg:grid-cols-3 gap-800"
+    class="grid grid-cols-1 lg:grid-cols-3 gap-800 sticky top-0 bg-white-transp-1000"
   >
     <SearchBar
       class="py-400"
-      @input="filterCinemas"
+      @input="onInput"
     />
+
+    <button
+      type="button"
+      @click="toggleOrder"
+      class="col-start-3"
+    >
+      {{ asc ? 'A–Z' : 'Z–A' }}
+    </button>
   </TwContainer>
 
   <hr class="text-neutrals-300">
@@ -60,7 +101,7 @@ const filterCinemas = (value) => {
         <div class="flex flex-col gap-50">
           <div class="flex gap-50 items-center">
             <IconWholeTicket
-              active="True"
+              :active="true"
               height="16"
               width="16"
             />
@@ -70,7 +111,7 @@ const filterCinemas = (value) => {
 
           <div v-if="cinema.cinema.endereco" class="flex gap-50 items-center">
             <IconPin
-              active="True"
+              :active="true"
               height="16"
               width="16"
             />
@@ -79,7 +120,7 @@ const filterCinemas = (value) => {
 
           <div v-if="cinema.cinema.telefone" class="flex gap-50 items-center">
             <IconPhone
-              active="True"
+              :active="true"
               height="16"
               width="16"
             />
@@ -89,7 +130,7 @@ const filterCinemas = (value) => {
           <div class="flex flex-col gap-300">
             <div class="flex gap-50 items-center">
               <IconSeat
-                active="True"
+                :active="true"
                 height="16"
                 width="16"
               />
