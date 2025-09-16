@@ -8,6 +8,7 @@ import banneImagePath from "@assets/images/mobile-banner.png";
 import QuickLinkSection from '@components/common/cards/QuickLinkSection.vue';
 import ArticlesSection from '@components/features/home/ArticlesSection.vue';
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
+import VideoBanner from "@/components/features/peliculas/VideoBanner.vue";
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
@@ -15,6 +16,7 @@ const props = defineProps({
   secondaryItems: { type: Array },
   noticias: { type: Array },
   noticasUrl: { type: String },
+  youtubeVideos: { type: Array }
 })
 </script>
 
@@ -34,7 +36,22 @@ const props = defineProps({
     <div class="py-1200">
       <ArticlesSection :articles="props.noticias" :noticiasUrl="props.noticasUrl"/>
     </div>
+
   </TwContainer>
+  <div class="tv-festival bg-neutrals-1000 py-1600">
+    <TwContainer>
+      <div class="flex flex-col gap-800">
+        <h3 class="text-white-transp-1000 leading-[120%] font-regular text-3xl">TV Festival do Rio</h3>
+        <div class="">
+          <!-- :youtube-link-trailer="'https://www.youtube.com/watch?v=FDIGvf3xzbU'" -->
+          <VideoBanner
+            :youtube-video-id="props.youtubeVideos[0]['snippet']['resourceId']['videoId']"
+            :title="props.youtubeVideos[0]['snippet']['title']"
+          />
+        </div>
+      </div>
+    </TwContainer>
+  </div>
 </template>
 
 <style scoped></style>

@@ -31,11 +31,23 @@ class PagesController < ApplicationController
                 methods: [ :caderno_nome, :display_date ],
               )
     # root_url = request.base_url
+
+    # Get youtube videos from Festival do Rio
+    playlist_response = HTTParty.get("#{ENV.fetch("YT_BASE_URL")}/playlistItems", {
+      query: {
+        part: "snippet",
+        playlistId: ENV.fetch("YT_CHANNEL_ID"),  # Use the correct one from step 2
+          maxResults: 5,
+        key: ENV.fetch("YT_API_KEY")
+      }
+    })
+
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
       quickLinksConfig:,
       noticias:,
-      noticasUrl: noticias_url
+      noticasUrl: noticias_url,
+      youtubeVideos: playlist_response["items"]
     }
   end
 end
