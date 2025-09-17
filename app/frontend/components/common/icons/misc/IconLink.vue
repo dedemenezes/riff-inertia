@@ -1,7 +1,7 @@
 <script setup>
 import BaseIcon from "@components/common/icons/BaseIcon.vue";
 const props = defineProps({
-  color: { type: String, default: undefined },
+  color: { type: String, default: 'text-neutrals-900' },
   active: { type: Boolean, default: false },
 });
 </script>
