@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 import { ref, computed, watch } from "vue";
 import TabComponent from "@/components/common/tabs/TabComponent.vue";
 import { IconChevronLeft, IconChevronRight } from "@/components/common/icons";
-
+import { useUpdateWindowWidth } from "@/lib/utils";
 const props = defineProps({
   tabs: { type: Array, required: true },
   isSticky: { type: Boolean, default: false }
@@ -12,8 +12,10 @@ const props = defineProps({
 const scrollContainer = ref(null);
 const currentStartIndex = ref(0);
 
+
+const isDesktop = useUpdateWindowWidth();
 // Show 3 tabs at a time
-const visibleTabsCount = 3;
+const visibleTabsCount = isDesktop.value ? 3 : 1;
 
 // Find the active tab index
 const activeTabIndex = computed(() => {

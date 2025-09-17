@@ -25,6 +25,12 @@
     --tag-text: theme('colors.white-transp.1000');
     --tag-border: theme('colors.laranja.600');
   }
+  /* Variant color definitions */
+  .border-tag-premiere-brasil {
+    --tag-bg: theme('colors.laranja.600');
+    /* --tag-text: theme('colors.white-transp.1000'); */
+    --tag-border: theme('colors.laranja.600');
+  }
 
   .tag-premiere-latina {
     --tag-bg: theme('colors.amarelo.800');

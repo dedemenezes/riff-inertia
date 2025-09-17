@@ -10,3 +10,4 @@ border-tag-classicos-cults
 border-tag-expectativas
 border-tag-itinerarios-unicos
 border-tag-panorama-mundial
+border-tag-default
