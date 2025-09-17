@@ -42,9 +42,9 @@ class PeliculaCollectionService
   def actor_to_pelicula_mapping(edicao_id)
     cache_key = "actor-pelicula-mapping-#{edicao_id}"
 
-    Rails.cache.fetch(cache_key, expires_in: 6.hours) do
+      # Rails.cache.fetch(cache_key, expires_in: 6.hours) do
       build_actor_mapping(edicao_id)
-    end
+    # end
   end
 
   def build_actor_mapping(edicao_id)
