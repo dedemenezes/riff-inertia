@@ -73,7 +73,7 @@ console.log(filters);
     <div class="grid grid-cols-12">
       <div class="col-span-12 md:col-span-6">
         <div
-          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-0 z-10 bg-white"
           v-if="Object.values(props.current_filters).some((item) => item !== null)"
         >
           <TagFilter
