@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "../assets/css/tailwind-config.css";
+
+@import "../assets/css/animation.css";
+@import "../assets/css/tag_base.css";
+@import "../assets/css/horizontal_scroll.css";
 
 @source "../../views/**/*.{erb,html,haml,slim}";
 @source "../../helpers/**/*.rb";
@@ -9,7 +17,6 @@
 @source "../assets/css/safelist.tailwind.txt";
 
 @import "tw-animate-css";
-@import "../assets/css/tailwind-config.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -133,3 +140,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+@import "../assets/css/typography.css";
