@@ -142,16 +142,17 @@
 }
 
 @theme static {
-  --color-tag-premiere-brasil: var(--color-laranja-600);
-  --color-tag-premiere-latina: var(--color-amarelo-800);
-  --color-tag-gala-abertura: var(--color-magenta-600);
-  --color-tag-gala-encerramento: var(--color-magenta-800);
-  --color-tag-resistencias: var(--color-neutrals-200);
-  --color-tag-cine-memoria: var(--color-violeta-100);
-  --color-tag-midnight-movies: var(--color-violeta-600);
-  --color-tag-cinema-capacete: var(--color-neutrals-400);
-  --color-tag-classicos-cults: var(--color-neutrals-900);
-  --color-tag-expectativas: var(--color-azul-600);
-  --color-tag-itinerarios-unicos: var(--color-verde-600);
-  --color-tag-panorama-mundial: var(--color-vermelho-600);
+  --color-tag-premiere-brasil: theme('colors.laranja.600');
+  --color-tag-premiere-latina: theme('color.amarelo.800');
+  --color-tag-gala-abertura: theme('color.magenta.600');
+  --color-tag-gala-encerramento: theme('color.magenta.800');
+  --color-tag-resistencias: theme('color.neutrals.200');
+  --color-tag-cine-memoria: theme('color.violeta.100');
+  --color-tag-midnight-movies: theme('color.violeta.600');
+  --color-tag-cinema-capacete: theme('color.neutrals.400');
+  --color-tag-classicos-cults: theme('color.neutrals.900');
+  --color-tag-expectativas: theme('color.azul.600');
+  --color-tag-itinerarios-unicos: theme('color.verde.600');
+  --color-tag-panorama-mundial: theme('color.vermelho.600');
+  --color-tag-default: theme('color.magenta.600');
 }

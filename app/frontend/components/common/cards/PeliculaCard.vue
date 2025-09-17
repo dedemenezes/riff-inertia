@@ -39,7 +39,7 @@ const movieGenre = computed(() => {
      <Link :href="props.pelicula.url" class="w-full">
       <div class="relative w-full">
         <img
-          :src="moviePoster"
+          :src="props.pelicula.imageURL"
           alt="movie-name poster"
           class="rounded-200 h-[268px] w-full object-cover"
         />
