@@ -42,7 +42,7 @@ const setDropdownOffset = (item) => {
 <template>
   <div class="">
     <div
-      class="p-400 lg:pb-0 mx-auto lg:max-w-7xl hidden md:flex items-center justify-between"
+      class="px-400 lg:pb-0 mx-auto lg:max-w-7xl hidden md:flex items-center justify-between"
     >
       <ul class="flex flex-grow gap-600 justify-start items-center me-400 h-1600">
         <li v-for="(subitems, item) in page.props.mainItems" :key="item" class="h-full">
