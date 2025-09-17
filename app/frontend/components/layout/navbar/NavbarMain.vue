@@ -4,7 +4,7 @@ import MobileMenu from "@/components/layout/navbar/MobileMenu.vue";
 import { IconSearch } from "@/components/common/icons";
 import TheLanguageSwitcher from "@components/TheLanguageSwitcher.vue";
 
-import FestivalLogo from "@assets/logos/logo_nova_riff.png"
+import FestivalLogo from "@assets/logos/logo-nova-full.svg"
 import IconArrowOut from "@/components/common/icons/misc/IconArrowOut.vue";
 const props = defineProps({
   rootUrl: { type: String, required: true }
@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
   <!-- NAVBARMAIN -->
   <nav
-    class="p-400 mx-auto lg:max-w-7xl flex items-start md:items-center justify-between"
+    class="px-400 py-200 mx-auto lg:max-w-7xl flex items-start md:items-center justify-between"
     role="navigation"
     aria-label="Navegação primária"
   >
@@ -43,7 +43,7 @@ const props = defineProps({
       >
         27th rio de janeiro int'l film festival
       </p>
-      <p class="font-body text-md font-bold leading-[22.4px]">
+      <p class="text-primary font-body text-md font-bold leading-[22.4px]">
         2 - 12 OUT 2025
       </p>
     </div>
