@@ -90,7 +90,7 @@ const clearField = (key) => {
   <div class="flex flex-col h-[100dvh]">
 
     <!-- FILTER CONTENT SCROLLS -->
-    <div class="flex-grow overflow-y-auto space-y-600">
+    <div class="flex-grow overflow-y-auto space-y-600 pb-24 no-scroll-bar">
       <slot
         name="filters"
         :modelValue="props.modelValue"

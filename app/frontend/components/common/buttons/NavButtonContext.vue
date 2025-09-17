@@ -1,6 +1,7 @@
 <script setup>
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
+import { useTabScroll } from '@/components/common/tabs/useTabScroll'
 
 const props = defineProps({
   content: { type: String, required: true },
@@ -31,10 +32,14 @@ const getPath = (url) => {
 };
 
 const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route
-const isIconActive = computed(() => isHovered.value || isFocused.value || isActive.value);</script>
+const isIconActive = computed(() => isHovered.value || isFocused.value || isActive.value);
+
+const navRef = useTabScroll(isActive.value);
+</script>
 
 <template>
-  <Link
+  <a
+    ref="navRef"
     :href="props.route"
     class=""
     :class="{ 'route-active-TEST': $page.url == props.route }"
@@ -55,5 +60,5 @@ const isIconActive = computed(() => isHovered.value || isFocused.value || isActi
         {{ props.content }}
       </p>
     </div>
-  </Link>
+  </a>
 </template>
