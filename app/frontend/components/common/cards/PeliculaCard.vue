@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
+import DefaultImage from "@assets/images/poc-poster.jpg"
 import TagMostra from "@/components/common/tags/TagMostra.vue";
 
 // Hover state
@@ -19,7 +20,7 @@ const moviePoster = computed(() => {
     return `${fullUrl}/${props.pelicula.imagem}`
   }
 
-  return "@assets/poc-poster.jpg";
+  return DefaultImage
 });
 const movieGenre = computed(() => {
   return props.pelicula.genre || "TBD";

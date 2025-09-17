@@ -3,11 +3,7 @@ import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
-import IconPin from "@/components/common/icons/misc/IconPin.vue";
-import IconPhone from "@/components/common/icons/misc/IconPhone.vue";
-import IconWholeTicket from "@/components/common/icons/misc/IconWholeTicket.vue";
-import IconSeat from "@/components/common/icons/misc/IconSeat.vue";
-import IconArrowDown from "@/components/common/icons/navigation/IconArrowDown.vue";
+import { IconPin, IconPhone, IconWholeTicket, IconSeat, IconArrowDown } from "@/components/common/icons";
 import { ref, reactive } from "vue";
 
 const props = defineProps({

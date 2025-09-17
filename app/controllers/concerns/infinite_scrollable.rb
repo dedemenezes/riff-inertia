@@ -1,9 +1,9 @@
 module InfiniteScrollable
   extend ActiveSupport::Concern
 
-  def pagy_infinite(collection, page_param)
+  def pagy_infinite(collection, page_param, limit = 5)
     current_page = (page_param || params[:page] || 1).to_i
-    limit = Pagy::DEFAULT[:limit] || 5
+    limit = limit || Pagy::DEFAULT[:limit]
 
     if current_page <= 1
       # First page - normal pagination

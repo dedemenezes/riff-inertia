@@ -1,13 +1,36 @@
 class PeliculasController < ApplicationController
   include BreadcrumbsHelper
+  include Pagy::Backend
+  include InfiniteScrollable
 
   def index
     @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
-    @peliculas = @edicao_atual.peliculas.order(titulo_portugues_coord_int: :asc)
+    @peliculas = Pelicula
+                  .includes(programacoes: :cinema)
+                  .where(edicao: @edicao_atual)
+                  .order(titulo_portugues_coord_int: :asc)
+
+    current_page = params[:page].to_i ||= 1
+
+    if params[:query]
+      term = "%#{params[:query].downcase}%"
+      @peliculas = @peliculas.where(edicao_id: ApplicationRecord::EDICAO_ATUAL).where(
+        "LOWER(titulo_ingles_coord_int) LIKE :term OR
+        LOWER(titulo_original_coord_int) LIKE :term OR
+        LOWER(titulo_portugues_coord_int) LIKE :term OR
+        LOWER(titulo_ingles_semartigo) LIKE :term OR
+        LOWER(titulo_portugues_semartigo) LIKE :term",
+        term: term
+      )
+      current_page = 1
+    end
+
+    pagy_limit = 9
+    @pagy, @peliculas = pagy_infinite(@peliculas, current_page, pagy_limit)
 
     render inertia: "Peliculas/Index", props: {
       rootUrl: @root_url,
-      peliculas: @peliculas.as_json(
+      elements: @peliculas.as_json(
         only: Pelicula::COLUMNS_NEEDED,
         methods: Pelicula::METHODS_NEEDED
       ),
@@ -15,7 +38,12 @@ class PeliculasController < ApplicationController
         [ "", @root_url ],
         [ I18n.t("navigation.edition2024"), "" ],
         [ "Todos os Filmes", peliculas_path ]
-      )
+      ),
+      pagy:  {
+        page: @pagy.page,
+        pages: @pagy.pages,
+        last: @pagy.last
+      }
     }
   end
 
