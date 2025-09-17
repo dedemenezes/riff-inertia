@@ -10,7 +10,7 @@ import ArticlesSection from '@components/features/home/ArticlesSection.vue';
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 import HorizontalScrollLayout from "@/components/layout/HorizontalScrollLayout.vue";
-const TvFestival = defineAsyncComponent(() => import("@/components/layout/TvFestival.vue"));
+import TvFestival from"@/components/layout/TvFestival.vue";
 
 import { simpleTranslation, useUpdateWindowWidth } from "@/lib/utils";
 import CarouselComponent from "@/components/ui/CarouselComponent.vue";
