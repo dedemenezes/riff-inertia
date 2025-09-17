@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="font-body flex items-center justify-center h-[72px] p-300">
+  <div class="px-300 font-body flex items-center justify-center h-[58px]">
     <p
       class="text-sm md:text-md uppercase leading-[22.4px] text-center text-neutrals-900"
     >
