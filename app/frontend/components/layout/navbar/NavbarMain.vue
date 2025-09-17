@@ -23,7 +23,7 @@ const props = defineProps({
     >
     <a
       :href="props.rootUrl"
-      class="focus:outline-2 focus:-outline-offset-2 focus:outline-laranja-600"
+      class="focus:outline-2 focus:-outline-offset-2 focus:outline-neutrals-300"
     >
       <img
         class="py-200"

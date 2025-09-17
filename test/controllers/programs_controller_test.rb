@@ -96,7 +96,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     props = inertia_props
     available_dates = props["menuTabs"].map { _1["date"] }
-    expected = [ "2024-10-05", "2024-10-06" ]
+    expected = [ "Sáb, 5 Out", "Dom, 6 Out" ]
     # 2. Verify each date actually has matching movies
     assert_equal expected, available_dates
   end
@@ -226,7 +226,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     props = inertia_props
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-06"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Dom, 6 Out"
 
     elements = props["elements"]
     elements.each do |element|
@@ -243,8 +243,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     # 4. Check props
     props = inertia_props
 
-    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
   end
+
   test "handles dates with no matching movies via direct URL" do
     # User directly accesses URL with search + date that has no matches
     get program_url, params: { query: "Batman", date: "2024-10-04" }
@@ -257,7 +258,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
     # Should fallback to first available date with Batman movies
     assert_not_equal "2024-10-04", props["menuTabs"].map { _1["date"] }
-    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-05"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Sáb, 5 Out"
   end
 
   test "search changes available dates when results are filtered" do
@@ -392,7 +393,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     available_dates = props["menuTabs"].map { _1["date"] }
-    expected_dates = [ "2024-10-05", "2024-10-06", "2024-10-07" ]
+    expected_dates = [ "Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out" ]
     assert_equal expected_dates, available_dates
   end
 
@@ -431,7 +432,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     # All filters should be preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal "documentarios", props["current_filters"]["mostra"]["permalink_pt"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
   end
 
   test "mostra filter with pagination" do
@@ -584,7 +585,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     available_dates = props["menuTabs"].map { _1["date"] }
-    assert_equal [ "2024-10-07" ], available_dates.uniq
+    assert_equal [ "Seg, 7 Out" ], available_dates.uniq
   end
 
   test "preserves cinema filter when navigating dates" do
@@ -622,7 +623,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "2024-10-07"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
   end
 
   test "cinema filter with pagination" do
