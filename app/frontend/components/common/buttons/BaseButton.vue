@@ -15,7 +15,7 @@ const variants = {
   dark: "text-white-transp-1000 bg-neutrals-900 hover:bg-neutrals-800 active:bg-neutrals-900 focus:outline-neutrals-900",
   gray: "text-neutrals-900 bg-neutrals-200 hover:bg-neutrals-300 active:bg-neutrals-300 focus:outline-neutrals-300",
   cta: "text-white-transp-1000 bg-gradient-to-r from-magenta-600 to-laranja-600 hover:bg-gradient-to-l",
-  rioMarket: "text-white bg-vermelho-600",
+  rioMarket: "text-white bg-vermelho-600 cursor-pointer",
   underline:
     "text-neutrals-700 border-neutrals-900/0 border-b-[1.5px] hover:border-neutrals-900/100 active:text-neutrals-900 active:border-none focus:outline-none focus:border-b-[1.5px] focus:border-neutrals-900 rounded-none",
 };
