@@ -8,25 +8,6 @@ const props = defineProps({
   content: { type: String, default: new Date().toISOString().split('T')[0] }
 })
 
-const day = computed(() => props.content.split("-")[2])
-const weekDay = computed(() => {
-  const dateParts = props.content.split('-').map(Number)
-  const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2])
-
-  const shortName = date.toLocaleString("pt-BR", { weekday: "short" })
-  const firstLetter = shortName[0].toUpperCase()
-  const restOfWord = shortName.substring(1).toLowerCase()
-
-  return `${firstLetter}${restOfWord}`
-})
-const month = computed(() => props.content.split("-")[1])
-const monthName = computed(() => {
-  const shortName = new Date(props.content).toLocaleString("pt-BR", { month: "short" })
-  const firstLetter = shortName[0].toUpperCase()
-  const restOfWord = shortName.substring(1).toLowerCase()
-  return `${firstLetter}${restOfWord}`
-})
-
 const tabRef = useTabScroll(props.active); // used to reference "self"
 </script>
 
@@ -41,7 +22,7 @@ const tabRef = useTabScroll(props.active); // used to reference "self"
       >
         <time :datetime="props.content">
           <div class="text-body-strong-sm flex items-center" :class="props.active ? 'text-neutrals-900' : 'text-neutrals-700'">
-            <span class="day me-100">{{ weekDay }}</span> <span>{{ day }}</span> <span class="month ms-100">{{ monthName }}</span>
+            <span class="day me-100">{{ content }}</span>
           </div>
         </time>
       </div>

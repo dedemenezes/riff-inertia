@@ -164,7 +164,7 @@ class ProgramsController < ApplicationController
     # display_selected_date = I18n.l(selected_date, format: "%a, %e %b", locale: :pt) if selected_date
     @menu_tabs = available_dates.map do |date|
       {
-        date: date,
+        date: I18n.l(date, format: "%a, %-d %b"),
         url: build_tab_url(date, selected_filters),
         active: date.to_s == params[:date] || (date == selected_date && !params[:date])
       }
