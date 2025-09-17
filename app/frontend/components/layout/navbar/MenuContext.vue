@@ -1,6 +1,6 @@
 <script setup>
 import NavButtonContext from "@components/common/buttons/NavButtonContext.vue";
-import { ref, defineAsyncComponent, watchEffect } from 'vue'
+import { defineAsyncComponent, watchEffect } from 'vue'
 import { usePage } from "@inertiajs/vue3"
 
 const IconChevronRight = defineAsyncComponent(() => import("@/components/common/icons/navigation/IconChevronRight.vue"))
@@ -53,29 +53,29 @@ watchEffect(() => {
 })
 
 
-const scrollContainer = ref(null);
+// const scrollContainer = ref(null);
 
-const scrollLeft = () => {
-  scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
-};
+// const scrollLeft = () => {
+//   scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
+// };
 
-const scrollRight = () => {
-  scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
-};
+// const scrollRight = () => {
+//   scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
+// };
 </script>
 
 <template>
   <div class="relative">
     <!-- Left scroll button -->
-    <button
+    <!-- <button
       @click="scrollLeft"
       class="absolute left-0 top-1/2 -translate-y-2/3 z-10 p-2 hover:bg-gray-50 md:hidden"
       aria-label="Scroll left"
     >
       <IconChevronLeft class="w-4 h-4 text-neutrals-900" />
-    </button>
+    </button> -->
     <div
-      class="flex gap-600 px-1200 py-200 lg:gap-1600 lg:py-800 lg:justify-center overflow-x-auto no-scroll-bar fade-out--left fade-out--right"
+      class="flex gap-600 px-800 py-200 lg:gap-1600 lg:py-800 md:justify-center overflow-x-auto no-scroll-bar fade-out--left fade-out--right"
       ref="scrollContainer"
     >
       <NavButtonContext
@@ -104,13 +104,13 @@ const scrollRight = () => {
       </NavButtonContext>
       <!-- Right scroll button -->
     </div>
-    <button
+    <!-- <button
       @click="scrollRight"
       class="absolute right-0 top-1/2 -translate-y-2/3 z-10 p-2 bg-transparent hover:bg-gray-50 md:hidden"
       aria-label="Scroll right"
     >
       <IconChevronRight class="w-4 h-4 text-neutrals-900" />
-    </button>
+    </button> -->
   </div>
 </template>
 
