@@ -1,7 +1,4 @@
 @import "./tailwind-config.css" reference;
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 
 @layer components {
