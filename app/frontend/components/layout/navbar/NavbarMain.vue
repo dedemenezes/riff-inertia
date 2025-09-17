@@ -4,7 +4,8 @@ import MobileMenu from "@/components/layout/navbar/MobileMenu.vue";
 import { IconSearch } from "@/components/common/icons";
 import TheLanguageSwitcher from "@components/TheLanguageSwitcher.vue";
 
-import FestivalLogo from "@assets/logos/festival-logo.svg"
+import FestivalLogo from "@assets/logos/logo_nova_riff.png"
+import IconArrowOut from "@/components/common/icons/misc/IconArrowOut.vue";
 const props = defineProps({
   rootUrl: { type: String, required: true }
 });
@@ -28,7 +29,7 @@ const props = defineProps({
         class="py-200"
         :src="FestivalLogo"
         alt="Logo do Festival do Rio"
-        width="221"
+        width="300"
       />
     </a>
 
@@ -40,7 +41,7 @@ const props = defineProps({
       <p
         class="font-body text-neutrals-900 text-sm font-regular leading-[21px] uppercase"
       >
-        rio international film festival
+        27th rio de janeiro int'l film festival
       </p>
       <p class="font-body text-md font-bold leading-[22.4px]">
         2 - 12 OUT 2025
@@ -56,14 +57,20 @@ const props = defineProps({
       <IconSearch />
       <TheLanguageSwitcher />
 
-      <BaseButton as="button" size="md" variant="cta">
-        RioMarket
-        <img
-          src="@assets/icons/Vector.svg"
-          alt="carret"
-          class="w-full ms-300"
-        />
-      </BaseButton>
+<BaseButton
+  as="button"
+  size="sm"
+  class="py-300 px-400 group flex items-center justify-center"
+  variant="rioMarket"
+>
+  <span class="transition-all duration-300 group-hover:translate-x-2">
+    RioMarket
+  </span>
+
+  <IconArrowOut
+    class="ms-150 w-4 h-4 transition-all duration-300 group-hover:opacity-0"
+  />
+</BaseButton>
     </div>
   </nav>
 </template>

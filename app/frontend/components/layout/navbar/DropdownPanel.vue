@@ -24,6 +24,6 @@ const props = defineProps({
 
 <style scoped>
   div {
-    z-index: 1;
+    z-index: 100;
   }
 </style>
