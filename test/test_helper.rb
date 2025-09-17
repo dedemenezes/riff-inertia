@@ -32,3 +32,31 @@ end
 class ActionDispatch::IntegrationTest
   include InertiaTestHelper
 end
+
+class Minitest::Test
+  def before_setup
+    super
+
+    # Save originals
+    @old_ano    = ApplicationRecord::EDICAO_ATUAL_ANO
+    @old_edicao = ApplicationRecord::EDICAO_ATUAL
+
+    # Override for all tests
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
+    ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, "2024")
+
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL)
+    ApplicationRecord.const_set(:EDICAO_ATUAL, 12)
+  end
+
+  def after_teardown
+    super
+
+    # Restore originals
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
+    ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, @old_ano)
+
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL)
+    ApplicationRecord.const_set(:EDICAO_ATUAL, @old_edicao)
+  end
+end

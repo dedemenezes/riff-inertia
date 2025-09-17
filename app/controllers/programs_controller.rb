@@ -1,7 +1,7 @@
 class ProgramsController < ApplicationController
   include InfiniteScrollable
 
-  EDICAO_ATUAL = ApplicationRecord::EDICAO_ATUAL
+  EDICAO_ATUAL = 12
   DATES_PER_PAGE = 1
 
   include BreadcrumbsHelper, Pagy::Backend

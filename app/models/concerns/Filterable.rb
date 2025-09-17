@@ -16,7 +16,6 @@ module Filterable
     end
 
     def build_filter_json(value, key)
-      logger.debug(value)
       if value.is_a?(Array)
         display = value.second
         value = value.first
