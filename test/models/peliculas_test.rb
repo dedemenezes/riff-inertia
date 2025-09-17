@@ -152,39 +152,40 @@ class PeliculaTest < ActiveSupport::TestCase
     refute_empty results_hyphen
   end
 
-  test "caching works - second call doesn't hit database" do
-    Rails.cache.clear
-    original_cache = Rails.cache
-    Rails.cache = ActiveSupport::Cache::MemoryStore.new
-    pelicula = peliculas(:batman)
-    edicao_id = pelicula.edicao_id
+  # TODO: ADD BACK WHEN ADDING CACHE
+  # test "caching works - second call doesn't hit database" do
+  #   Rails.cache.clear
+  #   original_cache = Rails.cache
+  #   Rails.cache = ActiveSupport::Cache::MemoryStore.new
+  #   pelicula = peliculas(:batman)
+  #   edicao_id = pelicula.edicao_id
 
-    # Clear cache to ensure clean test
-    Rails.cache.delete("actor-pelicula-mapping-#{edicao_id}")
+  #   # Clear cache to ensure clean test
+  #   Rails.cache.delete("actor-pelicula-mapping-#{edicao_id}")
 
-    first_mapping = nil
-    # First call should hit database
-    assert_queries_count(1) do
-      first_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
-    end
+  #   first_mapping = nil
+  #   # First call should hit database
+  #   assert_queries_count(1) do
+  #     first_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
+  #   end
 
-    second_mapping = nil
-    # Second call should use cache (no database queries)
-    assert_no_queries do
-      second_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
-    end
+  #   second_mapping = nil
+  #   # Second call should use cache (no database queries)
+  #   assert_no_queries do
+  #     second_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
+  #   end
 
-    # Results should be identical
-    first_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
-    second_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
+  #   # Results should be identical
+  #   first_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
+  #   second_mapping = @collection_service.actor_to_pelicula_mapping(edicao_id)
 
-    assert_equal first_mapping, second_mapping
+  #   assert_equal first_mapping, second_mapping
 
-    # Verify cache key exists
-    assert Rails.cache.exist?("actor-pelicula-mapping-#{edicao_id}")
+  #   # Verify cache key exists
+  #   assert Rails.cache.exist?("actor-pelicula-mapping-#{edicao_id}")
 
-    Rails.cache = original_cache
-  end
+  #   Rails.cache = original_cache
+  # end
   test "collection_for elenco returns all actors" do
     expected = Pelicula.pluck(:elenco_coord_int).map { _1.split(",") }.flatten.uniq.map(&:strip).count
     actual = @collection_service.collection_for_actors
