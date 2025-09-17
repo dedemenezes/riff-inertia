@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import TabComponent from "@/components/common/tabs/TabComponent.vue";
 import { IconChevronLeft, IconChevronRight } from "@/components/common/icons";
 
@@ -10,13 +10,52 @@ const props = defineProps({
 })
 
 const scrollContainer = ref(null);
+const currentStartIndex = ref(0);
+
+// Show 3 tabs at a time
+const visibleTabsCount = 3;
+
+// Find the active tab index
+const activeTabIndex = computed(() => {
+  return props.tabs.findIndex(tab => tab.active);
+});
+
+// Auto-center the active tab
+const centerActiveTab = () => {
+  if (activeTabIndex.value !== -1 && props.tabs.length > visibleTabsCount) {
+    // Calculate the ideal start index to center the active tab
+    const idealStart = activeTabIndex.value - Math.floor(visibleTabsCount / 2);
+
+    // Ensure we don't go below 0 or beyond the valid range
+    const maxStart = props.tabs.length - visibleTabsCount;
+    currentStartIndex.value = Math.max(0, Math.min(idealStart, maxStart));
+  }
+};
+
+// Watch for changes in active tab and auto-center
+watch(() => activeTabIndex.value, () => {
+  centerActiveTab();
+}, { immediate: true });
+
+// Get the currently visible tabs
+const visibleTabs = computed(() => {
+  return props.tabs.slice(currentStartIndex.value, currentStartIndex.value + visibleTabsCount);
+});
+
+// Check if we can scroll
+const canScrollLeft = computed(() => currentStartIndex.value > 0);
+const canScrollRight = computed(() => currentStartIndex.value + visibleTabsCount < props.tabs.length);
 
 const scrollLeft = () => {
-  scrollContainer.value.scrollBy({ left: -200, behavior: 'smooth' });
+  if (canScrollLeft.value) {
+    currentStartIndex.value = Math.max(0, currentStartIndex.value - 1);
+  }
 };
 
 const scrollRight = () => {
-  scrollContainer.value.scrollBy({ left: 200, behavior: 'smooth' });
+  if (canScrollRight.value) {
+    currentStartIndex.value = Math.min(props.tabs.length - visibleTabsCount, currentStartIndex.value + 1);
+  }
 };
 </script>
 
@@ -31,40 +70,48 @@ const scrollRight = () => {
   >
     <!-- Left scroll button -->
     <button
+      v-if="props.tabs.length > visibleTabsCount"
       @click="scrollLeft"
-      class="left-0 top-1/2 -translate-y-1/2 z-10 p-2 hover:bg-gray-50"
-      :class="props.tabs.length < 1 ? 'hidden' : 'absolute'"
+      class="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 hover:cursor-pointer hover:opacity-50 transition-all duration-200"
+      :class="!canScrollLeft ? 'opacity-30 cursor-not-allowed' : 'opacity-100'"
+      :disabled="!canScrollLeft"
       aria-label="Scroll left"
     >
       <IconChevronLeft class="w-4 h-4 text-neutrals-900" />
     </button>
 
-    <!-- Scrollable tabs -->
-    <div
-      ref="scrollContainer"
-      role="tablist"
-      class="flex gap-300 overflow-x-auto no-scroll-bar py-300 lg:py-400 px-12 fade-out--left fade-out--right"
-      :class="{ '-mt-[1px]': props.isSticky }"
-    >
-      <Link
-        class="block flex-shrink-0"
-        v-for="(tab, index) in tabs"
-        :key="tab.date"
-        :href="tab.url"
+    <!-- Tabs container -->
+    <div class="overflow-hidden">
+      <div
+        ref="scrollContainer"
+        role="tablist"
+        class="flex py-300 lg:py-400 px-12 transition-all duration-300 ease-in-out"
+        :class="{ '-mt-[1px]': props.isSticky }"
       >
-        <TabComponent
-          :active="tab.active"
-          :tabIndex="index"
-          :content="tab.date"
-        />
-      </Link>
+        <!-- Show only visible tabs -->
+        <Link
+          class="block flex-1 min-w-0"
+          v-for="(tab, index) in visibleTabs"
+          :key="tab.date"
+          :href="tab.url"
+        >
+          <TabComponent
+            :active="tab.active"
+            :tabIndex="currentStartIndex + index"
+            :content="tab.date"
+          />
+        </Link>
+      </div>
     </div>
 
+    {{  }}
     <!-- Right scroll button -->
     <button
+      v-if="props.tabs.length > visibleTabsCount"
       @click="scrollRight"
-      class="right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent hover:bg-gray-50"
-      :class="props.tabs.length < 1 ? 'hidden' : 'absolute'"
+      class="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent hover:cursor-pointer hover:opacity-50 transition-all duration-200"
+      :class="!canScrollRight ? 'opacity-30 cursor-not-allowed' : 'opacity-100'"
+      :disabled="!canScrollRight"
       aria-label="Scroll right"
     >
       <IconChevronRight class="w-4 h-4 text-neutrals-900" />
@@ -73,10 +120,5 @@ const scrollRight = () => {
 </template>
 
 <style scoped>
-.fade-out--left.fade-out--right {
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-}
+/* Keep any existing styles you need */
 </style>
