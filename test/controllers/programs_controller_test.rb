@@ -245,6 +245,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
   end
+
   test "handles dates with no matching movies via direct URL" do
     # User directly accesses URL with search + date that has no matches
     get program_url, params: { query: "Batman", date: "2024-10-04" }
