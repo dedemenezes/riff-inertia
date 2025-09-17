@@ -127,7 +127,7 @@ const debugMode = false;
           class="h-15"
         />
         <div
-          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-15 z-10 bg-white"
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-13 z-10 bg-white"
           v-if="Object.values(props.current_filters).some((item) => item !== null)"
         >
           <TagFilter
