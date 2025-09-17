@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   resources :newsletters, only: :create
 
-
   scope "(:locale)", locale: /en|pt/ do
     root "pages#home"
     get :programacao, to: "programs#index", as: :program

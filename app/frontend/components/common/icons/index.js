@@ -13,6 +13,7 @@ export { default as IconHome } from "./navigation/IconHome.vue";
 export { default as IconChevronLeft } from "./navigation/IconChevronLeft.vue";
 export { default as IconChevronRight } from "./navigation/IconChevronRight.vue";
 export { default as IconBoxArrowUp } from "./navigation/IconBoxArrowUp.vue";
+export { default as IconArrowDown } from "./navigation/IconArrowDown.vue";
 // export { default as IconMenu } from "./navigation/IconMenu.vue";
 
 // Status
@@ -24,6 +25,8 @@ export { default as IconBoxArrowUp } from "./navigation/IconBoxArrowUp.vue";
 export { default as IconClock } from "./misc/IconClock.vue";
 export { default as IconLink } from "./misc/IconLink.vue";
 export { default as IconSeat } from "./misc/IconSeat.vue";
+export { default as IconPhone } from "./misc/IconPhone.vue";
+export { default as IconWholeTicket } from "./misc/IconWholeTicket.vue";
 export { default as IconInstagram } from "./misc/IconInstagram.vue";
 export { default as IconFacebook } from "./misc/IconFacebook.vue";
 export { default as IconTikTok } from "./misc/IconTikTok.vue";
