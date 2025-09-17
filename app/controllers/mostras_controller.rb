@@ -1,8 +1,13 @@
 class MostrasController < ApplicationController
   def index
-    @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
-    @mostras = @edicao_atual.mostras.group_by(&:display_name)
-    @categorias = @mostras.map { |categoria, mostras| { name: categoria, class: mostras.first.tag_class, path: mostra_path(categoria) } }
+    # @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
+    @mostras = Mostra.includes(:peliculas).where(edicao_id: ApplicationRecord::EDICAO_ATUAL).group_by(&:display_name)
+    @categorias = @mostras.map { |categoria, mostras| {
+      name: categoria,
+      class: mostras.first.tag_class,
+      path: mostra_path(categoria),
+      mostraImageURL: mostras.first.peliculas.sample.imageURL
+    } }
 
     render inertia: "Mostras/Index", props: {
       rootUrl: @root_url,
