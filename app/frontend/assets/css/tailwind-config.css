@@ -7,7 +7,7 @@
 @theme {
   /* Colors (using your JSON tokens) */
   /* @import "./design-tokens/color-primitives.json"; */
-  --color-neutrals-100: #FFFFFF;
+  --color-neutrals-100: #f9f9f9;
   --color-neutrals-200: #F5F4F4;
   --color-neutrals-300: #DBDAD7;
   --color-neutrals-400: #C3C0BC;
@@ -101,7 +101,7 @@
   --radius-400: 1rem;
 
   /* Fonts */
-  --font-heading: "Fira Sans", sans-serif;
+  --font-heading: "Work Sans", sans-serif;
   --font-body: "Inter", sans-serif;
 
   /* Font weights */

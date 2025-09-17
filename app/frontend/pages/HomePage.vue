@@ -12,7 +12,9 @@ import SessionCard from "@/components/common/cards/SessionCard.vue";
 import HorizontalScrollLayout from "@/components/layout/HorizontalScrollLayout.vue";
 const TvFestival = defineAsyncComponent(() => import("@/components/layout/TvFestival.vue"));
 
-import { simpleTranslation } from "@/lib/utils";
+import { simpleTranslation, useUpdateWindowWidth } from "@/lib/utils";
+import CarouselComponent from "@/components/ui/CarouselComponent.vue";
+import { CarouselItem } from "@/components/ui/carousel";
 
 
 const props = defineProps({
@@ -22,20 +24,45 @@ const props = defineProps({
   noticias: { type: Array },
   noticasUrl: { type: String },
   youtubeVideos: { type: Array },
-  nextSessions: { type: Array }
+  nextSessions: { type: Array },
+  webdoors: { type: Array }
 })
+const isDesktop = ref(useUpdateWindowWidth());
 
+const mobileSizing = "height: 562px;";
+
+const backgroundImageStyle = (webdoor) => {
+  const imagePath = isDesktop.value ? webdoor.desktop_image_url : webdoor.mobile_image_url
+  return `background-image: url(${imagePath});
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;`;
+};
 </script>
 
+<!-- <h1 class="text-header-base text-2xl lg:text-3xl mb-200 text-primary">
+  A 26ª edição do Festival do Rio vem aí!
+</h1>
+<p class="text-subheading text-primary">
+  De 2 a 12 de outubro o cinema estará sob a luz do Rio
+</p> -->
 <template>
   <Head title="Festival do Rio" />
-  <HomeBanner :imagePath="banneImagePath" alt="Banner promocional">
-    <h1 class="text-header-base text-2xl lg:text-3xl mb-200 text-primary">
-      A 26ª edição do Festival do Rio vem aí!
-    </h1>
-    <p class="text-subheading text-primary">
-      De 2 a 12 de outubro o cinema estará sob a luz do Rio
-    </p>
+  <HomeBanner>
+    <CarouselComponent :full-screen="true">
+      <template v-slot:items>
+        <CarouselItem v-for="webdoor in props.webdoors" :key="webdoor.id">
+          <div class="flex items-end justify-start h-[562px] lg:h-[618px]" :style="[backgroundImageStyle(webdoor)]">
+               <div class="px-400 py-200 lg:ps-[150px] lg:max-w-5xl pb-[58px] lg:pb-[77px]">
+                 <h1 class="banner font-regular leading-[150%] text-2xl lg:text-3xl mb-200 text-primary">
+                 {{ webdoor.titulo }}
+                 </h1>
+               </div>
+            <!-- </TwContainer> -->
+          </div>
+        </CarouselItem>
+      </template>
+    </CarouselComponent>
   </HomeBanner>
   <QuickLinkSection v-bind:links="quickLinksConfig" />
 
@@ -72,4 +99,10 @@ const props = defineProps({
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
 }
+h1.banner {
+  background: white;
+  display: inline;
+  /* line-height: 1.4; */
+}
+
 </style>

@@ -2,7 +2,7 @@
 import { BaseIcon } from "@components/common/icons"
 
 const props = defineProps({
-  color: { type: String, default: undefined },
+  color: { type: String, default: 'text-neutrals-900' },
   active: { type: Boolean, default: false },
   width: { type: String, default: "20" },
   height: { type: String, default: "20" }
