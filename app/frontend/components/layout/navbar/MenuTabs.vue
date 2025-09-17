@@ -32,7 +32,8 @@ const scrollRight = () => {
     <!-- Left scroll button -->
     <button
       @click="scrollLeft"
-      class="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 hover:bg-gray-50"
+      class="left-0 top-1/2 -translate-y-1/2 z-10 p-2 hover:bg-gray-50"
+      :class="props.tabs.length < 1 ? 'hidden' : 'absolute'"
       aria-label="Scroll left"
     >
       <IconChevronLeft class="w-4 h-4 text-neutrals-900" />
@@ -62,7 +63,8 @@ const scrollRight = () => {
     <!-- Right scroll button -->
     <button
       @click="scrollRight"
-      class="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent hover:bg-gray-50"
+      class="right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-transparent hover:bg-gray-50"
+      :class="props.tabs.length < 1 ? 'hidden' : 'absolute'"
       aria-label="Scroll right"
     >
       <IconChevronRight class="w-4 h-4 text-neutrals-900" />
