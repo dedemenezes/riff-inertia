@@ -69,6 +69,10 @@ class PagesController < ApplicationController
       }
     end
 
+    webdoors = Webdoor.ordered.as_json(
+      only: %i[ id titulo ],
+      methods: %i[ permalink mobile_image_url desktop_image_url ]
+    )
 
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
@@ -76,7 +80,8 @@ class PagesController < ApplicationController
       noticias:,
       noticasUrl: noticias_url,
       youtubeVideos: playlist_response["items"],
-      nextSessions: @programacoes
+      nextSessions: @programacoes,
+      webdoors:
     }
   end
 end

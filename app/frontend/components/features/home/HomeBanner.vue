@@ -1,3 +1,4 @@
+
 <script setup>
 import { computed } from "vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
@@ -24,11 +25,11 @@ const backgroundImageStyle = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-end" :style="[backgroundImageStyle, mobileSizing]">
+  <slot />
+  <!-- <div class="flex items-end" :style="[backgroundImageStyle, mobileSizing]">
     <TwContainer extra-classes="pb-[58px] lg:pb-[77px]">
-      <slot />
     </TwContainer>
-  </div>
+  </div> -->
 </template>
 
 <style scoped></style>
