@@ -35,7 +35,7 @@ gem "thruster", require: false
 gem "inertia_rails", "~> 3.11"
 gem "vite_rails", "~> 3.0"
 
-gem "pagy", "~> 9.3"
+gem "pagy", "~> 43.0"
 
 gem "httparty", "~> 0.23.1"
 
