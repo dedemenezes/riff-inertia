@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :set_locale, :set_root_url
+  before_action :set_locale, :set_root_url, :current_edicao
 
   inertia_share flash: -> {
     {
@@ -28,6 +28,10 @@ class ApplicationController < ActionController::Base
   inertia_share imageBaseURL: -> {
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
+
+  def current_edicao
+    @current_edicao = Edicao.find_by!(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
+  end
 
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale

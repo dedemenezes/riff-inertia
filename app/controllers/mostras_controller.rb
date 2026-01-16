@@ -1,7 +1,6 @@
 class MostrasController < ApplicationController
   def index
-    # @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
-    @mostras = Mostra.includes(:peliculas).where(edicao_id: ApplicationRecord::EDICAO_ATUAL).group_by(&:display_name)
+    @mostras = Mostra.includes(:peliculas).where(edicao_id: @current_edicao.id).group_by(&:display_name)
     @categorias = @mostras.map { |categoria, mostras| {
       name: categoria,
       class: mostras.first.tag_class,
@@ -16,8 +15,7 @@ class MostrasController < ApplicationController
   end
 
   def show
-    @edicao_atual = Edicao.find_by(descricao: "2024") # TODO: Change to 2025
-    @mostras = @edicao_atual.mostras.select { |mostra| mostra.display_name == params[:category] }
+    @mostras = @current_edicao.mostras.select { |mostra| mostra.display_name == params[:category] }
 
     render inertia: "Mostras/Show", props: {
       rootUrl: @root_url,

@@ -4,13 +4,12 @@ class PeliculasController < ApplicationController
   include InfiniteScrollable
 
   def index
-    @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
     @peliculas = Pelicula
                   .includes(programacoes: :cinema)
-                  .where(edicao: @edicao_atual)
+                  .where(edicao: @current_edicao)
                   .order(titulo_portugues_coord_int: :asc)
 
-    current_page = params[:page].to_i ||= 1
+    current_page = params[:page]&.to_i || 1
 
     if params[:query]
       term = "%#{params[:query].downcase}%"
