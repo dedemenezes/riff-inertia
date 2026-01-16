@@ -45,8 +45,8 @@ const handleClear = (clearedFilters) => {
 <template>
   <SearchFilter
     v-model="filters"
-    @filtersApplied="handleApply"
-    @filtersCleared="handleClear"
+    @filters-applied="handleApply"
+    @filters-cleared="handleClear"
   >
     <template #filters="{ updateField, clearField, hasActiveFilters }">
       <MyCustomForm
@@ -82,8 +82,8 @@ const filters = ref({ /* your filter structure */ })
   <ResponsiveFilterMenu
     v-model="filters"
     :is-open="isFilterMenuOpen"
-    @filtersApplied="handleApply"
-    @filtersCleared="handleClear"
+    @filters-applied="handleApply"
+    @filters-cleared="handleClear"
     @close-filter-menu="isFilterMenuOpen = false"
   >
     <template #filters="searchFilterProps">
