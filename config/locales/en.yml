@@ -23,11 +23,22 @@ en:
       description: "Plan ahead by checking schedule changes."
 
   navigation:
-    programming: "Programming"
-    edition2024: "2024 Edition"
-    aboutUs: "About Us"
-    news: "News"
-    media: "Media"
+    media:
+      name: "Media"
+    programming:
+      name: "Programming"
+      full_schedule: "Schedule"
+      with_guests: "With guests"
+      free: "Free exibithions"
+      updates: "Latest updates"
+    edition:
+      name: "%{edicao_atual} Edition"
+    about:
+      name: "About us"
+    articles:
+      name: "Articles"
+      fotos_e_videos: "Photos & Videos"
+    impressos: "Prints"
     information: "Information"
     press: "Press"
     archive: "Archive"
@@ -36,6 +47,7 @@ en:
     sessoes_com_convidados: "Sessions with Guests"
     mudancas_na_programacao: "Program Updates"
     sessoes_ao_ar_livre: "Open-Air Screenings"
+    todos_os_filmes: "All Movies"
 
   filter:
     title: "Filters"
