@@ -4,6 +4,7 @@ pt:
     banner_subtitle: "De 2 a 12 de outubro o cinema estará sob a luz do Rio"
 
   pelicula:
+    sobre_o_filme: "Sobre o filme"
     roteiro: Roteiro
     diretor: Direção
     fotografia: Fotografia

@@ -31,6 +31,10 @@ module Displayable
     end
   end
 
+  def display_sobre_o_filme
+    I18n.t("pelicula.sobre_o_filme")
+  end
+
   def displayTeamsHeader
     I18n.t("pelicula.diretor")
   end
