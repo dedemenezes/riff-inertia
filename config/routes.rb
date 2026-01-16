@@ -13,7 +13,6 @@ Rails.application.routes.draw do
     resources :cinemas, only: :index
   end
 
-
   get "inertia-example", to: "inertia_example#index"
   get "up" => "rails/health#show", as: :rails_health_check
 end
