@@ -40,7 +40,7 @@ const movieGenre = computed(() => {
       <div class="relative w-full">
         <img
           :src="props.pelicula.imageURL"
-          alt="movie-name poster"
+          :alt="props.pelicula.display_titulo"
           class="rounded-200 h-[268px] w-full object-cover"
         />
         <!-- Overlay -->

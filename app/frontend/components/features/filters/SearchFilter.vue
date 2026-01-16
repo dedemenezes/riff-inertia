@@ -4,6 +4,8 @@ import { toRaw } from "vue";
 import { cleanObject, toHHMM } from "@/lib/utils";
 const FilterActions =  defineAsyncComponent(() => import("@/components/features/filters/FilterActions.vue"));
 
+const FILTER_KEYS_TO_IGNORE = ['page', 'date'];
+
 const closeMenu = () => {
   emit("close-filter-menu", false);
 };
@@ -60,10 +62,9 @@ const clearAllFilters = () => {
  * Check if any filters are active (excluding certain keys)
  */
 const hasActiveFilters = computed(() => {
-  const keysToIgnore = ['page', 'date']; // Add keys you want to ignore
 
   return Object.entries(props.modelValue)
-    .filter(([key, value]) => !keysToIgnore.includes(key))
+    .filter(([key, value]) => !FILTER_KEYS_TO_IGNORE.includes(key))
     .filter(([key, value]) => value != "")
     .some(([key, value]) => value !== null);
 });
