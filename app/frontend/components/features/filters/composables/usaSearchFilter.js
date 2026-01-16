@@ -39,6 +39,8 @@ export function useSearchFilter(props, filtersFromController = {}) {
   /**
    * Called when SearchFilter emits filtersApplied
    * This makes the actual router call to update the page
+   * @param {Object} filtersFromSearchFilter - Filters from SearchFilter
+   * @returns {void}
    */
 
   const filterSearch = (filtersFromSearchFilter) => {
@@ -56,6 +58,8 @@ export function useSearchFilter(props, filtersFromController = {}) {
   /**
    * Called when user clicks a filter tag to remove it
    * This updates the filters state and makes a router call
+   * @param {Object} filterToRemove - Filter to remove
+   * @returns {void}
    */
 
   const removeQuery = (filterToRemove) => {
@@ -107,7 +111,9 @@ export function useSearchFilter(props, filtersFromController = {}) {
   /**
    * Called when SearchFilter emits filtersCleared
    * This clears all filters and optionally makes a router call
-   */
+   * @returns {void}
+  */
+
   const clearSearchQuery = () => {
     console.log('ProgramPage: Clearing all filters');
 
@@ -126,7 +132,10 @@ export function useSearchFilter(props, filtersFromController = {}) {
 
   /**
    * Called when user clears search bar directly (if needed)
-   */
+   * This clears the search query and makes a router call
+   * @returns {void}
+  */
+ 
   const handleClear = () => {
     console.log('ProgramPage: Clearing search query');
     filters.value.query = null;
