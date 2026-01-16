@@ -10,7 +10,7 @@ class CinemasController < ApplicationController
       cinemas: @salas.as_json,
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition2024"), peliculas_path ],
+        [ I18n.t("navigation.edition.name"), peliculas_path ],
         [ "Cinemas", cinemas_path ]
       )
     }
