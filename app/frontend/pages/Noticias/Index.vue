@@ -105,7 +105,7 @@ console.log(filters);
         <ResponsiveFilterMenu
           v-model="filters"
           :is-open="isFilterMenuOpen"
-          @filtersApplied="filterSearch"
+          @filters-applied="filterSearch"
           @close-filter-menu="closeMenu"
         >
           <template #filters="{ modelValue, updateField }">

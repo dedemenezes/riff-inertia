@@ -63,8 +63,8 @@ const closeBtn = useTemplateRef('close-btn');
         <SearchFilter
           :modelValue="props.modelValue"
           @update:modelValue="$emit('update:modelValue', $event)"
-          @filtersApplied="$emit('filtersApplied', $event)"
-          @filtersCleared="$emit('filtersCleared', $event)"
+          @filters-applied="$emit('filtersApplied', $event)"
+          @filters-cleared="$emit('filtersCleared', $event)"
           @close-filter-menu="$emit('close-filter-menu')"
         >
           <!-- Pass all SearchFilter slot props directly to our slot -->
@@ -121,8 +121,8 @@ const closeBtn = useTemplateRef('close-btn');
                <SearchFilter
                  :modelValue="props.modelValue"
                  @update:modelValue="$emit('update:modelValue', $event)"
-                 @filtersApplied="$emit('filtersApplied', $event)"
-                 @filtersCleared="$emit('filtersCleared', $event)"
+                 @filters-applied="$emit('filtersApplied', $event)"
+                 @filters-cleared="$emit('filtersCleared', $event)"
                  @close-filter-menu="$emit('close-filter-menu')"
                >
                  <template #filters="searchFilterProps">
