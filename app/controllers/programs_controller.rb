@@ -5,6 +5,7 @@ class ProgramsController < ApplicationController
   DATES_PER_PAGE = 1
 
   include BreadcrumbsHelper, Pagy::Backend
+  include ProgramFilterOptions
 
   before_action :set_pelicula_collection_service
 
@@ -21,18 +22,16 @@ class ProgramsController < ApplicationController
 
     # Filtering SEARCH INPUT
     if params[:query].present?
-      term = "%#{params[:query].downcase}%"
-      pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).where(
-        "LOWER(titulo_ingles_coord_int) LIKE :term OR
-        LOWER(titulo_original_coord_int) LIKE :term OR
-        LOWER(titulo_portugues_coord_int) LIKE :term OR
-        LOWER(titulo_ingles_semartigo) LIKE :term OR
-        LOWER(titulo_portugues_semartigo) LIKE :term",
-        term: term
-      ).pluck(:id)
+      pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+                             .search_by_title(params[:query])
+                             .pluck(:id)
 
       base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      selected_query = { "filter_display": params[:query], "filter_value": params[:query] }
+      selected_query = {
+        "filter_display": params[:query],
+        "filter_value": params[:query]
+      }
+
       selected_filters[:query] = selected_query
     end
 
@@ -80,14 +79,8 @@ class ProgramsController < ApplicationController
 
       if selected_genre
         selected_filters[:genero] = selected_genre
-        locale_index = I18n.locale == :en ? -1 : 1
-
         # Use subquery instead of raw SQL on joined table
-        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).where(
-          "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
-          locale_index,
-          "%#{selected_genre['filter_value']}%"
-        ).pluck(:id)
+        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).search_by_genre(selected_genre["filter_value"]).pluck(:id)
 
         base_scope = base_scope.where(pelicula_id: pelicula_ids)
       end
@@ -223,49 +216,5 @@ class ProgramsController < ApplicationController
     query_params[:date] = date
     query_params[:free] = params[:free] if params[:free].present?
     url_for(params: query_params, only_path: true)
-  end
-
-  # TODO: Understand if it will become an api fetch
-  # TODO: Use caching
-  def set_filter_options(base_scope)
-    @paises_filter   = base_scope.includes(pelicula: :paises)
-                                .map { _1.pelicula.paises }
-                                .flatten
-                                .uniq
-                                .sort_by { |it| it.nome_pais }
-                                .as_json(
-                                  only: %i[id nome_pais],
-                                  methods: %i[filter_display filter_value filter_label]
-                                )
-
-    @mostras_filter  = Mostra.where(edicao_id: EDICAO_ATUAL)
-                            .to_a
-                            .uniq { |m| m.id }
-                            .sort_by { |it| it.permalink_pt }
-                            .as_json(
-                              only: %i[id permalink_pt nome_abreviado],
-                              methods: [ :tag_class, :display_name, :filter_value, :filter_display, :filter_label ]
-                            )
-    @cinemas_filter = Cinema.where(edicao_id: EDICAO_ATUAL)
-                            .to_a
-                            .uniq { |m| m.id }
-                            .sort_by { |it| it.nome }
-                            .as_json(
-                              only: %i[id nome endereco edicao_id],
-                              methods: %i[filter_display filter_value filter_label]
-                            )
-
-    @sessoes = Programacao.where(edicao_id: EDICAO_ATUAL).to_a.uniq { |p| p.sessao }.sort_by { |it| it.sessao }.as_json(
-      only: %i[sessao],
-      methods: %i[display_sessao filter_value filter_display filter_label]
-    )
-
-    @genres_filter = @pelicula_collection_service.collection_for_genres
-    @directors_filter = @pelicula_collection_service.collection_for_directors
-    @actors_filter = @pelicula_collection_service.collection_for_actors
-  end
-
-  def set_pelicula_collection_service
-    @pelicula_collection_service = PeliculaCollectionService.new
   end
 end
