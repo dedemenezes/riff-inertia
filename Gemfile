@@ -37,7 +37,7 @@ gem "vite_rails", "~> 3.0"
 
 gem "pagy", "~> 9.3"
 
-gem "httparty", "~> 0.23.1"
+gem "httparty", "~> 0.23.2"
 
 group :development, :test do
   gem "dotenv"
