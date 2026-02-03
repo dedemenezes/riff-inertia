@@ -4,6 +4,7 @@ pt:
     banner_subtitle: "De 2 a 12 de outubro o cinema estará sob a luz do Rio"
 
   pelicula:
+    sobre_o_filme: "Sobre o filme"
     roteiro: Roteiro
     diretor: Direção
     fotografia: Fotografia
@@ -22,11 +23,23 @@ pt:
       description: "Planeje-se verificando as mudanças na programação."
 
   navigation:
-    programming: "Programação"
-    edition2024: "Edição 2024"
-    aboutUs: "Sobre nós"
-    news: "Notícias"
-    media: "Mídias"
+    programming:
+      name: "Programação"
+      full_schedule: "Programação completa"
+      with_guests: "Sessões com convidados"
+      free: "Programação gratuita"
+      updates: "Mudanças na programação"
+    media:
+      name: "Mídias"
+      fotos_e_videos: "Fotos & Vídeos"
+      impressos: "Impressos"
+    edition:
+      name: "Edição %{edicao_atual}"
+    about: 
+      name: "Sobre nós"
+    articles: 
+      name: "Notícias"
+      fotos_e_videos: "Fotos & Vídeos"
     information: "Informações"
     press: "Imprensa"
     archive: "Arquivo"
@@ -35,6 +48,7 @@ pt:
     sessoes_com_convidados: "Sessões com convidados"
     mudancas_na_programacao: "Mudanças na programação"
     sessoes_ao_ar_livre: "Sessões ao ar livre"
+    todos_os_filmes: "Todos os Filmes"
 
   filter:
     title: "Filtros"

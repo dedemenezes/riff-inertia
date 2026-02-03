@@ -4,13 +4,12 @@ class PeliculasController < ApplicationController
   include InfiniteScrollable
 
   def index
-    @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
     @peliculas = Pelicula
                   .includes(programacoes: :cinema)
-                  .where(edicao: @edicao_atual)
+                  .where(edicao: @current_edicao)
                   .order(titulo_portugues_coord_int: :asc)
 
-    current_page = params[:page].to_i ||= 1
+    current_page = params[:page]&.to_i || 1
 
     if params[:query]
       term = "%#{params[:query].downcase}%"
@@ -36,8 +35,8 @@ class PeliculasController < ApplicationController
       ),
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition2024"), "" ],
-        [ "Todos os Filmes", peliculas_path ]
+        [ I18n.t("navigation.edition.name"), "" ],
+        [ I18n.t("navigation.todos_os_filmes"), peliculas_path ]
       ),
       pagy:  {
         page: @pagy.page,
@@ -57,7 +56,7 @@ class PeliculasController < ApplicationController
       ),
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.programming"), program_path ],
+        [ I18n.t("navigation.programming.name"), program_path ],
         [ @pelicula.display_titulo, "" ]
       ),
       backPath: request.referer || root_path

@@ -133,7 +133,7 @@ noticias = Noticia
 ```ruby
 # Prepare translated navigation items
 mainItems = [
-  I18n.t("navigation.programming"),
+  I18n.t("navigation.programming.name"),
   I18n.t("navigation.edition2024"),
   # ...
 ]

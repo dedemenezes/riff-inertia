@@ -154,10 +154,10 @@ const debugMode = false;
         <ResponsiveFilterMenu
           v-model="filters"
           :is-open="isFilterMenuOpen"
-          @filtersApplied="filterSearch"
-          @filtersCleared="clearSearchQuery"
+          @filters-applied="filterSearch"
+          @filters-cleared="clearSearchQuery"
           @close-filter-menu="closeMenu"
-          :debugMode="debugMode"
+          :debug-mode="debugMode"
           >
           <template #filters="searchFilterProps">
             <!-- v-bind="searchFilterProps" -->

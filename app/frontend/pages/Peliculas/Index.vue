@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import PeliculaCard from "@/components/common/cards/PeliculaCard.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -14,7 +14,7 @@ const props = defineProps({
   pagy: { type: Object, required: true }
 })
 
-const allElements = reactive([...props.elements])
+const allElements = ref([...props.elements])
 
 const inputValue = ref("")
 const search = (value) => {

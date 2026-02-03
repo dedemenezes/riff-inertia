@@ -13,7 +13,7 @@ const sizes = {
   md: "text-md leading-[22.4px]",
 };
 
-const { variant, size, text, tag, href, fontWeight } = defineProps({
+const props = defineProps({
   variant: {
     type: String,
     validator: (value) => ["dark", "light", "color"].includes(value),
@@ -33,9 +33,9 @@ const { variant, size, text, tag, href, fontWeight } = defineProps({
   },
 });
 
-const fontWeightClass = computed(() => `font-${fontWeight}`);
-const variantClass = computed(() => variants[variant]);
-const sizeClass = computed(() => sizes[size]);
+const fontWeightClass = computed(() => `font-${props.fontWeight}`);
+const variantClass = computed(() => variants[props.variant]);
+const sizeClass = computed(() => sizes[props.size]);
 </script>
 
 <template>

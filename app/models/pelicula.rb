@@ -9,6 +9,7 @@ class Pelicula < ApplicationRecord
     genre
     display_paises
     displayTeamsHeader
+    display_sobre_o_filme
     teams
     imageURL
     posterImageURL
@@ -44,26 +45,6 @@ class Pelicula < ApplicationRecord
   has_many :programacoes
   has_many :peliculas_tags
 
-  # def self.collection_for_genres
-  #   # Rails.cache.fetch("genres-for-edicao-#{edicao_id}-#{I18n.locale}", expires_in: 12.hours) do
-  #   locale_index = I18n.locale == :en ? 1 : 0
-  #   collection_for(:catalogo_ficha_2007, :genero) do |fichas|
-  #     fichas.map { |ficha| ficha.split(" ").first&.split("/")&.at(locale_index) }
-  #   end
-  # end
-
-  # def self.collection_for_directors
-  #   # Rails.cache.fetch("directors-for-edicao-#{edicao_id}", expires_in: 12.hours) do
-  #   collection_for(:diretor_coord_int, :direcao) do |directors|
-  #     directors.map(&:strip)
-  #   end
-  # end
-
-  # def self.collection_for_actors
-  #   collection_for(:elenco_coord_int, :elenco) do |actors|
-  #     actors.flat_map { |cast| cast.split(",").map(&:strip) }
-  #   end
-  # end
 
   def programacoesAsJson
     programacoes.order(:data).each_slice(3).map do |programacoes_slice|

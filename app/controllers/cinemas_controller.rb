@@ -2,8 +2,7 @@ class CinemasController < ApplicationController
   include BreadcrumbsHelper
 
   def index
-    @edicao_atual = Edicao.find_by(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
-    @cinemas = @edicao_atual.cinemas.order(nome: :asc)
+    @cinemas = @current_edicao.cinemas.order(nome: :asc)
     @salas = Cinema.group_salas(@cinemas)
 
     render inertia: "Cinemas/Index", props: {
@@ -11,7 +10,7 @@ class CinemasController < ApplicationController
       cinemas: @salas.as_json,
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition2024"), peliculas_path ],
+        [ I18n.t("navigation.edition.name"), peliculas_path ],
         [ "Cinemas", cinemas_path ]
       )
     }

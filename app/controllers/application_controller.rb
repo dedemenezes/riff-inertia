@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :set_locale, :set_root_url
+  before_action :set_locale, :set_root_url, :current_edicao
 
   inertia_share flash: -> {
     {
@@ -23,11 +23,14 @@ class ApplicationController < ActionController::Base
   inertia_share menuContext: -> {
     set_menu_context
   }
-  # fixed conflict here remove coment after testing
 
   inertia_share imageBaseURL: -> {
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
+
+  def current_edicao
+    @current_edicao = Edicao.find_by!(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
+  end
 
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
@@ -43,29 +46,29 @@ class ApplicationController < ActionController::Base
 
   def set_main_items
     {
-      "Programação": [
-        { name: "Programação completa", path: program_path },
-        { name: "Sessões com convidados", path: "" },
-        { name: "Programação gratuita", path: program_path(free: true) },
-        { name: "Mudanças na programação", path: "" }
+      I18n.t("navigation.programming.name") => [
+        { name: I18n.t("navigation.programming.full_schedule"), path: program_path },
+        { name: I18n.t("navigation.programming.with_guests"), path: program_path(free: true) },
+        { name: I18n.t("navigation.programming.free"), path: "" },
+        { name: I18n.t("navigation.programming.updates"), path: "" }
       ],
-      "Edição 2024": [
+      I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO) => [
         { name: "Todos os filmes", path: peliculas_path },
         { name: "Mostras", path: mostras_path },
         { name: "Cinemas", path: cinemas_path },
         { name: "Júri", path: "" },
         { name: "Equipe", path: "" }
       ],
-      "Sobre nós": [
+      I18n.t("navigation.about.name") => [
         { name: "O Festival", path: "" },
         { name: "Edições Anteriores", path: edicoes_anteriores_path },
         { name: "Talent Press", path: "" },
         { name: "Parceiros", path: "" }
       ],
-      "Notícias": [
+      I18n.t("navigation.articles.name") => [
         { name: "Todas as notícias", path: noticias_path }
       ],
-      "Mídias": [
+      I18n.t("navigation.media.name") => [
         { name: "Fotos e vídeos", path: "" },
         { name: "Impressos", path: "" }
       ]

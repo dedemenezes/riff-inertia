@@ -15,7 +15,7 @@ const isDesktop =  useUpdateWindowWidth()
 <template>
   <div class="space-y-600">
     <div class="">
-      <h3 class="text-overline text-neutrals-700 uppercase pb-200">sobre o filme</h3>
+      <h3 class="text-overline text-neutrals-700 uppercase pb-200">{{ props.pelicula.display_sobre_o_filme }}</h3>
       <p class="text-body-regular text-neutrals-900">{{ props.pelicula.display_sinopse }}</p>
     </div>
 

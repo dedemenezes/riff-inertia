@@ -1,7 +1,11 @@
 <script setup>
 const props = defineProps({
   tabs: { type: Array, required: true }, // [{ id: 'profile', label: 'Profile' }]
-  modelValue: String
+  modelValue: {
+    type: String,
+    required: true,
+    default: null,
+  }
 })
 
 const emit = defineEmits(['update:modelValue'])

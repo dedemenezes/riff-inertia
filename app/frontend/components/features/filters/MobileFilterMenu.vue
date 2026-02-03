@@ -50,15 +50,15 @@ const emit = defineEmits([
         <SearchFilter
           v-model="internalFilters"
           @update:modelValue="(val) => emit('update:modelValue', val)"
-          @filtersApplied="emit('filtersApplied', internalFilters)"
-          @filtersCleared="emit('filtersCleared')"
+          @filters-applied="emit('filtersApplied', internalFilters)"
+          @filters-cleared="emit('filtersCleared')"
           @close-filter-menu="emit('close-filter-menu')"
         >
           <template #filters="slotProps">
             <slot
               name="filters"
               :modelValue="internalFilters"
-              :updateField="(field, value) => {
+              :update-field="(field, value) => {
                 internalFilters[field] = value
               }"
             />
