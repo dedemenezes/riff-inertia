@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
     {
       I18n.t("navigation.programming.name") => [
         { name: I18n.t("navigation.programming.full_schedule"), path: program_path },
-        { name: I18n.t("navigation.programming.with_guests"), path: "" },
+        { name: I18n.t("navigation.programming.with_guests"), path: program_path(free: true) },
         { name: I18n.t("navigation.programming.free"), path: "" },
         { name: I18n.t("navigation.programming.updates"), path: "" }
       ],
