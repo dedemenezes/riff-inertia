@@ -13,6 +13,7 @@ const props = defineProps({
   size: { type: String, default: "large" },
 });
 const moviePoster = computed(() => {
+  // TODO: ADD TO ENV
   const baseUrl = "https://festivaldorio.s3.us-east-1.amazonaws.com"
 
   const fullUrl = `${baseUrl}/${props.edicao}/site/peliculas/${props.size}`

@@ -125,6 +125,11 @@ class ProgramsController < ApplicationController
       end
     end
 
+    if params[:free].present?
+      selected_filters[:free] = params[:free]
+      base_scope = base_scope.where(gratuito: ActiveRecord::Type::Boolean.new.cast(params[:free]))
+    end
+
     # Get Scope Available dates
     available_dates = base_scope.distinct.pluck(:data).sort
     selected_date = available_dates.first
@@ -157,7 +162,8 @@ class ProgramsController < ApplicationController
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,
         mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
-        pelicula_url: pelicula_path(programacao.pelicula.permalink)
+        pelicula_url: pelicula_path(programacao.pelicula.permalink),
+        gratuito:  ActiveRecord::Type::Boolean.new.cast(programacao.gratuito)
       }
     end
 
@@ -215,9 +221,12 @@ class ProgramsController < ApplicationController
     query_params[:direcao]= filters[:direcao]["filter_value"] if filters[:direcao].present?
     query_params[:elenco]= filters[:elenco]["filter_value"] if filters[:elenco].present?
     query_params[:date] = date
+    query_params[:free] = params[:free] if params[:free].present?
     url_for(params: query_params, only_path: true)
   end
 
+  # TODO: Understand if it will become an api fetch
+  # TODO: Use caching
   def set_filter_options(base_scope)
     @paises_filter   = base_scope.includes(pelicula: :paises)
                                 .map { _1.pelicula.paises }

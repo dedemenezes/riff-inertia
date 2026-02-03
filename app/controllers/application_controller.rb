@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
       "Programação": [
         { name: "Programação completa", path: program_path },
         { name: "Sessões com convidados", path: "" },
-        { name: "Programação gratuita", path: "" },
+        { name: "Programação gratuita", path: program_path(free: true) },
         { name: "Mudanças na programação", path: "" }
       ],
       "Edição 2024": [
