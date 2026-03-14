@@ -13,7 +13,7 @@ class PeliculasController < ApplicationController
 
     if params[:query]
       term = "%#{params[:query].downcase}%"
-      @peliculas = @peliculas.where(edicao_id: ApplicationRecord::EDICAO_ATUAL).where(
+      @peliculas = @peliculas.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).where(
         "LOWER(titulo_ingles_coord_int) LIKE :term OR
         LOWER(titulo_original_coord_int) LIKE :term OR
         LOWER(titulo_portugues_coord_int) LIKE :term OR

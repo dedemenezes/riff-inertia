@@ -39,7 +39,7 @@ class Minitest::Test
 
     # Save originals
     @old_ano    = ApplicationRecord::EDICAO_ATUAL_ANO
-    @old_edicao = ApplicationRecord::EDICAO_ATUAL
+    @old_edicao = ApplicationRecord::EDICAO_ATUAL_ID
 
     # Override for all tests
     ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
