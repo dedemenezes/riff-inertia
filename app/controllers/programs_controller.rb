@@ -1,7 +1,5 @@
 class ProgramsController < ApplicationController
   include InfiniteScrollable
-
-  EDICAO_ATUAL = 12
   DATES_PER_PAGE = 1
 
   include BreadcrumbsHelper, Pagy::Backend
@@ -16,13 +14,13 @@ class ProgramsController < ApplicationController
     base_scope = Programacao
       .joins(pelicula: :mostra)
       .includes(:cinema, pelicula: :mostra)
-      .where(importacoesprog_id: last_import_id, edicao_id: EDICAO_ATUAL) # TODO: remover importacoes?
+      .where(importacoesprog_id: last_import_id, edicao_id: ApplicationRecord::EDICAO_ATUAL_ID) # TODO: remover importacoes?
 
     set_filter_options(base_scope)
 
     # Filtering SEARCH INPUT
     if params[:query].present?
-      pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+      pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
                              .search_by_title(params[:query])
                              .pluck(:id)
 
@@ -46,7 +44,7 @@ class ProgramsController < ApplicationController
 
     if params[:cinema]
       @selected_cinema = @cinemas_filter.find do |cinema_filter|
-        (cinema_filter["id"].to_s === params[:cinema]) && (cinema_filter["edicao_id"] == EDICAO_ATUAL)
+        (cinema_filter["id"].to_s === params[:cinema]) && (cinema_filter["edicao_id"] == ApplicationRecord::EDICAO_ATUAL_ID)
       end
       if @selected_cinema
         @selected_filters[:cinema] = @selected_cinema
@@ -80,7 +78,7 @@ class ProgramsController < ApplicationController
       if @selected_genre
         @selected_filters[:genero] = @selected_genre
         # Use subquery instead of raw SQL on joined table
-        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL).search_by_genre(@selected_genre["filter_value"]).pluck(:id)
+        pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).search_by_genre(@selected_genre["filter_value"]).pluck(:id)
 
         base_scope = base_scope.where(pelicula_id: pelicula_ids)
       end
@@ -93,7 +91,7 @@ class ProgramsController < ApplicationController
         @selected_filters[:direcao] = @selected_director
 
         # Get pelicula IDs first - clean, simple query
-        pelicula_ids = Pelicula.where(edicao_id: EDICAO_ATUAL)
+        pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
                               .where(diretor_coord_int: @selected_director["filter_value"])
                               .pluck(:id)
 
@@ -106,7 +104,7 @@ class ProgramsController < ApplicationController
       actor_query = params[:elenco]
 
       # Find peliculas with this actor
-      pelicula_ids = @pelicula_collection_service.actor_to_pelicula_mapping(EDICAO_ATUAL)[actor_query] || []
+      pelicula_ids = @pelicula_collection_service.actor_to_pelicula_mapping(ApplicationRecord::EDICAO_ATUAL_ID)[actor_query] || []
       if pelicula_ids.any?
         @selected_actor = {
           "filter_display" => actor_query,
