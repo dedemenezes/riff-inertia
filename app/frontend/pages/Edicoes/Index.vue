@@ -2,14 +2,19 @@
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import Cartaz from "@/components/common/cards/Cartaz.vue";
+import Breadcrumb from "@/components/common/Breadcrumb.vue";
 
 const props = defineProps({
-  edicoes: { type: Array, default: () => []}
+  edicoes: { type: Array, default: () => []},
+  crumbs: { type: Array, required: true}
 })
 
 </script>
 
 <template>
+  <TwContainer>
+    <Breadcrumb :crumbs="props.crumbs" />
+  </TwContainer>
   <MenuContext
     nav="sobre"
   />
