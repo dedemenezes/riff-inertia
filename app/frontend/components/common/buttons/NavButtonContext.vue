@@ -38,7 +38,7 @@ const navRef = useTabScroll(isActive.value);
 </script>
 
 <template>
-  <a
+  <Link
     ref="navRef"
     :href="props.route"
     class=""
@@ -60,5 +60,5 @@ const navRef = useTabScroll(isActive.value);
         {{ props.content }}
       </p>
     </div>
-  </a>
+  </Link>
 </template>
