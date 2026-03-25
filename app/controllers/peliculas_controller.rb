@@ -35,7 +35,7 @@ class PeliculasController < ApplicationController
       ),
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition.name"), "" ],
+        [ I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO), "" ],
         [ I18n.t("navigation.todos_os_filmes"), peliculas_path ]
       ),
       pagy:  {

@@ -43,6 +43,7 @@ pt:
     articles: 
       name: "Notícias"
       fotos_e_videos: "Fotos & Vídeos"
+    mostras: "Mostras"
     information: "Informações"
     press: "Imprensa"
     archive: "Arquivo"
@@ -52,6 +53,13 @@ pt:
     mudancas_na_programacao: "Mudanças na programação"
     sessoes_ao_ar_livre: "Sessões ao ar livre"
     todos_os_filmes: "Todos os Filmes"
+    cinemas: "Cinemas"
+    juri: "Júri"
+    edicoes_anteriores: "Edições Anteriores"
+    talent_press: "Talent Press"
+    talent_rio: "Talent Rio"
+    parceiros: "Parceiros"
+    todas_as_noticias: "Todas as notícias"
 
   filter:
     title: "Filtros"
