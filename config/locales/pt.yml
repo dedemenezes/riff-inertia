@@ -35,6 +35,7 @@ pt:
       impressos: "Impressos"
     edition:
       name: "Edição %{edicao_atual}"
+      team: "Equipe"
     festival:
       name: "Festival"
     about:

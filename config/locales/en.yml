@@ -33,6 +33,7 @@ en:
       updates: "Latest updates"
     edition:
       name: "%{edicao_atual} Edition"
+      team: "Team"
     festival:
       name: "Festival"
     about:
