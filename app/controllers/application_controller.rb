@@ -59,8 +59,8 @@ class ApplicationController < ActionController::Base
         { name: "Júri", path: "" },
         { name: "Equipe", path: "" }
       ],
-      I18n.t("navigation.about.name") => [
-        { name: "O Festival", path: "" },
+      I18n.t("navigation.festival.name") => [
+        { name: I18n.t("navigation.about.name"), path: "" },
         { name: "Edições Anteriores", path: edicoes_anteriores_path },
         { name: "Talent Press", path: "" },
         { name: "Parceiros", path: "" }
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
         { name: "Equipe", path: "", icon: "people" }
       ],
       "sobre" => [
-        { name: "O Festival", path: "", icon: "logoFest" },
+        { name: I18n.t("navigation.about.name"), path: "", icon: "logoFest" },
         { name: "Edições Anteriores", path: edicoes_anteriores_url, icon: "calendar" },
         { name: "Talent Rio", path: "", icon: "talentPress" },
         { name: "Parceiros", path: "", icon: "handshake" }
