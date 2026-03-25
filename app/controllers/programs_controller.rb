@@ -8,7 +8,6 @@ class ProgramsController < ApplicationController
   before_action :set_pelicula_collection_service
 
   def index
-    @selected_filters = {}
     last_import_id = Programacao.maximum(:importacoesprog_id)
 
     base_scope = Programacao
@@ -18,121 +17,32 @@ class ProgramsController < ApplicationController
 
     set_filter_options(base_scope)
 
-    # Filtering SEARCH INPUT
-    if params[:query].present?
-      pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
-                             .search_by_title(params[:query])
-                             .pluck(:id)
+    filter_result = ProgramacoesFilter.new(
+      relation: base_scope,
+      params: params,
+      filter_options: {
+        mostras: @mostras_filter,
+        cinemas: @cinemas_filter,
+        paises: @paises_filter,
+        sessoes: @sessoes,
+        genres: @genres_filter,
+        directors: @directors_filter
+      },
+      pelicula_collection_service: @pelicula_collection_service
+    ).call
 
-      base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      @selected_query = {
-        "filter_display": params[:query],
-        "filter_value": params[:query]
-      }
-
-      @selected_filters[:query] = @selected_query
-    end
-
-    if params[:mostra].present?
-      @selected_mostra = @mostras_filter.find { |c| c["permalink_pt"] == params[:mostra] }
-      @selected_filters[:mostra] = @selected_mostra if @selected_mostra
-
-      if @selected_mostra
-        base_scope = base_scope.where(mostras: { permalink_pt: @selected_filters[:mostra]["permalink_pt"] })
-      end
-    end
-
-    if params[:cinema]
-      @selected_cinema = @cinemas_filter.find do |cinema_filter|
-        (cinema_filter["id"].to_s === params[:cinema]) && (cinema_filter["edicao_id"] == ApplicationRecord::EDICAO_ATUAL_ID)
-      end
-      if @selected_cinema
-        @selected_filters[:cinema] = @selected_cinema
-        base_scope = base_scope.where(cinema_id: @selected_cinema["id"])
-      end
-    end
-
-    if params[:pais]
-      @selected_pais = @paises_filter.find do |pais_filter|
-        (pais_filter["id"].to_s === params[:pais])
-      end
-      if @selected_pais
-        @selected_filters[:pais] = @selected_pais
-        # base_scope = base_scope.where(paises_id: @selected_pais["id"])
-        base_scope = base_scope.joins(pelicula: :paises).where(pelicula: { paises: { id: @selected_pais["id"] } })
-      end
-    end
-
-    if params[:sessao].present?
-      @selected_sessao = @sessoes.find { |sessao| (sessao["filter_value"] === params[:sessao]) }
-
-      if @selected_sessao
-        @selected_filters[:sessao] = @selected_sessao
-        base_scope = base_scope.where(sessao: params[:sessao]..)
-      end
-    end
-
-    if params[:genero].present?
-      @selected_genre = @genres_filter.find { |genre| (genre["filter_value"] === params[:genero]) }
-
-      if @selected_genre
-        @selected_filters[:genero] = @selected_genre
-        # Use subquery instead of raw SQL on joined table
-        pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).search_by_genre(@selected_genre["filter_value"]).pluck(:id)
-
-        base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      end
-    end
-
-    if params[:direcao].present?
-      @selected_director = @directors_filter.find { |d| d["filter_value"] == params[:direcao] }
-
-      if @selected_director
-        @selected_filters[:direcao] = @selected_director
-
-        # Get pelicula IDs first - clean, simple query
-        pelicula_ids = Pelicula.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
-                              .where(diretor_coord_int: @selected_director["filter_value"])
-                              .pluck(:id)
-
-        # Then filter programacoes by IDs - no complex joins
-        base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      end
-    end
-
-    if params[:elenco].present?
-      actor_query = params[:elenco]
-
-      # Find peliculas with this actor
-      pelicula_ids = @pelicula_collection_service.actor_to_pelicula_mapping(ApplicationRecord::EDICAO_ATUAL_ID)[actor_query] || []
-      if pelicula_ids.any?
-        @selected_actor = {
-          "filter_display" => actor_query,
-          "filter_value" => actor_query,
-          "filter_label" => I18n.t("filter.elenco")
-        }
-        @selected_filters[:elenco] = @selected_actor
-        base_scope = base_scope.where(pelicula_id: pelicula_ids)
-      end
-    end
-
-    if params[:free].present?
-      selected_filters[:free] = params[:free]
-      base_scope = base_scope.where(gratuito: ActiveRecord::Type::Boolean.new.cast(params[:free]))
-    end
-
-    # Get Scope Available dates
-    available_dates = base_scope.distinct.pluck(:data).sort
-    @selected_date = available_dates.first
-
-    # Filter by date
-    if params[:date].present?
-      parsed_date = Date.parse(params[:date]) rescue nil
-      if parsed_date&.in?(available_dates)
-        @selected_date = parsed_date
-      end
-    end
-    @selected_filters[:date] = @selected_date
+    @selected_filters = filter_result.selected_filters
+    @selected_query = filter_result.selected_query
+    @selected_mostra = filter_result.selected_mostra
+    @selected_cinema = filter_result.selected_cinema
+    @selected_pais = filter_result.selected_pais
+    @selected_sessao = filter_result.selected_sessao
+    @selected_genre = filter_result.selected_genre
+    @selected_director = filter_result.selected_director
+    @selected_actor = filter_result.selected_actor
+    @selected_date = filter_result.selected_date
+    available_dates = filter_result.available_dates
+    base_scope = filter_result.relation
 
     programacoes_for_date = base_scope.where(data: @selected_date).order(:sessao)
 

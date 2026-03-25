@@ -45,8 +45,8 @@ class Minitest::Test
     ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
     ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, "2024")
 
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL)
-    ApplicationRecord.const_set(:EDICAO_ATUAL, 12)
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ID)
+    ApplicationRecord.const_set(:EDICAO_ATUAL_ID, 12)
   end
 
   def after_teardown
@@ -56,7 +56,7 @@ class Minitest::Test
     ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
     ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, @old_ano)
 
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL)
-    ApplicationRecord.const_set(:EDICAO_ATUAL, @old_edicao)
+    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ID)
+    ApplicationRecord.const_set(:EDICAO_ATUAL_ID, @old_edicao)
   end
 end
