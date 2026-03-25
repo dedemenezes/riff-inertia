@@ -12,6 +12,7 @@ class Pelicula < ApplicationRecord
     display_sobre_o_filme
     teams
     imageURL
+    banner_image
     posterImageURL
     director_image
     carousel_images
