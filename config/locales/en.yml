@@ -33,6 +33,8 @@ en:
       updates: "Latest updates"
     edition:
       name: "%{edicao_atual} Edition"
+    festival:
+      name: "Festival"
     about:
       name: "About us"
     articles:

@@ -35,7 +35,9 @@ pt:
       impressos: "Impressos"
     edition:
       name: "Edição %{edicao_atual}"
-    about: 
+    festival:
+      name: "Festival"
+    about:
       name: "Sobre nós"
     articles: 
       name: "Notícias"
