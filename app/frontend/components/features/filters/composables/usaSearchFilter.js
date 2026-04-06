@@ -5,32 +5,25 @@ import { extractFilterValues } from "@/lib/filterUtils";
 /**
  * FILTER STATE MANAGEMENT - SINGLE SOURCE OF TRUTH
  */
-export function useSearchFilter(props, filtersFromController = {}) {
-  /**
-   * Initialize empty filter structure
-   */
-  console.log(filtersFromController);
-
-  const initializeFilters = () => (filtersFromController)
-
-  /**
-   * Override empty filters with current filter values from controller
-   */
-  const overrideFiltersValues = () => {
-    return { ...initializeFilters(), ...props.current_filters }
-  }
-
+export function useSearchFilter(props) {
   // Props that will change when updating filters
   const propsToUpdate = ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
 
   // Main filter state - this is passed to SearchFilter via ResponsiveFilterMenu
-  const filters = ref(overrideFiltersValues())
+  const filters = ref({ ...props.current_filters });
 
   // Watch for prop changes from server (shouldn't happen often but good to have)
-  watch(() => props.current_filters, (newFilters) => {
-    console.log('ProgramPage: current_filters changed from server:', newFilters);
-    filters.value = overrideFiltersValues()
-  }, { immediate: true, deep: true })
+  watch(
+    () => props.current_filters, // what is this watching?
+    (newFilters) => {
+      console.log(
+        "ProgramPage: current_filters changed from server:",
+        newFilters,
+      );
+      filters.value = { ...props.current_filters };
+    },
+    { immediate: true, deep: true },
+  );
 
   // ============================================================================
   // FILTER OPERATIONS - CALLED BY SEARCHFILTER VIA EVENTS
@@ -94,7 +87,12 @@ export function useSearchFilter(props, filtersFromController = {}) {
       // Build new URL params from remaining filters
       const newParams = new URLSearchParams();
       Object.entries(filters.value).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && value !== "" && value?.filter_value) {
+        if (
+          value !== null &&
+          value !== undefined &&
+          value !== "" &&
+          value?.filter_value
+        ) {
           newParams.set(key, value.filter_value);
         }
       });
@@ -112,7 +110,7 @@ export function useSearchFilter(props, filtersFromController = {}) {
    * Called when SearchFilter emits filtersCleared
    * This clears all filters and optionally makes a router call
    * @returns {void}
-  */
+   */
 
   const clearSearchQuery = () => {
     console.log('ProgramPage: Clearing all filters');
@@ -120,11 +118,13 @@ export function useSearchFilter(props, filtersFromController = {}) {
     const clearedFilters = initializeFilters()
     filters.value = clearedFilters
     // Only make router call if there were actually filters applied
-    const hasFiltersApplied = Object.entries(props.current_filters).some(([key, value]) => value != null)
+    const hasFiltersApplied = Object.entries(props.current_filters).some(
+      ([key, value]) => value != null,
+    );
     if (hasFiltersApplied) {
       router.get(props.tabBaseUrl, {}, {
-        preserveState: true,
-        preserveScroll: true,
+          preserveState: true,
+          preserveScroll: true,
         only: propsToUpdate
       });
     }
@@ -134,8 +134,8 @@ export function useSearchFilter(props, filtersFromController = {}) {
    * Called when user clears search bar directly (if needed)
    * This clears the search query and makes a router call
    * @returns {void}
-  */
- 
+   */
+
   const handleClear = () => {
     console.log('ProgramPage: Clearing search query');
     filters.value.query = null;
@@ -143,12 +143,10 @@ export function useSearchFilter(props, filtersFromController = {}) {
   };
 
   return {
-    initializeFilters,
-    overrideFiltersValues,
     filters,
     filterSearch,
     removeQuery,
     clearSearchQuery,
-    handleClear
-  }
+    handleClear,
+  };
 }
