@@ -4,6 +4,7 @@
 # belong in git's global ignore instead:
 # `$XDG_CONFIG_HOME/git/ignore` or `~/.config/git/ignore`
 
+.DS_Store
 # Ignore bundler config.
 /.bundle
 
@@ -44,3 +45,7 @@ msg.md
 conversation.md
 Untitled-2.txt
 commit.diff
+pr.diff
+
+.cursor/settings.json
+docs/**
