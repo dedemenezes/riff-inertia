@@ -1,9 +1,10 @@
 <script setup>
 import { computed, defineAsyncComponent } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import AccordionGroup from "@/components/AccordionGroup.vue";
 import DatePickerComponent from "@/components/ui/DatePickerComponent.vue";
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
-
+const page = usePage()
 const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
@@ -44,6 +45,7 @@ const getDateFromInput = (value) => {
     <ComboboxComponent
       :collection="cadernosOptions"
       :modelValue="props.modelValue.caderno?.filter_value || null"
+      :placeholder="page.props.locale_messages.placeholder.select"
       @update:modelValue="(val) => props.updateField('caderno', getCadernoObjectFromPermalink(val))"
     />
   </div>

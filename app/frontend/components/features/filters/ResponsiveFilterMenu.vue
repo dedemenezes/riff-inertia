@@ -9,9 +9,12 @@ REFACTORED: ResponsiveFilterMenu is now a PURE LAYOUT COMPONENT
 -->
 <script setup>
 import { useTemplateRef } from "vue";
+import { usePage } from "@inertiajs/vue3";
 import { IconClose } from "@/components/common/icons";
 import SearchFilter from "@/components/features/filters/SearchFilter.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
+
+const page = usePage();
 
 const props = defineProps({
   isOpen: { type: Boolean, required: true },
@@ -55,7 +58,7 @@ const closeBtn = useTemplateRef('close-btn');
           class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000"
         >
           <p class="text-header-sm text-neutrals-900 uppercase">
-            FILTROS
+            {{ page.props.locale_messages.filter.title }}
           </p>
         </div>
 
@@ -105,7 +108,7 @@ const closeBtn = useTemplateRef('close-btn');
               class="shrink-0 flex justify-between items-center py-400 sticky top-0 bg-white-transp-1000 z-50"
             >
               <p class="text-header-sm text-neutrals-900 uppercase">
-                FILTROS
+                {{ page.props.locale_messages.filter.title }}
               </p>
               <button
                 ref="closeBtn"
