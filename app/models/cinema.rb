@@ -12,46 +12,46 @@ class Cinema < ApplicationRecord
   end
 
   def display_capacidade
-    if !capacidade.nil? && !capacidade.empty?
-      "#{capacidade} lugares"
-    else
-      "TDB"
-    end
+    capacidade.present? ? "#{capacidade} lugares" : "TDB"
   end
 
   def filter_label
     I18n.t("filter.cinema")
   end
 
-  def self.group_salas(cinemas)
-    salas = cinemas.group_by { |cinema| cinema.nome.match(/\D*/)[0].strip }
+  class << self
+    def group_salas(cinemas)
+      cinemas
+        .group_by { |c| complex_name_from_record_name(c.nome) }
+        .map { |complex_name, salas| build_complex_row(complex_name, salas) }
+    end
 
-    cinemas_and_salas = cinemas.map do |cinema|
-      name = cinema.nome.match(/\D*/)[0].strip
-      {
-        name: name,
-        salas: salas[name]
-      }
-    end.uniq
+    private
 
-    cinemas_and_salas.map do |cas|
-      result = {
-        name: cas[:name],
-        cinema: cas[:salas].first
-      }
+    def complex_name_from_record_name(full_name)
+      full_name.match(/\A\D*/).to_s.strip
+    end
 
-      if cas[:salas].length > 1
-        result[:salas] = cas[:salas].map { |sala|
+    def build_complex_row(complex_name, salas)
+      first = salas.first
+      row = { name: complex_name, cinema: first }
+
+      if salas.many?
+        row[:salas] = salas.map do |sala|
           {
-            nome: "Sala #{sala.nome.match(/\d+/)[0].strip}",
+            nome: "Sala #{sala_number_from_record_name(sala.nome)}",
             capacidade: sala.display_capacidade
           }
-        }
+        end
       else
-        result[:capacidade] = cas[:salas].first.display_capacidade
+        row[:capacidade] = first.display_capacidade
       end
 
-      result
+      row
+    end
+
+    def sala_number_from_record_name(full_name)
+      full_name[/\d+/]
     end
   end
 end

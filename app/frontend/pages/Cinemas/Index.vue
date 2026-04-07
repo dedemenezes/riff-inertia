@@ -3,8 +3,17 @@ import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
-import { IconPin, IconPhone, IconWholeTicket, IconSeat, IconArrowDown } from "@/components/common/icons";
+import { IconPin, IconPhone, IconWholeTicket, IconSeat, IconArrowDown, IconProgram } from "@/components/common/icons";
 import { ref, reactive } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+
+const page = usePage();
+
+const programacaoHref = (cinemaId) => {
+  const locale = page.props.currentLocale;
+  const q = new URLSearchParams({ cinema: String(cinemaId) });
+  return `/${locale}/programacao?${q.toString()}`;
+};
 
 const props = defineProps({
   cinemas: { type: Object, default: () => []},
@@ -103,7 +112,7 @@ const toggleOrder = () => {
         </h2>
 
         <div class="flex flex-col gap-50">
-          <div class="flex gap-50 items-center">
+          <div class="flex gap-150 items-center">
             <IconWholeTicket
               :active="true"
               height="16"
@@ -113,7 +122,7 @@ const toggleOrder = () => {
             <p>imagine o PREÇO DO INGRESSO aqui</p>
           </div>
 
-          <div v-if="cinema.cinema.endereco" class="flex gap-50 items-center">
+          <div v-if="cinema.cinema.endereco" class="flex gap-150 items-center">
             <IconPin
               :active="true"
               height="16"
@@ -122,7 +131,7 @@ const toggleOrder = () => {
             <p>{{ cinema.cinema.endereco }}</p>
           </div>
 
-          <div v-if="cinema.cinema.telefone" class="flex gap-50 items-center">
+          <div v-if="cinema.cinema.telefone" class="flex gap-150 items-center">
             <IconPhone
               :active="true"
               height="16"
@@ -130,9 +139,18 @@ const toggleOrder = () => {
             />
             <p>{{ cinema.cinema.telefone }}</p>
           </div>
-
+          <div v-if="cinema.cinema.id" class="flex gap-150 items-center">
+            <IconProgram
+              :active="true"
+              height="16"
+              width="16"
+            />
+            <Link :href="programacaoHref(cinema.cinema.id)" class="inline-block">
+              Ver sessões
+            </Link>
+          </div>
           <div class="flex flex-col gap-300">
-            <div class="flex gap-50 items-center">
+            <div class="flex gap-150 items-center">
               <IconSeat
                 :active="true"
                 height="16"
@@ -140,7 +158,6 @@ const toggleOrder = () => {
               />
               <p>Lotação: <span v-if="cinema.capacidade">{{ cinema.capacidade }}</span></p>
             </div>
-
 
             <li v-for="sala in cinema.salas" class="list-disc ms-400">
               {{ sala.nome }} — {{ sala.capacidade }}

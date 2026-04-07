@@ -1,14 +1,19 @@
 <script setup>
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
+import Breadcrumb from "@/components/common/Breadcrumb.vue";
 
 const props = defineProps({
-  categorias: { type: Array, default: () => []}
+  categorias: { type: Array, default: () => []},
+  crumbs: { type: Array, required: true}
 })
 </script>
 
 <template>
-  <!-- TODO: alterar a imagem do card -->
+  <TwContainer>
+    <Breadcrumb :crumbs="props.crumbs" />
+  </TwContainer>
+
   <MenuContext
     nav="edicao"
   />

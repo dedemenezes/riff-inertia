@@ -1,10 +1,13 @@
 <script setup>
+import { onBeforeUnmount, onMounted } from 'vue';
 // TODO: renderizar imagem grande desktop, mobile menor
 // TODO: botao com cursor hover para comprar ingresso
 // TODO: Fix carousel só se tiver imagem para mostrar
 // TODO: E se filme nao tiver imagem na db?
 
-import { ref, defineAsyncComponent } from 'vue';
+import { ref, watch, computed, defineAsyncComponent } from 'vue';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/dist/photoswipe.css';
 
 const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
 const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
@@ -36,6 +39,51 @@ const startingTab = 0
 const activeTab = ref(tabs[startingTab].id)
 
 const isDesktop = useUpdateWindowWidth();
+
+// PhotoSwipe uses data-pswp-width/height for layout; must match the opened image’s aspect ratio.
+const bannerPswpWidth = ref(1920);
+const bannerPswpHeight = ref(1080);
+
+function applyIntrinsicSizeFromImage(img) {
+  if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+    bannerPswpWidth.value = img.naturalWidth;
+    bannerPswpHeight.value = img.naturalHeight;
+  }
+}
+
+function preloadBannerIntrinsicSize(url) {
+  if (!url) return;
+  const img = new Image();
+  img.onload = () => applyIntrinsicSizeFromImage(img);
+  img.src = url;
+}
+
+watch(
+  () => props.pelicula.imageURL,
+  (url) => preloadBannerIntrinsicSize(url),
+  { immediate: true }
+);
+
+// banner_image vem do mesmo critério que imageURL (imagem na DB); srcset/sizes só quando o hash existe.
+const bannerThumbSrc = computed(
+  () => props.pelicula.banner_image?.src ?? props.pelicula.imageURL
+);
+const bannerThumbSrcset = computed(() => props.pelicula.banner_image?.srcset);
+const bannerThumbSizes = computed(() => props.pelicula.banner_image?.sizes);
+
+const lightbox = new PhotoSwipeLightbox({
+  gallery: '#my-gallery',
+  children: 'a',
+  pswpModule: () => import('photoswipe')
+});
+
+onMounted(() => {
+  lightbox.init();
+});
+
+onBeforeUnmount(() => {
+  lightbox.destroy();
+});
 </script>
 
 <template>
@@ -50,8 +98,24 @@ const isDesktop = useUpdateWindowWidth();
       </template>
     </ButtonText>
   </TwContainer>
-  <!-- banner image -->
-  <img :src="props.pelicula.imageURL" class="h-[222px] lg:h-[634px] w-full object-cover" :alt="`${pelicula.display_titulo} banner`">
+  <!-- banner: <a> supplies PhotoSwipe href + data-pswp-* (plain <img> yields empty slide). -->
+  <div id="my-gallery">
+    <a
+      v-if="props.pelicula.imageURL"
+      class="block h-[222px] lg:h-[634px] w-full cursor-zoom-in outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      :href="props.pelicula.imageURL"
+      :data-pswp-width="bannerPswpWidth"
+      :data-pswp-height="bannerPswpHeight"
+    >
+      <img
+        :src="bannerThumbSrc"
+        :srcset="bannerThumbSrcset"
+        :sizes="bannerThumbSizes"
+        class="h-full w-full object-cover pointer-events-none"
+        :alt="`${pelicula.display_titulo} banner`"
+      >
+    </a>
+  </div>
   <!-- short info card -->
   <header>
     <div class="bg-neutrals-200">

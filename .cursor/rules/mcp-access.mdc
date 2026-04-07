@@ -1,0 +1,12 @@
+---
+description: How to handle MCP server access failures
+alwaysApply: true
+---
+
+# MCP Access Failures
+
+When an MCP server is unreachable, requires authentication, or a tool call fails:
+
+1. **Stop and inform the user** — explain which MCP server/tool is unavailable and why.
+2. **Ask whether to authenticate or proceed without it** before continuing.
+3. **Never silently skip MCP data** — if the task depends on it, wait for the user's decision.

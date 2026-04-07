@@ -2,6 +2,13 @@ module Imageable
   extend ActiveSupport::Concern
   CAROUSEL_IMAGES_AMOUNT = 3
 
+  # Width hints (w descriptors) for responsive srcset — same pattern as PhotoSwipe (sizes + srcset + small src).
+  # Add e.g. [ "large2", 612 ] when that folder exists on the CDN.
+  BANNER_SRCSET_WIDTHS = [
+    [ "large", 300 ],
+    [ "original", 1920 ]
+  ].freeze
+
   # TODO: RETHINK THIS MAYBE THERE ISN'T TWO IMAGES
   def carousel_images
     image_name = imagem
@@ -25,6 +32,17 @@ module Imageable
     # TODO: IF WE WANT DIFFERENT SIZE?
     # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
     build_image_url(image_name, size)
+  end
+
+  # Full-bleed banner: same pattern as PhotoSwipe docs (sizes + srcset + smallest src fallback).
+  def banner_image
+    return unless imagem.present?
+
+    {
+      src: imageURL(nil, "large"),
+      srcset: BANNER_SRCSET_WIDTHS.map { |folder, w| "#{imageURL(nil, folder)} #{w}w" }.join(", "),
+      sizes: "100vw"
+    }
   end
 
   # TODO: Define default size for all images in the website

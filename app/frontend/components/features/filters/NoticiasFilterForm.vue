@@ -31,36 +31,22 @@ const getDateFromInput = (value) => {
 </script>
 
 <template>
-  <AccordionGroup
-    :text="props.dataLabel"
-    :isOpen="!!props.modelValue.data?.filter_value"
-  >
-    <template v-slot:content>
-      <div class="w-full">
-        <DatePickerComponent
-          :model-value="props.modelValue.data?.filter_value"
-          placeholder="Pick session date"
-          @update:model-value="updateField('data', getDateFromInput($event))"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+  <div class="w-full">
+    <DatePickerComponent
+      :model-value="props.modelValue.data?.filter_value"
+      placeholder="Pick session date"
+      @update:model-value="updateField('data', getDateFromInput($event))"
+    />
+  </div>
   <!-- Article-specific filter content -->
-  <AccordionGroup
-    :text="cadernoLabel"
-    :isOpen="!!props.modelValue.caderno"
-  >
-    <template v-slot:content>
-      <div class="pt-400 overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="cadernosOptions"
-          :modelValue="props.modelValue.caderno?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('caderno', getCadernoObjectFromPermalink(val))"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
 
+  <div class="pt-400 overflow-hidden w-full">
+    <ComboboxComponent
+      :collection="cadernosOptions"
+      :modelValue="props.modelValue.caderno?.filter_value || null"
+      @update:modelValue="(val) => props.updateField('caderno', getCadernoObjectFromPermalink(val))"
+    />
+  </div>
   <!-- Add other article-specific filters -->
   <!--
   <AccordionGroup

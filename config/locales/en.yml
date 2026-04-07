@@ -25,6 +25,8 @@ en:
   navigation:
     media:
       name: "Media"
+      fotos_e_videos: "Photos & Videos"
+      impressos: "Prints"
     programming:
       name: "Programming"
       full_schedule: "Schedule"
@@ -33,11 +35,15 @@ en:
       updates: "Latest updates"
     edition:
       name: "%{edicao_atual} Edition"
+      team: "Team"
+    festival:
+      name: "Festival"
     about:
       name: "About us"
     articles:
       name: "Articles"
       fotos_e_videos: "Photos & Videos"
+    mostras: "Shows"
     impressos: "Prints"
     information: "Information"
     press: "Press"
@@ -48,6 +54,13 @@ en:
     mudancas_na_programacao: "Program Updates"
     sessoes_ao_ar_livre: "Open-Air Screenings"
     todos_os_filmes: "All Movies"
+    cinemas: "Theaters"
+    juri: "Jury"
+    edicoes_anteriores: "Previous editions"
+    talent_press: "Talent Press"
+    talent_rio: "Talent Rio"
+    parceiros: "Partners"
+    todas_as_noticias: "All news"
 
   filter:
     title: "Filters"

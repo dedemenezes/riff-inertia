@@ -53,24 +53,24 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.programming.updates"), path: "" }
       ],
       I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO) => [
-        { name: "Todos os filmes", path: peliculas_path },
-        { name: "Mostras", path: mostras_path },
-        { name: "Cinemas", path: cinemas_path },
-        { name: "Júri", path: "" },
-        { name: "Equipe", path: "" }
+        { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path },
+        { name: I18n.t("navigation.mostras"), path: mostras_path },
+        { name: I18n.t("navigation.cinemas"), path: cinemas_path },
+        { name: I18n.t("navigation.juri"), path: "" },
+        { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale) }
       ],
-      I18n.t("navigation.about.name") => [
-        { name: "O Festival", path: "" },
-        { name: "Edições Anteriores", path: edicoes_anteriores_path },
-        { name: "Talent Press", path: "" },
-        { name: "Parceiros", path: "" }
+      I18n.t("navigation.festival.name") => [
+        { name: I18n.t("navigation.about.name"), path: "" },
+        { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_path },
+        { name: I18n.t("navigation.talent_press"), path: "" },
+        { name: I18n.t("navigation.parceiros"), path: "" }
       ],
       I18n.t("navigation.articles.name") => [
-        { name: "Todas as notícias", path: noticias_path }
+        { name: I18n.t("navigation.todas_as_noticias"), path: noticias_path }
       ],
       I18n.t("navigation.media.name") => [
-        { name: "Fotos e vídeos", path: "" },
-        { name: "Impressos", path: "" }
+        { name: I18n.t("navigation.media.fotos_e_videos"), path: "" },
+        { name: I18n.t("navigation.media.impressos"), path: "" }
       ]
     }
   end
@@ -78,27 +78,27 @@ class ApplicationController < ActionController::Base
   def set_menu_context
     {
       "programacao" => [
-        { name: "Programação", path: program_url, icon: "program" },
-        { name: "Sessões com convidados", path: "", icon: "newUser" },
-        { name: "Mudanças na Programação", path: "", icon: "change" },
-        { name: "Programação Gratuita", path: "", icon: "ticket" }
+        { name: I18n.t("navigation.programming.name"), path: program_url, icon: "program" },
+        { name: I18n.t("navigation.programming.with_guests"), path: "", icon: "newUser" },
+        { name: I18n.t("navigation.mudancas_na_programacao"), path: "", icon: "change" },
+        { name: I18n.t("navigation.programming.free"), path: "", icon: "ticket" }
       ],
       "edicao" => [
-        { name: "Todos os Filmes", path: peliculas_path, icon: "program" },
-        { name: "Mostras", path: mostras_path, icon: "grid" },
-        { name: "Cinemas", path: cinemas_path, icon: "pin" },
-        { name: "Juri", path: "", icon: "trophy" },
-        { name: "Equipe", path: "", icon: "people" }
+        { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path, icon: "program" },
+        { name: I18n.t("navigation.mostras"), path: mostras_path, icon: "grid" },
+        { name: I18n.t("navigation.cinemas"), path: cinemas_path, icon: "pin" },
+        { name: I18n.t("navigation.juri"), path: "", icon: "trophy" },
+        { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale), icon: "people" }
       ],
       "sobre" => [
-        { name: "O Festival", path: "", icon: "logoFest" },
-        { name: "Edições Anteriores", path: edicoes_anteriores_url, icon: "calendar" },
-        { name: "Talent Rio", path: "", icon: "talentPress" },
-        { name: "Parceiros", path: "", icon: "handshake" }
+        { name: I18n.t("navigation.about.name"), path: "", icon: "logoFest" },
+        { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_url, icon: "calendar" },
+        { name: I18n.t("navigation.talent_rio"), path: "", icon: "talentPress" },
+        { name: I18n.t("navigation.parceiros"), path: "", icon: "handshake" }
       ],
       "midias" => [
-        { name: "Fotos & Vídeos", path: "", icon: "image" },
-        { name: "Impressos", path: "", icon: "book" }
+        { name: I18n.t("navigation.media.fotos_e_videos"), path: "", icon: "image" },
+        { name: I18n.t("navigation.media.impressos"), path: "", icon: "book" }
       ]
     }
   end

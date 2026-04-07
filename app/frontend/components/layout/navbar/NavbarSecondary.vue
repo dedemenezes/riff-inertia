@@ -2,7 +2,7 @@
 import DropdownPanel from "@/components/layout/navbar/DropdownPanel.vue";
 import { BaseButton } from "@/components/common/buttons";
 import { ref, reactive } from "vue";
-import { usePage } from "@inertiajs/vue3"
+import { Link, usePage } from "@inertiajs/vue3"
 import { IconInstagram, IconFacebook, IconTikTok, IconYoutube, IconLetterboxd, IconX, IconThreads, IconBlueSky, IconFlickr } from '@/components/common/icons/';
 
 
@@ -25,7 +25,7 @@ const handleDropdownIn = (item) => {
 }
 
 const handleDropdownOut = () => {
-  isDropdownOpen.value = allClosed
+  isDropdownOpen.value = { ...allClosed }
 }
 
 const dropdownRefs = reactive({})
@@ -79,17 +79,17 @@ const setDropdownOffset = (item) => {
       >
         <ul class="" :ref="ul => dropdownRefs[item]['ul'] = ul">
           <p v-for="subitem in subitems" class="p-200">
-            <a :href="subitem.path">{{ subitem.name }}</a>
+            <Link :href="subitem.path" @click="handleDropdownOut">{{ subitem.name }}</Link>
           </p>
         </ul>
 
         <div class="flex flex-col gap-1200 items-end py-1200">
           <div class="flex gap-1200">
-            <a href="https://www.instagram.com/festivaldorio/">
+            <Link href="https://www.instagram.com/festivaldorio/">
               <IconInstagram
                 color="text-neutrals-900"
               />
-            </a>
+            </Link>
 
             <a href="https://www.facebook.com/festivaldecinemadorio/">
               <IconFacebook

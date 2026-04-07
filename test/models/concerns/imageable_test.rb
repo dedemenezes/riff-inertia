@@ -39,6 +39,23 @@ class ImageableTest < ActiveSupport::TestCase
     assert_nil @pelicula.imageURL
   end
 
+  test "banner_image returns src, srcset, and sizes for responsive banner" do
+    ENV.stub(:fetch, "https://example.com") do
+      stub_const("ApplicationRecord::EDICAO_ATUAL_ANO", "2024") do
+        banner = @pelicula.banner_image
+        assert_equal "https://example.com/2024/site/peliculas/large/test_f01.jpg", banner[:src]
+        assert_includes banner[:srcset], "https://example.com/2024/site/peliculas/large/test_f01.jpg 300w"
+        assert_includes banner[:srcset], "https://example.com/2024/site/peliculas/original/test_f01.jpg 1920w"
+        assert_equal "100vw", banner[:sizes]
+      end
+    end
+  end
+
+  test "banner_image returns nil when imagem is blank" do
+    @pelicula.imagem = nil
+    assert_nil @pelicula.banner_image
+  end
+
   test "posterImageURL returns correct poster URL" do
     ENV.stub(:fetch, "https://example.com") do
       stub_const("ApplicationRecord::EDICAO_ATUAL_ANO", "2024") do

@@ -2,14 +2,10 @@ class NoticiasController < ApplicationController
   include BreadcrumbsHelper
   include Pagy::Backend
   include InfiniteScrollable
-  # TODO: Breakdown into smaller,
-  # more readable methods
-  before_action :set_filter_options, only: :index
 
   def index
     @idioma = Idioma.find_by("locale LIKE ?", "#{I18n.locale}%")
-    scope = Noticia.includes(:caderno).where(idioma: @idioma).published
-    selected_filters = {}
+    base_scope = Noticia.includes(:caderno).where(idioma: @idioma).published
 
     # if params[:search].present?
     #   term = "%#{params[:search].downcase}%"
@@ -18,32 +14,23 @@ class NoticiasController < ApplicationController
     #   )
     # end
 
-    if params[:data]
-      selected_date = { filter_display: params[:data], filter_value: params[:data], filter_label: I18n.t("filter.date") }
-      date_range = (Date.parse(selected_date[:filter_value])..Date.today)
-      scope = scope.where(data: date_range)
-    end
+    filter_result = NoticiasFilter.new(
+      relation: base_scope,
+      params: params,
+      locale: I18n.locale
+    ).call
 
-    if params[:caderno].present?
-      selected_caderno = @cadernos.find { |c| c["filter_value"] == params[:caderno] }
-      selected_filters[:caderno] = selected_caderno if selected_caderno
-      if I18n.locale == :pt
-        scope = scope.where(caderno: { permalink_pt: params[:caderno] })
-      else
-        scope = scope.where(caderno: { permalink_en: params[:caderno] })
-      end
-    end
+    current_page = params[:page].to_i
+    current_page = 1 if current_page < 1
 
-    current_page = params[:page].to_i ||= 1
-
-    ordered = scope.order(created: :desc)
+    ordered = filter_result.relation.order(created: :desc)
     @pagy, @noticias = pagy_infinite(ordered, current_page)
 
     render inertia: "Noticias/Index", props: {
       rootUrl: @root_url,
       tabBaseUrl: noticias_url,
       dataLabel: I18n.t("filter.date"),
-      cadernos: @cadernos,
+      cadernos: filter_result.cadernos,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Notícias", "" ],
@@ -58,8 +45,8 @@ class NoticiasController < ApplicationController
         last: @pagy.last
       },
       current_filters: {
-        data: selected_date,
-        caderno: selected_caderno
+        data: filter_result.selected_date,
+        caderno: filter_result.selected_caderno
       }
     }
   end
@@ -77,16 +64,5 @@ class NoticiasController < ApplicationController
         [ @noticia.breadcrumb_title, "" ]
       )
     }
-  end
-
-  private
-
-  def set_filter_options
-    # cadernos = Caderno.for_filters
-    if I18n.locale == :pt
-      @cadernos = Caderno.collection_without_edition_for(:permalink_pt, :nome_pt, :caderno)
-    else
-      @cadernos = Caderno.collection_without_edition_for(:permalink_en, :nome_en, :caderno)
-    end
   end
 end

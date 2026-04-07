@@ -81,7 +81,19 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Install JavaScript dependencies
-        run: npm install  # or yarn install
+        run: |
+          npm ci
+          # Lockfile generated on macOS omits Linux optional native modules; npm can skip
+          # installing them on ubuntu (https://github.com/npm/cli/issues/4828). Pin versions
+          # from package-lock.json so they stay aligned with rollup / tailwind / lightningcss.
+          ROLLUP_VER=$(node -pe "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/rollup'].version")
+          OXIDE_LINUX_VER=$(node -pe "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/@tailwindcss/oxide'].optionalDependencies['@tailwindcss/oxide-linux-x64-gnu']")
+          LIGHTNING_LINUX_VER=$(node -pe "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/lightningcss'].optionalDependencies['lightningcss-linux-x64-gnu']")
+          npm install \
+            "@rollup/rollup-linux-x64-gnu@${ROLLUP_VER}" \
+            "@tailwindcss/oxide-linux-x64-gnu@${OXIDE_LINUX_VER}" \
+            "lightningcss-linux-x64-gnu@${LIGHTNING_LINUX_VER}" \
+            --no-save
 
       - name: Set up database
         run: |

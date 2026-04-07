@@ -12,6 +12,7 @@ class Pelicula < ApplicationRecord
     display_sobre_o_filme
     teams
     imageURL
+    banner_image
     posterImageURL
     director_image
     carousel_images
@@ -45,6 +46,32 @@ class Pelicula < ApplicationRecord
   has_many :programacoes
   has_many :peliculas_tags
 
+  scope :search_by_title, ->(term) {
+    return all if term.blank?
+
+    term = "%#{term.downcase}%"
+
+    where(
+      "LOWER(titulo_ingles_coord_int) LIKE :term OR
+      LOWER(titulo_original_coord_int) LIKE :term OR
+      LOWER(titulo_portugues_coord_int) LIKE :term OR
+      LOWER(titulo_ingles_semartigo) LIKE :term OR
+      LOWER(titulo_portugues_semartigo) LIKE :term",
+      term: term
+    )
+  }
+
+  scope :search_by_genre, ->(genre) {
+    return all if genre.blank?
+
+    locale_index = I18n.locale == :en ? -1 : 1
+    genre = "%#{genre}%"
+    where(
+      "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",
+      locale_index,
+      genre
+    )
+  }
 
   def programacoesAsJson
     programacoes.order(:data).each_slice(3).map do |programacoes_slice|
