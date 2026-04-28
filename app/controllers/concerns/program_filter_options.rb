@@ -23,7 +23,10 @@ module ProgramFilterOptions
                                .to_a
                                .uniq { |p| p.sessao }
                                .sort_by { |it| it.sessao }
-    to_filter_collection(programacoes, "sessao")
+    to_filter_collection(programacoes, "sessao") do |prog, item|
+      item["sessao"] = prog.sessao
+      item["display_sessao"] = prog.display_sessao
+    end
   end
 
   def build_paises_filter(base_scope)
