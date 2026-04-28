@@ -1,44 +1,66 @@
 <script setup>
-import { onBeforeUnmount, onMounted } from 'vue';
-import { ref, defineAsyncComponent } from 'vue';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/dist/photoswipe.css';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { useBannerImages } from '@/components/features/peliculas/composables/useBannerImages.js';
+import { onBeforeUnmount, onMounted } from "vue";
+import { ref, defineAsyncComponent } from "vue";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/dist/photoswipe.css";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useBannerImages } from "@/components/features/peliculas/composables/useBannerImages.js";
 
-const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
-const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
-const CreditosContent = defineAsyncComponent(() => import('@/components/features/peliculas/CreditosContent.vue'));
-const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
-const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
-const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
-const VideoBanner = defineAsyncComponent(() => import('@/components/features/peliculas/VideoBanner.vue'));
-import { useUpdateWindowWidth } from '@/lib/utils';
+const InformacoesContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/InformacoesContent.vue"),
+);
+const SessoesContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/SessoesContent.vue"),
+);
+const CreditosContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/CreditosContent.vue"),
+);
+const TwContainer = defineAsyncComponent(
+  () => import("@/components/layout/TwContainer.vue"),
+);
+const TagMostra = defineAsyncComponent(
+  () => import("@/components/common/tags/TagMostra.vue"),
+);
+const TabbedPanel = defineAsyncComponent(
+  () => import("@/components/common/tabs/TabbedPanel.vue"),
+);
+const VideoBanner = defineAsyncComponent(
+  () => import("@/components/features/peliculas/VideoBanner.vue"),
+);
+import { useUpdateWindowWidth } from "@/lib/utils";
 
 const props = defineProps({
   rootUrl: { type: String, required: true },
-  crumbs: { type: Array, required: true, default: () => []},
+  crumbs: { type: Array, required: true, default: () => [] },
   backPath: String,
-  pelicula: { type: Object, required: true }
+  pelicula: { type: Object, required: true },
 });
 
 const tabs = [
-  { id: 'first', label: 'Informações' },
-  { id: 'second', label: 'Sessões' },
-  { id: 'third', label: 'Créditos' }
-]
+  { id: "first", label: "Informações" },
+  { id: "second", label: "Sessões" },
+  { id: "third", label: "Créditos" },
+];
 
-const startingTab = 0
-const activeTab = ref(tabs[startingTab].id)
+const startingTab = 0;
+const activeTab = ref(tabs[startingTab].id);
 
 const isDesktop = useUpdateWindowWidth();
 
-const { bannerImages, onImageError: onBannerImageError } = useBannerImages(() => props.pelicula);
+const { bannerImages, onImageError: onBannerImageError } = useBannerImages(
+  () => props.pelicula,
+);
 
 const lightbox = new PhotoSwipeLightbox({
-  gallery: '#pelicua-banner',
-  children: 'a',
-  pswpModule: () => import('photoswipe')
+  gallery: "#pelicua-banner",
+  children: "a",
+  pswpModule: () => import("photoswipe"),
 });
 
 onMounted(() => {
@@ -52,10 +74,14 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicua-banner. -->
-  <div id="pelicua-banner">
+  <div id="pelicula-banner">
     <Carousel v-if="bannerImages.length > 0" class="w-full">
       <CarouselContent class="-ml-0">
-        <CarouselItem v-for="(image, idx) in bannerImages" :key="image.href" class="pl-0">
+        <CarouselItem
+          v-for="(image, idx) in bannerImages"
+          :key="image.href"
+          class="pl-0"
+        >
           <a
             class="block h-[222px] md:h-[634px] w-full cursor-zoom-in outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             :href="image.href"
@@ -83,11 +109,17 @@ onBeforeUnmount(() => {
       <TwContainer>
         <div class="py-400 space-y-400">
           <section>
-            <h1 class="text-header-medium-sm pb-100">{{ props.pelicula.titulo_portugues_coord_int }}</h1>
-            <h2 class="text-body-regular italic">{{ props.pelicula.titulo_ingles_coord_int }}</h2>
+            <h1 class="text-header-medium-sm pb-100">
+              {{ props.pelicula.titulo_portugues_coord_int }}
+            </h1>
+            <h2 class="text-body-regular italic">
+              {{ props.pelicula.titulo_ingles_coord_int }}
+            </h2>
           </section>
           <div class="flex items-center gap-200 flex-wrap">
-            <p class="text-overline shrink-0">{{ props.pelicula.display_paises }}</p>
+            <p class="text-overline shrink-0">
+              {{ props.pelicula.display_paises }}
+            </p>
             <img
               src="@assets/icons/divisor_black.svg"
               alt=""
@@ -129,34 +161,47 @@ onBeforeUnmount(() => {
 
   <!-- Tabs -->
   <TwContainer>
-
-    <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center lg:hidden" />
+    <TabbedPanel
+      v-model="activeTab"
+      :tabs="tabs"
+      class="py-400 justify-center lg:hidden"
+    />
 
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-    <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
-
-      <section v-if="activeTab === 'third' || isDesktop" class="w-full lg:w-1/3">
+    <div
+      class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600"
+    >
+      <section
+        v-if="activeTab === 'third' || isDesktop"
+        class="w-full lg:w-1/3"
+      >
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         <Suspense>
-          <CreditosContent :pelicula="pelicula"/>
+          <CreditosContent :pelicula="pelicula" />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
         </Suspense>
       </section>
 
-      <section v-if="activeTab === 'first' || isDesktop" class="w-full lg:w-2/3">
+      <section
+        v-if="activeTab === 'first' || isDesktop"
+        class="w-full lg:w-2/3"
+      >
         <Suspense>
-          <InformacoesContent :pelicula="pelicula"/>
+          <InformacoesContent :pelicula="pelicula" />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
         </Suspense>
       </section>
 
-      <section v-if="activeTab === 'second' || isDesktop" class="w-full lg:w-1/3 space-y-400">
+      <section
+        v-if="activeTab === 'second' || isDesktop"
+        class="w-full lg:w-1/3 space-y-400"
+      >
         <Suspense>
-          <SessoesContent :sessions="pelicula.programacoesAsJson"/>
+          <SessoesContent :sessions="pelicula.programacoesAsJson" />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
@@ -180,5 +225,4 @@ onBeforeUnmount(() => {
   </Suspense>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
