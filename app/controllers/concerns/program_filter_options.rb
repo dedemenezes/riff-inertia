@@ -8,9 +8,14 @@ module ProgramFilterOptions
 
     @sessoes = build_sessoes_filter
 
-    @genres_filter = @pelicula_collection_service.collection_for_genres
-    @directors_filter = @pelicula_collection_service.collection_for_directors
-    @actors_filter = @pelicula_collection_service.collection_for_actors
+    genres = @pelicula_collection_service.collection_for_genres
+    @genres_filter = strings_to_filter_collection(genres, "genero")
+
+    directors = @pelicula_collection_service.collection_for_directors
+    @directors_filter = strings_to_filter_collection(directors, "direcao")
+
+    actors = @pelicula_collection_service.collection_for_actors
+    @actors_filter = strings_to_filter_collection(actors, "elenco")
   end
 
   def build_sessoes_filter

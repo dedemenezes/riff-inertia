@@ -12,7 +12,6 @@ module Filterable
       block_return.compact_blank
                   .uniq
                   .sort
-                  .map { |item| build_filter_json(item, filter_params_key) }
     end
 
     def build_filter_json(value, key)

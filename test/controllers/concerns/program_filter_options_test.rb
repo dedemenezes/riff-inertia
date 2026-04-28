@@ -69,4 +69,40 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
       assert_equal I18n.t("filter.direcao", locale: :en), result.first["filter_label"]
     end
   end
+
+  test "pelicula_collection_service genres returns strings" do
+    service = PeliculaCollectionService.new
+    genres = service.collection_for_genres
+
+    assert genres.is_a?(Array)
+    unless genres.empty?
+      genres.each do |genre|
+        assert genre.is_a?(String), "Expected string but got #{genre.inspect}"
+      end
+    end
+  end
+
+  test "pelicula_collection_service directors returns strings" do
+    service = PeliculaCollectionService.new
+    directors = service.collection_for_directors
+
+    assert directors.is_a?(Array)
+    unless directors.empty?
+      directors.each do |director|
+        assert director.is_a?(String), "Expected string but got #{director.inspect}"
+      end
+    end
+  end
+
+  test "pelicula_collection_service actors returns strings" do
+    service = PeliculaCollectionService.new
+    actors = service.collection_for_actors
+
+    assert actors.is_a?(Array)
+    unless actors.empty?
+      actors.each do |actor|
+        assert actor.is_a?(String), "Expected string but got #{actor.inspect}"
+      end
+    end
+  end
 end
