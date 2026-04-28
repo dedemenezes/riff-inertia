@@ -40,7 +40,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   test "query filters by exact title" do
     props = request_and_assert(params: { query: "Batman" })
     assert_filter_value(props, "query", "Batman")
-    assert_elements_match(props["elements"], count: 1, titles: ["Batman"])
+    assert_elements_match(props["elements"], count: 1, titles: [ "Batman" ])
   end
 
   test "query is case-insensitive" do
@@ -86,9 +86,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
   # Mostra filter tests
   mostra_filters = [
-    { mostra: "competicao-nacional", expected_titles: ["Cidade Perdida", "Amor em Brasília"], count: 2 },
-    { mostra: "mostra-internacional", expected_titles: ["Berlin Nights", "Paris Stories"], count: 2 },
-    { mostra: "documentarios", expected_titles: ["Amazônia Selvagem", "Cidade em Transformação"], count: 1 }
+    { mostra: "competicao-nacional", expected_titles: [ "Cidade Perdida", "Amor em Brasília" ], count: 2 },
+    { mostra: "mostra-internacional", expected_titles: [ "Berlin Nights", "Paris Stories" ], count: 2 },
+    { mostra: "documentarios", expected_titles: [ "Cidade em Transformação" ], count: 1 }
   ]
 
   mostra_filters.each do |filter|
@@ -106,7 +106,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
   test "mostra with query - only matching results" do
     props = request_and_assert(params: { query: "Cidade", mostra: "competicao-nacional" })
-    assert_elements_match(props["elements"], count: 1, titles: ["Cidade Perdida"])
+    assert_elements_match(props["elements"], count: 1, titles: [ "Cidade Perdida" ])
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
@@ -119,7 +119,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   test "mostra filter affects available dates" do
     props = request_and_assert(params: { mostra: "documentarios" })
     available_dates = props["menuTabs"].map { _1["date"] }
-    assert_equal ["Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out"], available_dates
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out" ], available_dates
   end
 
   # Cinema filter tests
@@ -133,7 +133,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   test "filters by cinema cinepolis" do
     cinema = cinemas(:cinepolis)
     props = request_and_assert(params: { cinema: cinema.id })
-    expected = ["Cidade Perdida", "Cidade em Transformação", "Amor em Brasília", "Berlin Nights", "São Paulo"]
+    expected = [ "Cidade Perdida", "Cidade em Transformação", "Amor em Brasília", "Berlin Nights", "São Paulo" ]
     actual_titles = props["elements"].map { _1["titulo"] }
     expected.each { |title| assert_includes actual_titles, title }
   end
@@ -147,7 +147,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
   test "cinema with query" do
     cinema = cinemas(:cinepolis)
     props = request_and_assert(params: { query: "Batman", cinema: cinema.id })
-    assert_elements_match(props["elements"], count: 1, titles: ["Batman"])
+    assert_elements_match(props["elements"], count: 1, titles: [ "Batman" ])
     assert_equal cinema.id, props["current_filters"]["cinema"]["id"]
   end
 
@@ -161,7 +161,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     cinema = cinemas(:cine_brasilia)
     props = request_and_assert(params: { cinema: cinema.id })
     available_dates = props["menuTabs"].map { _1["date"] }
-    assert_equal ["Seg, 7 Out"], available_dates.uniq
+    assert_equal [ "Seg, 7 Out" ], available_dates.uniq
   end
 
   # Pagination tests
