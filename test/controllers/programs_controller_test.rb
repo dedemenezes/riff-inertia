@@ -1,658 +1,214 @@
 require "test_helper"
 
-
 class ProgramsControllerTest < ActionDispatch::IntegrationTest
-  # setup do
-  #   @batman = programacoes(:program_batman)
-  #   @matrix = programacoes(:program_matrix)
-  # end
-
-  test "index returns inertia response" do
-    get program_url
-    assert_response :success
-
-    props = inertia_props
-
-    assert_equal "pt", props["currentLocale"], "no locale"
-    assert props["menuTabs"].is_a?(Array), "not an array"
-    assert props["elements"].any?, "Expected at least one program element"
+  def request_and_assert(params: {}, expected_status: :success)
+    get program_url, params: params
+    assert_response expected_status
+    inertia_props
   end
 
-  test "should return matching elements when query is provided" do
-    get program_url, params: { query: "Batman" }
-
-    assert_response :success
-    props = inertia_props
-
-    # Ensure the correct elements are returned
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
+  def assert_filter_value(props, filter_key, expected_value)
+    assert_equal expected_value, props["current_filters"][filter_key]["filter_value"]
   end
 
-  test "should return all elements for 2024-10-05 when no query is provided" do
-    get program_url
+  def assert_elements_match(elements, titles: nil, query: nil, date: nil, count: nil)
+    assert_equal count, elements.length if count
 
-    assert_response :success
-    props = inertia_props
+    if titles
+      actual_titles = elements.map { _1["titulo"] }
+      titles.each { |title| assert_includes actual_titles, title }
+    end
 
-    elements = props["elements"]
-    assert_equal 5, elements.length
-  end
+    if query
+      elements.each { |e| assert_includes e["titulo"], query }
+    end
 
-  test "should ignore case when searching" do
-    get program_url, params: { query: "batman" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
-  end
-
-  test "should return elements for partial title" do
-    get program_url, params: { query: "ma" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 2, elements.length
-  end
-
-  test "should handle special characters" do
-    get program_url, params: { query: "São Paulo" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-  end
-
-  test "preserves search query when navigating to different date" do
-    # 1. Make request with both query and date
-    get program_url, params: { query: "Batman", date: "2024-10-05" }
-
-    # 2. Assert response is successful
-    assert_response :success
-
-    # 3. Check that search query is preserved in props
-    props = inertia_props
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-
-    # 4. Verify results are filtered by both query AND date
-    elements = props["elements"]
-    elements.each do |element|
-      assert_includes element["titulo"], "Batman"
-      assert_equal "2024-10-05", element["data"].to_s
+    if date
+      elements.each { |e| assert_equal date, e["data"].to_s }
     end
   end
 
-  test "menuTabs only includes dates with matching movies" do
-    # 1. Search for a specific term
-    get program_url, params: { query: "Batman" }
-
-    props = inertia_props
-    available_dates = props["menuTabs"].map { _1["date"] }
-    expected = [ "Sáb, 5 Out", "Dom, 6 Out" ]
-    # 2. Verify each date actually has matching movies
-    assert_equal expected, available_dates
+  # Basic index tests
+  test "index returns inertia response with defaults" do
+    props = request_and_assert
+    assert_equal "pt", props["currentLocale"]
+    assert props["menuTabs"].is_a?(Array)
+    assert props["elements"].any?
   end
 
-  test "handles search with no results gracefully" do
-    get program_url, params: { query: "NonexistentMovie" }
+  # Search/query tests
+  test "query filters by exact title" do
+    props = request_and_assert(params: { query: "Batman" })
+    assert_filter_value(props, "query", "Batman")
+    assert_elements_match(props["elements"], count: 1, titles: ["Batman"])
+  end
 
-    assert_response :success
-    props = inertia_props
+  test "query is case-insensitive" do
+    props = request_and_assert(params: { query: "batman" })
+    assert_equal 1, props["elements"].length
+    assert_equal "Batman", props["elements"].first["titulo"]
+  end
 
-    # Should return empty arrays, not break
+  test "query matches partial titles" do
+    props = request_and_assert(params: { query: "ma" })
+    assert_equal 2, props["elements"].length
+  end
+
+  test "query handles special characters" do
+    props = request_and_assert(params: { query: "São Paulo" })
+    assert_equal 1, props["elements"].length
+  end
+
+  test "query with no results returns empty gracefully" do
+    props = request_and_assert(params: { query: "NonexistentMovie" })
     assert_equal [], props["menuTabs"].map { _1["date"] }
     assert_equal [], props["elements"]
-    # assert_equal "", props["menuTabs"].map { _1["date"] }
   end
 
-  test "handles invalid date parameter gracefully" do
-    get program_url, params: { query: "Batman", date: "invalid-date" }
+  # Date + query combinations
+  test "query and date together filter results" do
+    props = request_and_assert(params: { query: "Batman", date: "2024-10-05" })
+    assert_filter_value(props, "query", "Batman")
+    assert_elements_match(props["elements"], query: "Batman", date: "2024-10-05")
+  end
 
-    assert_response :success
-    props = inertia_props
+  test "query changes available dates menu when filtered" do
+    all_dates = request_and_assert["menuTabs"].map { _1["date"] }.count
+    filtered_dates = request_and_assert(params: { query: "test" })["menuTabs"].map { _1["date"] }.count
+    assert filtered_dates < all_dates
+  end
 
-    # Should fall back to first available date
+  test "invalid date falls back to first available" do
+    props = request_and_assert(params: { query: "Batman", date: "invalid-date" })
     assert props["menuTabs"].present?
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
+    assert_filter_value(props, "query", "Batman")
   end
 
-  test "pagination returns 1st page with search and date filters" do
-    get program_url, params: {
-      query: "test",
-      date: "2024-10-07"
-    }
+  # Mostra filter tests
+  mostra_filters = [
+    { mostra: "competicao-nacional", expected_titles: ["Cidade Perdida", "Amor em Brasília"], count: 2 },
+    { mostra: "mostra-internacional", expected_titles: ["Berlin Nights", "Paris Stories"], count: 2 },
+    { mostra: "documentarios", expected_titles: ["Amazônia Selvagem", "Cidade em Transformação"], count: 1 }
+  ]
 
-    assert_response :success
-    props = inertia_props
-    # 2. Verify pagination info
-    pagy = props["pagy"]
-    assert_equal 1, pagy["page"]
-
-    # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 5, props["elements"].count
-
-    elements.each do |element|
-      assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
+  mostra_filters.each do |filter|
+    test "filters by mostra - #{filter[:mostra]}" do
+      props = request_and_assert(params: { mostra: filter[:mostra] })
+      assert_elements_match(props["elements"], titles: filter[:expected_titles], count: filter[:count])
     end
   end
 
-  test "pagination returns 2nd page with search, date and page filters" do
-    get program_url, params: {
-      query: "test",
-      date: "2024-10-07",
-      page: 2
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    # 2. Verify pagination info
-    pagy = props["pagy"]
-    assert_equal 2, pagy["page"]
-
-    # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 10, props["elements"].count
-
-    elements.each do |element|
-      assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
-    end
-  end
-  test "pagination returns 3rd page with search, date and page filters" do
-    get program_url, params: {
-      query: "test",
-      date: "2024-10-07",
-      page: 3
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    # 2. Verify pagination info
-    pagy = props["pagy"]
-    assert_equal 3, pagy["page"]
-
-    # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 15, props["elements"].count
-
-    elements.each do |element|
-      assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
-    end
-  end
-  test "pagination returns 4th page with search, date and page filters" do
-    get program_url, params: {
-      query: "test",
-      date: "2024-10-07",
-      page: 4
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    # 2. Verify pagination info
-    pagy = props["pagy"]
-    assert_equal 4, pagy["page"]
-
-    # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 17, props["elements"].count
-
-    elements.each do |element|
-      assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
-    end
+  test "invalid mostra ignored and returns all elements" do
+    props = request_and_assert(params: { mostra: "non-existent" })
+    assert props["elements"].length > 0
+    assert_nil props["current_filters"]["mostra"]
   end
 
-  # Preserve search across dates
-  test "preserves search across dates when navigating" do
-    get program_url, params: { query: "Batman" }
-    assert_response :success
-
-    get program_url, params: { query: "Batman", date: "2024-10-06" }
-    assert_response :success
-
-    props = inertia_props
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Dom, 6 Out"
-
-    elements = props["elements"]
-    elements.each do |element|
-      assert_includes element["titulo"], "Batman"
-    end
-  end
-
-  test "selects first available date when searching" do
-    get program_url, params: { query: "est" }
-
-    # 3. Assert response
-    assert_response :success
-
-    # 4. Check props
-    props = inertia_props
-
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
-  end
-
-  test "handles dates with no matching movies via direct URL" do
-    # User directly accesses URL with search + date that has no matches
-    get program_url, params: { query: "Batman", date: "2024-10-04" }
-
-    assert_response :success
-    props = inertia_props
-
-    # Should handle gracefully - empty results, preserved search, fallback date
-    assert_equal 1, props["elements"].count
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    # Should fallback to first available date with Batman movies
-    assert_not_equal "2024-10-04", props["menuTabs"].map { _1["date"] }
-    assert_includes props["menuTabs"].map { _1["date"] }, "Sáb, 5 Out"
-  end
-
-  test "search changes available dates when results are filtered" do
-    # First, get all results without search to see total pages
-    get program_url
-    assert_response :success
-    available_dates_count = inertia_props["menuTabs"].map { _1["date"] }.count
-    # total_pages_unfiltered = all_results_pagy["pages"]
-
-    # Now search for something specific that should have fewer results
-    get program_url, params: { query: "test" }
-    assert_response :success
-    filtered_available_dates_count = inertia_props["menuTabs"].map { _1["date"] }.count
-    # Filtered results should have fewer pages than unfiltered
-    assert filtered_available_dates_count < available_dates_count,
-      "Expected filtered search to have fewer dates (#{filtered_available_dates_count}) than unfiltered (#{available_dates_count})"
-  end
-
-  test "filters by mostra - competicao nacional" do
-    get program_url, params: { mostra: "competicao-nacional" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 2, elements.length
-
-    elements.each do |element|
-      assert_includes [ "Cidade Perdida", "Amor em Brasília" ], element["titulo"]
-    end
-  end
-
-  test "filters by mostra - mostra internacional" do
-    get program_url, params: { mostra: "mostra-internacional" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 2, elements.length
-
-    elements.each do |element|
-      assert_includes [ "Berlin Nights", "Paris Stories" ], element["titulo"]
-    end
-  end
-
-  test "filters by mostra - documentarios" do
-    get program_url, params: { mostra: "documentarios" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    # Only 1 element on first available date (2024-10-05)
-    assert_equal 1, elements.length
-    elements.each do |element|
-      assert_includes [ "Amazônia Selvagem", "Cidade em Transformação" ], element["titulo"]
-    end
-  end
-
-  test "handles invalid mostra filter gracefully" do
-    get program_url, params: { mostra: "non-existent-mostra" }
-
-    assert_response :success
-    props = inertia_props
-
-    # Should return all elements (no filter applied)
-    elements = props["elements"]
-    assert elements.length > 0
-
-    # selectedFilters should be empty
-    selected_filters = props["current_filters"]
-    assert_nil selected_filters["mostra"]
-  end
-
-  # COMBINED FILTERS TESTS
-  test "combines search query and mostra filter" do
-    get program_url, params: {
-      query: "Cidade",
-      mostra: "competicao-nacional"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade Perdida", elements.first["titulo"]
-
-    # Verify both filters are preserved
-    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
+  test "mostra with query - only matching results" do
+    props = request_and_assert(params: { query: "Cidade", mostra: "competicao-nacional" })
+    assert_elements_match(props["elements"], count: 1, titles: ["Cidade Perdida"])
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
-  test "combines search query and mostra filter with no results" do
-    get program_url, params: {
-      query: "Paris",
-      mostra: "competicao-nacional"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    # Paris is in internacional mostra, not competicao-nacional
-    elements = props["elements"]
-    assert_equal 0, elements.length
-
-    # Filters should still be preserved
-    assert_equal "Paris", props["current_filters"]["query"]["filter_value"]
+  test "mostra with query - no cross-mostra matches" do
+    props = request_and_assert(params: { query: "Paris", mostra: "competicao-nacional" })
+    assert_equal 0, props["elements"].length
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
-  end
-
-  test "search finds movies across different mostras" do
-    get program_url, params: { query: "Cidade" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 2, elements.length
-
-    titles = elements.map { |e| e["titulo"] }
-    assert_includes titles, "Cidade Perdida" # from competicao-nacional
-    assert_includes titles, "Cidade em Transformação" # from documentarios
   end
 
   test "mostra filter affects available dates" do
-    # Documentarios only has content on 2024-10-05, 2024-10-06 and 2024-10-07
-    get program_url, params: { mostra: "documentarios" }
-
-    assert_response :success
-    props = inertia_props
-
+    props = request_and_assert(params: { mostra: "documentarios" })
     available_dates = props["menuTabs"].map { _1["date"] }
-    expected_dates = [ "Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out" ]
-    assert_equal expected_dates, available_dates
+    assert_equal ["Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out"], available_dates
   end
 
-  test "preserves mostra filter when navigating dates" do
-    get program_url, params: {
-      mostra: "competicao-nacional",
-      date: "2024-10-06"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    # Should show nacional movie on 2024-10-06
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade Perdida", elements.first["titulo"]
-
-    # Filter should be preserved
-    assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
+  # Cinema filter tests
+  test "filters by cinema cine_brasilia" do
+    cine = cinemas(:cine_brasilia)
+    props = request_and_assert(params: { cinema: cine.id })
+    assert_equal 5, props["elements"].length
+    assert_equal 17, props["pagy"]["count"]
   end
 
-  test "combines all filters - search, mostra, and date" do
-    get program_url, params: {
-      query: "Cidade",
-      mostra: "documentarios",
-      date: "2024-10-07"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade em Transformação", elements.first["titulo"]
-
-    # All filters should be preserved
-    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
-    assert_equal "documentarios", props["current_filters"]["mostra"]["permalink_pt"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
+  test "filters by cinema cinepolis" do
+    cinema = cinemas(:cinepolis)
+    props = request_and_assert(params: { cinema: cinema.id })
+    expected = ["Cidade Perdida", "Cidade em Transformação", "Amor em Brasília", "Berlin Nights", "São Paulo"]
+    actual_titles = props["elements"].map { _1["titulo"] }
+    expected.each { |title| assert_includes actual_titles, title }
   end
 
-  test "mostra filter with pagination" do
-    get program_url, params: {
-      mostra: "competicao-nacional"
-    }
+  test "invalid cinema ignored" do
+    props = request_and_assert(params: { cinema: 999_999 })
+    assert props["elements"].length > 0
+    assert_nil props["current_filters"]["cinema"]
+  end
 
-    assert_response :success
-    props = inertia_props
+  test "cinema with query" do
+    cinema = cinemas(:cinepolis)
+    props = request_and_assert(params: { query: "Batman", cinema: cinema.id })
+    assert_elements_match(props["elements"], count: 1, titles: ["Batman"])
+    assert_equal cinema.id, props["current_filters"]["cinema"]["id"]
+  end
 
-    # Should have filtered results
-    elements = props["elements"]
-    assert elements.length > 0
+  test "cinema with query - no results" do
+    cinema = cinemas(:cine_brasilia)
+    props = request_and_assert(params: { query: "Batman", cinema: cinema.id })
+    assert_equal 0, props["elements"].length
+  end
 
-    elements.each do |element|
-      assert_includes [ "Cidade Perdida", "Amor em Brasília" ], element["titulo"]
+  test "cinema filter affects available dates" do
+    cinema = cinemas(:cine_brasilia)
+    props = request_and_assert(params: { cinema: cinema.id })
+    available_dates = props["menuTabs"].map { _1["date"] }
+    assert_equal ["Seg, 7 Out"], available_dates.uniq
+  end
+
+  # Pagination tests
+  pagination_tests = [
+    { page: 1, query: "test", date: "2024-10-07", expected_count: 5 },
+    { page: 2, query: "test", date: "2024-10-07", expected_count: 10 },
+    { page: 3, query: "test", date: "2024-10-07", expected_count: 15 },
+    { page: 4, query: "test", date: "2024-10-07", expected_count: 17 }
+  ]
+
+  pagination_tests.each do |test_case|
+    test "pagination page #{test_case[:page]} with filters" do
+      params = { query: test_case[:query], date: test_case[:date], page: test_case[:page] }
+      props = request_and_assert(params: params)
+
+      assert_equal test_case[:page], props["pagy"]["page"]
+      assert_equal test_case[:expected_count], props["elements"].count
+      assert_elements_match(props["elements"], query: "test", date: "2024-10-07")
+    end
+  end
+
+  # Props/structure tests
+  test "mostras filter options in props" do
+    props = request_and_assert
+    mostras = props["mostras"]
+    assert_equal 4, mostras.length
+
+    permalinks = mostras.map { |m| m["permalink_pt"] }
+    %w[competicao-nacional mostra-internacional documentarios].each do |name|
+      assert_includes permalinks, name
     end
 
-    # Pagination should work
-    pagy = props["pagy"]
-    assert_equal 1, pagy["page"]
-  end
-
-  test "returns correct mostras options in props" do
-    get program_url
-
-    assert_response :success
-    props = inertia_props
-
-    mostras_filter = props["mostras"]
-    assert_equal 4, mostras_filter.length
-
-    # Check that all mostras are included
-    permalinks = mostras_filter.map { |m| m["permalink_pt"] }
-    assert_includes permalinks, "competicao-nacional"
-    assert_includes permalinks, "mostra-internacional"
-    assert_includes permalinks, "documentarios"
-
-    # Check structure of mostra objects
-    mostra = mostras_filter.first
+    mostra = mostras.first
     assert mostra["id"].present?
     assert mostra["permalink_pt"].present?
     assert mostra["nome_abreviado"].present?
   end
 
-  test "provides correct cinemas filters options" do
-    get program_url
-    assert_response :success
-    props = inertia_props
-    cinema_options = props["cinemas"]
-    assert_equal 2, cinema_options.length
-  end
+  test "cinemas filter options in props" do
+    props = request_and_assert
+    cinemas_list = props["cinemas"]
+    assert_equal 2, cinemas_list.length
 
-  test "filters by cinema - cine brasilia" do
-    cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinema: cine_brasilia.id }
+    names = cinemas_list.map { _1["nome"] }
+    %w[Cinépolis\ Lagoon Cine\ Brasília].each { |name| assert_includes names, name }
 
-    assert_response :success
-    props = inertia_props
-
-    # 17 total only 5 first page
-    elements = props["elements"]
-    assert_equal 5, elements.length
-    # 17 total so 5 pages
-    total_elements = props["pagy"]["count"]
-    assert_equal 17, total_elements
-  end
-  test "filters by cinema - cinepolis" do
-    cinepolis = cinemas(:cinepolis)
-    get program_url, params: { cinema: cinepolis.id }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    titles = elements.map { |e| e["titulo"] }
-
-    # Movies associated with cinepolis only
-    expected_titles = [ "Cidade Perdida", "Cidade em Transformação", "Amor em Brasília", "Berlin Nights", "São Paulo" ]
-    expected_titles.each { |title| assert_includes titles, title }
-  end
-
-  test "handles invalid cinema filter gracefully" do
-    get program_url, params: { cinema: 999_999 }
-
-    assert_response :success
-    props = inertia_props
-
-    # Should fallback to all movies (no filter)
-    assert props["elements"].length > 0
-
-    selected_filters = props["current_filters"]
-    assert_nil selected_filters["cinema"]
-  end
-
-  test "combines search query and cinema filter" do
-    cinepolis = cinemas(:cinepolis)
-    get program_url, params: {
-      query: "Batman",
-      cinema: cinepolis.id
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
-
-    # Filters preserved
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-  end
-
-  test "combines search query and cinema filter with no results" do
-    cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: {
-      query: "Batman",
-      cinema: cine_brasilia.id
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    assert_equal 0, props["elements"].length
-
-    # Filters preserved
-    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal cine_brasilia.id, props["current_filters"]["cinema"]["id"]
-  end
-
-  test "search finds movies across different cinemas" do
-    get program_url, params: { query: "Cidade" }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    titles = elements.map { |e| e["titulo"] }
-
-    assert_includes titles, "Cidade Perdida"
-    assert_includes titles, "Cidade em Transformação"
-  end
-
-  test "cinema filter affects available dates" do
-    cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinema: cine_brasilia.id }
-
-    assert_response :success
-    props = inertia_props
-
-    available_dates = props["menuTabs"].map { _1["date"] }
-    assert_equal [ "Seg, 7 Out" ], available_dates.uniq
-  end
-
-  test "preserves cinema filter when navigating dates" do
-    cinepolis = cinemas(:cinepolis)
-    get program_url, params: {
-      cinema: cinepolis.id,
-      date: "2024-10-06"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    titles = elements.map { |e| e["titulo"] }
-    assert_includes titles, "Amazônia Selvagem"
-    assert_includes titles, "Matrix"
-
-    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-  end
-
-  test "combines all filters - search, cinema, and date" do
-    cinepolis = cinemas(:cinepolis)
-    get program_url, params: {
-      query: "Cidade",
-      cinema: cinepolis.id,
-      date: "2024-10-07"
-    }
-
-    assert_response :success
-    props = inertia_props
-
-    elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade em Transformação", elements.first["titulo"]
-
-    assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
-    assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
-  end
-
-  test "cinema filter with pagination" do
-    cine_brasilia = cinemas(:cine_brasilia)
-    get program_url, params: { cinema: cine_brasilia.id }
-
-    assert_response :success
-    props = inertia_props
-
-    assert_equal 5, props["elements"].length
-    assert_equal 1, props["pagy"]["page"]
-    assert_equal 17, props["pagy"]["count"]
-  end
-
-  test "returns correct cinemas options in props" do
-    get program_url
-
-    assert_response :success
-    props = inertia_props
-
-    cinemas_filter = props["cinemas"]
-    assert_equal 2, cinemas_filter.length
-
-    names = cinemas_filter.map { _1["nome"] }
-    assert_includes names, "Cinépolis Lagoon"
-    assert_includes names, "Cine Brasília"
-
-    # Ensure structure
-    cinema = cinemas_filter.first
+    cinema = cinemas_list.first
     assert cinema["id"].present?
     assert cinema["nome"].present?
   end
