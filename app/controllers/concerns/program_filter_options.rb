@@ -61,4 +61,28 @@ module ProgramFilterOptions
   def set_pelicula_collection_service
     @pelicula_collection_service = PeliculaCollectionService.new
   end
+
+  private
+
+  def to_filter_collection(records, label_key, locale: I18n.locale)
+    label = I18n.t("filter.#{label_key}", locale:)
+    records.map { |record|
+      {
+        "filter_value" => record.filter_value,
+        "filter_display" => record.filter_display(locale:),
+        "filter_label" => label
+      }
+    }
+  end
+
+  def strings_to_filter_collection(strings, label_key, locale: I18n.locale)
+    label = I18n.t("filter.#{label_key}", locale:)
+    strings.map { |string|
+      {
+        "filter_value" => string,
+        "filter_display" => string,
+        "filter_label" => label
+      }
+    }
+  end
 end
