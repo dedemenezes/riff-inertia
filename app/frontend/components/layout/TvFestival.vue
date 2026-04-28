@@ -1,12 +1,7 @@
 <script setup>
-import { defineAsyncComponent, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import TwContainer from "./TwContainer.vue";
 import VideoBanner from "@/components/features/peliculas/VideoBanner.vue";
-
-const CarouselComponent = defineAsyncComponent(
-  () => import("@/components/ui/CarouselComponent.vue"),
-);
-import CarouselItem from "@/components/ui/carousel/CarouselItem.vue";
 
 const props = defineProps({
   youtubeVideos: {
@@ -93,29 +88,5 @@ function selectVideo(index) {
         </div>
       </div>
     </TwContainer>
-  </div>
-
-  <div v-if="false">
-    <div class="tv-festival bg-neutrals-1000 py-1600">
-      <TwContainer>
-        <div class="flex flex-col gap-800">
-          <h3
-            class="text-white-transp-1000 leading-[120%] font-regular text-3xl"
-          >
-            TV Festival do Rio
-          </h3>
-
-          <CarouselComponent :full-screen="true">
-            <template v-slot:items>
-              <CarouselItem
-                v-for="(youtubeVideo, index) in youtubeVideos"
-                :key="youtubeVideo['id']"
-              >
-              </CarouselItem>
-            </template>
-          </CarouselComponent>
-        </div>
-      </TwContainer>
-    </div>
   </div>
 </template>
