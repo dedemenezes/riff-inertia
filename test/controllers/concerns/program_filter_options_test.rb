@@ -32,7 +32,7 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
 
   test "to_filter_collection defaults to I18n.locale when not provided" do
     mostra = Mostra.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).first
-    mostras = [mostra]
+    mostras = [ mostra ]
 
     I18n.with_locale(:en) do
       result = @controller.send(:to_filter_collection, mostras, "mostra")
@@ -44,7 +44,7 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
   end
 
   test "strings_to_filter_collection builds filter array from strings" do
-    directors = ["Christopher Nolan", "Wachowskis", "João Silva"]
+    directors = [ "Christopher Nolan", "Wachowskis", "João Silva" ]
 
     result = @controller.send(:strings_to_filter_collection, directors, "direcao", locale: :pt)
 
@@ -59,7 +59,7 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
   end
 
   test "strings_to_filter_collection defaults to I18n.locale when not provided" do
-    directors = ["Christopher Nolan"]
+    directors = [ "Christopher Nolan" ]
 
     I18n.with_locale(:en) do
       result = @controller.send(:strings_to_filter_collection, directors, "direcao")
