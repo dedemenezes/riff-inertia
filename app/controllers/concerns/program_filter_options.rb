@@ -32,15 +32,11 @@ module ProgramFilterOptions
                        .flatten
                        .uniq
                        .sort_by { |it| it.nome_pais }
-    filter_data = to_filter_collection(paises, "pais")
 
-    filter_data.each_with_index do |item, idx|
-      pais = paises[idx]
+    to_filter_collection(paises, "pais") do |pais, item|
       item["id"] = pais.id
       item["nome_pais"] = pais.nome_pais
     end
-
-    @paises_filter = filter_data
   end
 
   def build_cinema_filter
@@ -48,17 +44,13 @@ module ProgramFilterOptions
                     .to_a
                     .uniq { |m| m.id }
                     .sort_by { |it| it.nome }
-    filter_data = to_filter_collection(cinemas, "cinema")
 
-    filter_data.each_with_index do |item, idx|
-      cinema = cinemas[idx]
+    to_filter_collection(cinemas, "cinema") do |cinema, item|
       item["id"] = cinema.id
       item["nome"] = cinema.nome
       item["endereco"] = cinema.endereco
       item["edicao_id"] = cinema.edicao_id
     end
-
-    filter_data
   end
 
   def build_mostra_filter
@@ -66,18 +58,14 @@ module ProgramFilterOptions
                     .to_a
                     .uniq { |mostra| mostra.id }
                     .sort_by { |mostra| mostra.permalink_pt }
-    filter_data = to_filter_collection(mostras, "mostra")
 
-    filter_data.each_with_index do |item, idx|
-      mostra = mostras[idx]
+    to_filter_collection(mostras, "mostra") do |mostra, item|
       item["id"] = mostra.id
       item["permalink_pt"] = mostra.permalink_pt
       item["nome_abreviado"] = mostra.nome_abreviado
       item["tag_class"] = mostra.tag_class
       item["display_name"] = mostra.display_name
     end
-
-    filter_data
   end
 
   def set_pelicula_collection_service
@@ -89,11 +77,14 @@ module ProgramFilterOptions
   def to_filter_collection(records, label_key, locale: I18n.locale)
     label = I18n.t("filter.#{label_key}", locale:)
     records.map { |record|
-      {
+      item = {
         "filter_value" => record.filter_value,
         "filter_display" => record.filter_display(locale:),
         "filter_label" => label
       }
+      yield(record, item) if block_given?
+
+      item
     }
   end
 
