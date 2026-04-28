@@ -15,10 +15,6 @@ class Cinema < ApplicationRecord
     capacidade.present? ? "#{capacidade} lugares" : "TDB"
   end
 
-  def filter_label
-    I18n.t("filter.cinema")
-  end
-
   class << self
     def group_salas(cinemas)
       cinemas

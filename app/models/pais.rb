@@ -11,8 +11,4 @@ class Pais < ApplicationRecord
     nome_without_special_char = transliterate(self.nome_pais, :pt).downcase.gsub(" ", "_")
     I18n.t("countries.#{nome_without_special_char}", locale:)
   end
-
-  def filter_label
-    I18n.t("filter.pais")
-  end
 end
