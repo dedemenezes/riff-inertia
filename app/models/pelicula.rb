@@ -34,6 +34,8 @@ class Pelicula < ApplicationRecord
     cor_coord_int
     catalogo_ficha_2007
     diretor_coord_int
+    youtube_link_trailer
+    vimeo_link_trailer
   ]
 
   belongs_to :importacao
