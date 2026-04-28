@@ -8,10 +8,12 @@ const props = defineProps({
   youtubeLinkTrailer: { type: String, default: null },
   vimeoLinkTrailer: { type: String, default: null },
   fallbackImage: { type: String, default: null },
-  title: { type: String, default: 'Video Banner' }
-})
+  title: { type: String, default: "Video Banner" },
+  showPlay: { type: Boolean, default: true },
+  showTitle: { type: Boolean, default: true },
+});
 
-const isPlaying = ref(false)
+const isPlaying = ref(false);
 
 // Extract YouTube ID from URL
 const getYouTubeId = (url) => {
@@ -127,10 +129,18 @@ const playVideo = () => {
       ></div>
 
       <!-- Dark overlay -->
-      <div class="absolute inset-0 bg-black/40"></div>
+      <div
+        class="absolute inset-0 transition-opacity duration-300"
+        :class="
+          showPlay ? 'bg-black/40' : 'bg-black/20 group-hover:bg-black/30'
+        "
+      ></div>
 
       <!-- Play button -->
-      <div class="absolute inset-0 flex items-center justify-center">
+      <div
+        v-if="showPlay"
+        class="absolute inset-0 flex items-center justify-center"
+      >
         <div
           class="bg-white-transp-1000/70 rounded-200 p-4 group-hover:bg-white-transp-1000/100 transition-all duration-300 group-hover:scale-105"
         >
@@ -139,6 +149,7 @@ const playVideo = () => {
       </div>
     </div>
     <div
+      v-if="showTitle"
       class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 z-10 rounded-200"
     >
       <p class="text-white text-md leading-[140%] font-body font-regular">
