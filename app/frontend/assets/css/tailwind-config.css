@@ -8,79 +8,79 @@
   /* Colors (using your JSON tokens) */
   /* @import "./design-tokens/color-primitives.json"; */
   --color-neutrals-100: #f9f9f9;
-  --color-neutrals-200: #F5F4F4;
-  --color-neutrals-300: #DBDAD7;
-  --color-neutrals-400: #C3C0BC;
-  --color-neutrals-500: #AAA7A1;
-  --color-neutrals-600: #908C84;
-  --color-neutrals-700: #736F68;
-  --color-neutrals-800: #56534E;
-  --color-neutrals-900: #3B3935;
-  --color-neutrals-1000: #201F1D;
+  --color-neutrals-200: #f5f4f4;
+  --color-neutrals-300: #dbdad7;
+  --color-neutrals-400: #c3c0bc;
+  --color-neutrals-500: #aaa7a1;
+  --color-neutrals-600: #908c84;
+  --color-neutrals-700: #736f68;
+  --color-neutrals-800: #56534e;
+  --color-neutrals-900: #3b3935;
+  --color-neutrals-1000: #201f1d;
 
   --color-white-transp-100: rgba(255, 255, 255, 0.05);
-  --color-white-transp-200: rgba(255, 255, 255, 0.10);
-  --color-white-transp-300: rgba(255, 255, 255, 0.20);
-  --color-white-transp-400: rgba(255, 255, 255, 0.40);
-  --color-white-transp-500: rgba(255, 255, 255, 0.70);
-  --color-white-transp-600: rgba(255, 255, 255, 0.80);
+  --color-white-transp-200: rgba(255, 255, 255, 0.1);
+  --color-white-transp-300: rgba(255, 255, 255, 0.2);
+  --color-white-transp-400: rgba(255, 255, 255, 0.4);
+  --color-white-transp-500: rgba(255, 255, 255, 0.7);
+  --color-white-transp-600: rgba(255, 255, 255, 0.8);
   --color-white-transp-700: rgba(255, 255, 255, 0.85);
-  --color-white-transp-800: rgba(255, 255, 255, 0.90);
+  --color-white-transp-800: rgba(255, 255, 255, 0.9);
   --color-white-transp-900: rgba(255, 255, 255, 0.95);
   --color-white-transp-1000: rgba(255, 255, 255, 1);
 
   --color-black-transp-100: rgba(0, 0, 0, 0.05);
-  --color-black-transp-200: rgba(0, 0, 0, 0.10);
-  --color-black-transp-300: rgba(0, 0, 0, 0.20);
-  --color-black-transp-400: rgba(0, 0, 0, 0.40);
-  --color-black-transp-500: rgba(0, 0, 0, 0.70);
-  --color-black-transp-600: rgba(0, 0, 0, 0.80);
+  --color-black-transp-200: rgba(0, 0, 0, 0.1);
+  --color-black-transp-300: rgba(0, 0, 0, 0.2);
+  --color-black-transp-400: rgba(0, 0, 0, 0.4);
+  --color-black-transp-500: rgba(0, 0, 0, 0.7);
+  --color-black-transp-600: rgba(0, 0, 0, 0.8);
   --color-black-transp-700: rgba(0, 0, 0, 0.85);
-  --color-black-transp-800: rgba(0, 0, 0, 0.90);
+  --color-black-transp-800: rgba(0, 0, 0, 0.9);
   --color-black-transp-900: rgba(0, 0, 0, 0.95);
   --color-black-transp-1000: rgba(0, 0, 0, 1);
 
-  --color-laranja-200: #FFE1C3;
-  --color-laranja-400: #FFB46A;
-  --color-laranja-600: #FF7F00;
-  --color-laranja-800: #C06103;
-  --color-laranja-1000: #8A4805;
+  --color-laranja-200: #ffe1c3;
+  --color-laranja-400: #ffb46a;
+  --color-laranja-600: #ff7f00;
+  --color-laranja-800: #c06103;
+  --color-laranja-1000: #8a4805;
 
-  --color-magenta-200: #FFD4E9;
-  --color-magenta-400: #FF6FB7;
-  --color-magenta-600: #FF007F;
-  --color-magenta-800: #B20059;
-  --color-magenta-1000: #6A0035;
+  --color-magenta-200: #ffd4e9;
+  --color-magenta-400: #ff6fb7;
+  --color-magenta-600: #ff007f;
+  --color-magenta-800: #b20059;
+  --color-magenta-1000: #6a0035;
 
-  --color-vermelho-100: #FFCCCC;
-  --color-vermelho-200: #FF7E7E;
-  --color-vermelho-400: #A30000;
-  --color-vermelho-600: #FF0000;
-  --color-vermelho-1000: #5E0000;
+  --color-vermelho-100: #ffcccc;
+  --color-vermelho-200: #ff7e7e;
+  --color-vermelho-400: #a30000;
+  --color-vermelho-600: #ff0000;
+  --color-vermelho-1000: #5e0000;
 
-  --color-violeta-100: #DA9FE0;
-  --color-violeta-200: #DA9FE0;
-  --color-violeta-400: #BF68C8;
-  --color-violeta-600: #7F008C;
+  --color-violeta-100: #da9fe0;
+  --color-violeta-200: #da9fe0;
+  --color-violeta-400: #bf68c8;
+  --color-violeta-600: #7f008c;
   --color-violeta-800: #580161;
-  --color-violeta-1000: #2D0032;
+  --color-violeta-1000: #2d0032;
 
-  --color-amarelo-200: #FFF8DF;
-  --color-amarelo-400: #FFECAB;
-  --color-amarelo-600: #FFDB5C;
-  --color-amarelo-800: #FFC700;
-  --color-amarelo-1000: #D4A500;
+  --color-amarelo-200: #fff8df;
+  --color-amarelo-400: #ffecab;
+  --color-amarelo-600: #ffdb5c;
+  --color-amarelo-800: #ffc700;
+  --color-amarelo-1000: #d4a500;
 
-  --color-verde-200: #CAFFCF;
-  --color-verde-400: #9EF4A6;
-  --color-verde-600: #1BBC2B;
-  --color-verde-800: #11861D;
-  --color-verde-1000: #094A0F;
+  --color-verde-200: #caffcf;
+  --color-verde-400: #9ef4a6;
+  --color-verde-600: #1bbc2b;
+  --color-verde-800: #11861d;
+  --color-verde-1000: #094a0f;
 
-  --color-azul-400: #94BBE2;
-  --color-azul-600: #1881F1;
+  --color-azul-400: #87bde5;
+  --color-azul-600: #1881f1;
 
- /* Spacing scale */
+  /* Spacing scale */
   --spacing-50: 0.125rem;
   --spacing-100: 0.25rem;
   --spacing-150: 0.375rem;
@@ -142,17 +142,17 @@
 }
 
 @theme static {
-  --color-tag-premiere-brasil: theme('colors.laranja.600');
-  --color-tag-premiere-latina: theme('color.amarelo.800');
-  --color-tag-gala-abertura: theme('color.magenta.600');
-  --color-tag-gala-encerramento: theme('color.magenta.800');
-  --color-tag-resistencias: theme('color.neutrals.200');
-  --color-tag-cine-memoria: theme('color.violeta.100');
-  --color-tag-midnight-movies: theme('color.violeta.600');
-  --color-tag-cinema-capacete: theme('color.neutrals.400');
-  --color-tag-classicos-cults: theme('color.neutrals.900');
-  --color-tag-expectativas: theme('color.azul.600');
-  --color-tag-itinerarios-unicos: theme('color.verde.600');
-  --color-tag-panorama-mundial: theme('color.vermelho.600');
-  --color-tag-default: theme('color.magenta.600');
+  --color-tag-premiere-brasil: theme("colors.laranja.600");
+  --color-tag-premiere-latina: theme("color.amarelo.800");
+  --color-tag-gala-abertura: theme("color.magenta.600");
+  --color-tag-gala-encerramento: theme("color.magenta.800");
+  --color-tag-resistencias: theme("color.neutrals.200");
+  --color-tag-cine-memoria: theme("color.violeta.100");
+  --color-tag-midnight-movies: theme("color.violeta.600");
+  --color-tag-cinema-capacete: theme("color.neutrals.400");
+  --color-tag-classicos-cults: theme("color.neutrals.900");
+  --color-tag-expectativas: theme("color.azul.600");
+  --color-tag-itinerarios-unicos: theme("color.verde.600");
+  --color-tag-panorama-mundial: theme("color.vermelho.600");
+  --color-tag-default: theme("color.magenta.600");
 }
