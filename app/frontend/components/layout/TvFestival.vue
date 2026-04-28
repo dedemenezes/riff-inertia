@@ -20,7 +20,7 @@ const { activeIndex, mainVideo, sideVideos, selectVideo } = useVideoSelection(
 <template>
   <div class="tv-festival bg-neutrals-1000 py-1600">
     <TwContainer>
-      <div class="text-white">
+      <div v-if="mainVideo" class="text-white">
         <!-- DESKTOP: grid 3 colunas -->
         <div class="hidden lg:grid grid-cols-3 gap-8 mx-auto">
           <!-- LEFT -->
@@ -78,7 +78,7 @@ const { activeIndex, mainVideo, sideVideos, selectVideo } = useVideoSelection(
         </div>
 
         <!-- MOBILE: vídeo principal + carrossel -->
-        <div class="flex flex-col gap-4 lg:hidden">
+        <div v-if="mainVideo" class="flex flex-col gap-4 lg:hidden">
           <!-- Vídeo principal -->
           <div class="aspect-video bg-black rounded-200">
             <VideoBanner
@@ -104,7 +104,7 @@ const { activeIndex, mainVideo, sideVideos, selectVideo } = useVideoSelection(
           </div>
           <!-- Carrossel horizontal -->
           <div
-            class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory scrollbar-hide"
+            class="flex gap-3 overflow-x-auto pb-2 px-4 snap-x snap-mandatory scrollbar-hide"
           >
             <div
               v-for="{ video, index } in sideVideos"

@@ -149,7 +149,7 @@ const playVideo = () => {
       </div>
     </div>
     <div
-      v-if="showTitle"
+      v-if="showTitle && !isPlaying"
       class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 z-10 rounded-200"
     >
       <p class="text-white text-md leading-[140%] font-body font-regular">
