@@ -1,9 +1,10 @@
 <script setup>
 import { onBeforeUnmount, onMounted } from 'vue';
-import { ref, watch, computed, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/dist/photoswipe.css';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { useBannerImages } from '@/components/features/peliculas/composables/useBannerImages.js';
 
 const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
 const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
@@ -32,65 +33,10 @@ const activeTab = ref(tabs[startingTab].id)
 
 const isDesktop = useUpdateWindowWidth();
 
-// PhotoSwipe uses data-pswp-width/height; preload natural size for every banner image.
-const pswpDims = ref(new Map());
-
-function preloadDims(url) {
-  if (!url || pswpDims.value.has(url)) return;
-  const img = new Image();
-  img.onload = () => {
-    if (img.naturalWidth > 0) {
-      pswpDims.value = new Map(pswpDims.value).set(url, {
-        w: img.naturalWidth,
-        h: img.naturalHeight
-      });
-    }
-  };
-  img.src = url;
-}
-
-watch(
-  () => [props.pelicula.imageURL, ...(props.pelicula.carousel_images ?? []).map((i) => i.path)],
-  (urls) => urls.forEach(preloadDims),
-  { immediate: true }
-);
-
-const brokenBannerSrcs = ref(new Set());
-const onBannerImageError = (src) => {
-  brokenBannerSrcs.value = new Set([...brokenBannerSrcs.value, src]);
-};
-
-const bannerImages = computed(() => {
-  const images = [];
-  if (props.pelicula.imageURL) {
-    const dims = pswpDims.value.get(props.pelicula.imageURL);
-    const src = props.pelicula.banner_image?.src ?? props.pelicula.imageURL;
-    if (!brokenBannerSrcs.value.has(src)) {
-      images.push({
-        href: props.pelicula.imageURL,
-        src,
-        srcset: props.pelicula.banner_image?.srcset,
-        sizes: props.pelicula.banner_image?.sizes,
-        pswpWidth: dims?.w ?? 1920,
-        pswpHeight: dims?.h ?? 1080
-      });
-    }
-  }
-  (props.pelicula.carousel_images ?? []).forEach((img) => {
-    if (brokenBannerSrcs.value.has(img.path)) return;
-    const dims = pswpDims.value.get(img.path);
-    images.push({
-      href: img.path,
-      src: img.path,
-      pswpWidth: dims?.w ?? 1920,
-      pswpHeight: dims?.h ?? 1080
-    });
-  });
-  return images;
-});
+const { bannerImages, onImageError: onBannerImageError } = useBannerImages(() => props.pelicula);
 
 const lightbox = new PhotoSwipeLightbox({
-  gallery: '#my-gallery',
+  gallery: '#pelicua-banner',
   children: 'a',
   pswpModule: () => import('photoswipe')
 });
@@ -105,8 +51,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #my-gallery. -->
-  <div id="my-gallery">
+  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicua-banner. -->
+  <div id="pelicua-banner">
     <Carousel v-if="bannerImages.length > 0" class="w-full">
       <CarouselContent class="-ml-0">
         <CarouselItem v-for="(image, idx) in bannerImages" :key="image.href" class="pl-0">
@@ -171,7 +117,11 @@ onBeforeUnmount(() => {
             />
             <p class="text-overline">{{ props.pelicula.cor_coord_int }}</p>
           </div>
-          <TagMostra class="rounded-100" :tag-class="props.pelicula.mostra_tag_class" :text="props.pelicula.mostra_name" />
+          <TagMostra
+            class="rounded-100"
+            :tag-class="props.pelicula.mostra_tag_class"
+            :text="props.pelicula.mostra_name"
+          />
         </div>
       </TwContainer>
     </div>
