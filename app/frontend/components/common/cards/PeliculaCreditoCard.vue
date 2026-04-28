@@ -17,6 +17,7 @@ const props = defineProps({
       <!-- TODO: TRANSLATE ✅ -->
       <div class="card__director rounded-200 w-1/2 sm:w-1/3">
         <img
+          v-if="pelicula.director_image"
           :src="pelicula.director_image"
           :alt="`Foto de ${pelicula.diretor_coord_int}`"
           class="h-[154px] w-full object-cover object-top rounded-t-200"

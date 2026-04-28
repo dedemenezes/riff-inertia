@@ -70,9 +70,9 @@ class ImageableTest < ActiveSupport::TestCase
       stub_const("ApplicationRecord::EDICAO_ATUAL_ANO", "2024") do
           # stub_const("DummyPelicula::CAROUSEL_IMAGES_AMOUNT", 3) do
           images = @pelicula.carousel_images
-          assert_equal 3, images.length
+          assert_equal 2, images.length
           assert_includes images.first[:path], "test_f02.jpg"
-          assert_includes images.last[:path], "test_f04.jpg"
+          assert_includes images.last[:path], "test_f03.jpg"
         end
       # end
     end

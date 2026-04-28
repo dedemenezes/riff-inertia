@@ -42,12 +42,6 @@ const isDesktop =  useUpdateWindowWidth()
     </div>
 
     <div></div>
-    <Suspense>
-      <CarouselComponent v-if="!isDesktop" :imageCollection="props.pelicula.carousel_images" :class-names="['pt-800']" />
-      <template #fallback>
-        <div class="h-48 bg-gray-200 animate-pulse rounded pt-800"></div>
-      </template>
-    </Suspense>
   </div>
 </template>
 

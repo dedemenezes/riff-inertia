@@ -37,10 +37,10 @@ pt:
       name: "Edição %{edicao_atual}"
       team: "Equipe"
     festival:
-      name: "Festival"
+      name: "O Festival"
     about:
       name: "Sobre nós"
-    articles: 
+    articles:
       name: "Notícias"
       fotos_e_videos: "Fotos & Vídeos"
     mostras: "Mostras"

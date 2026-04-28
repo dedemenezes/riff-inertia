@@ -1,6 +1,6 @@
 module Imageable
   extend ActiveSupport::Concern
-  CAROUSEL_IMAGES_AMOUNT = 3
+  CAROUSEL_IMAGES_AMOUNT = 2
 
   # Width hints (w descriptors) for responsive srcset — same pattern as PhotoSwipe (sizes + srcset + small src).
   # Add e.g. [ "large2", 612 ] when that folder exists on the CDN.
