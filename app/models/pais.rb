@@ -7,13 +7,9 @@ class Pais < ApplicationRecord
     id
   end
 
-  def filter_display
+  def filter_display(locale: I18n.locale)
     nome_without_special_char = transliterate(self.nome_pais, :pt).downcase.gsub(" ", "_")
-    if I18n.locale == :pt
-      I18n.t("countries.#{nome_without_special_char}")
-    else
-      I18n.t("countries.#{nome_without_special_char}")
-    end
+    I18n.t("countries.#{nome_without_special_char}", locale:)
   end
 
   def filter_label

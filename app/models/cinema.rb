@@ -7,7 +7,7 @@ class Cinema < ApplicationRecord
     id
   end
 
-  def filter_display
+  def filter_display(locale: I18n.locale)
     nome
   end
 

@@ -31,7 +31,7 @@ class Programacao < ApplicationRecord
     sessao.strftime("%Hh%M")
   end
 
-  def filter_display
+  def filter_display(locale: I18n.locale)
     sessao.strftime("%Hh%M")
   end
 

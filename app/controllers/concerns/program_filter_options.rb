@@ -14,48 +14,65 @@ module ProgramFilterOptions
   end
 
   def build_sessoes_filter
-    Programacao.where(edicao_id: @current_edicao)
-               .to_a
-               .uniq { |p| p.sessao }
-               .sort_by { |it| it.sessao }
-               .as_json(
-                 only: %i[sessao],
-                 methods: %i[display_sessao filter_value filter_display filter_label]
-               )
+    programacoes = Programacao.where(edicao_id: @current_edicao)
+                               .to_a
+                               .uniq { |p| p.sessao }
+                               .sort_by { |it| it.sessao }
+    to_filter_collection(programacoes, "sessao")
   end
 
   def build_paises_filter(base_scope)
-    @paises_filter = base_scope.includes(pelicula: :paises)
-                               .map { _1.pelicula.paises }
-                               .flatten
-                               .uniq
-                               .sort_by { |it| it.nome_pais }
-                               .as_json(
-                                 only: %i[id nome_pais],
-                                 methods: %i[filter_display filter_value filter_label]
-                               )
+    paises = base_scope.includes(pelicula: :paises)
+                       .map { _1.pelicula.paises }
+                       .flatten
+                       .uniq
+                       .sort_by { |it| it.nome_pais }
+    filter_data = to_filter_collection(paises, "pais")
+
+    filter_data.each_with_index do |item, idx|
+      pais = paises[idx]
+      item["id"] = pais.id
+      item["nome_pais"] = pais.nome_pais
+    end
+
+    @paises_filter = filter_data
   end
 
   def build_cinema_filter
-    Cinema.where(edicao_id: @current_edicao)
-          .to_a
-          .uniq { |m| m.id }
-          .sort_by { |it| it.nome }
-          .as_json(
-            only: %i[id nome endereco edicao_id],
-            methods: %i[filter_display filter_value filter_label]
-          )
+    cinemas = Cinema.where(edicao_id: @current_edicao)
+                    .to_a
+                    .uniq { |m| m.id }
+                    .sort_by { |it| it.nome }
+    filter_data = to_filter_collection(cinemas, "cinema")
+
+    filter_data.each_with_index do |item, idx|
+      cinema = cinemas[idx]
+      item["id"] = cinema.id
+      item["nome"] = cinema.nome
+      item["endereco"] = cinema.endereco
+      item["edicao_id"] = cinema.edicao_id
+    end
+
+    filter_data
   end
 
   def build_mostra_filter
-    Mostra.where(edicao_id: @current_edicao)
-          .to_a
-          .uniq { |mostra| mostra.id }
-          .sort_by { |mostra| mostra.permalink_pt }
-          .as_json(
-            only: %i[id permalink_pt nome_abreviado],
-            methods: [ :tag_class, :display_name, :filter_value, :filter_display, :filter_label ]
-          )
+    mostras = Mostra.where(edicao_id: @current_edicao)
+                    .to_a
+                    .uniq { |mostra| mostra.id }
+                    .sort_by { |mostra| mostra.permalink_pt }
+    filter_data = to_filter_collection(mostras, "mostra")
+
+    filter_data.each_with_index do |item, idx|
+      mostra = mostras[idx]
+      item["id"] = mostra.id
+      item["permalink_pt"] = mostra.permalink_pt
+      item["nome_abreviado"] = mostra.nome_abreviado
+      item["tag_class"] = mostra.tag_class
+      item["display_name"] = mostra.display_name
+    end
+
+    filter_data
   end
 
   def set_pelicula_collection_service
