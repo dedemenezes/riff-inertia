@@ -74,6 +74,26 @@ class PagesController < ApplicationController
       methods: %i[ permalink mobile_image_url desktop_image_url ]
     )
 
+    destaques_by_tipo = Destaque
+      .active
+      .includes(:tipo)
+      .group_by(&:tipo)
+      .map do |tipo, grupo|
+        {
+          tipo_id:   tipo.id,
+          tipo_nome: I18n.locale == :pt ? tipo.nome_pt : tipo.nome_en,
+          items: grupo.first(5).map do |d|
+            {
+              id:      d.id,
+              titulo:  d.titulo,
+              url:     d.url,
+              destino: d.destino,
+              imagem:  d.image_url
+            }
+          end
+        }
+      end
+
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
       quickLinksConfig:,
@@ -81,6 +101,7 @@ class PagesController < ApplicationController
       noticasUrl: noticias_url,
       youtubeVideos: playlist_response["items"],
       nextSessions: @programacoes,
+      destaques: destaques_by_tipo,
       webdoors:
     }
   end

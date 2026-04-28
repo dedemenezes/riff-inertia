@@ -1,21 +1,21 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
 import { ref, defineAsyncComponent, computed } from "vue";
-import TwContainer from "@components/layout/TwContainer.vue"
+import TwContainer from "@components/layout/TwContainer.vue";
 
-import HomeBanner from '@/components/features/home/HomeBanner.vue';
+import HomeBanner from "@/components/features/home/HomeBanner.vue";
 import banneImagePath from "@assets/images/mobile-banner.png";
-import QuickLinkSection from '@components/common/cards/QuickLinkSection.vue';
-import ArticlesSection from '@components/features/home/ArticlesSection.vue';
+import QuickLinkSection from "@components/common/cards/QuickLinkSection.vue";
+import ArticlesSection from "@components/features/home/ArticlesSection.vue";
 import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 import HorizontalScrollLayout from "@/components/layout/HorizontalScrollLayout.vue";
-import TvFestival from"@/components/layout/TvFestival.vue";
+import TvFestival from "@/components/layout/TvFestival.vue";
+import DestaquesSection from "@/components/features/home/DestaquesSection.vue";
 
 import { simpleTranslation, useUpdateWindowWidth } from "@/lib/utils";
 import CarouselComponent from "@/components/ui/CarouselComponent.vue";
 import { CarouselItem } from "@/components/ui/carousel";
-
 
 const props = defineProps({
   quickLinksConfig: { type: Array },
@@ -25,14 +25,17 @@ const props = defineProps({
   noticasUrl: { type: String },
   youtubeVideos: { type: Array },
   nextSessions: { type: Array },
-  webdoors: { type: Array }
-})
+  webdoors: { type: Array },
+  destaques: { type: Array, default: () => [] },
+});
 const isDesktop = ref(useUpdateWindowWidth());
 
 const mobileSizing = "height: 562px;";
 
 const backgroundImageStyle = (webdoor) => {
-  const imagePath = isDesktop.value ? webdoor.desktop_image_url : webdoor.mobile_image_url
+  const imagePath = isDesktop.value
+    ? webdoor.desktop_image_url
+    : webdoor.mobile_image_url;
   return `background-image: url(${imagePath});
     background-position: center;
     background-size: cover;
@@ -52,12 +55,19 @@ const backgroundImageStyle = (webdoor) => {
     <CarouselComponent :full-screen="true">
       <template v-slot:items>
         <CarouselItem v-for="webdoor in props.webdoors" :key="webdoor.id">
-          <div class="flex items-end justify-start h-[562px] lg:h-[618px]" :style="[backgroundImageStyle(webdoor)]">
-               <div class="px-400 py-200 lg:ps-[150px] lg:max-w-5xl pb-[58px] lg:pb-[77px]">
-                 <h1 class="banner font-regular leading-[150%] text-2xl lg:text-3xl mb-200 text-primary">
-                 {{ webdoor.titulo }}
-                 </h1>
-               </div>
+          <div
+            class="flex items-end justify-start h-[562px] lg:h-[618px]"
+            :style="[backgroundImageStyle(webdoor)]"
+          >
+            <div
+              class="px-400 py-200 lg:ps-[150px] lg:max-w-5xl pb-[58px] lg:pb-[77px]"
+            >
+              <h1
+                class="banner font-regular leading-[150%] text-2xl lg:text-3xl mb-200 text-primary"
+              >
+                {{ webdoor.titulo }}
+              </h1>
+            </div>
             <!-- </TwContainer> -->
           </div>
         </CarouselItem>
@@ -66,35 +76,54 @@ const backgroundImageStyle = (webdoor) => {
   </HomeBanner>
   <QuickLinkSection v-bind:links="quickLinksConfig" />
 
-
-  <div class="py-1600">
-    <HorizontalScrollLayout>
-      <template v-slot:header>
-        <h3 class="text-header-xxl text-neutrals-900">{{ simpleTranslation("Próximas sessões", "Upcoming sessions") }}</h3>
-      </template>
-      <template v-slot:content>
-        <div class="flex-shrink-0 w-[calc(80%-0.75rem)] sm:w-[calc(30%-0.75rem)] sm:min-w-[300px]"
-          v-for="(session, index) in props.nextSessions" :key="session.id">
-          <SessionCard :session="session" />
-        </div>
-      </template>
-    </HorizontalScrollLayout>
-  </div>
-  <!-- </div> -->
-  <TwContainer>
-  </TwContainer>
   <TwContainer>
     <div class="py-1200">
-      <ArticlesSection :articles="props.noticias" :noticiasUrl="props.noticasUrl"/>
+      <ArticlesSection
+        :articles="props.noticias"
+        :noticiasUrl="props.noticasUrl"
+      />
     </div>
-
   </TwContainer>
   <TvFestival :youtube-videos="props.youtubeVideos" />
+
+  <div class="py-1200">
+    <TwContainer>
+      <HorizontalScrollLayout variant="light" mobile-variant="dark">
+        <template v-slot:header>
+          <h3 class="text-header-xxl text-neutrals-900">
+            {{ simpleTranslation("Próximas sessões", "Upcoming sessions") }}
+          </h3>
+        </template>
+        <template v-slot:content>
+          <div
+            class="flex-shrink-0 w-[calc(80%-0.75rem)] sm:w-[calc(30%-0.75rem)] sm:min-w-[300px]"
+            v-for="(session, index) in props.nextSessions"
+            :key="session.id"
+          >
+            <SessionCard :session="session" />
+          </div>
+        </template>
+      </HorizontalScrollLayout>
+    </TwContainer>
+  </div>
+  <TwContainer>
+    <DestaquesSection
+      v-for="grupo in props.destaques"
+      :key="grupo.tipo_id"
+      :tipo-nome="grupo.tipo_nome"
+      :items="grupo.items"
+    />
+  </TwContainer>
 </template>
 
 <style scoped>
 .fade-out--right {
-  -webkit-mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black 0%,
+    black 85%,
+    transparent 100%
+  );
   mask-image: linear-gradient(to right, black 0%, black 85%, transparent 100%);
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
@@ -104,5 +133,4 @@ h1.banner {
   display: inline;
   /* line-height: 1.4; */
 }
-
 </style>
