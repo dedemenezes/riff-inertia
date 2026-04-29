@@ -74,6 +74,16 @@ class PagesController < ApplicationController
       methods: %i[ permalink mobile_image_url desktop_image_url ]
     )
 
+    destaques_by_tipo = Destaque
+      .active
+      .includes(:tipo)
+      .group_by(&:tipo)
+      .map do |tipo, grupo|
+        TipoSerializer.new(tipo).as_json.merge(
+          items: grupo.first(5).map { |d| DestaqueSerializer.new(d).as_json }
+        )
+      end
+
     render inertia: "HomePage", props: {
       rootUrl: @root_url,
       quickLinksConfig:,
@@ -81,6 +91,7 @@ class PagesController < ApplicationController
       noticasUrl: noticias_url,
       youtubeVideos: playlist_response["items"],
       nextSessions: @programacoes,
+      destaques: destaques_by_tipo,
       webdoors:
     }
   end

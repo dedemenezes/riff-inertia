@@ -1,0 +1,23 @@
+karim_ainouz:
+  idioma: port
+  tipo: meu_redentor
+  titulo: Maior vencedor do Troféu Redentor de melhor direção
+  imagem: d738b0f25ac52d8a9f5cd24ffa25c352.jpg
+  url: https://www.festivaldorio.com.br/br/noticias/maior-vencedor
+  destino: _self
+  ordem: 1
+  ativo: 1
+  created: 2024-10-13 09:40:30
+  updated: 2024-10-13 09:40:30
+
+lucia_murat:
+  idioma: port
+  tipo: meu_redentor
+  titulo: Memória, resistência e o poder do diálogo
+  imagem: 5ad97e3a1e036b06f12103a1557f8b6f.jpg
+  url: https://www.festivaldorio.com.br/br/noticias/memoria-resistencia
+  destino: _self
+  ordem: 2
+  ativo: 1
+  created: 2024-10-13 09:41:07
+  updated: 2024-10-13 09:41:07
