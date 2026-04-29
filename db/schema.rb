@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_29_041433) do
   create_table "atores", id: { type: :integer, unsigned: true }, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome_ator", limit: 50, null: false
   end
@@ -64,6 +64,8 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.string "seq_estabelecimento", limit: 45
     t.datetime "created", precision: nil, null: false
     t.datetime "updated", precision: nil, null: false
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
     t.index ["bairro_id"], name: "fk_bairro_id_idx"
     t.index ["edicao_id"], name: "idx_edicao_id"
     t.index ["nome"], name: "idx_bairro_nome"

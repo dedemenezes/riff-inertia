@@ -3,9 +3,11 @@ import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
+import CinemaMap from "@/components/features/cinemas/CinemaMap.vue";
 import { IconPin, IconPhone, IconWholeTicket, IconSeat, IconArrowDown, IconProgram } from "@/components/common/icons";
 import { ref, reactive } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const page = usePage();
 
@@ -101,71 +103,77 @@ const toggleOrder = () => {
   <hr class="text-neutrals-300">
 
   <TwContainer>
-    <ul class="flex flex-col py-1200 gap-800 text-body-regular">
-      <li
-        v-for="cinema in cinemas"
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-800">
+      <ul class="flex flex-col py-1200 gap-800 text-body-regular overflow-y-auto lg:max-h-[calc(100vh-200px)]">
+        <li
+          v-for="cinema in cinemas"
 
-        class="flex flex-col gap-300"
-      >
-        <h2 class="text-header-medium-sm p-150 cinema-name">
-          {{ cinema.name }}
-        </h2>
+          class="flex flex-col gap-300"
+        >
+          <h2 class="text-header-medium-sm p-150 cinema-name">
+            {{ cinema.name }}
+          </h2>
 
-        <div class="flex flex-col gap-50">
-          <div class="flex gap-150 items-center">
-            <IconWholeTicket
-              :active="true"
-              height="16"
-              width="16"
-            />
-            <!-- TODO: trocar o preço do ingresso -->
-            <p>imagine o PREÇO DO INGRESSO aqui</p>
-          </div>
-
-          <div v-if="cinema.cinema.endereco" class="flex gap-150 items-center">
-            <IconPin
-              :active="true"
-              height="16"
-              width="16"
-            />
-            <p>{{ cinema.cinema.endereco }}</p>
-          </div>
-
-          <div v-if="cinema.cinema.telefone" class="flex gap-150 items-center">
-            <IconPhone
-              :active="true"
-              height="16"
-              width="16"
-            />
-            <p>{{ cinema.cinema.telefone }}</p>
-          </div>
-          <div v-if="cinema.cinema.id" class="flex gap-150 items-center">
-            <IconProgram
-              :active="true"
-              height="16"
-              width="16"
-            />
-            <Link :href="programacaoHref(cinema.cinema.id)" class="inline-block">
-              Ver sessões
-            </Link>
-          </div>
-          <div class="flex flex-col gap-300">
+          <div class="flex flex-col gap-50">
             <div class="flex gap-150 items-center">
-              <IconSeat
+              <IconWholeTicket
                 :active="true"
                 height="16"
                 width="16"
               />
-              <p>Lotação: <span v-if="cinema.capacidade">{{ cinema.capacidade }}</span></p>
+              <!-- TODO: trocar o preço do ingresso -->
+              <p>imagine o PREÇO DO INGRESSO aqui</p>
             </div>
 
-            <li v-for="sala in cinema.salas" class="list-disc ms-400">
-              {{ sala.nome }} — {{ sala.capacidade }}
-            </li>
+            <div v-if="cinema.cinema.endereco" class="flex gap-150 items-center">
+              <IconPin
+                :active="true"
+                height="16"
+                width="16"
+              />
+              <p>{{ cinema.cinema.endereco }}</p>
+            </div>
+
+            <div v-if="cinema.cinema.telefone" class="flex gap-150 items-center">
+              <IconPhone
+                :active="true"
+                height="16"
+                width="16"
+              />
+              <p>{{ cinema.cinema.telefone }}</p>
+            </div>
+            <div v-if="cinema.cinema.id" class="flex gap-150 items-center">
+              <IconProgram
+                :active="true"
+                height="16"
+                width="16"
+              />
+              <Link :href="programacaoHref(cinema.cinema.id)" class="inline-block">
+                Ver sessões
+              </Link>
+            </div>
+            <div class="flex flex-col gap-300">
+              <div class="flex gap-150 items-center">
+                <IconSeat
+                  :active="true"
+                  height="16"
+                  width="16"
+                />
+                <p>Lotação: <span v-if="cinema.capacidade">{{ cinema.capacidade }}</span></p>
+              </div>
+
+              <li v-for="sala in cinema.salas" class="list-disc ms-400">
+                {{ sala.nome }} — {{ sala.capacidade }}
+              </li>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+
+      <div class="hidden lg:block sticky top-0 py-1200">
+        <CinemaMap :cinemas="cinemas" />
+      </div>
+    </div>
   </TwContainer>
 </template>
 
