@@ -9,16 +9,16 @@ class PeliculaCollectionServiceTest < ActiveSupport::TestCase
   test "collection_for_genres returns genres in Portuguese" do
     I18n.with_locale(:pt) do
       genres = @service.collection_for_genres
-      assert_equal "Animação", genres.first["filter_value"]
-      assert_equal "Documentário", genres.second["filter_value"]
+      assert_equal "Animação", genres.first
+      assert_equal "Documentário", genres.second
     end
   end
 
   test "collection_for_genres returns genres in English" do
     I18n.with_locale(:en) do
       genres = @service.collection_for_genres
-      assert_equal "Animation", genres.first["filter_value"]
-      assert_equal "Documentary", genres.second["filter_value"]
+      assert_equal "Animation", genres.first
+      assert_equal "Documentary", genres.second
     end
   end
 

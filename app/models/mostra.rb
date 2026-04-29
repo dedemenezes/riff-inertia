@@ -39,15 +39,11 @@ class Mostra < ApplicationRecord
     permalink_pt
   end
 
-  def filter_display
-    if I18n.locale == :pt
+  def filter_display(locale: I18n.locale)
+    if locale == :pt
       nome_pt
     else
       nome_en
     end
-  end
-
-  def filter_label
-    I18n.t("filter.submostra")
   end
 end

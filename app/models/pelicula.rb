@@ -34,6 +34,8 @@ class Pelicula < ApplicationRecord
     cor_coord_int
     catalogo_ficha_2007
     diretor_coord_int
+    youtube_link_trailer
+    vimeo_link_trailer
   ]
 
   belongs_to :importacao
@@ -61,10 +63,10 @@ class Pelicula < ApplicationRecord
     )
   }
 
-  scope :search_by_genre, ->(genre) {
+  scope :search_by_genre, ->(genre, locale: I18n.locale) {
     return all if genre.blank?
 
-    locale_index = I18n.locale == :en ? -1 : 1
+    locale_index = locale == :en ? -1 : 1
     genre = "%#{genre}%"
     where(
       "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",

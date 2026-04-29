@@ -93,7 +93,7 @@ const playVideo = () => {
   </div>
 
   <!-- Video banner wrapper -->
-  <div v-else class="relative w-full aspect-video lg:mx-auto rounded-200">
+  <div v-else class="relative w-full aspect-video lg:mx-auto rounded-200 bg-black">
     <!-- Iframe layer: mounted when playing -->
     <iframe
       v-if="isPlaying"

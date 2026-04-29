@@ -1,80 +1,66 @@
 <script setup>
-import { onBeforeUnmount, onMounted } from 'vue';
-// TODO: renderizar imagem grande desktop, mobile menor
-// TODO: botao com cursor hover para comprar ingresso
-// TODO: Fix carousel só se tiver imagem para mostrar
-// TODO: E se filme nao tiver imagem na db?
+import { onBeforeUnmount, onMounted } from "vue";
+import { ref, defineAsyncComponent } from "vue";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/dist/photoswipe.css";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useBannerImages } from "@/components/features/peliculas/composables/useBannerImages.js";
 
-import { ref, watch, computed, defineAsyncComponent } from 'vue';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/dist/photoswipe.css';
-
-const InformacoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/InformacoesContent.vue'));
-const SessoesContent = defineAsyncComponent(() => import('@/components/features/peliculas/SessoesContent.vue'));
-const CreditosContent = defineAsyncComponent(() => import('@/components/features/peliculas/CreditosContent.vue'));
-const Breadcrumb = defineAsyncComponent(() => import('@/components/common/Breadcrumb.vue'));
-const ButtonText = defineAsyncComponent(() => import('@/components/common/buttons/ButtonText.vue'));
-const IconChevronLeft = defineAsyncComponent(() => import('@/components/common/icons/navigation/IconChevronLeft.vue'));
-const TwContainer = defineAsyncComponent(() => import('@/components/layout/TwContainer.vue'));
-const TagMostra = defineAsyncComponent(() => import('@/components/common/tags/TagMostra.vue'));
-const TabbedPanel = defineAsyncComponent(() => import('@/components/common/tabs/TabbedPanel.vue'));
-const CarouselComponent = defineAsyncComponent(() => import('@/components/ui/CarouselComponent.vue'));
-
-import { useUpdateWindowWidth } from '@/lib/utils';
+const InformacoesContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/InformacoesContent.vue"),
+);
+const SessoesContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/SessoesContent.vue"),
+);
+const CreditosContent = defineAsyncComponent(
+  () => import("@/components/features/peliculas/CreditosContent.vue"),
+);
+const TwContainer = defineAsyncComponent(
+  () => import("@/components/layout/TwContainer.vue"),
+);
+const TagMostra = defineAsyncComponent(
+  () => import("@/components/common/tags/TagMostra.vue"),
+);
+const TabbedPanel = defineAsyncComponent(
+  () => import("@/components/common/tabs/TabbedPanel.vue"),
+);
+const VideoBanner = defineAsyncComponent(
+  () => import("@/components/features/peliculas/VideoBanner.vue"),
+);
+import { useUpdateWindowWidth } from "@/lib/utils";
 
 const props = defineProps({
   rootUrl: { type: String, required: true },
-  crumbs: { type: Array, required: true, default: () => []},
+  crumbs: { type: Array, required: true, default: () => [] },
   backPath: String,
-  pelicula: { type: Object, required: true }
+  pelicula: { type: Object, required: true },
 });
 
 const tabs = [
-  { id: 'first', label: 'Informações' },
-  { id: 'second', label: 'Sessões' },
-  { id: 'third', label: 'Créditos' }
-]
+  { id: "first", label: "Informações" },
+  { id: "second", label: "Sessões" },
+  { id: "third", label: "Créditos" },
+];
 
-const startingTab = 0
-const activeTab = ref(tabs[startingTab].id)
+const startingTab = 0;
+const activeTab = ref(tabs[startingTab].id);
 
 const isDesktop = useUpdateWindowWidth();
 
-// PhotoSwipe uses data-pswp-width/height for layout; must match the opened image’s aspect ratio.
-const bannerPswpWidth = ref(1920);
-const bannerPswpHeight = ref(1080);
-
-function applyIntrinsicSizeFromImage(img) {
-  if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-    bannerPswpWidth.value = img.naturalWidth;
-    bannerPswpHeight.value = img.naturalHeight;
-  }
-}
-
-function preloadBannerIntrinsicSize(url) {
-  if (!url) return;
-  const img = new Image();
-  img.onload = () => applyIntrinsicSizeFromImage(img);
-  img.src = url;
-}
-
-watch(
-  () => props.pelicula.imageURL,
-  (url) => preloadBannerIntrinsicSize(url),
-  { immediate: true }
+const { bannerImages, onImageError: onBannerImageError } = useBannerImages(
+  () => props.pelicula,
 );
-
-// banner_image vem do mesmo critério que imageURL (imagem na DB); srcset/sizes só quando o hash existe.
-const bannerThumbSrc = computed(
-  () => props.pelicula.banner_image?.src ?? props.pelicula.imageURL
-);
-const bannerThumbSrcset = computed(() => props.pelicula.banner_image?.srcset);
-const bannerThumbSizes = computed(() => props.pelicula.banner_image?.sizes);
 
 const lightbox = new PhotoSwipeLightbox({
-  gallery: '#my-gallery',
-  children: 'a',
-  pswpModule: () => import('photoswipe')
+  gallery: "#pelicua-banner",
+  children: "a",
+  pswpModule: () => import("photoswipe"),
 });
 
 onMounted(() => {
@@ -87,34 +73,35 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <TwContainer>
-    <Breadcrumb :crumbs="props.crumbs" />
-    <!-- TODO: Translate back text instalar i18n vue -->
-
-    <!-- back link -->
-    <ButtonText variant="dark" class="gap-200 py-400" text="Voltar" tag="a" :href="props.backPath">
-      <template #icon>
-        <IconChevronLeft height="16" width="16" color="inherit"/>
-      </template>
-    </ButtonText>
-  </TwContainer>
-  <!-- banner: <a> supplies PhotoSwipe href + data-pswp-* (plain <img> yields empty slide). -->
-  <div id="my-gallery">
-    <a
-      v-if="props.pelicula.imageURL"
-      class="block h-[222px] lg:h-[634px] w-full cursor-zoom-in outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-      :href="props.pelicula.imageURL"
-      :data-pswp-width="bannerPswpWidth"
-      :data-pswp-height="bannerPswpHeight"
-    >
-      <img
-        :src="bannerThumbSrc"
-        :srcset="bannerThumbSrcset"
-        :sizes="bannerThumbSizes"
-        class="h-full w-full object-cover pointer-events-none"
-        :alt="`${pelicula.display_titulo} banner`"
-      >
-    </a>
+  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicua-banner. -->
+  <div id="pelicula-banner">
+    <Carousel v-if="bannerImages.length > 0" class="w-full">
+      <CarouselContent class="-ml-0">
+        <CarouselItem
+          v-for="(image, idx) in bannerImages"
+          :key="image.href"
+          class="pl-0"
+        >
+          <a
+            class="block h-[222px] md:h-[634px] w-full cursor-zoom-in outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            :href="image.href"
+            :data-pswp-width="image.pswpWidth"
+            :data-pswp-height="image.pswpHeight"
+          >
+            <img
+              :src="image.src"
+              :srcset="image.srcset"
+              :sizes="image.sizes"
+              class="h-full w-full object-cover pointer-events-none"
+              :alt="`${pelicula.display_titulo} banner ${idx + 1}`"
+              @error="onBannerImageError(image.src)"
+            />
+          </a>
+        </CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious class="left-4 translate-x-0" />
+      <CarouselNext class="right-4 translate-x-0" />
+    </Carousel>
   </div>
   <!-- short info card -->
   <header>
@@ -122,11 +109,17 @@ onBeforeUnmount(() => {
       <TwContainer>
         <div class="py-400 space-y-400">
           <section>
-            <h1 class="text-header-medium-sm pb-100">{{ props.pelicula.titulo_portugues_coord_int }}</h1>
-            <h2 class="text-body-regular italic">{{ props.pelicula.titulo_ingles_coord_int }}</h2>
+            <h1 class="text-header-medium-sm pb-100">
+              {{ props.pelicula.titulo_portugues_coord_int }}
+            </h1>
+            <h2 class="text-body-regular italic">
+              {{ props.pelicula.titulo_ingles_coord_int }}
+            </h2>
           </section>
           <div class="flex items-center gap-200 flex-wrap">
-            <p class="text-overline shrink-0">{{ props.pelicula.display_paises }}</p>
+            <p class="text-overline shrink-0">
+              {{ props.pelicula.display_paises }}
+            </p>
             <img
               src="@assets/icons/divisor_black.svg"
               alt=""
@@ -168,36 +161,47 @@ onBeforeUnmount(() => {
 
   <!-- Tabs -->
   <TwContainer>
-
-    <TabbedPanel v-model="activeTab" :tabs="tabs" class="py-400 justify-center lg:hidden" />
+    <TabbedPanel
+      v-model="activeTab"
+      :tabs="tabs"
+      class="py-400 justify-center lg:hidden"
+    />
 
     <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
-    <div class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600">
-
-      <section v-if="activeTab === 'third' || isDesktop" class="w-full lg:w-1/3">
+    <div
+      class="flex flex-col justify-center gap-6 sm:flex-row sm:gap-800 py-600"
+    >
+      <section
+        v-if="activeTab === 'third' || isDesktop"
+        class="w-full lg:w-1/3"
+      >
         <!-- EACH SHOULD BE A COMPONENT LAZY LOADED -->
         <Suspense>
-          <CreditosContent :pelicula="pelicula"/>
+          <CreditosContent :pelicula="pelicula" />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
         </Suspense>
       </section>
 
-      <section v-if="activeTab === 'first' || isDesktop" class="w-full lg:w-2/3">
-
-          <Suspense>
-            <InformacoesContent :pelicula="pelicula"
-            />
-            <template #fallback>
-              <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
-            </template>
-          </Suspense>
-        </section>
-
-      <section v-if="activeTab === 'second' || isDesktop" class="w-full lg:w-1/3 space-y-400">
+      <section
+        v-if="activeTab === 'first' || isDesktop"
+        class="w-full lg:w-2/3"
+      >
         <Suspense>
-          <SessoesContent :sessions="pelicula.programacoesAsJson"/>
+          <InformacoesContent :pelicula="pelicula" />
+          <template #fallback>
+            <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
+          </template>
+        </Suspense>
+      </section>
+
+      <section
+        v-if="activeTab === 'second' || isDesktop"
+        class="w-full lg:w-1/3 space-y-400"
+      >
+        <Suspense>
+          <SessoesContent :sessions="pelicula.programacoesAsJson" />
           <template #fallback>
             <div class="animate-pulse bg-gray-200 h-32 rounded"></div>
           </template>
@@ -206,13 +210,19 @@ onBeforeUnmount(() => {
     </div>
   </TwContainer>
 
-  <Suspense v-if="isDesktop">
-    <CarouselComponent :full-screen="true" :imageCollection="props.pelicula.carousel_images" :class-names="['pt-800']" />
-    <template #fallback>
-      <div class="h-48 bg-gray-200 animate-pulse rounded pt-800"></div>
-    </template>
+  <Suspense v-if="pelicula.youtube_link_trailer || pelicula.vimeo_link_trailer">
+    <TwContainer>
+      <VideoBanner
+        :youtube-link-trailer="pelicula.youtube_link_trailer"
+        :vimeo-link-trailer="pelicula.vimeo_link_trailer"
+        :fallback-image="pelicula.imageURL"
+        :title="pelicula.display_titulo"
+      />
+      <template #fallback>
+        <div class="aspect-video w-full bg-neutrals-900 animate-pulse" />
+      </template>
+    </TwContainer>
   </Suspense>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
