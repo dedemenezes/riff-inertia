@@ -24,8 +24,17 @@ task geocode_cinemas: :environment do
     )
     url = URI("#{base_url}?#{params}")
 
-    response = Net::HTTP.get(url)
-    data = JSON.parse(response)
+    begin
+      response = Net::HTTP.get_response(url)
+      unless response.is_a?(Net::HTTPSuccess)
+        puts "  [SKIP] #{cinema.nome} — API error: #{response.code}"
+        next
+      end
+      data = JSON.parse(response.body)
+    rescue StandardError => e
+      puts "  [SKIP] #{cinema.nome} — Connection error: #{e.message}"
+      next
+    end
 
     feature = data.dig("features", 0)
     unless feature
