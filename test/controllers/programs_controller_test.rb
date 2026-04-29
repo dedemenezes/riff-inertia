@@ -24,6 +24,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     filters = inertia_props["current_filters"]
 
+    expected_keys = %w[query mostra cinema pais genero sessao elenco direcao]
+    assert_equal expected_keys.sort, filters.keys.sort, "Missing or extra keys in current_filters"
+
     assert_nil filters["query"]
     assert_nil filters["mostra"]
     assert_nil filters["cinema"]
