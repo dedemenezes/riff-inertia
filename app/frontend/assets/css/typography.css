@@ -1,6 +1,5 @@
 @import "./tailwind-config.css" reference;
 
-
 @layer components {
   /*
    * TYPOGRAPHY STYLES - Pure typography properties only
@@ -42,6 +41,10 @@
     @apply text-neutrals-900 font-body text-lg font-regular leading-[140%];
   }
 
+  .text-body-regular-md {
+    @apply font-body text-md font-regular leading-[140%];
+  }
+
   .text-body-strong-xs {
     @apply font-body text-xs font-semibold leading-[140%];
   }
@@ -51,7 +54,7 @@
   }
 
   .text-body-regular-line-small {
-    @apply font-body text-sm font-regular underline underline-offset-auto leading-[140%]
+    @apply font-body text-sm font-regular underline underline-offset-auto leading-[140%];
   }
 
   .text-subheading {
@@ -60,7 +63,7 @@
 
   /* Header variants */
   .text-header-xxl {
-    @apply font-heading font-regular text-3xl leading-[120%]
+    @apply font-heading font-regular text-3xl leading-[120%];
   }
 
   .text-header-base {
@@ -125,7 +128,7 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-magenta-600 to-laranja-600 hover:bg-gradient-to-l active:bg-gradient-to-r
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-magenta-600 to-laranja-600 hover:bg-gradient-to-l active:bg-gradient-to-r;
   }
 }
 

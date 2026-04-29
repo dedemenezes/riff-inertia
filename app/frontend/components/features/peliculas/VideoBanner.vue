@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { IconPlay } from '@/components/common/icons'
+import { ref, computed } from "vue";
+import { IconPlay } from "@/components/common/icons";
 
 const props = defineProps({
   youtubeVideoId: { type: String, default: null },
@@ -8,75 +8,79 @@ const props = defineProps({
   youtubeLinkTrailer: { type: String, default: null },
   vimeoLinkTrailer: { type: String, default: null },
   fallbackImage: { type: String, default: null },
-  title: { type: String, default: 'Video Banner' }
-})
+  title: { type: String, default: "Video Banner" },
+  showPlay: { type: Boolean, default: true },
+  showTitle: { type: Boolean, default: true },
+});
 
-const isPlaying = ref(false)
+const isPlaying = ref(false);
 
 // Extract YouTube ID from URL
 const getYouTubeId = (url) => {
-  if (!url) return null
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/)
-  return match ? match[1] : null
-}
+  if (!url) return null;
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+  );
+  return match ? match[1] : null;
+};
 
 // Extract Vimeo ID from URL
 const getVimeoId = (url) => {
-  if (!url) return null
-  const match = url.match(/vimeo\.com\/(\d+)/)
-  return match ? match[1] : null
-}
+  if (!url) return null;
+  const match = url.match(/vimeo\.com\/(\d+)/);
+  return match ? match[1] : null;
+};
 
 // Get embed URL for video
 const embedUrl = computed(() => {
   // Priority: embedded iframe > youtube link > vimeo link
   if (props.youtubeEmbedTrailer) {
-    const srcMatch = props.youtubeEmbedTrailer.match(/src="([^"]+)"/)
+    const srcMatch = props.youtubeEmbedTrailer.match(/src="([^"]+)"/);
     if (srcMatch) {
-      return srcMatch[1] + '&autoplay=1'
+      return srcMatch[1] + "&autoplay=1";
     }
   }
 
   if (props.youtubeLinkTrailer) {
-    const youtubeId = getYouTubeId(props.youtubeLinkTrailer)
+    const youtubeId = getYouTubeId(props.youtubeLinkTrailer);
     if (youtubeId) {
-      return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`
+      return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
     }
   }
 
   if (props.vimeoLinkTrailer) {
-    const vimeoId = getVimeoId(props.vimeoLinkTrailer)
+    const vimeoId = getVimeoId(props.vimeoLinkTrailer);
     if (vimeoId) {
-      return `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`
+      return `https://player.vimeo.com/video/${vimeoId}?autoplay=1&title=0&byline=0&portrait=0`;
     }
   }
 
   if (props.youtubeVideoId) {
-    return `https://www.youtube.com/embed/${props.youtubeVideoId}?autoplay=1&controls=1&rel=0&mute=1`
+    return `https://www.youtube.com/embed/${props.youtubeVideoId}?autoplay=1&controls=1&rel=0&mute=1&modestbranding=1&showinfo=0`;
   }
 
-  return null
-})
+  return null;
+});
 
 // Get thumbnail URL
 const thumbnailUrl = computed(() => {
   if (props.youtubeLinkTrailer) {
-    const youtubeId = getYouTubeId(props.youtubeLinkTrailer)
+    const youtubeId = getYouTubeId(props.youtubeLinkTrailer);
     if (youtubeId) {
-      return `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`
+      return `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`;
     }
   }
   if (props.youtubeVideoId) {
-    return `https://i.ytimg.com/vi/${props.youtubeVideoId}/maxresdefault.jpg`
+    return `https://i.ytimg.com/vi/${props.youtubeVideoId}/maxresdefault.jpg`;
   }
 
   // For Vimeo, we'd need API call for thumbnail, use fallback for now
-  return props.fallbackImage
-})
+  return props.fallbackImage;
+});
 
 const playVideo = () => {
-  isPlaying.value = true
-}
+  isPlaying.value = true;
+};
 </script>
 
 <template>
@@ -96,7 +100,14 @@ const playVideo = () => {
       :src="embedUrl"
       class="absolute inset-0 z-[100] w-full h-full rounded-200"
       frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+      "
       allowfullscreen
     ></iframe>
     <!-- Thumbnail + play button overlay -->
@@ -110,21 +121,37 @@ const playVideo = () => {
         v-if="thumbnailUrl"
         :src="thumbnailUrl"
         :alt="title"
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover rounded-200"
       />
-      <div v-else class="w-full h-full bg-gradient-to-br from-primary to-secondary"></div>
+      <div
+        v-else
+        class="w-full h-full bg-gradient-to-br from-primary to-secondary"
+      ></div>
 
       <!-- Dark overlay -->
-      <div class="absolute inset-0 bg-black/40"></div>
+      <div
+        class="absolute inset-0 transition-opacity duration-300"
+        :class="
+          showPlay ? 'bg-black/40' : 'bg-black/20 group-hover:bg-black/30'
+        "
+      ></div>
 
       <!-- Play button -->
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-white-transp-1000/70 rounded-200 p-4 group-hover:bg-white-transp-1000/100 transition-all duration-300 group-hover:scale-105">
+      <div
+        v-if="showPlay"
+        class="absolute inset-0 flex items-center justify-center"
+      >
+        <div
+          class="bg-white-transp-1000/70 rounded-200 p-4 group-hover:bg-white-transp-1000/100 transition-all duration-300 group-hover:scale-105"
+        >
           <IconPlay class="w-8 h-8 text-neutrals-900 ml-1" />
         </div>
       </div>
     </div>
-    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 z-10">
+    <div
+      v-if="showTitle && !isPlaying"
+      class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 z-10 rounded-200"
+    >
       <p class="text-white text-md leading-[140%] font-body font-regular">
         {{ title }}
       </p>
