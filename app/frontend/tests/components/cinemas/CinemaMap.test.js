@@ -6,7 +6,7 @@ const mockRemove = vi.fn();
 const mockAddTo = vi.fn().mockReturnThis();
 const mockSetPopup = vi.fn().mockReturnThis();
 const mockSetLngLat = vi.fn().mockReturnThis();
-const mockSetHTML = vi.fn().mockReturnThis();
+const mockSetDOMContent = vi.fn().mockReturnThis();
 const mockExtend = vi.fn();
 const mockIsEmpty = vi.fn().mockReturnValue(false);
 const mockFitBounds = vi.fn();
@@ -30,7 +30,7 @@ vi.mock("mapbox-gl", () => {
 
   class PopupMock {
     constructor() {}
-    setHTML(...args) { mockSetHTML(...args); return this; }
+    setDOMContent(...args) { mockSetDOMContent(...args); return this; }
   }
 
   class MapMock {
@@ -136,16 +136,17 @@ describe("CinemaMap", () => {
     expect(mockFitBounds).toHaveBeenCalled();
   });
 
-  it("creates popup with cinema name and address", () => {
+  it("creates popup with cinema name and address using safe DOM content", () => {
     const cinemas = [
       cinemaWithCoords("Cine Odeon", -22.91, -43.17, "Praça Floriano, 7"),
     ];
 
     mount(CinemaMap, { props: { cinemas } });
 
-    expect(mockSetHTML).toHaveBeenCalledWith(
-      "<strong>Cine Odeon</strong><br>Praça Floriano, 7"
-    );
+    expect(mockSetDOMContent).toHaveBeenCalledTimes(1);
+    const popupEl = mockSetDOMContent.mock.calls[0][0];
+    expect(popupEl.querySelector("strong").textContent).toBe("Cine Odeon");
+    expect(popupEl.textContent).toContain("Praça Floriano, 7");
   });
 
   it("creates popup without address when endereco is missing", () => {
@@ -158,8 +159,9 @@ describe("CinemaMap", () => {
 
     mount(CinemaMap, { props: { cinemas } });
 
-    expect(mockSetHTML).toHaveBeenCalledWith(
-      "<strong>Cinema Teste</strong>"
-    );
+    expect(mockSetDOMContent).toHaveBeenCalledTimes(1);
+    const popupEl = mockSetDOMContent.mock.calls[0][0];
+    expect(popupEl.querySelector("strong").textContent).toBe("Cinema Teste");
+    expect(popupEl.childNodes.length).toBe(1);
   });
 });

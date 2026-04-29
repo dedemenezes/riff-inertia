@@ -42,9 +42,17 @@ const syncMarkers = (cinemas) => {
     hasCoords = true;
     const lngLat = [cinema.longitude, cinema.latitude];
 
-    const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-      `<strong>${cinema.name}</strong>${cinema.cinema?.endereco ? `<br>${cinema.cinema.endereco}` : ""}`
-    );
+    const popupContent = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = cinema.name;
+    popupContent.appendChild(title);
+
+    if (cinema.cinema?.endereco) {
+      popupContent.appendChild(document.createElement("br"));
+      popupContent.appendChild(document.createTextNode(cinema.cinema.endereco));
+    }
+
+    const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(popupContent);
 
     const marker = new mapboxgl.Marker({ color: "#FF007F" })
       .setLngLat(lngLat)
