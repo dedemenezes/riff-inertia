@@ -162,9 +162,11 @@ const toggleOrder = () => {
                 <p>Lotação: <span v-if="cinema.capacidade">{{ cinema.capacidade }}</span></p>
               </div>
 
-              <li v-for="sala in cinema.salas" class="list-disc ms-400">
-                {{ sala.nome }} — {{ sala.capacidade }}
-              </li>
+              <ul>
+                <li v-for="sala in cinema.salas" class="list-disc ms-400">
+                  {{ sala.nome }} — {{ sala.capacidade }}
+                </li>
+              </ul>
             </div>
           </div>
         </li>
