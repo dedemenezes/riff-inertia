@@ -7,6 +7,8 @@ const props = defineProps({
   cinemas: { type: Array, required: true },
 });
 
+const page = usePage();
+
 const mapContainer = ref(null);
 let map = null;
 const markers = ref([]);
@@ -14,7 +16,6 @@ const markers = ref([]);
 const RIO_CENTER = [-43.1729, -22.9068];
 
 const buildMap = () => {
-  const page = usePage();
   mapboxgl.accessToken = page.props.mapboxAccessToken;
 
   map = new mapboxgl.Map({
