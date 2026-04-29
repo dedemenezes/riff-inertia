@@ -8,7 +8,7 @@ task geocode_cinemas: :environment do
   rio_proximity = "-43.1729,-22.9068"
 
   cinemas = Cinema.where(latitude: nil).or(Cinema.where(longitude: nil))
-                  .where.not(endereco: [nil, ""])
+                  .where.not(endereco: [ nil, "" ])
 
   puts "Found #{cinemas.count} cinemas to geocode"
 
