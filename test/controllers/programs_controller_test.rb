@@ -18,6 +18,22 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert props["elements"].any?, "Expected at least one program element"
   end
 
+  test "current_filters returns nil values when no params are provided" do
+    get program_url
+    assert_response :success
+
+    filters = inertia_props["current_filters"]
+
+    assert_nil filters["query"]
+    assert_nil filters["mostra"]
+    assert_nil filters["cinema"]
+    assert_nil filters["pais"]
+    assert_nil filters["genero"]
+    assert_nil filters["sessao"]
+    assert_nil filters["elenco"]
+    assert_nil filters["direcao"]
+  end
+
   test "should return matching elements when query is provided" do
     get program_url, params: { query: "Batman" }
 
