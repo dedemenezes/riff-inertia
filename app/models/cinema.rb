@@ -7,16 +7,12 @@ class Cinema < ApplicationRecord
     id
   end
 
-  def filter_display
+  def filter_display(locale: I18n.locale)
     nome
   end
 
   def display_capacidade
     capacidade.present? ? "#{capacidade} lugares" : "TDB"
-  end
-
-  def filter_label
-    I18n.t("filter.cinema")
   end
 
   class << self

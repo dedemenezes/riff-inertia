@@ -63,10 +63,10 @@ class Pelicula < ApplicationRecord
     )
   }
 
-  scope :search_by_genre, ->(genre) {
+  scope :search_by_genre, ->(genre, locale: I18n.locale) {
     return all if genre.blank?
 
-    locale_index = I18n.locale == :en ? -1 : 1
+    locale_index = locale == :en ? -1 : 1
     genre = "%#{genre}%"
     where(
       "SUBSTRING_INDEX(SUBSTRING_INDEX(catalogo_ficha_2007, ' ', 1), '/', ?) LIKE ?",

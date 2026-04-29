@@ -77,6 +77,9 @@ en:
     premios: "Awards"
     palavras_chaves: "Keywords"
     caderno: "Category"
+    sessao: "Screening"
+    mostra: "Showcase"
+
   filter_by:
     date: "by date"
     time: "by time"
