@@ -49,4 +49,5 @@ Examples:
 ## Development Practices
 
 - XP coding practices (TDD, pair programming, small increments)
+- **TDD is mandatory:** Always write the test first and verify it fails (red), then implement the code to make it pass (green), then refactor
 - Always run tests before considering a feature complete

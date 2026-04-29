@@ -104,7 +104,7 @@ const toggleOrder = () => {
 
   <TwContainer>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-800">
-      <ul class="flex flex-col py-1200 gap-800 text-body-regular overflow-y-auto lg:max-h-[calc(100vh-200px)]">
+      <ul class="flex flex-col py-1200 gap-800 text-body-regular">
         <li
           v-for="cinema in cinemas"
 
@@ -170,8 +170,10 @@ const toggleOrder = () => {
         </li>
       </ul>
 
-      <div class="hidden lg:block sticky top-0 py-1200">
-        <CinemaMap :cinemas="cinemas" />
+      <div class="hidden lg:block">
+        <div class="sticky top-0 h-[80vh] py-1200">
+          <CinemaMap :cinemas="cinemas" />
+        </div>
       </div>
     </div>
   </TwContainer>
