@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUpdated } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import TwContainer from "./TwContainer.vue";
 import { IconChevronRight, IconChevronLeft } from "@/components/common/icons";
 
@@ -24,27 +24,9 @@ const props = defineProps({
   },
 });
 
-const iconClasses = computed(() => {
-  if (currentVariant.value === "dark") {
-    return "text-white-transp-800 hover:text-white-transp-1000";
-  }
-  return "cursor-pointer text-neutrals-900 hover:text-neutrals-700";
-});
-
-const disabledIconClasses = computed(() => {
-  if (currentVariant.value === "dark") {
-    return "text-neutrals-400 cursor-not-allowed";
-  }
-  return "text-neutrals-400 cursor-not-allowed";
-});
-
 const scrollContainer = ref(null);
-const width = ref(typeof window !== "undefined" ? window.innerWidth : 0);
-const canScrollLeft = ref(false);
-const canScrollRight = ref(true);
-const isMobile = ref(
-  typeof window !== "undefined" ? window.innerWidth < 1024 : false,
-);
+const width = ref(window.innerWidth);
+const isMobile = computed(() => width.value < 1024);
 
 const currentVariant = computed(() => {
   return isMobile.value && props.mobileVariant
@@ -56,8 +38,21 @@ const currentScrollDistance = computed(() => {
   return isMobile.value ? props.mobileScrollDistance : props.scrollDistance;
 });
 
+const canScrollLeft = ref(false);
+const canScrollRight = ref(true);
+
+const iconClasses = computed(() => {
+  if (currentVariant.value === "dark") {
+    return "text-white-transp-800 hover:text-white-transp-1000";
+  }
+  return "cursor-pointer text-neutrals-900 hover:text-neutrals-700";
+});
+
+const disabledIconClasses = "text-neutrals-400 cursor-not-allowed";
+
 const updateScrollState = () => {
   if (!scrollContainer.value) return;
+
   const { scrollLeft, scrollWidth, clientWidth } = scrollContainer.value;
   canScrollLeft.value = scrollLeft > 0;
   canScrollRight.value = scrollLeft + clientWidth < scrollWidth - 10;
@@ -76,17 +71,17 @@ const scrollRight = () => {
   });
 };
 
+const onResize = () => {
+  width.value = window.innerWidth;
+};
+
 onMounted(() => {
   updateScrollState();
-  isMobile.value = window.innerWidth < 1024;
-  scrollContainer.value?.addEventListener("scroll", updateScrollState);
-  window.addEventListener("resize", () => {
-    width.value = window.innerWidth;
-    isMobile.value = window.innerWidth < 1024;
-  });
+  window.addEventListener("resize", onResize);
 });
-onUpdated(() => {
-  updateScrollState();
+
+onUnmounted(() => {
+  window.removeEventListener("resize", onResize);
 });
 </script>
 
@@ -97,6 +92,7 @@ onUpdated(() => {
     </TwContainer>
     <div
       ref="scrollContainer"
+      @scroll="updateScrollState"
       class="flex overflow-x-auto no-scroll-bar gap-800 scroll-snap-x-mandatory"
     >
       <slot name="content" />
