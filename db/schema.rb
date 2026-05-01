@@ -141,6 +141,18 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.index ["pelicula_id"], name: "fk_pelicula_galeria_idx"
   end
 
+  create_table "generos", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+    t.string "nome_abreviado", limit: 150
+    t.string "permalink_pt", null: false
+    t.string "permalink_en", null: false
+    t.string "nome_pt", limit: 150
+    t.string "nome_en", limit: 150
+    t.datetime "created", precision: nil, null: false
+    t.datetime "updated", precision: nil, null: false
+    t.index ["permalink_en"], name: "idx_permalink_en"
+    t.index ["permalink_pt"], name: "idx_permalink_pt"
+  end
+
   create_table "idiomas", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome", limit: 45, null: false
     t.string "locale", limit: 45, null: false
@@ -175,6 +187,18 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.string "acao", limit: 1, default: "c", null: false
     t.datetime "created", precision: nil, null: false
     t.datetime "updated", precision: nil, null: false
+  end
+
+  create_table "metragens", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+    t.string "nome_abreviado", limit: 150
+    t.string "permalink_pt", null: false
+    t.string "permalink_en", null: false
+    t.string "nome_pt", limit: 150
+    t.string "nome_en", limit: 150
+    t.datetime "created", precision: nil, null: false
+    t.datetime "updated", precision: nil, null: false
+    t.index ["permalink_en"], name: "idx_permalink_en"
+    t.index ["permalink_pt"], name: "idx_permalink_pt"
   end
 
   create_table "mostras", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -295,6 +319,8 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.integer "edicao_id"
     t.string "permalink", null: false
     t.integer "mostra_id"
+    t.integer "genero_id"
+    t.integer "metragem_id"
     t.string "imagem"
     t.string "imagem_diretor"
     t.string "imagem_diretor2"
@@ -356,9 +382,14 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.datetime "updated", precision: nil, null: false
     t.index ["ativo"], name: "idx_ativo"
     t.index ["edicao_id"], name: "fk_edicao_id_peliculas_idx"
+    t.index ["filmecolado"], name: "idx_peliculas_col"
+    t.index ["genero_id"], name: "idx_genero_id"
     t.index ["importacao_id"], name: "fk_importacao_id_idx"
+    t.index ["metragem_id"], name: "idx_metragem_id"
     t.index ["mostra_id"], name: "idx_mostra_id"
     t.index ["permalink"], name: "idx_permalink"
+    t.index ["seq_pelicula"], name: "idx_peliculas_seq"
+    t.index ["seq_pelicula"], name: "uniq_seq", unique: true
   end
 
   create_table "peliculas_tags", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -381,14 +412,19 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.integer "edicao_id"
     t.string "codigo_com_5_digitos", limit: 5
     t.text "ingresso_url_venda", size: :long
+    t.integer "ingresso_enabled", limit: 1, default: 0, null: false, unsigned: true
+    t.string "ingresso_block_message"
+    t.text "url_inscricao_gratuitas", size: :long
     t.date "data"
     t.time "sessao"
     t.string "legnacopia", limit: 150
     t.integer "sessao_gala", default: 0, null: false
-    t.integer "sessao_cineencontro", default: 0, null: false
-    t.string "filmecolado", limit: 50
+    t.integer "sessao_debate", default: 0, null: false
+    t.integer "sessao_colada", default: 0, null: false
+    t.string "filmecolado"
     t.integer "sessao_fechada_manual", default: 0, null: false
     t.integer "gratuito", default: 0, null: false
+    t.integer "gratuidade_limitada", default: 0, null: false
     t.integer "acessibilidade", default: 0, null: false
     t.integer "deletado", default: 0, null: false
     t.datetime "created", precision: nil, null: false
@@ -498,7 +534,9 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   add_foreign_key "paises_peliculas", "paises", name: "fk_paises_peliculas_paises_idx", on_delete: :cascade
   add_foreign_key "paises_peliculas", "peliculas", name: "fk_paises_peliculas_peliculas_idx", on_delete: :cascade
   add_foreign_key "peliculas", "edicoes", name: "fk_edicao_id_peliculas", on_delete: :cascade
+  add_foreign_key "peliculas", "generos", name: "fk_peliculas_genero", on_update: :cascade
   add_foreign_key "peliculas", "importacoes", name: "fk_importacao_id", on_delete: :cascade
+  add_foreign_key "peliculas", "metragens", column: "metragem_id", name: "fk_peliculas_metragem", on_update: :cascade, on_delete: :nullify
   add_foreign_key "peliculas", "mostras", name: "fk_mostra_id_peliculas", on_delete: :nullify
   add_foreign_key "programacoes", "cinemas", name: "fk_cinema_id"
   add_foreign_key "programacoes", "importacoesprogs", column: "importacoesprog_id", name: "fk_importacoesprog_id"
