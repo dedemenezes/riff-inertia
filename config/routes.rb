@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount_avo
   resources :newsletters, only: :create
 
   scope "(:locale)", locale: /en|pt/ do
