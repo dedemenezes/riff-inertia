@@ -9,7 +9,7 @@ program_batman:
   sessao: "19:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -29,7 +29,7 @@ program_batman_other_day:
   sessao: "19:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -49,7 +49,7 @@ program_special_char:
   sessao: "19:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -69,7 +69,7 @@ program_matrix:
   sessao: "21:00"
   legnacopia: "PT"
   sessao_gala: 1
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 1
@@ -92,7 +92,7 @@ program_test_<%= i %>:
   sessao: "0<%= i %>:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -115,7 +115,7 @@ programa_cidade_perdida_1:
   sessao: "14:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -135,7 +135,7 @@ programa_amor_brasilia_1:
   sessao: "16:30"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -155,7 +155,7 @@ programa_berlin_nights_1:
   sessao: "19:00"
   legnacopia: "EN"
   sessao_gala: 1
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -175,7 +175,7 @@ programa_paris_stories_1:
   sessao: "21:30"
   legnacopia: "FR"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -195,7 +195,7 @@ programa_amazonia_selvagem_1:
   sessao: "15:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 1
+  sessao_debate: 1
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 1
@@ -215,7 +215,7 @@ programa_cidade_transformacao_0:
   sessao: "15:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -235,7 +235,7 @@ programa_cidade_transformacao_1:
   sessao: "17:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -255,7 +255,7 @@ programa_cidade_perdida_2:
   sessao: "20:00"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -275,7 +275,7 @@ programa_berlin_nights_2:
   sessao: "18:00"
   legnacopia: "EN"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
@@ -295,7 +295,7 @@ programa_cidade_transformacao_2:
   sessao: "20:30"
   legnacopia: "PT"
   sessao_gala: 0
-  sessao_cineencontro: 0
+  sessao_debate: 0
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
