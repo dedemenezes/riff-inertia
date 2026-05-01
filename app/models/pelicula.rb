@@ -41,6 +41,8 @@ class Pelicula < ApplicationRecord
   belongs_to :importacao
   belongs_to :edicao
   belongs_to :mostra
+  belongs_to :genero
+  belongs_to :metragem
   has_many :atores_peliculas
   has_many :galerias
   has_many :paises_peliculas
