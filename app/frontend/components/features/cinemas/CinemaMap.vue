@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import mapboxgl from "mapbox-gl";
+import logoSvg from "@/assets/logos/festival-logo-mobile.svg?raw";
 
 const props = defineProps({
   cinemas: { type: Array, required: true },
@@ -55,7 +56,18 @@ const syncMarkers = (cinemas) => {
 
     const popup = new mapboxgl.Popup({ offset: 25 }).setDOMContent(popupContent);
 
-    const marker = new mapboxgl.Marker({ color: "#FF007F" })
+    const el = document.createElement("div");
+    el.innerHTML = logoSvg;
+    el.style.width = "32px";
+    el.style.height = "32px";
+    el.style.cursor = "pointer";
+    const svg = el.querySelector("svg");
+    if (svg) {
+      svg.setAttribute("width", "32");
+      svg.setAttribute("height", "32");
+    }
+
+    const marker = new mapboxgl.Marker({ element: el })
       .setLngLat(lngLat)
       .setPopup(popup)
       .addTo(map);

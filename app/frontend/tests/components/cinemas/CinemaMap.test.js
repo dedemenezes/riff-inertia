@@ -12,6 +12,7 @@ const mockIsEmpty = vi.fn().mockReturnValue(false);
 const mockFitBounds = vi.fn();
 const mockAddControl = vi.fn();
 const mockMapRemove = vi.fn();
+const mockMarkerConstructor = vi.fn();
 
 vi.mock("@inertiajs/vue3", () => ({
   usePage: () => ({
@@ -19,9 +20,13 @@ vi.mock("@inertiajs/vue3", () => ({
   }),
 }));
 
+vi.mock("@/assets/logos/festival-logo-mobile.svg?raw", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" width="85" height="29"><path d="M0 0"/></svg>',
+}));
+
 vi.mock("mapbox-gl", () => {
   class MarkerMock {
-    constructor() {}
+    constructor(opts) { mockMarkerConstructor(opts); }
     setLngLat(...args) { mockSetLngLat(...args); return this; }
     setPopup(...args) { mockSetPopup(...args); return this; }
     addTo(...args) { mockAddTo(...args); return this; }
@@ -163,5 +168,19 @@ describe("CinemaMap", () => {
     const popupEl = mockSetDOMContent.mock.calls[0][0];
     expect(popupEl.querySelector("strong").textContent).toBe("Cinema Teste");
     expect(popupEl.childNodes.length).toBe(1);
+  });
+
+  it("creates markers with custom SVG element instead of default pin", () => {
+    const cinemas = [
+      cinemaWithCoords("Cine Odeon", -22.91, -43.17),
+    ];
+
+    mount(CinemaMap, { props: { cinemas } });
+
+    expect(mockMarkerConstructor).toHaveBeenCalledTimes(1);
+    const opts = mockMarkerConstructor.mock.calls[0][0];
+    expect(opts).toHaveProperty("element");
+    expect(opts.element).toBeInstanceOf(HTMLElement);
+    expect(opts.element.querySelector("svg")).not.toBeNull();
   });
 });
