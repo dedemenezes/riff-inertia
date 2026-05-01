@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
+  inertia_share mapboxAccessToken: -> {
+    ENV.fetch("MAPBOX_ACCESS_TOKEN", "")
+  }
+
   def current_edicao
     @current_edicao = Edicao.find_by!(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
   end

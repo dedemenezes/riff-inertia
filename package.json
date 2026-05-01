@@ -27,6 +27,7 @@
     "focus-trap": "^7.6.5",
     "focus-trap-vue": "^4.1.0",
     "lucide-vue-next": "^0.542.0",
+    "mapbox-gl": "^3.22.0",
     "photoswipe": "^5.4.4",
     "reka-ui": "^2.9.2",
     "tailwind-merge": "^3.3.1",

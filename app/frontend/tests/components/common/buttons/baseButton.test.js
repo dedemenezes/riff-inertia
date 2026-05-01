@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import BaseButton from "@components/common/buttons/BaseButton.vue"; // ← ADJUST THIS PATH
+import BaseButton from "@components/common/buttons/BaseButton.vue";
 
 describe("BaseButton", () => {
   it("renders button by default", () => {

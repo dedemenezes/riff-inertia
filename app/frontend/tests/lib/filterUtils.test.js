@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { extractFilterValues } from '../filterUtils.js'
+import { extractFilterValues } from '@/lib/filterUtils.js'
 
 describe('extractFilterValues', () => {
   it('should extract filter_value from valid filter objects', () => {

@@ -30,7 +30,12 @@ class Cinema < ApplicationRecord
 
     def build_complex_row(complex_name, salas)
       first = salas.first
-      row = { name: complex_name, cinema: first }
+      row = {
+        name: complex_name,
+        cinema: first,
+        latitude: first.latitude&.to_f,
+        longitude: first.longitude&.to_f
+      }
 
       if salas.many?
         row[:salas] = salas.map do |sala|
