@@ -42,6 +42,7 @@ gem "httparty", "~> 0.23.1"
 gem "propshaft"
 
 gem "avo", "~> 3.0"
+gem "ckeditor5"
 
 group :development, :test do
   gem "dotenv"
