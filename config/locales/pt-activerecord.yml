@@ -1,0 +1,42 @@
+pt:
+  errors:
+    messages:
+      required: "é obrigatório(a)"
+      blank: "não pode ficar em branco"
+      present: "deve ficar em branco"
+      accepted: "deve ser aceito"
+      empty: "não pode ficar vazio"
+      too_long:
+        one: "é muito longo (máximo: 1 caractere)"
+        other: "é muito longo (máximo: %{count} caracteres)"
+      too_short:
+        one: "é muito curto (mínimo: 1 caractere)"
+        other: "é muito curto (mínimo: %{count} caracteres)"
+      wrong_length:
+        one: "não possui o tamanho esperado (1 caractere)"
+        other: "não possui o tamanho esperado (%{count} caracteres)"
+      taken: "já está em uso"
+      invalid: "não é válido"
+      inclusion: "não está incluído na lista"
+      exclusion: "está reservado"
+      not_a_number: "não é um número"
+      not_an_integer: "não é um número inteiro"
+      greater_than: "deve ser maior que %{count}"
+      greater_than_or_equal_to: "deve ser maior ou igual a %{count}"
+      less_than: "deve ser menor que %{count}"
+      less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+      other_than: "deve ser diferente de %{count}"
+      odd: "deve ser ímpar"
+      even: "deve ser par"
+      confirmation: "não é igual a %{attribute}"
+      format: "não é válido"
+      in: "não está incluso entre %{min} e %{max}"
+
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "A validação falhou: %{errors}"
+        required: "é obrigatório(a)"
+        blank: "não pode ficar em branco"
+        taken: "já está em uso"
+        invalid: "não é válido"

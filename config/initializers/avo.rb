@@ -102,7 +102,7 @@ Avo.configure do |config|
 
   ## == Customization ==
   config.click_row_to_view_record = true
-  # config.app_name = 'Avocadelicious'
+  config.app_name = ""
   # config.timezone = 'UTC'
   # config.currency = 'USD'
   # config.hide_layout_when_printing = false
@@ -120,20 +120,20 @@ Avo.configure do |config|
   # config.model_generator_hook = true
 
   ## == Branding ==
-  # config.branding = {
-  #   colors: {
-  #     background: "248 246 242",
-  #     100 => "#CEE7F8",
-  #     400 => "#399EE5",
-  #     500 => "#0886DE",
-  #     600 => "#066BB2",
-  #   },
-  #   chart_colors: ["#0B8AE2", "#34C683", "#2AB1EE", "#34C6A8"],
-  #   logo: "/avo-assets/logo.png",
-  #   logomark: "/avo-assets/logomark.png",
-  #   placeholder: "/avo-assets/placeholder.svg",
-  #   favicon: "/avo-assets/favicon.ico"
-  # }
+  config.branding = {
+    logomark: "/festival-logo-mobile.svg",
+    logo: "/festival-logo.svg",
+      colors: {
+        #     background: "248 246 242",
+        100 => "#ffe1c3",
+        400 => "#ffb46a",
+        500 => "#ff7f00",
+        600 => "#c06103"
+      }
+    #   logo: "/avo-assets/logo.png",
+    #   chart_colors: ["#0B8AE2", "#34C683", "#2AB1EE", "#34C6A8"],
+    #   favicon: "/avo-assets/favicon.ico"
+  }
 
   ## == Breadcrumbs ==
   # config.display_breadcrumbs = true
