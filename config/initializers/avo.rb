@@ -150,9 +150,10 @@ Avo.configure do |config|
   #   section "Resources", icon: "avo/resources" do
   #     all_resources
   #   end
-
-  #   section "Tools", icon: "avo/tools" do
-  #     all_tools
+  # config.main_menu = -> {
+  #   section "Resources", icon: "avo/resources" do
+  #     resource :webdoor, label: "Carrossel"
+  #     all_resources
   #   end
   # }
   # config.profile_menu = -> {
