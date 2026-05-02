@@ -7,5 +7,10 @@ module Avo
         query.find(id)
       end
     }
+
+    def field(id, **args, &block)
+      args[:show_on] = :index if args[:as] == :textarea
+      super(id, **args, &block)
+    end
   end
 end
