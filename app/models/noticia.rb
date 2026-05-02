@@ -2,6 +2,10 @@ class Noticia < ApplicationRecord
   belongs_to :caderno
   belongs_to :idioma
 
+  validates :data, presence: true
+  validates :titulo, presence: true, length: { maximum: 150 }
+  validates :permalink, presence: true, length: { maximum: 150 }, uniqueness: true
+
   scope :published, -> { where(ativo: true) }
 
   def breadcrumb_title
