@@ -33,7 +33,7 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "inertia_rails", "~> 3.11"
-gem "vite_rails", "~> 3.0"
+gem "vite_rails", "~> 3.10"
 
 gem "pagy", "~> 9.3"
 
