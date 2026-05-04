@@ -1,0 +1,8 @@
+<%= field_wrapper(**field_wrapper_args) do %>
+  <%= helpers.ckeditor5_editor(
+    name: "#{@form.object_name}[#{@field.id}]",
+    initial_data: @field.value.to_s,
+    disabled: disabled?,
+    editable_height: 400
+  ) %>
+<% end %>

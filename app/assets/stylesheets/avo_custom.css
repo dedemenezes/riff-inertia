@@ -1,0 +1,8 @@
+/* CKEditor5 — prevent toolbar overflow
+.ck.ck-editor {
+  max-width: 100%;
+}
+
+.ck.ck-editor__top .ck-sticky-panel .ck-toolbar {
+  flex-wrap: wrap;
+} */
