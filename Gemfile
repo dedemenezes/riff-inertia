@@ -32,7 +32,7 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem "inertia_rails", "~> 3.11"
+gem "inertia_rails", "~> 3.21"
 gem "vite_rails", "~> 3.0"
 
 gem "pagy", "~> 9.3"
