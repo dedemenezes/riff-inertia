@@ -58,6 +58,6 @@ module Imageable
   private
 
   def build_image_url(img_name, img_size = "large2")
-    "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{ApplicationRecord::EDICAO_ATUAL_ANO}/site/peliculas/#{img_size}/#{img_name}"
+    "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{Edicao.current.descricao}/site/peliculas/#{img_size}/#{img_name}"
   end
 end

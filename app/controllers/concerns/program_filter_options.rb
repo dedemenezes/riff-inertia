@@ -19,7 +19,7 @@ module ProgramFilterOptions
   end
 
   def build_sessoes_filter
-    programacoes = Programacao.where(edicao_id: @current_edicao)
+    programacoes = Programacao.where(edicao_id: Edicao.current.id, deletado: 0)
                                .to_a
                                .uniq { |p| p.sessao }
                                .sort_by { |it| it.sessao }
@@ -43,7 +43,7 @@ module ProgramFilterOptions
   end
 
   def build_cinema_filter
-    cinemas = Cinema.where(edicao_id: @current_edicao)
+    cinemas = Cinema.where(edicao_id: Edicao.current.id)
                     .to_a
                     .uniq { |m| m.id }
                     .sort_by { |it| it.nome }
@@ -57,7 +57,7 @@ module ProgramFilterOptions
   end
 
   def build_mostra_filter
-    mostras = Mostra.where(edicao_id: @current_edicao)
+    mostras = Mostra.where(edicao_id: Edicao.current.id)
                     .to_a
                     .uniq { |mostra| mostra.id }
                     .sort_by { |mostra| mostra.permalink_pt }

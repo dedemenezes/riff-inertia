@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :set_locale, :set_root_url, :current_edicao
+  before_action :set_locale, :set_root_url
 
   inertia_share flash: -> {
     {
@@ -31,10 +31,6 @@ class ApplicationController < ActionController::Base
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
-  def current_edicao
-    @current_edicao = Edicao.find_by!(descricao: ApplicationRecord::EDICAO_ATUAL_ANO)
-  end
-
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
@@ -55,7 +51,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.programming.free"), path: "" },
         { name: I18n.t("navigation.programming.updates"), path: "" }
       ],
-      I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO) => [
+      I18n.t("navigation.edition.name", edicao_atual: Edicao.current.descricao) => [
         { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path },
         { name: I18n.t("navigation.mostras"), path: mostras_path },
         { name: I18n.t("navigation.cinemas"), path: cinemas_path },

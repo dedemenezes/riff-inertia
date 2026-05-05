@@ -2,7 +2,7 @@ class MostrasController < ApplicationController
   include BreadcrumbsHelper
 
   def index
-    @mostras = Mostra.includes(:peliculas).where(edicao_id: @current_edicao.id).group_by(&:display_name)
+    @mostras = Mostra.includes(:peliculas).where(edicao_id: Edicao.current.id).group_by(&:display_name)
     @categorias = @mostras.map { |categoria, mostras| {
       name: categoria,
       class: mostras.first.tag_class,
@@ -15,14 +15,14 @@ class MostrasController < ApplicationController
       categorias: @categorias.as_json,
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO), "" ],
+        [ I18n.t("navigation.edition.name", edicao_atual: Edicao.current.descricao), "" ],
         [ I18n.t("navigation.mostras"), mostras_path ]
       )
     }
   end
 
   def show
-    @mostras = @current_edicao.mostras.select { |mostra| mostra.display_name == params[:category] }
+    @mostras = Edicao.current.mostras.select { |mostra| mostra.display_name == params[:category] }
 
     render inertia: "Mostras/Show", props: {
       rootUrl: @root_url,

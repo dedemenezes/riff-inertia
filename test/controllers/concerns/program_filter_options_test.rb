@@ -3,12 +3,6 @@ require "test_helper"
 class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
   class DummyController < ActionController::Base
     include ProgramFilterOptions
-    attr_accessor :current_edicao
-
-    def initialize
-      super
-      @current_edicao = ApplicationRecord::EDICAO_ATUAL_ID
-    end
   end
 
   setup do
@@ -16,7 +10,7 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
   end
 
   test "to_filter_collection builds filter array with locale parameter" do
-    mostras = Mostra.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).limit(2).to_a
+    mostras = Mostra.where(edicao_id: Edicao.current.id).limit(2).to_a
 
     result = @controller.send(:to_filter_collection, mostras, "mostra", locale: :pt)
 
@@ -31,7 +25,7 @@ class ProgramFilterOptionsTest < ActionDispatch::IntegrationTest
   end
 
   test "to_filter_collection defaults to I18n.locale when not provided" do
-    mostra = Mostra.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).first
+    mostra = Mostra.where(edicao_id: Edicao.current.id).first
     mostras = [ mostra ]
 
     I18n.with_locale(:en) do

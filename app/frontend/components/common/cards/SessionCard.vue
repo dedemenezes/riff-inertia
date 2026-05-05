@@ -2,29 +2,17 @@
 import { computed, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
+import DefaultImage from "@assets/images/poc-poster.jpg";
 import TagMostra from "@/components/common/tags/TagMostra.vue";
 import TagScreening from "@/components/common/tags/TagScreening.vue";
 import { IconPin } from "@/components/common/icons";
-// Hover state
+
 const isHovered = ref(false);
 const props = defineProps({
   session: { type: Object, required: true },
-  edicao: { type: String, default: "2024" },
-  size: { type: String, default: "large" },
 });
-const moviePoster = computed(() => {
-  const baseUrl = "https://festivaldorio.s3.us-east-1.amazonaws.com"
-
-  const fullUrl = `${baseUrl}/${props.edicao}/site/peliculas/${props.size}`
-  if (props.session.imagem) {
-    return `${fullUrl}/${props.session.imagem}`
-  }
-
-  return "@assets/poc-poster.jpg";
-});
-const movieGenre = computed(() => {
-  return props.session.genero || "TBD";
-});
+const moviePoster = computed(() => props.session.imagem_url || DefaultImage);
+const movieGenre = computed(() => props.session.genero || "TBD");
 </script>
 
 <template>
@@ -36,7 +24,7 @@ const movieGenre = computed(() => {
   >
     <!-- image -->
     <!-- LINK -->
-     <Link :href="props.session.pelicula_url" class="w-full">
+    <Link :href="props.session.pelicula_url" class="w-full">
       <div class="relative w-full">
         <img
           :src="moviePoster"
@@ -61,13 +49,17 @@ const movieGenre = computed(() => {
           :text="props.session.mostra"
         />
 
-        <div class="content absolute bottom-250 left-250 flex flex-col gap-[5px]">
+        <div
+          class="content absolute bottom-250 left-250 flex flex-col gap-[5px]"
+        >
           <!-- LINK movie title -->
           <h2 class="text-header-sm text-on-dark">
             {{ props.session.titulo }}
           </h2>
           <div class="flex items-center gap-200">
-            <span class="text-overline text-on-dark-secondary">{{ props.session.paises }}</span>
+            <span class="text-overline text-on-dark-secondary">{{
+              props.session.paises
+            }}</span>
             <img
               src="@assets/icons/divisor.svg"
               alt="divisor"
@@ -95,7 +87,6 @@ const movieGenre = computed(() => {
         </div>
       </div>
     </Link>
-
 
     <div class="px-200 space-y-250 w-full">
       <div class="flex items-center gap-[6px]">

@@ -46,7 +46,7 @@ class PagesController < ApplicationController
 
     # Get next programacoes
     @programacoes = Programacao
-    .where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
+    .where(edicao_id: Edicao.current.id, deletado: 0)
     .where("TIME(sessao) > ? AND TIME(sessao) < ?", Time.now.strftime("%H:%M:%S"), Time.now.end_of_day.strftime("%H:%M:%S"))
     .order([ :data, :sessao ])
     .limit(9)
@@ -60,7 +60,7 @@ class PagesController < ApplicationController
         cinema: programacao.cinema&.nome,
         titulo: programacao.pelicula&.titulo_portugues_coord_int,
         duracao: programacao.pelicula&.duracao_coord_int,
-        imagem: programacao.pelicula&.imagem,
+        imagem_url: programacao.pelicula&.imageURL,
         genero: programacao.pelicula&.genre,
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,

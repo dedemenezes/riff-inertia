@@ -8,7 +8,7 @@ class EquipeController < ApplicationController
       rootUrl: @root_url,
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO), peliculas_path ],
+        [ I18n.t("navigation.edition.name", edicao_atual: Edicao.current.descricao), peliculas_path ],
         [ I18n.t("navigation.edition.team"), equipe_path(locale: I18n.locale) ]
       ),
       **EquipePageContent.as_props

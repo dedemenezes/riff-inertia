@@ -13,7 +13,7 @@ class ProgramsController < ApplicationController
     base_scope = Programacao
       .joins(pelicula: :mostra)
       .includes(:cinema, pelicula: :mostra)
-      .where(importacoesprog_id: last_import_id, edicao_id: ApplicationRecord::EDICAO_ATUAL_ID) # TODO: remover importacoes?
+      .where(importacoesprog_id: last_import_id, edicao_id: Edicao.current.id, deletado: 0) # TODO: remover importacoes?
 
     set_filter_options(base_scope)
 
@@ -58,7 +58,7 @@ class ProgramsController < ApplicationController
         cinema: programacao.cinema&.nome,
         titulo: programacao.pelicula&.titulo_portugues_coord_int,
         duracao: programacao.pelicula&.duracao_coord_int,
-        imagem: programacao.pelicula&.imagem,
+        imagem_url: programacao.pelicula&.imageURL,
         genero: programacao.pelicula&.genre,
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,
