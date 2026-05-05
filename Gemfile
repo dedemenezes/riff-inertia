@@ -39,7 +39,7 @@ gem "vite_rails", "~> 3.0"
 
 gem "pagy", "~> 9.3"
 
-gem "httparty", "~> 0.23.1"
+gem "httparty", "~> 0.24.2"
 
 gem "propshaft"
 
