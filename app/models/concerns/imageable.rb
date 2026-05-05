@@ -26,11 +26,9 @@ module Imageable
 
   def imageURL(image_name = nil, size = "original")
     image_name ||= self.imagem
-    return unless image_name
+    image_name = self.imagem_producao if image_name.blank?
+    return if image_name.blank?
 
-    # TODO: CACHE
-    # TODO: IF WE WANT DIFFERENT SIZE?
-    # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
     build_image_url(image_name, size)
   end
 

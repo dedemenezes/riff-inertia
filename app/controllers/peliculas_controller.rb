@@ -6,7 +6,7 @@ class PeliculasController < ApplicationController
   def index
     @peliculas = Pelicula
                   .includes(programacoes: :cinema)
-                  .where(edicao_id: Edicao.current.id, ativo: true)
+                  .where(edicao_id: Edicao.current.id)
                   .order(titulo_portugues_coord_int: :asc)
 
     current_page = params[:page]&.to_i || 1
