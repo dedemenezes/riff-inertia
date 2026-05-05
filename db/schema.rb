@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_05_000438) do
   create_table "atores", id: { type: :integer, unsigned: true }, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome_ator", limit: 50, null: false
   end
@@ -441,6 +441,15 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.index ["sessao_gala"], name: "idx_sessao_gala"
   end
 
+  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "user_agent"
+    t.string "ip_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "tags", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome", limit: 150, null: false
     t.string "permalink", limit: 150, null: false
@@ -462,6 +471,15 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.datetime "updated", precision: nil, null: false
   end
 
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.boolean "verified", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   create_table "usuarios", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "idioma_id", null: false
     t.integer "perfil_id", null: false
@@ -480,12 +498,17 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.integer "ativo", default: 0, null: false
     t.datetime "created", precision: nil, null: false
     t.datetime "updated", precision: nil, null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["ativo"], name: "idx_usuario_ativo"
     t.index ["email", "senha"], name: "idx_usuario_login"
     t.index ["email"], name: "email_UNIQUE", unique: true
     t.index ["facebook_id"], name: "idx_usuario_facebook"
     t.index ["idioma_id"], name: "fk_usuario_idioma"
     t.index ["perfil_id"], name: "fk_usuario_perfil"
+    t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
     t.index ["sexo"], name: "idx_usuario_sexo"
   end
 
@@ -536,11 +559,12 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   add_foreign_key "peliculas", "edicoes", name: "fk_edicao_id_peliculas", on_delete: :cascade
   add_foreign_key "peliculas", "generos", name: "fk_peliculas_genero", on_update: :cascade
   add_foreign_key "peliculas", "importacoes", name: "fk_importacao_id", on_delete: :cascade
-  add_foreign_key "peliculas", "metragens", column: "metragem_id", name: "fk_peliculas_metragem", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "peliculas", "metragens", name: "fk_peliculas_metragem", on_update: :cascade, on_delete: :nullify
   add_foreign_key "peliculas", "mostras", name: "fk_mostra_id_peliculas", on_delete: :nullify
   add_foreign_key "programacoes", "cinemas", name: "fk_cinema_id"
   add_foreign_key "programacoes", "importacoesprogs", column: "importacoesprog_id", name: "fk_importacoesprog_id"
   add_foreign_key "programacoes", "peliculas", name: "fk_pelicula_id"
+  add_foreign_key "sessions", "users"
   add_foreign_key "usuarios", "idiomas", name: "usuarios_ibfk_1"
   add_foreign_key "usuarios", "perfis", name: "usuarios_ibfk_2", on_delete: :cascade
   add_foreign_key "videos", "idiomas", name: "videos_ibfk_1", on_delete: :cascade
