@@ -6,14 +6,14 @@ class PeliculasController < ApplicationController
   def index
     @peliculas = Pelicula
                   .includes(programacoes: :cinema)
-                  .where(edicao: @current_edicao)
+                  .where(edicao_id: Edicao.current.id, ativo: true)
                   .order(titulo_portugues_coord_int: :asc)
 
     current_page = params[:page]&.to_i || 1
 
     if params[:query]
       term = "%#{params[:query].downcase}%"
-      @peliculas = @peliculas.where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID).where(
+      @peliculas = @peliculas.where(
         "LOWER(titulo_ingles_coord_int) LIKE :term OR
         LOWER(titulo_original_coord_int) LIKE :term OR
         LOWER(titulo_portugues_coord_int) LIKE :term OR
@@ -35,7 +35,7 @@ class PeliculasController < ApplicationController
       ),
       crumbs: breadcrumbs(
         [ "", @root_url ],
-        [ I18n.t("navigation.edition.name", edicao_atual: ApplicationRecord::EDICAO_ATUAL_ANO), "" ],
+        [ I18n.t("navigation.edition.name", edicao_atual: Edicao.current.descricao), "" ],
         [ I18n.t("navigation.todos_os_filmes"), peliculas_path ]
       ),
       pagy:  {

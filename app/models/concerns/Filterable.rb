@@ -30,7 +30,7 @@ module Filterable
     end
 
     def filter_scope(field_name)
-      where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
+      where(edicao_id: Edicao.current.id)
         .where.not(field_name => [ nil, "" ])
         .pluck(field_name)
     end

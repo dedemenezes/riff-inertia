@@ -46,7 +46,7 @@ class PagesController < ApplicationController
 
     # Get next programacoes
     @programacoes = Programacao
-    .where(edicao_id: ApplicationRecord::EDICAO_ATUAL_ID)
+    .where(edicao_id: Edicao.current.id, deletado: 0)
     .where("TIME(sessao) > ? AND TIME(sessao) < ?", Time.now.strftime("%H:%M:%S"), Time.now.end_of_day.strftime("%H:%M:%S"))
     .order([ :data, :sessao ])
     .limit(9)

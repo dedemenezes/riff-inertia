@@ -22,7 +22,7 @@ class ProgramacoesFilter
   def initialize(relation:, params:, filter_options:, pelicula_collection_service:)
     @relation = relation
     @params = params
-    @edicao_id = ApplicationRecord::EDICAO_ATUAL_ID
+    @edicao_id = Edicao.current.id
     @mostras_filter = filter_options.fetch(:mostras)
     @cinemas_filter = filter_options.fetch(:cinemas)
     @paises_filter = filter_options.fetch(:paises)

@@ -37,26 +37,19 @@ class Minitest::Test
   def before_setup
     super
 
-    # Save originals
-    @old_ano    = ApplicationRecord::EDICAO_ATUAL_ANO
-    @old_edicao = ApplicationRecord::EDICAO_ATUAL_ID
-
-    # Override for all tests
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
-    ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, "2024")
-
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ID)
-    ApplicationRecord.const_set(:EDICAO_ATUAL_ID, 12)
+    @old_current_id = Edicao::CURRENT_ID
+    Edicao.send(:remove_const, :CURRENT_ID)
+    Edicao.const_set(:CURRENT_ID, 12)
+    Rails.cache.delete("edicao/current")
+    Rails.cache.delete("edicao/previous")
   end
 
   def after_teardown
     super
 
-    # Restore originals
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ANO)
-    ApplicationRecord.const_set(:EDICAO_ATUAL_ANO, @old_ano)
-
-    ApplicationRecord.send(:remove_const, :EDICAO_ATUAL_ID)
-    ApplicationRecord.const_set(:EDICAO_ATUAL_ID, @old_edicao)
+    Edicao.send(:remove_const, :CURRENT_ID)
+    Edicao.const_set(:CURRENT_ID, @old_current_id)
+    Rails.cache.delete("edicao/current")
+    Rails.cache.delete("edicao/previous")
   end
 end
