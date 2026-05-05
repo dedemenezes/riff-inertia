@@ -78,6 +78,7 @@ en:
     palavras_chaves: "Keywords"
     caderno: "Category"
     sessao: "Screening"
+    busca: "Search"
     mostra: "Showcase"
 
   filter_by:
@@ -88,6 +89,16 @@ en:
   loading:
     title: "Loading"
     movies: "Loading movies"
+
+  infinite_scroll:
+    end:
+      sessoes: "No sessions available."
+      filmes: "No more films."
+      noticias: "No more news."
+
+  mostras:
+    show:
+      ver_filmes: "View Films"
 
   datepicker:
     pick_date: "Pick a date"

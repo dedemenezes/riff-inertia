@@ -50,6 +50,7 @@ const props = defineProps({
   ,current_filters: { type: Object, default: () => ({}) }
   ,has_active_filters: { type: Boolean, default: false }
   ,crumbs: { type: Array, required: true }
+  ,endMessage: { type: String, required: true }
 })
 
 const controllerParamsKeys = {
@@ -142,6 +143,7 @@ const debugMode = false;
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
+          :end-message="props.endMessage"
         >
           <SessionCard v-for="session in allElements"
             :session="session"

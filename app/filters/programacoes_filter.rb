@@ -52,8 +52,9 @@ class ProgramacoesFilter
 
       relation = relation.where(pelicula_id: pelicula_ids)
       selected_query = {
-        "filter_display": @params[:query],
-        "filter_value": @params[:query]
+        "filter_display" => @params[:query],
+        "filter_value" => @params[:query],
+        "filter_label" => I18n.t("filter.busca")
       }
       selected_filters[:query] = selected_query
     end

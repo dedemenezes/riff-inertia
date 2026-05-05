@@ -47,7 +47,8 @@ class NoticiasController < ApplicationController
       current_filters: {
         data: filter_result.selected_date,
         caderno: filter_result.selected_caderno
-      }
+      },
+      endMessage: I18n.t("infinite_scroll.end.noticias")
     }
   end
 

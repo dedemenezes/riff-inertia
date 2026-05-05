@@ -29,7 +29,8 @@ const props = defineProps({
   elements: { type: Array, default: () => []},
   cadernos: { type: Array, required: true },
   current_filters: { type: Object, default: () => {} },
-  pagy: { type: Object, required: true }
+  pagy: { type: Object, required: true },
+  endMessage: { type: String, required: true }
 })
 
 const { isFilterMenuOpen, openMenu, closeMenu } = useMobileTrigger();
@@ -87,6 +88,7 @@ console.log(filters);
         <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
+          :end-message="props.endMessage"
         >
         <IndexArticleCard
           v-for="article in allElements"

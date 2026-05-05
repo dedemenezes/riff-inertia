@@ -77,7 +77,9 @@ export function useSearchFilter(props) {
       "Caderno": "caderno",
       "Category": "caderno",
       "Data de publicação": "data",
-      "Publication date": "data"
+      "Publication date": "data",
+      "Busca": "query",
+      "Search": "query"
     };
     const filterKey = filterKeyMap[filterToRemove.filter_label];
     if (filterKey) {

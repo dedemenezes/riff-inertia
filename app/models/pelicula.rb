@@ -78,7 +78,7 @@ class Pelicula < ApplicationRecord
   }
 
   def programacoesAsJson
-    programacoes.order(:data).each_slice(3).map do |programacoes_slice|
+    programacoes.sort_by(&:data).each_slice(3).map do |programacoes_slice|
       programacoes_slice.map do |prog|
         {
           data: prog.display_date,

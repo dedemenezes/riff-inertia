@@ -36,8 +36,19 @@ class ImageableTest < ActiveSupport::TestCase
     end
   end
 
-  test "imageURL returns nil for blank image" do
+  test "imageURL falls back to imagem_producao when imagem is blank" do
+    ENV.stub(:fetch, "https://example.com") do
+      Edicao.stub(:current, TEST_EDICAO) do
+        @pelicula.imagem = nil
+        expected_url = "https://example.com/2024/site/peliculas/original/poster.jpg"
+        assert_equal expected_url, @pelicula.imageURL
+      end
+    end
+  end
+
+  test "imageURL returns nil when both imagem and imagem_producao are blank" do
     @pelicula.imagem = nil
+    @pelicula.imagem_producao = nil
     assert_nil @pelicula.imageURL
   end
 

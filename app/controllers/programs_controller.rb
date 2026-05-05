@@ -106,7 +106,8 @@ class ProgramsController < ApplicationController
         [ "", @root_url ],
         [ "Programação", "" ],
         [ "Programação Completa", "" ],
-      )
+      ),
+      endMessage: I18n.t("infinite_scroll.end.sessoes")
     }
   end
 
