@@ -11,7 +11,7 @@ class Usuario < ApplicationRecord
 
     self.password = password
     self.senha = ""
-    save(validate: false)
+    save(validate: false) unless readonly?
     true
   end
 

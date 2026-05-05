@@ -441,15 +441,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_05_000438) do
     t.index ["sessao_gala"], name: "idx_sessao_gala"
   end
 
-  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "user_agent"
-    t.string "ip_address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
-  end
-
   create_table "tags", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome", limit: 150, null: false
     t.string "permalink", limit: 150, null: false
@@ -469,15 +460,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_05_000438) do
     t.string "telefone", default: "", null: false
     t.datetime "created", precision: nil, null: false
     t.datetime "updated", precision: nil, null: false
-  end
-
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "email", null: false
-    t.string "password_digest", null: false
-    t.boolean "verified", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "usuarios", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -564,7 +546,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_05_000438) do
   add_foreign_key "programacoes", "cinemas", name: "fk_cinema_id"
   add_foreign_key "programacoes", "importacoesprogs", column: "importacoesprog_id", name: "fk_importacoesprog_id"
   add_foreign_key "programacoes", "peliculas", name: "fk_pelicula_id"
-  add_foreign_key "sessions", "users"
   add_foreign_key "usuarios", "idiomas", name: "usuarios_ibfk_1"
   add_foreign_key "usuarios", "perfis", name: "usuarios_ibfk_2", on_delete: :cascade
   add_foreign_key "videos", "idiomas", name: "videos_ibfk_1", on_delete: :cascade
