@@ -65,7 +65,7 @@ class PagesController < ApplicationController
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,
         mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
-        pelicula_url: pelicula_path(programacao.pelicula.permalink),
+        pelicula_url: pelicula_path(programacao.pelicula.permalink)
       }
     end
 
