@@ -2,29 +2,17 @@
 import { computed, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
+import DefaultImage from "@assets/images/poc-poster.jpg";
 import TagMostra from "@/components/common/tags/TagMostra.vue";
 import TagScreening from "@/components/common/tags/TagScreening.vue";
 import { IconPin } from "@/components/common/icons";
-// Hover state
+
 const isHovered = ref(false);
 const props = defineProps({
   session: { type: Object, required: true },
-  edicao: { type: String, default: "2024" },
-  size: { type: String, default: "large" },
 });
-const moviePoster = computed(() => {
-  const baseUrl = "https://festivaldorio.s3.us-east-1.amazonaws.com";
-
-  const fullUrl = `${baseUrl}/${props.edicao}/site/peliculas/${props.size}`;
-  if (props.session.imagem) {
-    return `${fullUrl}/${props.session.imagem}`;
-  }
-
-  return "@assets/poc-poster.jpg";
-});
-const movieGenre = computed(() => {
-  return props.session.genero || "TBD";
-});
+const moviePoster = computed(() => props.session.imagem_url || DefaultImage);
+const movieGenre = computed(() => props.session.genero || "TBD");
 </script>
 
 <template>

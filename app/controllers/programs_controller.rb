@@ -58,7 +58,7 @@ class ProgramsController < ApplicationController
         cinema: programacao.cinema&.nome,
         titulo: programacao.pelicula&.titulo_portugues_coord_int,
         duracao: programacao.pelicula&.duracao_coord_int,
-        imagem: programacao.pelicula&.imagem,
+        imagem_url: programacao.pelicula&.imageURL,
         genero: programacao.pelicula&.genre,
         paises: programacao.pelicula&.display_paises,
         mostra: programacao.pelicula&.mostra&.display_name,

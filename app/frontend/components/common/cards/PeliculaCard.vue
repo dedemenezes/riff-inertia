@@ -2,30 +2,15 @@
 import { computed, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
-import DefaultImage from "@assets/images/poc-poster.jpg"
+import DefaultImage from "@assets/images/poc-poster.jpg";
 import TagMostra from "@/components/common/tags/TagMostra.vue";
 
-// Hover state
 const isHovered = ref(false);
 const props = defineProps({
   pelicula: { type: Object, required: true },
-  edicao: { type: String, default: "2024" },
-  size: { type: String, default: "large" },
 });
-const moviePoster = computed(() => {
-  // TODO: ADD TO ENV
-  const baseUrl = "https://festivaldorio.s3.us-east-1.amazonaws.com"
-
-  const fullUrl = `${baseUrl}/${props.edicao}/site/peliculas/${props.size}`
-  if (props.pelicula.imagem) {
-    return `${fullUrl}/${props.pelicula.imagem}`
-  }
-
-  return DefaultImage
-});
-const movieGenre = computed(() => {
-  return props.pelicula.genre || "TBD";
-});
+const moviePoster = computed(() => props.pelicula.imageURL || DefaultImage);
+const movieGenre = computed(() => props.pelicula.genre || "TBD");
 </script>
 
 <template>
@@ -40,7 +25,7 @@ const movieGenre = computed(() => {
      <Link :href="props.pelicula.url" class="w-full">
       <div class="relative w-full">
         <img
-          :src="props.pelicula.imageURL"
+          :src="moviePoster"
           :alt="props.pelicula.display_titulo"
           class="rounded-200 h-[268px] w-full object-cover"
         />

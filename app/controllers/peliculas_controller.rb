@@ -47,7 +47,7 @@ class PeliculasController < ApplicationController
   end
 
   def show
-    @pelicula = Pelicula.includes(:paises, :mostra, programacoes: :cinema).find_by(edicao_id: 12, permalink: params[:permalink])
+    @pelicula = Pelicula.includes(:paises, :mostra, programacoes: :cinema).find_by(edicao_id: Edicao.current.id, permalink: params[:permalink])
     render inertia: "Peliculas/Show", props: {
       rootUrl: @root_url,
       pelicula: @pelicula.as_json(
