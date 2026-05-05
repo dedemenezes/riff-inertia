@@ -1,0 +1,38 @@
+<div class="min-h-screen flex items-center justify-center bg-background px-4 py-12">
+  <div class="w-full max-w-md">
+    <div class="bg-card rounded-lg border border-border shadow-sm p-8">
+      <h2 class="text-2xl font-semibold text-foreground mb-6">Entrar</h2>
+
+      <%= render "usuarios/shared/error_messages", resource: resource %>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-foreground mb-1" %>
+          <%= f.email_field :email,
+                autofocus: true,
+                autocomplete: "email",
+                class: "w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring" %>
+        </div>
+
+        <div>
+          <%= f.label :password, "Senha", class: "block text-sm font-medium text-foreground mb-1" %>
+          <%= f.password_field :password,
+                autocomplete: "current-password",
+                class: "w-full px-3 py-2 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center gap-2">
+            <%= f.check_box :remember_me, class: "rounded border-border" %>
+            <%= f.label :remember_me, "Lembrar de mim", class: "text-sm text-foreground" %>
+          </div>
+        <% end %>
+
+        <%= f.submit "Entrar",
+              class: "w-full bg-primary text-primary-foreground py-2 px-4 rounded-md font-medium hover:opacity-90 transition cursor-pointer" %>
+      <% end %>
+
+      <%= render "usuarios/shared/links" %>
+    </div>
+  </div>
+</div>

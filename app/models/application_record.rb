@@ -20,4 +20,10 @@ class ApplicationRecord < ActiveRecord::Base
       # table may not exist during migrations
     end
   end
+
+  # Legacy app owns the writes. Production runs read-only against the shared DB.
+  # Models that genuinely need to write in production must override this.
+  def readonly?
+    Rails.env.production?
+  end
 end
