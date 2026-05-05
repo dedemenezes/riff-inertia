@@ -2,6 +2,7 @@ class Pais < ApplicationRecord
   include ActiveSupport::Inflector
 
   has_many :paises_peliculas
+  has_many :peliculas, through: :paises_peliculas
 
   def filter_value
     id

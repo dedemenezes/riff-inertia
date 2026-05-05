@@ -27,9 +27,10 @@ module MostraFilterOptions
   end
 
   def build_mostra_paises_filter(peliculas_scope)
-    paises = peliculas_scope.flat_map(&:paises)
-                            .uniq
-                            .sort_by(&:nome_pais)
+    paises = Pais.joins(:peliculas)
+                 .merge(peliculas_scope)
+                 .distinct
+                 .order(:nome_pais)
 
     to_filter_collection(paises, "pais") do |pais, item|
       item["id"] = pais.id

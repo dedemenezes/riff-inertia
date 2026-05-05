@@ -25,7 +25,12 @@ class MostrasController < ApplicationController
   end
 
   def show
-    @mostras = Edicao.current.mostras.select { |mostra| mostra.display_name == params[:category] }
+    @mostras = Edicao.current.mostras.where(
+      "nome_abreviado = :cat OR nome_abreviado LIKE :pre_dash OR nome_abreviado LIKE :pre_colon",
+      cat: params[:category],
+      pre_dash: "#{params[:category]}-%",
+      pre_colon: "#{params[:category]}:%"
+    )
     mostra_ids = @mostras.map(&:id)
 
     base_scope = Pelicula.includes(:paises, :mostra, programacoes: :cinema)
