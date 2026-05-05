@@ -11,7 +11,8 @@ import { router } from '@inertiajs/vue3';
 const props = defineProps({
   elements: { type: Array, default: () => []},
   crumbs: { type: Array, required: true, default: () => []},
-  pagy: { type: Object, required: true }
+  pagy: { type: Object, required: true },
+  endMessage: { type: String, required: true }
 })
 
 const allElements = ref([...props.elements])
@@ -66,6 +67,7 @@ const search = (value) => {
       <InfiniteScrollLayout #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
+          :end-message="props.endMessage"
           class="grid grid-cols-1 lg:grid-cols-3 py-1200 gap-800"
         >
         <PeliculaCard

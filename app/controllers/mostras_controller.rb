@@ -81,7 +81,8 @@ class MostrasController < ApplicationController
         direcao: filter_result.selected_director,
         elenco: filter_result.selected_actor
       },
-      has_active_filters: params.permit(:query, :mostra, :pais, :genero, :direcao, :elenco).to_h.values.any?(&:present?)
+      has_active_filters: params.permit(:query, :mostra, :pais, :genero, :direcao, :elenco).to_h.values.any?(&:present?),
+      endMessage: I18n.t("infinite_scroll.end.filmes")
     }
   end
 end

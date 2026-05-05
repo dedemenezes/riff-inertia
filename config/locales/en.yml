@@ -89,6 +89,12 @@ en:
     title: "Loading"
     movies: "Loading movies"
 
+  infinite_scroll:
+    end:
+      sessoes: "No sessions available."
+      filmes: "No more films."
+      noticias: "No more news."
+
   datepicker:
     pick_date: "Pick a date"
 

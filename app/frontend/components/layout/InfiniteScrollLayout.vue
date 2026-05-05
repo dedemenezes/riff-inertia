@@ -16,6 +16,10 @@ const props = defineProps({
   filters: {
     type: Object,
     default: () => ({})
+  },
+  endMessage: {
+    type: String,
+    required: true
   }
 })
 
@@ -144,8 +148,7 @@ onUnmounted(() => {
       v-else-if="hasReachedEnd"
       class="text-center py-8 text-gray-500"
     >
-      <!-- TODO: trocar texto -->
-      <p>Não há sessões disponíveis.</p>
+      <p>{{ props.endMessage }}</p>
     </div>
 
     <div

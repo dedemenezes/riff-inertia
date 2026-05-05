@@ -42,7 +42,8 @@ class PeliculasController < ApplicationController
         page: @pagy.page,
         pages: @pagy.pages,
         last: @pagy.last
-      }
+      },
+      endMessage: I18n.t("infinite_scroll.end.filmes")
     }
   end
 

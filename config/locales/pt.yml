@@ -90,6 +90,12 @@ pt:
     title: "Carregando"
     movies: "Carregando filmes"
 
+  infinite_scroll:
+    end:
+      sessoes: "Não há sessões disponíveis."
+      filmes: "Não há mais filmes."
+      noticias: "Não há mais notícias."
+
   datepicker:
     pick_date: "Escolha uma data"
 

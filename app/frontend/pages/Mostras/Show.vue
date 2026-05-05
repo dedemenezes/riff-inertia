@@ -51,6 +51,7 @@ const props = defineProps({
   actors: { type: Array, default: () => [] },
   current_filters: { type: Object, default: () => ({}) },
   has_active_filters: { type: Boolean, default: false },
+  endMessage: { type: String, required: true },
 });
 
 const {
@@ -214,6 +215,7 @@ const {
           #content="{ allElements }"
           :elements="props.elements"
           :pagy="props.pagy"
+          :end-message="props.endMessage"
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-800">
             <PeliculaCard
