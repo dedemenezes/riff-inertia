@@ -9,14 +9,14 @@ class Edicao < ApplicationRecord
   has_many :importacoesprogs, class_name: "Importacoesprog"
 
   def self.current
-    Rails.cache.fetch("edicao/current", expires_in: 1.hour) do
+    Rails.cache.fetch("edicao/current/#{CURRENT_ID}", expires_in: 1.hour) do
       find(CURRENT_ID)
     end
   end
 
   def self.previous
-    Rails.cache.fetch("edicao/previous", expires_in: 1.hour) do
-      find(CURRENT_ID - 1)
+    Rails.cache.fetch("edicao/previous/#{CURRENT_ID}", expires_in: 1.hour) do
+      where("id < ?", CURRENT_ID).order(id: :desc).first
     end
   end
 end
