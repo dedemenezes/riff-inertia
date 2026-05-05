@@ -62,10 +62,10 @@ class PeliculasFilter
     end
 
     if @params[:genero].present?
-      selected_genre = @genres_filter.find { |g| g["filter_value"] == @params[:genero] }
+      selected_genre = @genres_filter.find { |g| g["filter_value"].to_s == @params[:genero].to_s }
       if selected_genre
         selected_filters[:genero] = selected_genre
-        relation = relation.search_by_genre(selected_genre["filter_value"])
+        relation = relation.where(genero_id: selected_genre["id"])
       end
     end
 

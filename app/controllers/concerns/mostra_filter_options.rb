@@ -4,9 +4,7 @@ module MostraFilterOptions
   def set_mostra_filter_options(mostras, peliculas_scope)
     @submostras_filter = build_submostras_filter(mostras)
     @paises_filter = build_mostra_paises_filter(peliculas_scope)
-
-    genres = @pelicula_collection_service.collection_for_genres
-    @genres_filter = strings_to_filter_collection(genres, "genero")
+    @genres_filter = build_mostra_generos_filter(peliculas_scope)
 
     directors = @pelicula_collection_service.collection_for_directors
     @directors_filter = strings_to_filter_collection(directors, "direcao")
@@ -35,6 +33,20 @@ module MostraFilterOptions
     to_filter_collection(paises, "pais") do |pais, item|
       item["id"] = pais.id
       item["nome_pais"] = pais.nome_pais
+    end
+  end
+
+  def build_mostra_generos_filter(peliculas_scope)
+    order_col = I18n.locale == :en ? :nome_en : :nome_pt
+    generos = Genero.joins(:peliculas)
+                    .merge(peliculas_scope)
+                    .distinct
+                    .order(order_col)
+
+    to_filter_collection(generos, "genero") do |genero, item|
+      item["id"] = genero.id
+      item["nome_pt"] = genero.nome_pt
+      item["nome_en"] = genero.nome_en
     end
   end
 
