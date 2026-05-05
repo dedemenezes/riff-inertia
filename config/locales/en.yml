@@ -95,6 +95,10 @@ en:
       filmes: "No more films."
       noticias: "No more news."
 
+  mostras:
+    show:
+      ver_filmes: "View Films"
+
   datepicker:
     pick_date: "Pick a date"
 

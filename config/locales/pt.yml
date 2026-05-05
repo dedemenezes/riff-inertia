@@ -96,6 +96,10 @@ pt:
       filmes: "Não há mais filmes."
       noticias: "Não há mais notícias."
 
+  mostras:
+    show:
+      ver_filmes: "Ver Filmes"
+
   datepicker:
     pick_date: "Escolha uma data"
 

@@ -52,6 +52,7 @@ const props = defineProps({
   current_filters: { type: Object, default: () => ({}) },
   has_active_filters: { type: Boolean, default: false },
   endMessage: { type: String, required: true },
+  verFilmesLabel: { type: String, required: true },
 });
 
 const {
@@ -115,7 +116,7 @@ const {
         :class="`cursor-pointer text-body-strong-sm flex gap-200`"
         @click="scrollToFilmes"
       >
-        Ver Filmes<IconCarretUp class="rotate-180" />
+        {{ props.verFilmesLabel }}<IconCarretUp class="rotate-180" />
       </button>
     </div>
 
@@ -174,9 +175,9 @@ const {
     </Carousel>
   </TwContainer>
 
-  <hr class="text-neutrals-300 my-800" />
+  <hr ref="refToFilmesSession" class="text-neutrals-300 my-800" />
 
-  <TwContainer class="relative" ref="refToFilmesSession">
+  <TwContainer class="relative">
     <div class="filter flex lg:hidden items-center justify-end py-300 bg-white">
       <MobileTrigger @open-menu="openMenu" />
     </div>
