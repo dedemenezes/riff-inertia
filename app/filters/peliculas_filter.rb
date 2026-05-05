@@ -40,7 +40,8 @@ class PeliculasFilter
       relation = relation.search_by_title(@params[:query])
       selected_query = {
         "filter_display" => @params[:query],
-        "filter_value" => @params[:query]
+        "filter_value" => @params[:query],
+        "filter_label" => I18n.t("filter.busca")
       }
       selected_filters[:query] = selected_query
     end

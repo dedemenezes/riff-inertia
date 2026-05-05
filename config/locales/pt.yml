@@ -77,6 +77,7 @@ pt:
     palavras_chaves: "Palavras chaves"
     caderno: "Caderno"
     sessao: "Sessão"
+    busca: "Busca"
     mostra: "Mostra"
 
   filtro: "Filtro | Filtros"

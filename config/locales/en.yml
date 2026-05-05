@@ -78,6 +78,7 @@ en:
     palavras_chaves: "Keywords"
     caderno: "Category"
     sessao: "Screening"
+    busca: "Search"
     mostra: "Showcase"
 
   filter_by:
