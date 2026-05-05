@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :usuarios
   mount_avo
   resources :newsletters, only: :create
 
