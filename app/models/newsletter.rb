@@ -1,6 +1,8 @@
 class Newsletter < ApplicationRecord
   EMAIL_REGEX = %r{\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z}
   self.record_timestamps = false # Disable default timestamping
+
+  def readonly? = false
   validates :email, presence: true, format: { with: EMAIL_REGEX }
   before_create :set_created_timestamp
   before_save :set_updated_timestamp

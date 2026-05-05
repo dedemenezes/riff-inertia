@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_05_000438) do
   create_table "atores", id: { type: :integer, unsigned: true }, charset: "utf8mb3", force: :cascade do |t|
     t.string "nome_ator", limit: 50, null: false
   end
@@ -480,12 +480,17 @@ ActiveRecord::Schema[8.0].define(version: 0) do
     t.integer "ativo", default: 0, null: false
     t.datetime "created", precision: nil, null: false
     t.datetime "updated", precision: nil, null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["ativo"], name: "idx_usuario_ativo"
     t.index ["email", "senha"], name: "idx_usuario_login"
     t.index ["email"], name: "email_UNIQUE", unique: true
     t.index ["facebook_id"], name: "idx_usuario_facebook"
     t.index ["idioma_id"], name: "fk_usuario_idioma"
     t.index ["perfil_id"], name: "fk_usuario_perfil"
+    t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
     t.index ["sexo"], name: "idx_usuario_sexo"
   end
 
@@ -536,7 +541,7 @@ ActiveRecord::Schema[8.0].define(version: 0) do
   add_foreign_key "peliculas", "edicoes", name: "fk_edicao_id_peliculas", on_delete: :cascade
   add_foreign_key "peliculas", "generos", name: "fk_peliculas_genero", on_update: :cascade
   add_foreign_key "peliculas", "importacoes", name: "fk_importacao_id", on_delete: :cascade
-  add_foreign_key "peliculas", "metragens", column: "metragem_id", name: "fk_peliculas_metragem", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "peliculas", "metragens", name: "fk_peliculas_metragem", on_update: :cascade, on_delete: :nullify
   add_foreign_key "peliculas", "mostras", name: "fk_mostra_id_peliculas", on_delete: :nullify
   add_foreign_key "programacoes", "cinemas", name: "fk_cinema_id"
   add_foreign_key "programacoes", "importacoesprogs", column: "importacoesprog_id", name: "fk_importacoesprog_id"

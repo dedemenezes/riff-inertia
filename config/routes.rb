@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  mount_avo
+  # Avo + Devise are scoped to dev/test only.
+  # Legacy app remains the source of truth for writes and admin
+  # until the gradual migration is complete (RIFF-44).
+  if Rails.env.local?
+    devise_for :usuarios
+    mount_avo
+  end
+
   resources :newsletters, only: :create
 
   scope "(:locale)", locale: /en|pt/ do
