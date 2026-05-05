@@ -4,7 +4,9 @@ class Avo::Resources::Idioma < Avo::BaseResource
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
+  self.visible_on_sidebar = false
   self.title = :nome
+
   def fields
     field :id, as: :id
     field :nome, as: :text
