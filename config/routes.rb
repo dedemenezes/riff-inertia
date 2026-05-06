@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     get :equipe, to: "equipe#index", as: :equipe
     scope :talents do
       get :apresentacao, to: "talents#participants", as: :talents_members
+      get :noticias_e_criticas, to: "talents#news", as: :talents_news
     end
   end
 

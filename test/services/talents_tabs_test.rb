@@ -40,9 +40,33 @@ class TalentsTabsTest < ActiveSupport::TestCase
     end
   end
 
-  test "all tabs use deadlink href until routes are added" do
-    tabs = TalentsTabs.build(active: "sobre")
+  test "sobre tab links to talents_members_path" do
+    I18n.with_locale(:pt) do
+      tabs = TalentsTabs.build(active: "sobre")
+      sobre = tabs.find { |t| t[:label] == "Sobre" }
+      assert_equal "/pt/talents/apresentacao", sobre[:href]
+    end
+  end
 
-    assert tabs.all? { |t| t[:href] == "#" }
+  test "noticias_e_criticas tab links to talents_news_path" do
+    I18n.with_locale(:pt) do
+      tabs = TalentsTabs.build(active: "noticias_e_criticas")
+      noticias = tabs.find { |t| t[:label] == "Notícias e Críticas" }
+      assert_equal "/pt/talents/noticias_e_criticas", noticias[:href]
+    end
+  end
+
+  test "programacao tab still uses placeholder until route exists" do
+    tabs = TalentsTabs.build(active: "sobre")
+    programacao = tabs.last
+    assert_equal "#", programacao[:href]
+  end
+
+  test "tab hrefs include current locale" do
+    I18n.with_locale(:en) do
+      tabs = TalentsTabs.build(active: "sobre")
+      sobre = tabs.first
+      assert_equal "/en/talents/apresentacao", sobre[:href]
+    end
   end
 end
