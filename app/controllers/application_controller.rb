@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale) }
       ],
       I18n.t("navigation.festival.name") => [
-        { name: I18n.t("navigation.about.name"), path: "" },
+        { name: I18n.t("navigation.about.name"), path: festival_sobre_nos_path },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_path },
         { name: I18n.t("navigation.talent_press"), path: talents_members_path },
         { name: I18n.t("navigation.parceiros"), path: "" }
@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale), icon: "people" }
       ],
       "sobre" => [
-        { name: I18n.t("navigation.about.name"), path: "", icon: "logoFest" },
+        { name: I18n.t("navigation.about.name"), path: festival_sobre_nos_path, icon: "logoFest" },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_url, icon: "calendar" },
         { name: I18n.t("navigation.talent_rio"), path: talents_members_path, icon: "talentPress" },
         { name: I18n.t("navigation.parceiros"), path: "", icon: "handshake" }
