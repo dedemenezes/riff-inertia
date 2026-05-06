@@ -6,7 +6,6 @@ class CinemasController < ApplicationController
     @salas = Cinema.group_salas(@cinemas)
 
     render inertia: "Cinemas/Index", props: {
-      rootUrl: @root_url,
       cinemas: @salas.as_json,
       crumbs: breadcrumbs(
         [ "", @root_url ],

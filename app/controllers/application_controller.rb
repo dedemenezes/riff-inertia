@@ -31,6 +31,8 @@ class ApplicationController < ActionController::Base
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
+  inertia_share rootUrl: -> { @root_url }
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end

@@ -10,7 +10,6 @@ class TalentsController < ApplicationController
     @pagina = Pagina.find_by(rota: "/br/talents/", permalink: :apresentacao)
 
     render inertia: "Talents/Apresentacao", props: {
-      rootUrl: @root_url,
       crumbs: talents_crumbs,
       sections: TalentsContentParser.parse(@pagina&.conteudo),
       tabs: TalentsTabs.build(active: "sobre")
