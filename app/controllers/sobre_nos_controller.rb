@@ -10,8 +10,8 @@ class SobreNosController < ApplicationController
       titulo: @pagina&.titulo,
       conteudo: @pagina&.conteudo,
       breadcrumbs: breadcrumbs(
-        [ "", @root_url ],
-        [ "Sobre nós", "" ]
+        [ I18n.t("navigation.home"), @root_url ],
+        [ I18n.t("navigation.about.name"), "" ]
       )
     }
   end
