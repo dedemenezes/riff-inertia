@@ -3,6 +3,12 @@ en:
     banner_title: "The 26th edition of Festival do Rio is coming!"
     banner_subtitle: "From October 2 to 12, cinema will be under the light of Rio"
 
+  talents:
+    tabs:
+      sobre: "About"
+      noticias_e_criticas: "News & Reviews"
+      programacao: "Schedule"
+
   pelicula:
     sobre_o_filme: "About the movie"
     roteiro: Screenplay
