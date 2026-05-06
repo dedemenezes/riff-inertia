@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
       "sobre" => [
         { name: I18n.t("navigation.about.name"), path: "", icon: "logoFest" },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_url, icon: "calendar" },
-        { name: I18n.t("navigation.talent_rio"), path: "", icon: "talentPress" },
+        { name: I18n.t("navigation.talent_rio"), path: talents_members_path, icon: "talentPress" },
         { name: I18n.t("navigation.parceiros"), path: "", icon: "handshake" }
       ],
       "midias" => [

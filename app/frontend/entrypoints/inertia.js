@@ -25,7 +25,11 @@ createInertiaApp({
     // see https://inertia-rails.dev/guide/pages#default-layouts
     //
     const page = pages[`../pages/${name}.vue`]
-    page.default.layout = page.default.layout || PageLayout
+    if (!page.default.__layoutResolved) {
+      const childLayout = page.default.layout
+      page.default.layout = childLayout ? [PageLayout, childLayout] : PageLayout
+      page.default.__layoutResolved = true
+    }
     return page
   },
 
