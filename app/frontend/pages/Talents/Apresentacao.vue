@@ -37,8 +37,8 @@ defineProps({
         <SectionHeader>{{ section.titulo }}</SectionHeader>
         <ul class="flex flex-col gap-600">
           <li
-            v-for="participante in section.participantes"
-            :key="participante.name"
+            v-for="(participante, index) in section.participantes"
+            :key="participante.name + '_' + index"
           >
             <JuriCard
               :photo="participante.photo"
