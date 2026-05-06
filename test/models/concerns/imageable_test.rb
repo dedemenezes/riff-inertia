@@ -1,42 +1,96 @@
 require "test_helper"
 
 class ImageableTest < ActiveSupport::TestCase
-  class DummyModel
+  class DummyPelicula
     include Imageable
 
-    attr_accessor :imagem
+    attr_accessor :imagem, :imagem_producao
 
-    def initialize(imagem: nil)
+    def initialize(imagem: nil, imagem_producao: nil)
       @imagem = imagem
+      @imagem_producao = imagem_producao
     end
-
-    def image_path_prefix = "imagens/dummy"
-    def image_default_size = "medium"
   end
+
+  TEST_EDICAO = Struct.new(:descricao, :id).new("2024", 12)
 
   def setup
-    @model = DummyModel.new(imagem: "foto.jpg")
+    @pelicula = DummyPelicula.new(imagem: "test_f01.jpg", imagem_producao: "poster.jpg")
   end
 
-  test "image_url returns correct URL with default size" do
+  test "imageURL returns correct URL with default parameters" do
     ENV.stub(:fetch, "https://example.com") do
-      assert_equal "https://example.com/imagens/dummy/medium/foto.jpg", @model.image_url
+      Edicao.stub(:current, TEST_EDICAO) do
+        expected_url = "https://example.com/2024/site/peliculas/original/test_f01.jpg"
+        assert_equal expected_url, @pelicula.imageURL
+      end
     end
   end
 
-  test "image_url accepts custom size" do
+  test "imageURL returns correct URL with custom size" do
     ENV.stub(:fetch, "https://example.com") do
-      assert_equal "https://example.com/imagens/dummy/large/foto.jpg", @model.image_url("large")
+      Edicao.stub(:current, TEST_EDICAO) do
+        expected_url = "https://example.com/2024/site/peliculas/large/test_f01.jpg"
+        assert_equal expected_url, @pelicula.imageURL(nil, "large")
+      end
     end
   end
 
-  test "image_url returns nil when imagem is blank" do
-    @model.imagem = nil
-    assert_nil @model.image_url
+  test "imageURL falls back to imagem_producao when imagem is blank" do
+    ENV.stub(:fetch, "https://example.com") do
+      Edicao.stub(:current, TEST_EDICAO) do
+        @pelicula.imagem = nil
+        expected_url = "https://example.com/2024/site/peliculas/original/poster.jpg"
+        assert_equal expected_url, @pelicula.imageURL
+      end
+    end
   end
 
-  test "image_url returns nil when imagem is empty string" do
-    @model.imagem = ""
-    assert_nil @model.image_url
+  test "imageURL returns nil when both imagem and imagem_producao are blank" do
+    @pelicula.imagem = nil
+    @pelicula.imagem_producao = nil
+    assert_nil @pelicula.imageURL
+  end
+
+  test "banner_image returns src, srcset, and sizes for responsive banner" do
+    ENV.stub(:fetch, "https://example.com") do
+      Edicao.stub(:current, TEST_EDICAO) do
+        banner = @pelicula.banner_image
+        assert_equal "https://example.com/2024/site/peliculas/large/test_f01.jpg", banner[:src]
+        assert_includes banner[:srcset], "https://example.com/2024/site/peliculas/large/test_f01.jpg 300w"
+        assert_includes banner[:srcset], "https://example.com/2024/site/peliculas/original/test_f01.jpg 1920w"
+        assert_equal "100vw", banner[:sizes]
+      end
+    end
+  end
+
+  test "banner_image returns nil when imagem is blank" do
+    @pelicula.imagem = nil
+    assert_nil @pelicula.banner_image
+  end
+
+  test "posterImageURL returns correct poster URL" do
+    ENV.stub(:fetch, "https://example.com") do
+      Edicao.stub(:current, TEST_EDICAO) do
+        expected_url = "https://example.com/2024/site/peliculas/large/poster.jpg"
+        assert_equal expected_url, @pelicula.posterImageURL
+      end
+    end
+  end
+
+  test "carousel_images generates carousel image URLs" do
+    ENV.stub(:fetch, "https://example.com") do
+      Edicao.stub(:current, TEST_EDICAO) do
+        images = @pelicula.carousel_images
+        assert_equal 2, images.length
+        assert_includes images.first[:path], "test_f02.jpg"
+        assert_includes images.last[:path], "test_f03.jpg"
+      end
+    end
+  end
+
+  test "carousel_images returns empty array for blank image" do
+    @pelicula.imagem = ""
+    assert_equal [], @pelicula.carousel_images
   end
 end

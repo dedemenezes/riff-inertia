@@ -1,15 +1,10 @@
 class Noticia < ApplicationRecord
-  include Imageable
-
   belongs_to :caderno
   belongs_to :idioma
 
   validates :data, presence: true
   validates :titulo, presence: true, length: { maximum: 150 }
   validates :permalink, presence: true, length: { maximum: 150 }, uniqueness: true
-
-  def image_path_prefix = "imagens/noticias"
-  def image_default_size = "medium2"
 
   scope :published, -> { where(ativo: true) }
 

@@ -1,25 +1,25 @@
 class Webdoor < ApplicationRecord
-  include Imageable
-
+  BASE_IMAGE_PATH = "/imagens/webdoors"
   belongs_to :idioma
 
   scope :published, -> { where(ativo: 1) }
   scope :ordered, -> { published.order(:ordem) }
 
-  def image_path_prefix = "imagens/webdoors"
-  def image_default_size = "small"
+  def permalink
+    return "" if url.blank?
 
-  alias_method :desktop_image_url, :image_url
+     url.split("/").last
+  end
 
   def mobile_image_url
     return "" if imagem_mobile.blank?
 
-    build_image_url(imagem_mobile, "small_mobile")
+    "#{ENV.fetch("IMAGES_BASE_URL")}#{BASE_IMAGE_PATH}/small_mobile/#{imagem_mobile}"
   end
 
-  def permalink
-    return "" if url.blank?
+  def desktop_image_url
+    return "" if imagem.blank?
 
-    url.split("/").last
+    "#{ENV.fetch("IMAGES_BASE_URL")}#{BASE_IMAGE_PATH}/small/#{imagem}"
   end
 end

@@ -11,48 +11,6 @@ class PeliculaTest < ActiveSupport::TestCase
     assert_equal expected_url, pelicula.posterImageURL
   end
 
-  test "imageURL returns correct URL with default size" do
-    pelicula = peliculas(:batman)
-    base_url = ENV.fetch("IMAGES_BASE_URL")
-    assert_equal "#{base_url}/2024/site/peliculas/original/batman.jpg", pelicula.imageURL
-  end
-
-  test "imageURL returns correct URL with custom size" do
-    pelicula = peliculas(:batman)
-    base_url = ENV.fetch("IMAGES_BASE_URL")
-    assert_equal "#{base_url}/2024/site/peliculas/large/batman.jpg", pelicula.imageURL(nil, "large")
-  end
-
-  test "imageURL falls back to imagem_producao when imagem is blank" do
-    pelicula = peliculas(:batman)
-    pelicula.imagem = nil
-    base_url = ENV.fetch("IMAGES_BASE_URL")
-    assert_equal "#{base_url}/2024/site/peliculas/original/p01_batman.jpg", pelicula.imageURL
-  end
-
-  test "imageURL returns nil when both imagem and imagem_producao are blank" do
-    pelicula = peliculas(:batman)
-    pelicula.imagem = nil
-    pelicula.imagem_producao = nil
-    assert_nil pelicula.imageURL
-  end
-
-  test "banner_image returns src, srcset and sizes" do
-    pelicula = peliculas(:batman)
-    base_url = ENV.fetch("IMAGES_BASE_URL")
-    banner = pelicula.banner_image
-    assert_equal "#{base_url}/2024/site/peliculas/large/batman.jpg", banner[:src]
-    assert_includes banner[:srcset], "#{base_url}/2024/site/peliculas/large/batman.jpg 300w"
-    assert_includes banner[:srcset], "#{base_url}/2024/site/peliculas/original/batman.jpg 1920w"
-    assert_equal "100vw", banner[:sizes]
-  end
-
-  test "banner_image returns nil when imagem is blank" do
-    pelicula = peliculas(:batman)
-    pelicula.imagem = nil
-    assert_nil pelicula.banner_image
-  end
-
   test "display_titulo returns Portuguese title when locale is pt" do
     pelicula = peliculas(:amor_brasilia)
     I18n.with_locale(:pt) do
