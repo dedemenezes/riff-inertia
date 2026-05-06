@@ -5,7 +5,6 @@ import NavTab from "@/components/common/tabs/NavTab.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 
 defineProps({
-  pagina: { type: Object, required: true },
   sections: { type: Array, required: false, default: () => [] },
   tabs: { type: Array, required: false, default: () => [] },
 });

@@ -5,7 +5,6 @@ import SectionHeader from "@/components/common/SectionHeader.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
 
 defineProps({
-  pagina: { type: Object, required: false, default: null },
   sections: { type: Array, required: false, default: () => [] },
   tabs: { type: Array, required: false, default: () => [] },
 });
