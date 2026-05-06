@@ -3,6 +3,11 @@ class Pelicula < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   CAROUSEL_IMAGES_AMOUNT = 3
+  BANNER_SRCSET_WIDTHS = [
+    [ "large", 300 ],
+    [ "original", 1920 ]
+  ].freeze
+
   METHODS_NEEDED = %i[
     display_titulo
     display_sinopse
@@ -101,6 +106,44 @@ class Pelicula < ApplicationRecord
 
   def mostra_tag_class
     mostra.tag_class
+  end
+
+  def image_path_prefix = "#{Edicao.current.descricao}/site/peliculas"
+  def image_default_size = "original"
+
+  def imageURL(image_name = nil, size = "original")
+    image_name ||= imagem
+    image_name = imagem_producao if image_name.blank?
+    return if image_name.blank?
+
+    build_image_url(image_name, size)
+  end
+
+  def posterImageURL(image_name = nil, size = "large")
+    image_name ||= imagem_producao
+    build_image_url(image_name, size)
+  end
+
+  def banner_image
+    return unless imagem.present?
+
+    {
+      src: build_image_url(imagem, "large"),
+      srcset: BANNER_SRCSET_WIDTHS.map { |folder, w| "#{build_image_url(imagem, folder)} #{w}w" }.join(", "),
+      sizes: "100vw"
+    }
+  end
+
+  def carousel_images
+    image_name = imagem
+    return [] if image_name.nil? || image_name.empty?
+
+    (2..CAROUSEL_IMAGES_AMOUNT + 1).map do |i|
+      image_number = "0#{i}"
+      digits_after_f_regex = /(\w+_f)\d+/
+      rotated = imagem.gsub(digits_after_f_regex, "\\1#{image_number}")
+      { path: build_image_url(rotated, "original") }
+    end.compact_blank
   end
 
   def director_image

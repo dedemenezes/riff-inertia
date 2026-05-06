@@ -1,61 +1,27 @@
 module Imageable
   extend ActiveSupport::Concern
-  CAROUSEL_IMAGES_AMOUNT = 2
 
-  # Width hints (w descriptors) for responsive srcset — same pattern as PhotoSwipe (sizes + srcset + small src).
-  # Add e.g. [ "large2", 612 ] when that folder exists on the CDN.
-  BANNER_SRCSET_WIDTHS = [
-    [ "large", 300 ],
-    [ "original", 1920 ]
-  ].freeze
+  # Including model MUST define:
+  #   def image_path_prefix = "imagens/noticias"   # no leading/trailing slash
+  #   def image_default_size = "medium2"
 
-  # TODO: RETHINK THIS MAYBE THERE ISN'T TWO IMAGES
-  def carousel_images
-    image_name = imagem
-    return [] if image_name.nil? || image_name.empty?
-
-    (2..CAROUSEL_IMAGES_AMOUNT + 1).to_a.map do |i|
-      image_number = "0#{i}"
-      digits_after_f_regex = /(\w+_f)\d+/
-      image_name = imagem.gsub(digits_after_f_regex, "\\1#{image_number}")
-      {
-        path: imageURL(image_name)
-      }
-    end.compact_blank
+  def image_path_prefix
+    raise NotImplementedError, "#{self.class} must implement #image_path_prefix"
   end
 
-  def imageURL(image_name = nil, size = "original")
-    image_name ||= self.imagem
-    image_name = self.imagem_producao if image_name.blank?
-    return if image_name.blank?
-
-    build_image_url(image_name, size)
+  def image_default_size
+    raise NotImplementedError, "#{self.class} must implement #image_default_size"
   end
 
-  # Full-bleed banner: same pattern as PhotoSwipe docs (sizes + srcset + smallest src fallback).
-  def banner_image
-    return unless imagem.present?
+  def image_url(size = image_default_size)
+    return nil if imagem.blank?
 
-    {
-      src: imageURL(nil, "large"),
-      srcset: BANNER_SRCSET_WIDTHS.map { |folder, w| "#{imageURL(nil, folder)} #{w}w" }.join(", "),
-      sizes: "100vw"
-    }
+    build_image_url(imagem, size)
   end
 
-  # TODO: Define default size for all images in the website
-  def posterImageURL(image_name = nil, size = "large")
-    image_name ||= self.imagem_producao
-    # TODO: CACHE
-    # TODO: IF WE WANT DIFFERENT SIZE?
-    # Rails.cache.fetch("image-for-pelicula-#{id}", expires_in: 12.hours) do
-    build_image_url(image_name, size)
-    # end
-  end
+  protected
 
-  private
-
-  def build_image_url(img_name, img_size = "large2")
-    "#{ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_ENV")}/#{Edicao.current.descricao}/site/peliculas/#{img_size}/#{img_name}"
+  def build_image_url(img_name, img_size)
+    "#{ENV.fetch("IMAGES_BASE_URL")}/#{image_path_prefix}/#{img_size}/#{img_name}"
   end
 end

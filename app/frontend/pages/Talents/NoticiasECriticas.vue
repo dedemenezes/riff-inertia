@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from "vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import NewsCard from "@/components/common/cards/NewsCard.vue";
 import NavTab from "@/components/common/tabs/NavTab.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
@@ -12,19 +12,8 @@ const props = defineProps({
 
 const page = usePage();
 
-const NOTICIA_IMAGE_BASE_URL =
-  "https://s3.amazonaws.com/festivaldorio/imagens/noticias/medium2/";
-
-const cards = computed(() =>
-  props.noticias.map((noticia) => ({
-    id: noticia.id,
-    title: noticia.titulo,
-    date: noticia.display_date,
-    category: noticia.caderno_nome,
-    image: `${NOTICIA_IMAGE_BASE_URL}${noticia.imagem}`,
-    permalink: `/${page.props.currentLocale}/noticias/${noticia.permalink}`,
-  }))
-);
+const noticiaPermalink = (permalink) =>
+  `/${page.props.currentLocale}/noticias/${permalink}`;
 </script>
 
 <template>
@@ -51,17 +40,17 @@ const cards = computed(() =>
 
     <div class="py-1600">
       <ul
-        v-if="cards.length"
+        v-if="noticias.length"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-800"
       >
-        <li v-for="card in cards" :key="card.id">
+        <li v-for="noticia in noticias" :key="noticia.id">
           <NewsCard
             variant="secundaria"
-            :image="card.image"
-            :title="card.title"
-            :date="card.date"
-            :category="card.category"
-            :permalink="card.permalink"
+            :image="noticia.image_url"
+            :title="noticia.titulo"
+            :date="noticia.display_date"
+            :category="noticia.caderno_nome"
+            :permalink="noticiaPermalink(noticia.permalink)"
           />
         </li>
       </ul>

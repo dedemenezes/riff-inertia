@@ -30,8 +30,8 @@ class TalentsController < ApplicationController
     render inertia: "Talents/NoticiasECriticas", props: {
       tabs: TalentsTabs.build(active: "noticias_e_criticas"),
       noticias: noticias.as_json(
-        only: %i[id titulo permalink chamada imagem],
-        methods: [ :caderno_nome, :display_date ]
+        only: %i[id titulo permalink chamada],
+        methods: [ :caderno_nome, :display_date, :image_url ]
       )
     }
   end
