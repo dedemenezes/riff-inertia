@@ -37,6 +37,28 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
+  frontend_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install JavaScript dependencies
+        run: |
+          npm ci
+          ROLLUP_VER=$(node -pe "JSON.parse(require('fs').readFileSync('package-lock.json','utf8')).packages['node_modules/rollup'].version")
+          npm install "@rollup/rollup-linux-x64-gnu@${ROLLUP_VER}" --no-save
+
+      - name: Run frontend tests
+        run: npm test -- --run
+
   test:
     runs-on: ubuntu-latest
 
