@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     resources :peliculas, only: %i[ index show ], param: :permalink
     resources :cinemas, only: :index
     get :equipe, to: "equipe#index", as: :equipe
+    scope :festival do
+      get "sobre-nos", to: "sobre_nos#index", as: :festival_sobre_nos
+    end
+
     scope :talents do
       get :apresentacao, to: "talents#participants", as: :talents_members
       get :noticias_e_criticas, to: "talents#news", as: :talents_news
