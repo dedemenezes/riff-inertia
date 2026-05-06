@@ -5,6 +5,14 @@ module Imageable
   #   def image_path_prefix = "imagens/noticias"   # no leading/trailing slash
   #   def image_default_size = "medium2"
 
+  def image_path_prefix
+    raise NotImplementedError, "#{self.class} must implement #image_path_prefix"
+  end
+
+  def image_default_size
+    raise NotImplementedError, "#{self.class} must implement #image_default_size"
+  end
+
   def image_url(size = image_default_size)
     return nil if imagem.blank?
 
