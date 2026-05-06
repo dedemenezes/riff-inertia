@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
       I18n.t("navigation.festival.name") => [
         { name: I18n.t("navigation.about.name"), path: "" },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_path },
-        { name: I18n.t("navigation.talent_press"), path: "" },
+        { name: I18n.t("navigation.talent_press"), path: talents_members_path },
         { name: I18n.t("navigation.parceiros"), path: "" }
       ],
       I18n.t("navigation.articles.name") => [
