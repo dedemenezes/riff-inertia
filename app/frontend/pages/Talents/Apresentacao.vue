@@ -35,7 +35,7 @@ defineProps({
         class="flex flex-col gap-800"
       >
         <SectionHeader>{{ section.titulo }}</SectionHeader>
-        <ul class="flex flex-col gap-400">
+        <ul class="flex flex-col gap-600">
           <li
             v-for="participante in section.participantes"
             :key="participante.name"
@@ -44,6 +44,7 @@ defineProps({
               :photo="participante.photo"
               :name="participante.name"
               :bio="participante.bio"
+              bio-variant="double-spaced"
             />
           </li>
         </ul>

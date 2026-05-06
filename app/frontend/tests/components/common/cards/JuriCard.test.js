@@ -65,4 +65,23 @@ describe("JuriCard", () => {
 
     expect(wrapper.findAll("p")).toHaveLength(1);
   });
+
+  it("uses default bio class by default", () => {
+    const wrapper = mount(JuriCard, {
+      props: { ...baseProps, bio: "Bio text." },
+    });
+
+    const bioParagraph = wrapper.findAll("p").at(-1);
+    expect(bioParagraph.classes()).toContain("text-body-regular");
+  });
+
+  it("uses double-spaced bio class when bioVariant is 'double-spaced'", () => {
+    const wrapper = mount(JuriCard, {
+      props: { ...baseProps, bio: "Bio text.", bioVariant: "double-spaced" },
+    });
+
+    const bioParagraph = wrapper.findAll("p").at(-1);
+    expect(bioParagraph.classes()).toContain("text-body-regular-double");
+    expect(bioParagraph.classes()).not.toContain("text-body-regular");
+  });
 });

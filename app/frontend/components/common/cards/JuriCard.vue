@@ -10,12 +10,23 @@ const props = defineProps({
     required: false,
     default: () => [],
   },
+  bioVariant: {
+    type: String,
+    default: "default",
+    validator: (v) => [ "default", "double-spaced" ].includes(v),
+  },
 });
 
 const bioParagraphs = computed(() => {
   if (Array.isArray(props.bio)) return props.bio.filter((p) => p && p.trim());
   return props.bio && props.bio.trim() ? [props.bio] : [];
 });
+
+const bioClass = computed(() =>
+  props.bioVariant === "double-spaced"
+    ? "text-body-regular-double"
+    : "text-body-regular",
+);
 </script>
 
 <template>
@@ -34,7 +45,7 @@ const bioParagraphs = computed(() => {
       <p
         v-for="(paragraph, idx) in bioParagraphs"
         :key="idx"
-        class="text-body-regular"
+        :class="bioClass"
       >
         {{ paragraph }}
       </p>

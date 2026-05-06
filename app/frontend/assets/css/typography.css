@@ -45,6 +45,10 @@
     @apply font-body text-md font-regular leading-[140%];
   }
 
+  .text-body-regular-double {
+    @apply font-body text-md font-regular leading-[200%];
+  }
+
   .text-body-strong-xs {
     @apply font-body text-xs font-semibold leading-[140%];
   }
