@@ -46,34 +46,34 @@ defineProps({
 </template>
 
 <style scoped>
-::v-deep(.content p),
-::v-deep(.content span),
-::v-deep(.content li) {
+:deep(.content p),
+:deep(.content span),
+:deep(.content li) {
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 2;
 }
 
-::v-deep(.content p:not(:empty):not(:has(img))) {
+:deep(.content p:not(:empty):not(:has(img))) {
   margin-bottom: 1rem;
 }
 
-::v-deep(.content b) {
+:deep(.content b) {
   font-weight: 600;
 }
 
-::v-deep(.content ul) {
+:deep(.content ul) {
   list-style: disc;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
 
-::v-deep(.content a) {
+:deep(.content a) {
   text-decoration: underline;
 }
 
-::v-deep(.content a:hover) {
+:deep(.content a:hover) {
   color: var(--color-vermelho-400);
 }
 </style>
