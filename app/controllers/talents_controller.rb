@@ -14,6 +14,16 @@ class TalentsController < ApplicationController
     }
   end
 
+  def programacao
+    @pagina = Pagina.find_by(rota: "/br/talents/", permalink: :programacao)
+
+    render inertia: "Talents/Programacao", props: {
+      pagina: @pagina,
+      sections: TalentsProgramacaoParser.parse(@pagina&.conteudo),
+      tabs: TalentsTabs.build(active: "programacao")
+    }
+  end
+
   def news
     idioma = Idioma.find_by("locale LIKE ?", "#{I18n.locale}%")
     permalink = TALENTS_CADERNO_PERMALINK[I18n.locale.to_sym] || TALENTS_CADERNO_PERMALINK[:pt]

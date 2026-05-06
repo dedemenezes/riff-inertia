@@ -56,10 +56,12 @@ class TalentsTabsTest < ActiveSupport::TestCase
     end
   end
 
-  test "programacao tab still uses placeholder until route exists" do
-    tabs = TalentsTabs.build(active: "sobre")
-    programacao = tabs.last
-    assert_equal "#", programacao[:href]
+  test "programacao tab links to talents_programacao_path" do
+    I18n.with_locale(:pt) do
+      tabs = TalentsTabs.build(active: "programacao")
+      programacao = tabs.last
+      assert_equal "/pt/talents/programacao", programacao[:href]
+    end
   end
 
   test "tab hrefs include current locale" do

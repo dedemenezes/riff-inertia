@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     scope :talents do
       get :apresentacao, to: "talents#participants", as: :talents_members
       get :noticias_e_criticas, to: "talents#news", as: :talents_news
+      get :programacao, to: "talents#programacao", as: :talents_programacao
     end
   end
 

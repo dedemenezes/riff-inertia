@@ -7,7 +7,7 @@ class TalentsTabs
   TABS = [
     { key: "sobre", path_helper: :talents_members_path },
     { key: "noticias_e_criticas", path_helper: :talents_news_path },
-    { key: "programacao", path_helper: nil }
+    { key: "programacao", path_helper: :talents_programacao_path }
   ].freeze
 
   def self.build(active:)
