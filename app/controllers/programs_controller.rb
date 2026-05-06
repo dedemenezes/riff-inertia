@@ -79,7 +79,6 @@ class ProgramsController < ApplicationController
 
     # Build breadcrumbs
     render inertia: "ProgramPage", props: {
-      rootUrl: @root_url,
       tabBaseUrl: program_url,
       elements: @programacoes,
       pagy: @pagy,

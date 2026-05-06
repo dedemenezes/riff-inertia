@@ -31,6 +31,8 @@ class ApplicationController < ActionController::Base
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
+  inertia_share rootUrl: -> { @root_url }
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
@@ -92,7 +94,7 @@ class ApplicationController < ActionController::Base
       "sobre" => [
         { name: I18n.t("navigation.about.name"), path: "", icon: "logoFest" },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_url, icon: "calendar" },
-        { name: I18n.t("navigation.talent_rio"), path: "", icon: "talentPress" },
+        { name: I18n.t("navigation.talent_rio"), path: talents_members_path, icon: "talentPress" },
         { name: I18n.t("navigation.parceiros"), path: "", icon: "handshake" }
       ],
       "midias" => [

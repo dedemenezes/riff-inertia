@@ -85,7 +85,6 @@ class PagesController < ApplicationController
       end
 
     render inertia: "HomePage", props: {
-      rootUrl: @root_url,
       quickLinksConfig:,
       noticias:,
       noticasUrl: noticias_url,

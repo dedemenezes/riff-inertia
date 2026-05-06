@@ -27,7 +27,6 @@ class NoticiasController < ApplicationController
     @pagy, @noticias = pagy_infinite(ordered, current_page)
 
     render inertia: "Noticias/Index", props: {
-      rootUrl: @root_url,
       tabBaseUrl: noticias_url,
       dataLabel: I18n.t("filter.date"),
       cadernos: filter_result.cadernos,
@@ -58,7 +57,6 @@ class NoticiasController < ApplicationController
       conteudo: @noticia.conteudo,
       titulo: @noticia.titulo,
       chamada: @noticia.chamada,
-      rootUrl: @root_url,
       breadcrumbs: breadcrumbs(
         [ "Home", @root_url ],
         [ "Notícias", noticias_url ],

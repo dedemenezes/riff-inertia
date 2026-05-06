@@ -36,7 +36,6 @@ const VideoBanner = defineAsyncComponent(
 import { useUpdateWindowWidth } from "@/lib/utils";
 
 const props = defineProps({
-  rootUrl: { type: String, required: true },
   crumbs: { type: Array, required: true, default: () => [] },
   backPath: String,
   pelicula: { type: Object, required: true },

@@ -2,11 +2,12 @@
 import { usePage } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import NewsCard from "@/components/common/cards/NewsCard.vue";
-import NavTab from "@/components/common/tabs/NavTab.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
+import TalentsLayout from "@/pages/Talents/TalentsLayout.vue";
 
-const props = defineProps({
-  tabs: { type: Array, required: false, default: () => [] },
+defineOptions({ layout: TalentsLayout });
+
+defineProps({
   noticias: { type: Array, required: false, default: () => [] },
 });
 
@@ -22,22 +23,6 @@ const noticiaPermalink = (permalink) =>
   </Head>
 
   <TwContainer>
-    <div v-if="tabs.length" class="py-800">
-      <nav
-        aria-label="Talents sections"
-        class="flex gap-300 items-center px-400 h-12"
-      >
-        <NavTab
-          v-for="tab in tabs"
-          :key="tab.label"
-          :href="tab.href"
-          :active="tab.active"
-        >
-          {{ tab.label }}
-        </NavTab>
-      </nav>
-    </div>
-
     <div class="py-1600">
       <ul
         v-if="noticias.length"

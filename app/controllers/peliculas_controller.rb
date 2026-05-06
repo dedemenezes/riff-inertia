@@ -28,7 +28,6 @@ class PeliculasController < ApplicationController
     @pagy, @peliculas = pagy_infinite(@peliculas, current_page, pagy_limit)
 
     render inertia: "Peliculas/Index", props: {
-      rootUrl: @root_url,
       elements: @peliculas.as_json(
         only: Pelicula::COLUMNS_NEEDED,
         methods: Pelicula::METHODS_NEEDED
@@ -50,7 +49,6 @@ class PeliculasController < ApplicationController
   def show
     @pelicula = Pelicula.includes(:paises, :mostra, programacoes: :cinema).find_by!(edicao_id: Edicao.current.id, permalink: params[:permalink])
     render inertia: "Peliculas/Show", props: {
-      rootUrl: @root_url,
       pelicula: @pelicula.as_json(
         only: Pelicula::COLUMNS_NEEDED,
         methods: Pelicula::METHODS_NEEDED

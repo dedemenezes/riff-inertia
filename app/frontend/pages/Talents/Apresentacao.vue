@@ -1,33 +1,18 @@
 <script setup>
 import JuriCard from "@/components/common/cards/JuriCard.vue";
 import SectionHeader from "@/components/common/SectionHeader.vue";
-import NavTab from "@/components/common/tabs/NavTab.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
+import TalentsLayout from "@/pages/Talents/TalentsLayout.vue";
+
+defineOptions({ layout: TalentsLayout });
 
 defineProps({
-  pagina: { type: Object, required: true },
   sections: { type: Array, required: false, default: () => [] },
-  tabs: { type: Array, required: false, default: () => [] },
 });
 </script>
 
 <template>
   <TwContainer>
-    <div v-if="tabs.length" class="py-800">
-      <nav
-        aria-label="Talents sections"
-        class="flex gap-300 items-center px-400 h-12"
-      >
-        <NavTab
-          v-for="tab in tabs"
-          :key="tab.label"
-          :href="tab.href"
-          :active="tab.active"
-        >
-          {{ tab.label }}
-        </NavTab>
-      </nav>
-    </div>
     <div class="flex flex-col gap-1600 py-1600">
       <section
         v-for="section in sections"

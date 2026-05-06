@@ -3,29 +3,19 @@ import { createApp, h } from 'vue'
 import PageLayout from '@pages/PageLayout.vue'
 import { FocusTrap } from 'focus-trap-vue'
 
+const wrappedPages = new WeakSet()
+
 createInertiaApp({
-  // Set default page title
-  // see https://inertia-rails.dev/guide/title-and-meta
-  //
-  // title: title => title ? `${title} - App` : 'App',
-
-  // Disable progress bar
-  //
-  // see https://inertia-rails.dev/guide/progress-indicators
-  // progress: false,
-
   resolve: (name) => {
     const pages = import.meta.glob('../pages/**/*.vue', {
       eager: true,
     })
-    // return pages[`../pages/${name}.vue`]
-
-    // To use a default layout, import the Layout component
-    // and use the following lines.
-    // see https://inertia-rails.dev/guide/pages#default-layouts
-    //
     const page = pages[`../pages/${name}.vue`]
-    page.default.layout = page.default.layout || PageLayout
+    if (!wrappedPages.has(page.default)) {
+      const childLayout = page.default.layout
+      page.default.layout = childLayout ? [PageLayout, childLayout] : PageLayout
+      wrappedPages.add(page.default)
+    }
     return page
   },
 

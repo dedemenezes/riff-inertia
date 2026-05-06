@@ -51,4 +51,23 @@ class TalentsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "en", props["currentLocale"]
     assert props["noticias"].is_a?(Array)
   end
+
+  test "programacao returns inertia response with sections and tabs" do
+    get talents_programacao_url(locale: :pt)
+
+    assert_response :success
+    props = inertia_props
+
+    assert props["sections"].is_a?(Array)
+    assert props["tabs"].is_a?(Array)
+  end
+
+  test "programacao active tab is programacao" do
+    get talents_programacao_url(locale: :pt)
+
+    props = inertia_props
+    active_labels = props["tabs"].select { |t| t["active"] }.map { |t| t["label"] }
+
+    assert_equal [ "Programação" ], active_labels
+  end
 end

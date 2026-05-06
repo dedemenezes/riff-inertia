@@ -5,7 +5,6 @@ class EdicoesAnterioresController < ApplicationController
     @edicoes = Edicao.all.order(descricao: :desc).offset(1)
 
     render inertia: "Edicoes/Index", props: {
-      rootUrl: @root_url,
       crumbs: breadcrumbs(
         [ "", @root_url ],
         [ I18n.t("navigation.festival.name"), "#" ],

@@ -14,7 +14,6 @@ class MostrasController < ApplicationController
     } }
 
     render inertia: "Mostras/Index", props: {
-      rootUrl: @root_url,
       categorias: @categorias.as_json,
       crumbs: breadcrumbs(
         [ "", @root_url ],
@@ -59,7 +58,6 @@ class MostrasController < ApplicationController
     @pagy, @peliculas = pagy_infinite(filtered_relation, current_page, 9)
 
     render inertia: "Mostras/Show", props: {
-      rootUrl: @root_url,
       categoria: params[:category],
       tag_class: @mostras.first.tag_class,
       tabBaseUrl: mostra_path(params[:category]),
