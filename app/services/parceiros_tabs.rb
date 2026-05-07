@@ -2,8 +2,8 @@
 
 class ParceirosTabs
   TABS = [
-    { key: "parceiros", label: "Parceiros 2025", path_helper: :festival_parceiros_path },
-    { key: "editoriais", label: "Editoriais", path_helper: :festival_parceiros_editoriais_path }
+    { key: "parceiros", label_key: "navigation.parceiros_tabs.parceiros", path_helper: :festival_parceiros_path },
+    { key: "editoriais", label_key: "navigation.parceiros_tabs.editoriais", path_helper: :festival_parceiros_editoriais_path }
   ].freeze
 
   def self.build(active:)
@@ -11,7 +11,7 @@ class ParceirosTabs
 
     TABS.map do |tab|
       {
-        label: tab[:label],
+        label: I18n.t(tab[:label_key]),
         href: helpers.public_send(tab[:path_helper], locale: I18n.locale),
         active: tab[:key] == active.to_s
       }

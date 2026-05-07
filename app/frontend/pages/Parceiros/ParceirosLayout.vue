@@ -10,6 +10,9 @@ import BarraLogos from "@/components/features/parceiros/BarraLogos.vue";
 const page = usePage();
 const crumbs = computed(() => page.props.crumbs || []);
 const tabs = computed(() => page.props.tabs || []);
+const parceirosLabel = computed(
+  () => page.props.locale_messages?.navigation?.parceiros || "Parceiros"
+);
 </script>
 
 <template>
@@ -17,7 +20,7 @@ const tabs = computed(() => page.props.tabs || []);
     <Breadcrumb :crumbs="crumbs" />
   </TwContainer>
 
-  <MenuContext nav="sobre" activePage="Parceiros" />
+  <MenuContext nav="sobre" :activePage="parceirosLabel" />
   <hr class="text-neutrals-300" />
 
   <TwContainer>
