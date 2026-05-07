@@ -108,7 +108,7 @@ class Pelicula < ApplicationRecord
     mostra.tag_class
   end
 
-  def image_path_prefix = "#{Edicao.current.descricao}/site/peliculas"
+  def image_path_prefix = "#{edicao.descricao}/site/peliculas"
   def image_default_size = "original"
 
   def imageURL(image_name = nil, size = "original")
