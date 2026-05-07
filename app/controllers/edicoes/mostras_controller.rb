@@ -13,11 +13,12 @@ class Edicoes::MostrasController < ApplicationController
       mostraImageURL: mostras.first.peliculas.sample&.imageURL
     } }
     render inertia: "Edicoes/Mostras", props: {
-      edicao: @edicao.as_json(only: %i[id descricao]).merge(cartazURL: @edicao.image_url),
+      edicao: @edicao.as_json(only: %i[id descricao], methods: %i[cartazURL]),
       categorias: @categorias.as_json,
       menuContext: set_menu_context.merge(
         "edicoes_anteriores" => edicoes_anteriores_menu_context(@edicao)
-      )
+      ),
+      fallBackUrl: edicoes_anteriores_path
     }
   end
 

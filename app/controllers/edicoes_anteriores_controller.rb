@@ -12,7 +12,7 @@ class EdicoesAnterioresController < ApplicationController
       ),
       edicoes: @edicoes.as_json(
                 only: %i[id descricao cartaz],
-                methods: []
+                methods: [ :cartazURL ]
               )
     }
   end

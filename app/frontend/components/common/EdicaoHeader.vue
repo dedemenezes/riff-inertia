@@ -1,4 +1,5 @@
 <script setup>
+import { router } from "@inertiajs/vue3";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/dist/photoswipe.css";
@@ -7,9 +8,12 @@ import IconChevronLeft from "@/components/common/icons/navigation/IconChevronLef
 
 const props = defineProps({
   edicao: { type: Object, required: true },
+  fallBackUrl: { type: String, required: true },
 });
 
-const goBack = () => window.history.back();
+const goBack = () => {
+  window.history.state?.url ? router.back() : router.visit(props.fallBackUrl);
+};
 
 const cartazDims = ref(null);
 

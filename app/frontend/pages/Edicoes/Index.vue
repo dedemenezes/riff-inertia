@@ -22,10 +22,7 @@ const props = defineProps({
     <ul class="grid grid-cols-2 lg:grid-cols-6 py-1200 gap-800">
       <li v-for="edicao in props.edicoes" :key="edicao.id">
         <Link :href="`/edicoes_anteriores/${edicao.id}/mostras`" prefetch>
-          <Cartaz
-            :cartaz="`https://s3.amazonaws.com/festivaldorio/imagens/edicoes/small/${edicao.cartaz}`"
-            :descricao="edicao.descricao"
-          />
+          <Cartaz :cartaz="edicao.cartazURL" :descricao="edicao.descricao" />
         </Link>
       </li>
     </ul>

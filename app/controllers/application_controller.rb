@@ -107,10 +107,10 @@ class ApplicationController < ActionController::Base
 
   def edicoes_anteriores_menu_context(edicao)
     [
-      { name: "Mostras", path: edicao_anterior_mostras_path(edicao), icon: "grid" },
-      { name: "Filmes", path: edicao_anterior_filmes_path(edicao), icon: "film" },
-      { name: "Notícias", path: edicao_anterior_noticias_path(edicao), icon: "newspaper" },
-      { name: "Júri/Premiados", path: "#", icon: "trophy" }
+      { name: I18n.t("navigation.mostras"), path: edicao_anterior_mostras_path(edicao), icon: "grid" },
+      { name: I18n.t("navigation.todos_os_filmes"), path: edicao_anterior_filmes_path(edicao), icon: "film" },
+      { name: I18n.t("navigation.todas_as_noticias"), path: edicao_anterior_noticias_path(edicao), icon: "newspaper" },
+      { name: I18n.t("navigation.juri"), path: "#", icon: "trophy" }
     ]
   end
 

@@ -19,6 +19,10 @@ class Edicao < ApplicationRecord
     build_image_url(cartaz, size)
   end
 
+  def cartazURL(size = image_default_size)
+    image_url(size)
+  end
+
   def self.current
     Rails.cache.fetch("edicao/current/#{CURRENT_ID}", expires_in: 1.hour) do
       find(CURRENT_ID)
