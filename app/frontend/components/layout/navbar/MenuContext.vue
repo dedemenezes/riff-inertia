@@ -30,14 +30,17 @@ const loaders = {
   talentPress: () => import('@/components/common/icons/misc/IconTalentPress.vue'),
   handshake: () => import('@/components/common/icons/misc/IconHandshake.vue'),
   image: () => import('@/components/common/icons/misc/IconImage.vue'),
-  book: () => import('@/components/common/icons/misc/IconBook.vue')
+  book: () => import('@/components/common/icons/misc/IconBook.vue'),
+  film: () => import('@/components/common/icons/misc/IconFilm.vue'),
+  newspaper: () => import('@/components/common/icons/misc/IconNewspaper.vue'),
 }
 
 const loadersPerNav = {
   programacao: ["program", "newUser", "change", "ticket"],
   edicao: ["program", "grid", "pin", "trophy", "people"],
   sobre: ["logoFest", "calendar", "talentPress", "handshake"],
-  midias: ["image", "book"]
+  midias: ["image", "book"],
+  edicoes_anteriores: ["grid", "film", "newspaper", "trophy"],
 }
 
 const cache = new Map()

@@ -100,8 +100,18 @@ class ApplicationController < ActionController::Base
       "midias" => [
         { name: I18n.t("navigation.media.fotos_e_videos"), path: "", icon: "image" },
         { name: I18n.t("navigation.media.impressos"), path: "", icon: "book" }
-      ]
+      ],
+      "edicoes_anteriores" => []
     }
+  end
+
+  def edicoes_anteriores_menu_context(edicao)
+    [
+      { name: I18n.t("navigation.mostras"), path: edicao_anterior_mostras_path(edicao), icon: "grid" },
+      { name: I18n.t("navigation.todos_os_filmes"), path: edicao_anterior_filmes_path(edicao), icon: "film" },
+      { name: I18n.t("navigation.todas_as_noticias"), path: edicao_anterior_noticias_path(edicao), icon: "newspaper" },
+      { name: I18n.t("navigation.juri"), path: "#", icon: "trophy" }
+    ]
   end
 
   def set_secondary_items

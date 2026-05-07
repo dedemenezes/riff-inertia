@@ -15,7 +15,12 @@ Rails.application.routes.draw do
     resources :noticias, only: %i[ index show ], param: :permalink
     # other localized routes
 
-    resources :edicoes_anteriores, only: %i[ index ]
+    resources :edicoes_anteriores, only: [ :index ] do
+      resources :mostras, only: [ :index ], controller: "edicoes/mostras"
+      resources :filmes, only: [ :index ], controller: "edicoes/filmes"
+      resources :noticias, only: [ :index ], controller: "edicoes/noticias"
+      resources :juri, only: [ :index ], controller: "edicoes/juri", as: :juri
+    end
     resources :mostras, only: %i[ index show ], param: :category
     resources :peliculas, only: %i[ index show ], param: :permalink
     resources :cinemas, only: :index
