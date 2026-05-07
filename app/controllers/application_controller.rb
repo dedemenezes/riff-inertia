@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.about.name"), path: festival_sobre_nos_path },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_path },
         { name: I18n.t("navigation.talent_press"), path: talents_members_path },
-        { name: I18n.t("navigation.parceiros"), path: "" }
+        { name: I18n.t("navigation.parceiros"), path: festival_parceiros_path }
       ],
       I18n.t("navigation.articles.name") => [
         { name: I18n.t("navigation.todas_as_noticias"), path: noticias_path }
@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.about.name"), path: festival_sobre_nos_path, icon: "logoFest" },
         { name: I18n.t("navigation.edicoes_anteriores"), path: edicoes_anteriores_url, icon: "calendar" },
         { name: I18n.t("navigation.talent_rio"), path: talents_members_path, icon: "talentPress" },
-        { name: I18n.t("navigation.parceiros"), path: "", icon: "handshake" }
+        { name: I18n.t("navigation.parceiros"), path: festival_parceiros_path, icon: "handshake" }
       ],
       "midias" => [
         { name: I18n.t("navigation.media.fotos_e_videos"), path: "", icon: "image" },
