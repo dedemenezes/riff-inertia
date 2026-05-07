@@ -12,6 +12,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   # Regular plurals that end in 's'
   inflect.irregular "alteracao", "alteracoes"
   inflect.irregular "edicao", "edicoes"
+  inflect.irregular "edicao_anterior", "edicoes_anteriores"
   inflect.irregular "importacao", "importacoes"
   inflect.irregular "programacao", "programacoes"
 
