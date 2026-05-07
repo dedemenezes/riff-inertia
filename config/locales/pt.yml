@@ -65,6 +65,9 @@ pt:
     talent_press: "Talent Press"
     talent_rio: "Talent Rio"
     parceiros: "Parceiros"
+    parceiros_tabs:
+      parceiros: "Parceiros 2025"
+      editoriais: "Editoriais"
     todas_as_noticias: "Todas as notícias"
 
   filter:
