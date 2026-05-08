@@ -1,10 +1,10 @@
 <script setup>
-import shellLogo from "@assets/images/parceiros/shell.webp";
-import visitrioLogo from "@assets/images/parceiros/visitrio.webp";
-import cinemaDoRioLogo from "@assets/images/parceiros/cinemadorio.webp";
-import governoFedLogo from "@assets/images/parceiros/governofed.webp";
-import leiRouanetLogo from "@assets/images/parceiros/leirouanet.webp";
-import apoioBlocLogo from "@assets/images/parceiros/apoio-bloc.webp";
+import cinemaDoRioLogo from "@assets/images/parceiros/CinemadoRio.svg";
+import governoFedLogo from "@assets/images/parceiros/Governo.svg";
+import leiRouanetLogo from "@assets/images/parceiros/LeiRouanet.svg";
+import rioFilmeLogo from "@assets/images/parceiros/RioFilme.svg";
+import shellLogo from "@assets/images/parceiros/Shell.svg";
+import visitrioLogo from "@assets/images/parceiros/VisitRio.svg";
 </script>
 
 <template>
@@ -50,7 +50,7 @@ import apoioBlocLogo from "@assets/images/parceiros/apoio-bloc.webp";
         </p>
         <div class="flex gap-800 items-center">
           <img
-            :src="apoioBlocLogo"
+            :src="rioFilmeLogo"
             alt="RioFilme — Prefeitura do Rio Secretaria Municipal de Cultura"
             class="h-[52px] w-auto object-contain"
           />

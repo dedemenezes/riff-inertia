@@ -5,13 +5,12 @@ import Breadcrumb from "@/components/common/Breadcrumb.vue";
 import NavTab from "@/components/common/tabs/NavTab.vue";
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import TwContainer from "@/components/layout/TwContainer.vue";
-import BarraLogos from "@/components/features/parceiros/BarraLogos.vue";
 
 const page = usePage();
 const crumbs = computed(() => page.props.crumbs || []);
 const tabs = computed(() => page.props.tabs || []);
 const parceirosLabel = computed(
-  () => page.props.locale_messages?.navigation?.parceiros || "Parceiros"
+  () => page.props.locale_messages?.navigation?.parceiros || "Parceiros",
 );
 </script>
 
@@ -42,6 +41,4 @@ const parceirosLabel = computed(
   </TwContainer>
 
   <slot />
-
-  <BarraLogos class="mt-1200" />
 </template>
