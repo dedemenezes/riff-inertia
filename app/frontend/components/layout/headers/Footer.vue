@@ -5,6 +5,7 @@ import { usePage } from "@inertiajs/vue3";
 
 const page = usePage()
 const locale = page.props.currentLocale
+const imprensaPath = page.props.imprensaPath
 
 </script>
 
@@ -83,7 +84,7 @@ const locale = page.props.currentLocale
         </div>
         <div class="flex lg:gap-1200 gap-400 text-body-regular border-b-1 py-300 flex-wrap lg:justify-start justify-center">
           <a :href="`/${locale}/`" class="p-200">Ingressos</a>
-          <a :href="`/${locale}/`" class="p-200">Imprensa</a>
+          <a v-if="imprensaPath" :href="imprensaPath" class="p-200">Imprensa</a>
           <a :href="`/${locale}/`" class="p-200">Acessibilidade</a>
           <a :href="`/${locale}/`" class="p-200">Contatos</a>
         </div>
