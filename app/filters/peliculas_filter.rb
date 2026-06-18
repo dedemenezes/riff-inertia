@@ -15,10 +15,10 @@ class PeliculasFilter
     keyword_init: true
   )
 
-  def initialize(relation:, params:, filter_options:, pelicula_collection_service:)
+  def initialize(relation:, params:, filter_options:, pelicula_collection_service:, edicao_id: Edicao.current.id)
     @relation = relation
     @params = params
-    @edicao_id = Edicao.current.id
+    @edicao_id = edicao_id
     @mostras_filter = filter_options.fetch(:mostras)
     @paises_filter = filter_options.fetch(:paises)
     @genres_filter = filter_options.fetch(:genres)

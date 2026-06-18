@@ -8,9 +8,14 @@ import TagMostra from "@/components/common/tags/TagMostra.vue";
 const isHovered = ref(false);
 const props = defineProps({
   pelicula: { type: Object, required: true },
+  linkable: { type: Boolean, default: true },
 });
 const moviePoster = computed(() => props.pelicula.imageURL || DefaultImage);
 const movieGenre = computed(() => props.pelicula.genre || "TBD");
+const wrapperTag = computed(() => (props.linkable ? Link : "div"));
+const wrapperProps = computed(() =>
+  props.linkable ? { href: props.pelicula.url } : {},
+);
 </script>
 
 <template>
@@ -21,8 +26,8 @@ const movieGenre = computed(() => props.pelicula.genre || "TBD");
     @mouseleave="isHovered = false"
   >
     <!-- image -->
-    <!-- LINK -->
-     <Link :href="props.pelicula.url" class="w-full">
+    <!-- LINK (plain wrapper when not linkable, e.g. previous editions) -->
+     <component :is="wrapperTag" v-bind="wrapperProps" class="w-full">
       <div class="relative w-full">
         <img
           :src="moviePoster"
@@ -76,10 +81,10 @@ const movieGenre = computed(() => props.pelicula.genre || "TBD");
           <!-- Animated underline -->
           <span
             class="w-full bg-white-transp-900 transition-height duration-100"
-            :style="{ height: isHovered ? '1px' : '0px' }"
+            :style="{ height: props.linkable && isHovered ? '1px' : '0px' }"
           ></span>
         </div>
       </div>
-    </Link>
+    </component>
   </div>
 </template>

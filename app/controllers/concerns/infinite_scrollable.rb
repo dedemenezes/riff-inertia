@@ -2,12 +2,12 @@ module InfiniteScrollable
   extend ActiveSupport::Concern
 
   def pagy_infinite(collection, page_param, limit = 5)
-    current_page = (page_param || params[:page] || 1).to_i
+    current_page = [ (page_param || params[:page] || 1).to_i, 1 ].max
     limit = limit || Pagy::DEFAULT[:limit]
 
     if current_page <= 1
       # First page - normal pagination
-      pagy_result = pagy(collection, limit: limit)
+      pagy_result = pagy(collection, limit: limit, page: current_page)
       pagy_result
     else
       # Infinite scroll - load all items from page 1 to current page
