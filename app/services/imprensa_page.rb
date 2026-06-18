@@ -7,10 +7,18 @@ class ImprensaPage
     pt: "/br/imprensa/"
   }.freeze
 
+  # Legacy content rarely changes and is written by the legacy admin, so cache
+  # the lookup to avoid a Pagina query on every localized page load (this runs
+  # in inertia_share + the secondary nav). TTL bounds staleness since the legacy
+  # app cannot bust this cache.
+  CACHE_TTL = 1.hour
+
   def self.for(locale)
     rota = LEGACY_ROUTES[locale&.to_sym]
     return nil unless rota
 
-    Pagina.find_by(rota: rota)
+    Rails.cache.fetch("imprensa_page/#{rota}", expires_in: CACHE_TTL) do
+      Pagina.find_by(rota: rota)
+    end
   end
 end
