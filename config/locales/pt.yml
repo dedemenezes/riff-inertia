@@ -9,6 +9,15 @@ pt:
       noticias_e_criticas: "Notícias e Críticas"
       programacao: "Programação"
 
+  ingressos:
+    tabs:
+      como_comprar: "Como comprar seu ingresso"
+      pacotes: "Pacote de ingressos"
+      proximas_sessoes: "Próximas sessões"
+    proximas_sessoes:
+      descricao: "Confira a programação completa para encontrar as próximas sessões do Festival do Rio."
+      cta: "Ver programação"
+
   pelicula:
     sobre_o_filme: "Sobre o filme"
     roteiro: Roteiro
@@ -52,6 +61,7 @@ pt:
     mostras: "Mostras"
     information: "Informações"
     press: "Imprensa"
+    tickets: "Ingressos"
     archive: "Arquivo"
     registrations: "Inscrições"
     contact: "Contato"

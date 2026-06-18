@@ -1,6 +1,6 @@
 <script setup>
 const { as, type, variant, size, disabled } = defineProps({
-  as: { type: String, default: "button" }, // Could be 'a', 'router-link', etc.
+  as: { type: [String, Object], default: "button" }, // Could be 'a', Link, etc.
   type: { type: String, default: "button" }, // Only relevant if as=button
   variant: { type: String, default: "gray" }, // primary, secondary, ghost...
   size: { type: String, default: "md" }, // sm, md, lg
