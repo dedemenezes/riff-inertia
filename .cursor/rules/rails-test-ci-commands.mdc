@@ -1,0 +1,15 @@
+---
+description: Local command quirks for Rails tests and Brakeman in this repo
+globs: Gemfile,Gemfile.lock,bin/*,test/**/*.rb
+alwaysApply: false
+---
+
+# Rails Test And CI Commands
+
+When running Rails commands from the agent environment:
+
+- Use `env -u BUNDLE_PATH bundle exec rails test ...` for Rails tests.
+- Tests that need the local MySQL socket may need to run outside the sandbox.
+- `bin/brakeman` injects `--ensure-latest`; if CI fails only with "Brakeman X is not the latest version Y", update `Gemfile.lock`.
+- Verify Brakeman with `env -u BUNDLE_PATH bin/brakeman --no-pager`.
+- Do not change `bin/brakeman` to bypass the latest-version policy.

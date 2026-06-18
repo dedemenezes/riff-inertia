@@ -1,0 +1,15 @@
+---
+description: Commit and PR hygiene for this repository
+alwaysApply: true
+---
+
+# Git Hygiene
+
+Before committing or creating a PR:
+
+- Inspect `git status --short` and include only files related to the requested change.
+- Keep local/dev-only changes out of feature commits unless explicitly requested.
+- Do not commit `.DS_Store`; if tracked, remove from Git with `git rm --cached`.
+- Treat accidental `package-lock.json` churn as unrelated unless dependency changes were intentional.
+- Preserve local ngrok/development environment changes unless the user explicitly asks to alter them.
+- Mention any unrelated dirty files left in the working tree.
