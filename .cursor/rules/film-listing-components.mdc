@@ -1,0 +1,20 @@
+---
+description: Frontend conventions for film listing cards and controls
+globs: app/frontend/components/common/cards/PeliculaCard.vue,app/frontend/pages/**/*Filmes*.vue,app/frontend/pages/Edicoes/**/*.vue,app/frontend/tests/components/common/cards/**/*Pelicula*.js
+alwaysApply: false
+---
+
+# Film Listing Components
+
+When building or changing film listing UIs:
+
+- `PeliculaCard` is a renderer for server-provided film data. Do not fetch film details client-side from the card.
+- Previous-edition film cards stay non-clickable until a historical film detail route exists. Use `linkable=false` rather than linking to the current-edition `pelicula_path`.
+- When `linkable=false`, remove click affordances such as hover underlines or cursor/link behavior.
+- Keep `PeliculaCard` payload expectations small: title, countries, genre, duration, image, showcase tag/name, and URL only when links are enabled or needed as a key.
+
+Component-specific notes:
+
+- `IconArrowDown` currently accepts a `className` prop and applies it to the inner SVG. Do not replace it with Vue `:class` unless the icon component API is refactored.
+- Search/filter controls on Inertia pages should update URL params through Inertia navigation, preserving server-owned data and infinite-scroll state.
+- Add/update Vitest coverage when changing clickable vs non-clickable card behavior.
