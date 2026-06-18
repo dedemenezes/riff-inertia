@@ -1,0 +1,12 @@
+---
+description: How to reply to PR review comments after applying or declining feedback
+alwaysApply: true
+---
+
+# PR Review Comment Replies
+
+When asked to respond to PR review comments:
+
+- Always reply in the original review thread/comment, not only in a general PR comment.
+- If the feedback was applied, include the commit SHA or commit URL that contains the change.
+- If the feedback was not applied, explain the reason briefly in the same thread.
