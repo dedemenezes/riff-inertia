@@ -4,13 +4,15 @@ import { Link } from "@inertiajs/vue3";
 defineProps({
   href: { type: String, required: true },
   active: { type: Boolean, default: false },
+  stretch: { type: Boolean, default: true },
 });
 </script>
 
 <template>
   <Link
     :href="href"
-    class="flex flex-col flex-1 min-w-0 items-center justify-end h-full gap-150"
+    class="flex flex-col items-center justify-end h-full gap-150"
+    :class="stretch ? 'flex-1 min-w-0' : 'flex-none min-w-max'"
   >
     <span
       class="text-body-strong-sm uppercase whitespace-nowrap"
