@@ -9,8 +9,8 @@ alwaysApply: false
 When building or changing film listing UIs:
 
 - `PeliculaCard` is a renderer for server-provided film data. Do not fetch film details client-side from the card.
-- Previous-edition film cards stay non-clickable until a historical film detail route exists. Use `linkable=false` rather than linking to the current-edition `pelicula_path`.
-- When `linkable=false`, remove click affordances such as hover underlines or cursor/link behavior.
+- Previous-edition film cards stay non-clickable until a historical film detail route exists. In Vue templates, use `:linkable="false"` (boolean binding) rather than linking to the current-edition `pelicula_path`.
+- When `:linkable="false"`, remove click affordances such as hover underlines or cursor/link behavior.
 - Keep `PeliculaCard` payload expectations small: title, countries, genre, duration, image, showcase tag/name, and URL only when links are enabled or needed as a key.
 
 Component-specific notes:
