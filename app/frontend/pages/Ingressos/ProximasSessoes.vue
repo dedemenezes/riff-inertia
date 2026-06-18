@@ -19,7 +19,7 @@ const props = defineProps({
   </Head>
 
   <TwContainer>
-    <section class="flex flex-col gap-800 max-w-[1428px] py-1200">
+    <section class="flex flex-col gap-600 md:gap-800 max-w-[1428px] py-800 md:py-1200">
       <div class="flex flex-col gap-150">
         <h1 class="text-header-lg text-neutrals-900">
           {{ props.titulo }}

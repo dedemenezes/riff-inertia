@@ -10,7 +10,7 @@ const tabs = computed(() => page.props.tabs || []);
 
 <template>
   <TwContainer>
-    <div v-if="tabs.length" class="py-800">
+    <div v-if="tabs.length" class="py-600 md:py-800">
       <nav
         aria-label="Ingressos"
         class="flex gap-300 items-center justify-start md:justify-center px-400 max-w-[940px] mx-auto h-12 overflow-x-auto no-scroll-bar md:overflow-visible"
@@ -21,6 +21,7 @@ const tabs = computed(() => page.props.tabs || []);
           :href="tab.href"
           :active="tab.active"
           :stretch="false"
+          stretch-from="md"
         >
           {{ tab.label }}
         </NavTab>
