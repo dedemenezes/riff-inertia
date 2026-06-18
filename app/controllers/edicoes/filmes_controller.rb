@@ -4,6 +4,16 @@ class Edicoes::FilmesController < ApplicationController
   include MostraFilterOptions
 
   PER_PAGE = 9
+  FILM_COLUMNS = %i[edicao_id duracao_coord_int].freeze
+  FILM_METHODS = %i[
+    display_titulo
+    genre
+    display_paises
+    imageURL
+    mostra_tag_class
+    mostra_display_name
+    url
+  ].freeze
 
   before_action :set_edicao
 
@@ -34,14 +44,14 @@ class Edicoes::FilmesController < ApplicationController
 
     filtered_relation = filter_result.relation.order(sort_column => sort_direction)
 
-    current_page = params[:page]&.to_i || 1
+    current_page = [ params[:page].to_i, 1 ].max
     @pagy, @peliculas = pagy_infinite(filtered_relation, current_page, PER_PAGE)
 
     render inertia: "Edicoes/Filmes", props: {
       edicao: @edicao.as_json(only: %i[id descricao], methods: %i[cartazURL]),
       elements: @peliculas.as_json(
-        only: Pelicula::COLUMNS_NEEDED,
-        methods: Pelicula::METHODS_NEEDED
+        only: FILM_COLUMNS,
+        methods: FILM_METHODS
       ),
       pagy: {
         page: @pagy.page,

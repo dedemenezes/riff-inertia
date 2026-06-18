@@ -27,6 +27,32 @@ class Edicoes::FilmesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
   end
 
+  test "index serializes only fields used by the films listing card" do
+    get edicao_anterior_filmes_path(@edicao, locale: :pt)
+
+    film = inertia_props["elements"].first
+    assert_includes film.keys, "display_titulo"
+    assert_includes film.keys, "display_paises"
+    assert_includes film.keys, "genre"
+    assert_includes film.keys, "imageURL"
+    assert_includes film.keys, "mostra_tag_class"
+    assert_includes film.keys, "mostra_display_name"
+    assert_includes film.keys, "duracao_coord_int"
+
+    assert_not_includes film.keys, "programacoesAsJson"
+    assert_not_includes film.keys, "banner_image"
+    assert_not_includes film.keys, "carousel_images"
+  end
+
+  test "invalid page params fall back to the first page" do
+    [ "0", "-1", "abc" ].each do |page|
+      get edicao_anterior_filmes_path(@edicao, locale: :pt, page: page)
+
+      assert_response :success
+      assert_equal 1, inertia_props["pagy"]["page"]
+    end
+  end
+
   test "sort toggles ascending and descending by title" do
     get edicao_anterior_filmes_path(@edicao, locale: :pt, sort: "asc")
     asc = inertia_props["elements"].map { |f| f["display_titulo"] }

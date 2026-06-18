@@ -81,7 +81,7 @@ const wrapperProps = computed(() =>
           <!-- Animated underline -->
           <span
             class="w-full bg-white-transp-900 transition-height duration-100"
-            :style="{ height: isHovered ? '1px' : '0px' }"
+            :style="{ height: props.linkable && isHovered ? '1px' : '0px' }"
           ></span>
         </div>
       </div>

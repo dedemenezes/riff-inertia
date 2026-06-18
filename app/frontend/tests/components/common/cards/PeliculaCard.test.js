@@ -31,4 +31,18 @@ describe("PeliculaCard", () => {
     expect(wrapper.findComponent(Link).exists()).toBe(false);
     expect(wrapper.find("div.w-full").exists()).toBe(true);
   });
+
+  it("does not show the hover underline when non-clickable", async () => {
+    const wrapper = shallowMount(PeliculaCard, {
+      props: { pelicula, linkable: false },
+    });
+
+    await wrapper.find(".flex.flex-col").trigger("mouseenter");
+
+    const underline = wrapper
+      .findAll("span")
+      .find((span) => span.classes().includes("transition-height"));
+    expect(underline.attributes("style")).toContain("height: 0px");
+  });
+
 });
