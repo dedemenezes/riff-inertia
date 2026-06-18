@@ -6,13 +6,16 @@ import TwContainer from "@/components/layout/TwContainer.vue";
 
 const page = usePage();
 const tabs = computed(() => page.props.tabs || []);
+const navigationLabel = computed(
+  () => page.props.locale_messages?.navigation?.tickets || "Ingressos",
+);
 </script>
 
 <template>
   <TwContainer>
     <div v-if="tabs.length" class="py-600 md:py-800">
       <nav
-        aria-label="Ingressos"
+        :aria-label="navigationLabel"
         class="flex gap-300 items-center justify-start md:justify-center px-400 max-w-[940px] mx-auto h-12 overflow-x-auto no-scroll-bar md:overflow-visible"
       >
         <NavTab

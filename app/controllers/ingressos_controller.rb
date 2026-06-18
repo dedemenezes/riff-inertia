@@ -38,8 +38,15 @@ class IngressosController < ApplicationController
 
     render inertia: "Ingressos/Conteudo", props: base_props(active).merge(
       titulo: pagina&.titulo || I18n.t("ingressos.tabs.#{active}"),
-      conteudo: pagina&.conteudo.to_s
+      conteudo: sanitized_legacy_content(pagina&.conteudo)
     )
+  end
+
+  def sanitized_legacy_content(html)
+    fragment = Nokogiri::HTML::DocumentFragment.parse(html.to_s)
+    fragment.css("script, style").remove
+
+    helpers.sanitize(fragment.to_html)
   end
 
   def base_props(active)

@@ -7,6 +7,11 @@ import ProximasSessoes from "@/pages/Ingressos/ProximasSessoes.vue";
 vi.mock("@inertiajs/vue3", () => ({
   usePage: () => ({
     props: {
+      locale_messages: {
+        navigation: {
+          tickets: "Ingressos traduzido",
+        },
+      },
       tabs: [
         { label: "Como comprar seu ingresso", href: "/ingressos/como-comprar", active: true },
         { label: "Pacote de ingressos", href: "/ingressos/pacotes", active: false },
@@ -32,6 +37,7 @@ describe("IngressosLayout", () => {
     });
 
     const nav = wrapper.find("nav");
+    expect(nav.attributes("aria-label")).toBe("Ingressos traduzido");
     expect(nav.classes()).toContain("overflow-x-auto");
     expect(nav.classes()).toContain("no-scroll-bar");
     expect(nav.classes()).toContain("md:overflow-visible");

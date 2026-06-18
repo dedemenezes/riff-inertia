@@ -6,7 +6,7 @@ class IngressosControllerTest < ActionDispatch::IntegrationTest
     create_pagina(
       titulo: "Como comprar seu ingresso",
       permalink: "como-e-onde-comprar",
-      conteudo: "<p>Conteúdo de como comprar.</p>"
+      conteudo: "<p>Conteúdo de como comprar.</p><script>alert('xss')</script>"
     )
     create_pagina(
       titulo: "Pacote de Ingressos",
