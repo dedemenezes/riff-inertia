@@ -8,7 +8,7 @@ class ImprensaPage
   }.freeze
 
   def self.for(locale)
-    rota = LEGACY_ROUTES[locale.to_sym]
+    rota = LEGACY_ROUTES[locale&.to_sym]
     return nil unless rota
 
     Pagina.find_by(rota: rota)

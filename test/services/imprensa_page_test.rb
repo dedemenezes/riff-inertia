@@ -21,6 +21,12 @@ class ImprensaPageTest < ActiveSupport::TestCase
     assert_nil ImprensaPage.for(:pt)
   end
 
+  test "returns nil when locale is nil" do
+    create_pagina
+
+    assert_nil ImprensaPage.for(nil)
+  end
+
   private
 
   def create_pagina
