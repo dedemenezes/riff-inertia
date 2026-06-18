@@ -116,8 +116,8 @@ class ApplicationController < ActionController::Base
 
   def set_secondary_items
     [
+      { name: I18n.t("navigation.tickets"), tag: "a", href: ingressos_como_comprar_path, internal: true },
       { name: I18n.t("navigation.press"), tag: "a", href: root_url },
-      { name: I18n.t("navigation.archive"), tag: "a", href: "https://www.globo.com" },
       { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
       { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
     ]

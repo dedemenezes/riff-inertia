@@ -9,6 +9,15 @@ en:
       noticias_e_criticas: "News & Reviews"
       programacao: "Schedule"
 
+  ingressos:
+    tabs:
+      como_comprar: "How to buy tickets"
+      pacotes: "Ticket packages"
+      proximas_sessoes: "Upcoming screenings"
+    proximas_sessoes:
+      descricao: "Check the full schedule to find upcoming Festival do Rio screenings."
+      cta: "View schedule"
+
   pelicula:
     sobre_o_filme: "About the movie"
     roteiro: Screenplay
@@ -53,6 +62,7 @@ en:
     impressos: "Prints"
     information: "Information"
     press: "Press"
+    tickets: "Tickets"
     archive: "Archive"
     registrations: "Registration"
     contact: "Contact"

@@ -47,4 +47,31 @@ describe("NavTab", () => {
     expect(indicator.classes()).toContain("bg-transparent");
     expect(indicator.classes()).not.toContain("bg-gradient-to-r");
   });
+
+  it("stretches to fill available space by default", () => {
+    const wrapper = mountTab();
+
+    const link = wrapper.find("a");
+    expect(link.classes()).toContain("flex-1");
+    expect(link.classes()).toContain("min-w-0");
+  });
+
+  it("uses natural width when stretch is false", () => {
+    const wrapper = mountTab({ stretch: false });
+
+    const link = wrapper.find("a");
+    expect(link.classes()).toContain("flex-none");
+    expect(link.classes()).toContain("min-w-max");
+    expect(link.classes()).not.toContain("flex-1");
+  });
+
+  it("can restore stretched layout from the md breakpoint", () => {
+    const wrapper = mountTab({ stretch: false, stretchFrom: "md" });
+
+    const link = wrapper.find("a");
+    expect(link.classes()).toContain("flex-none");
+    expect(link.classes()).toContain("min-w-max");
+    expect(link.classes()).toContain("md:flex-1");
+    expect(link.classes()).toContain("md:min-w-0");
+  });
 });

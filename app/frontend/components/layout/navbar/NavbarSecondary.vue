@@ -64,9 +64,18 @@ const setDropdownOffset = (item) => {
       </ul>
       <ul class="hidden md:flex items-center space-x-400">
         <li v-for="item in page.props.secondaryItems" :key="item">
-          <BaseButton :as="item.tag" :href="item.href" variant="gray" size="xs">{{
-            item.name
-          }}</BaseButton>
+          <BaseButton
+            v-if="item.internal"
+            :as="Link"
+            :href="item.href"
+            variant="gray"
+            size="xs"
+          >
+            {{ item.name }}
+          </BaseButton>
+          <BaseButton v-else :as="item.tag" :href="item.href" variant="gray" size="xs">
+            {{ item.name }}
+          </BaseButton>
         </li>
       </ul>
     </div>

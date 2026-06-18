@@ -30,6 +30,28 @@ describe("BaseButton", () => {
     expect(anchor_tag.text()).toBe("Anchor tag");
   });
 
+  it("renders a component object passed as the as prop", () => {
+    const LinkStub = {
+      props: [ "href" ],
+      template: '<a data-test="link-stub" :href="href"><slot /></a>',
+    };
+
+    const wrapper = mount(BaseButton, {
+      props: {
+        as: LinkStub,
+        href: "/ingressos/como-comprar",
+      },
+      slots: {
+        default: "Ingressos",
+      },
+    });
+
+    const link = wrapper.find('[data-test="link-stub"]');
+    expect(link.exists()).toBe(true);
+    expect(link.attributes("href")).toBe("/ingressos/como-comprar");
+    expect(link.text()).toBe("Ingressos");
+  });
+
   it("is disabled when disabled=true", () => {
     const wrapper = mount(BaseButton, {
       props: {
