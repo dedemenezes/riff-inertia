@@ -2,7 +2,7 @@
 
 class ImprensaController < ApplicationController
   def index
-    pagina = imprensa_page
+    pagina = ImprensaPage.for(I18n.locale)
     raise ActiveRecord::RecordNotFound unless pagina
 
     render inertia: "Imprensa/Index", props: {

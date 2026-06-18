@@ -131,8 +131,10 @@ class ApplicationController < ActionController::Base
     ])
   end
 
-  # Memoized per request: shared by the secondary nav, the footer link and the
-  # ImprensaController. Returns nil when the current locale has no legacy content.
+  private
+
+  # Memoized per request: shared by the secondary nav and the footer link.
+  # Returns nil when the current locale has no legacy content.
   def imprensa_page
     return @imprensa_page if defined?(@imprensa_page)
 
