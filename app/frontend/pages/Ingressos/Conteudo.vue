@@ -75,8 +75,4 @@ const props = defineProps({
 :deep(.content a:hover) {
   color: var(--color-vermelho-400);
 }
-
-:deep(.content br) {
-  display: none;
-}
 </style>
