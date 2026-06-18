@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     resources :peliculas, only: %i[ index show ], param: :permalink
     resources :cinemas, only: :index
     get :equipe, to: "equipe#index", as: :equipe
+    get :imprensa, to: "imprensa#index", as: :imprensa
     get :ingressos, to: "ingressos#index", as: :ingressos
 
     scope :ingressos do

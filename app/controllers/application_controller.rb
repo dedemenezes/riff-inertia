@@ -31,6 +31,8 @@ class ApplicationController < ActionController::Base
     ENV.fetch("IMAGES_BASE_URL", "DEFINE_BASE_URL_AT_ENV_FILE")
   }
 
+  inertia_share imprensaPath: -> { imprensa_page ? imprensa_path : nil }
+
   inertia_share rootUrl: -> { @root_url }
 
   def set_locale
@@ -115,11 +117,27 @@ class ApplicationController < ActionController::Base
   end
 
   def set_secondary_items
-    [
-      { name: I18n.t("navigation.tickets"), tag: "a", href: ingressos_como_comprar_path, internal: true },
-      { name: I18n.t("navigation.press"), tag: "a", href: root_url },
+    items = [
+      { name: I18n.t("navigation.tickets"), tag: "a", href: ingressos_como_comprar_path, internal: true }
+    ]
+
+    if imprensa_page
+      items << { name: I18n.t("navigation.press"), tag: "a", href: imprensa_path, internal: true }
+    end
+
+    items.concat([
       { name: I18n.t("navigation.registrations"), tag: "a", href: root_url },
       { name: I18n.t("navigation.contact"), tag: "a", href: root_url }
-    ]
+    ])
+  end
+
+  private
+
+  # Memoized per request: shared by the secondary nav and the footer link.
+  # Returns nil when the current locale has no legacy content.
+  def imprensa_page
+    return @imprensa_page if defined?(@imprensa_page)
+
+    @imprensa_page = ImprensaPage.for(I18n.locale)
   end
 end
