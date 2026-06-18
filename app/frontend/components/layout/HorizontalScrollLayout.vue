@@ -25,7 +25,7 @@ const props = defineProps({
 });
 
 const scrollContainer = ref(null);
-const width = ref(window.innerWidth);
+const width = ref(typeof window === "undefined" ? 1024 : window.innerWidth);
 const isMobile = computed(() => width.value < 1024);
 
 const currentVariant = computed(() => {

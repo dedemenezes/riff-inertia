@@ -56,18 +56,19 @@ const { bannerImages, onImageError: onBannerImageError } = useBannerImages(
   () => props.pelicula,
 );
 
-const lightbox = new PhotoSwipeLightbox({
-  gallery: "#pelicua-banner",
-  children: "a",
-  pswpModule: () => import("photoswipe"),
-});
+let lightbox;
 
 onMounted(() => {
+  lightbox = new PhotoSwipeLightbox({
+    gallery: "#pelicua-banner",
+    children: "a",
+    pswpModule: () => import("photoswipe"),
+  });
   lightbox.init();
 });
 
 onBeforeUnmount(() => {
-  lightbox.destroy();
+  lightbox?.destroy();
 });
 </script>
 

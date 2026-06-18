@@ -78,7 +78,7 @@ Use `.env` / team-provided secrets as needed (`dotenv` is available in developme
 bin/dev
 ```
 
-`Procfile.dev` runs `bin/rails s` and `bin/vite dev`.
+`Procfile.dev` runs `bin/rails s`, `bin/vite dev`, and the Inertia SSR server.
 
 **Or** two terminals:
 
@@ -89,7 +89,27 @@ bin/vite dev    # or: npm run dev
 
 If you run **only** Rails, `autoBuild` in `config/vite.json` can still rebuild assets on demand; it is slower and not ideal for active frontend work.
 
-**Scripts:** `npm run build` (Vite production build), `npm run test` (Vitest).
+**Scripts:** `npm run build` (Vite production build), `npm run build:ssr` (Inertia SSR bundle), `npm run ssr` (SSR server), `npm run test` (Vitest).
+
+### Inertia SSR
+
+SSR is opt-in from Rails so environments without the Node process keep rendering the normal Inertia shell:
+
+```bash
+INERTIA_SSR_ENABLED=true bin/dev
+```
+
+The SSR server listens on port `13714` by default. Override both sides when needed:
+
+```bash
+INERTIA_SSR_PORT=13715 npm run build:ssr
+INERTIA_SSR_PORT=13715 npm run ssr
+INERTIA_SSR_ENABLED=true INERTIA_SSR_URL=http://localhost:13715 bin/rails server
+```
+
+Production deploys must build the SSR bundle with `npm run build:ssr`, run `npm run ssr` as a Node process reachable by Rails, and set `INERTIA_SSR_ENABLED=true`.
+
+The SSR entrypoint lives at `app/frontend/ssr/ssr.js`. It intentionally sits outside `app/frontend/entrypoints/` because Vite Ruby treats files in `entrypoints/` as browser bundles during the normal client build.
 
 ---
 

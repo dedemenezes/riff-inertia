@@ -27,7 +27,7 @@ const handleBlur = () => {
 const { url } = usePage();
 
 const getPath = (url) => {
-  const u = new URL(url, window.location.origin);
+  const u = new URL(url, "http://inertia.local");
   return u.pathname;
 };
 

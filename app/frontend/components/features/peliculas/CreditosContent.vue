@@ -10,7 +10,6 @@ const props = defineProps({
 })
 
 const isDesktop = useUpdateWindowWidth()
-console.log(isDesktop.value);
 
 </script>
 

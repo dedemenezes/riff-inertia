@@ -1,3 +1,4 @@
 
 vite: bin/vite dev
+ssr: npm run build:ssr && npm run ssr
 web: bin/rails s

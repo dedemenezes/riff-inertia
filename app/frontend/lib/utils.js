@@ -28,7 +28,7 @@ export function slugify(str) {
 }
 
 export function useUpdateWindowWidth() {
-  const width = ref(typeof window !== 'undefined' ? window.innerWidth : 0)
+  const width = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
   const updateWidth = () => width.value = window.innerWidth
 
   const isDesktop = computed(() => width.value >= 1024)

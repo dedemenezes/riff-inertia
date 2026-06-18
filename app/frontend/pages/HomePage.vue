@@ -28,7 +28,7 @@ const props = defineProps({
   webdoors: { type: Array },
   destaques: { type: Array, default: () => [] },
 });
-const isDesktop = ref(useUpdateWindowWidth());
+const isDesktop = useUpdateWindowWidth();
 
 const mobileSizing = "height: 562px;";
 

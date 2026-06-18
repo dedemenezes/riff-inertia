@@ -15,7 +15,7 @@ const currentStartIndex = ref(0);
 
 const isDesktop = useUpdateWindowWidth();
 // Show 3 tabs at a time
-const visibleTabsCount = isDesktop.value ? 3 : 1;
+const visibleTabsCount = computed(() => isDesktop.value ? 3 : 1);
 
 // Find the active tab index
 const activeTabIndex = computed(() => {
@@ -24,12 +24,12 @@ const activeTabIndex = computed(() => {
 
 // Auto-center the active tab
 const centerActiveTab = () => {
-  if (activeTabIndex.value !== -1 && props.tabs.length > visibleTabsCount) {
+  if (activeTabIndex.value !== -1 && props.tabs.length > visibleTabsCount.value) {
     // Calculate the ideal start index to center the active tab
-    const idealStart = activeTabIndex.value - Math.floor(visibleTabsCount / 2);
+    const idealStart = activeTabIndex.value - Math.floor(visibleTabsCount.value / 2);
 
     // Ensure we don't go below 0 or beyond the valid range
-    const maxStart = props.tabs.length - visibleTabsCount;
+    const maxStart = props.tabs.length - visibleTabsCount.value;
     currentStartIndex.value = Math.max(0, Math.min(idealStart, maxStart));
   }
 };
@@ -41,12 +41,12 @@ watch(() => activeTabIndex.value, () => {
 
 // Get the currently visible tabs
 const visibleTabs = computed(() => {
-  return props.tabs.slice(currentStartIndex.value, currentStartIndex.value + visibleTabsCount);
+  return props.tabs.slice(currentStartIndex.value, currentStartIndex.value + visibleTabsCount.value);
 });
 
 // Check if we can scroll
 const canScrollLeft = computed(() => currentStartIndex.value > 0);
-const canScrollRight = computed(() => currentStartIndex.value + visibleTabsCount < props.tabs.length);
+const canScrollRight = computed(() => currentStartIndex.value + visibleTabsCount.value < props.tabs.length);
 
 const scrollLeft = () => {
   if (canScrollLeft.value) {
@@ -56,7 +56,7 @@ const scrollLeft = () => {
 
 const scrollRight = () => {
   if (canScrollRight.value) {
-    currentStartIndex.value = Math.min(props.tabs.length - visibleTabsCount, currentStartIndex.value + 1);
+    currentStartIndex.value = Math.min(props.tabs.length - visibleTabsCount.value, currentStartIndex.value + 1);
   }
 };
 </script>
