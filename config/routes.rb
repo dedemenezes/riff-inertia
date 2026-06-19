@@ -27,11 +27,17 @@ Rails.application.routes.draw do
     get :equipe, to: "equipe#index", as: :equipe
     get :imprensa, to: "imprensa#index", as: :imprensa
     get :ingressos, to: "ingressos#index", as: :ingressos
+    get :midias, to: "midias#index", as: :midias
 
     scope :ingressos do
       get "como-comprar", to: "ingressos#como_comprar", as: :ingressos_como_comprar
       get "pacotes", to: "ingressos#pacotes", as: :ingressos_pacotes
       get "proximas-sessoes", to: "ingressos#proximas_sessoes", as: :ingressos_proximas_sessoes
+    end
+
+    scope :midias, as: :midias do
+      get "fotos-e-videos", to: "midias#fotos_e_videos", as: :fotos_e_videos
+      get "impressos", to: "midias#impressos", as: :impressos
     end
 
     scope :festival do

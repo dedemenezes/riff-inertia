@@ -72,8 +72,8 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.todas_as_noticias"), path: noticias_path }
       ],
       I18n.t("navigation.media.name") => [
-        { name: I18n.t("navigation.media.fotos_e_videos"), path: "" },
-        { name: I18n.t("navigation.media.impressos"), path: "" }
+        { name: I18n.t("navigation.media.fotos_e_videos"), path: midias_fotos_e_videos_path },
+        { name: I18n.t("navigation.media.impressos"), path: midias_impressos_path }
       ]
     }
   end
@@ -100,8 +100,8 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.parceiros"), path: festival_parceiros_path, icon: "handshake" }
       ],
       "midias" => [
-        { name: I18n.t("navigation.media.fotos_e_videos"), path: "", icon: "image" },
-        { name: I18n.t("navigation.media.impressos"), path: "", icon: "book" }
+        { name: I18n.t("navigation.media.fotos_e_videos"), path: midias_fotos_e_videos_path, icon: "image" },
+        { name: I18n.t("navigation.media.impressos"), path: midias_impressos_path, icon: "book" }
       ],
       "edicoes_anteriores" => []
     }
