@@ -88,7 +88,8 @@ const {
           <div class="flex flex-wrap gap-100 max-w-full">
             <span
               v-for="mostra in props.mostras"
-              class="inline-flex max-w-[100%] inline-flex items-center px-200 py-100 border rounded-full border-neutrals-300 font-body text-xs text-neutrals-700 font-regular leading-[18px] truncate min-w-0"
+              :key="mostra.id"
+              class="inline-flex max-w-[100%] items-center px-200 py-100 border rounded-full border-neutrals-300 font-body text-xs text-neutrals-700 font-regular leading-[18px] truncate min-w-0"
               role="group"
             >
               <span class="flex-1 min-w-0 truncate">

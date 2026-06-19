@@ -61,9 +61,10 @@ class Edicoes::MostrasController < ApplicationController
   def show
     importacao_id = latest_importacao_id
     mostra = Mostra.where(importacao_id: importacao_id)
-                  .find_by(permalink_pt: params[:permalink]) ||
-      Mostra.where(importacao_id: importacao_id)
-            .find_by(permalink_en: params[:permalink])
+                  .find_by(
+                    "permalink_pt = :permalink OR permalink_en = :permalink",
+                    permalink: params[:permalink]
+                  )
 
     return head :not_found unless mostra
 

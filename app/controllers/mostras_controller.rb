@@ -96,9 +96,10 @@ class MostrasController < ApplicationController
 
   def mostra_scope_for(category, importacao_id)
     mostra = Mostra.where(importacao_id: importacao_id)
-                  .find_by(permalink_pt: category) ||
-      Mostra.where(importacao_id: importacao_id)
-            .find_by(permalink_en: category)
+                  .find_by(
+                    "permalink_pt = :category OR permalink_en = :category",
+                    category: category
+                  )
     return grouped_mostras_for(mostra, importacao_id) if mostra
 
     current_mostras_for(category, importacao_id)
