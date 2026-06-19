@@ -6,7 +6,6 @@ Rails.application.routes.draw do
     devise_for :usuarios
     mount_avo
   end
-
   resources :newsletters, only: :create
 
   scope "(:locale)", locale: /en|pt/ do
@@ -16,7 +15,8 @@ Rails.application.routes.draw do
     # other localized routes
 
     resources :edicoes_anteriores, only: [ :index ] do
-      resources :mostras, only: [ :index ], controller: "edicoes/mostras"
+      get "mostras/premiere-brasil", to: "edicoes/mostras#premiere_brasil", as: :mostras_premiere_brasil
+      resources :mostras, only: [ :index, :show ], controller: "edicoes/mostras", param: :permalink
       resources :filmes, only: [ :index ], controller: "edicoes/filmes"
       resources :noticias, only: [ :index ], controller: "edicoes/noticias"
       resources :juri, only: [ :index ], controller: "edicoes/juri", as: :juri
