@@ -5,11 +5,12 @@ class MostrasController < ApplicationController
   include MostraFilterOptions
 
   def index
-    @mostras = Mostra.includes(:peliculas).where(importacao_id: Importacao.last).group_by(&:display_name)
+    importacao_id = current_importacao_id
+    @mostras = Mostra.includes(:peliculas).where(importacao_id: importacao_id).group_by(&:display_name)
     @categorias = @mostras.map { |categoria, mostras| {
       name: categoria,
       class: mostras.first.tag_class,
-      path: mostra_path(categoria),
+      path: mostra_path(mostras.first.permalink_pt),
       mostraImageURL: mostras.first.peliculas.sample&.imageURL
     } }
 
@@ -24,16 +25,13 @@ class MostrasController < ApplicationController
   end
 
   def show
-    @mostras = Edicao.current.mostras.where(
-      "nome_abreviado = :cat OR nome_abreviado LIKE :pre_dash OR nome_abreviado LIKE :pre_colon",
-      cat: params[:category],
-      pre_dash: "#{params[:category]}-%",
-      pre_colon: "#{params[:category]}:%"
-    )
+    @mostras = mostra_scope_for(params[:category], current_importacao_id)
+    return head :not_found if @mostras.empty?
+
     mostra_ids = @mostras.map(&:id)
 
     base_scope = Pelicula.includes(:paises, :mostra, programacoes: :cinema)
-                         .where(mostra_id: mostra_ids)
+                         .where(importacao_id: @mostras.first.importacao_id, mostra_id: mostra_ids)
 
     @pelicula_collection_service = PeliculaCollectionService.new(
       Pelicula.where(mostra_id: mostra_ids)
@@ -58,9 +56,9 @@ class MostrasController < ApplicationController
     @pagy, @peliculas = pagy_infinite(filtered_relation, current_page, 9)
 
     render inertia: "Mostras/Show", props: {
-      categoria: params[:category],
+      categoria: @mostras.first.display_name,
       tag_class: @mostras.first.tag_class,
-      tabBaseUrl: mostra_path(params[:category]),
+      tabBaseUrl: mostra_path(@mostras.first.permalink_pt),
       mostras: @mostras.as_json(only: %i[id nome_abreviado imagem]),
       submostras: @submostras_filter,
       paises: @paises_filter,
@@ -88,5 +86,41 @@ class MostrasController < ApplicationController
       endMessage: I18n.t("infinite_scroll.end.filmes"),
       verFilmesLabel: I18n.t("mostras.show.ver_filmes")
     }
+  end
+
+  private
+
+  def current_importacao_id
+    Importacao.where(edicao_id: Edicao.current.id).order(created: :desc).pick(:id)
+  end
+
+  def mostra_scope_for(category, importacao_id)
+    mostra = Mostra.where(importacao_id: importacao_id)
+                  .find_by(permalink_pt: category) ||
+      Mostra.where(importacao_id: importacao_id)
+            .find_by(permalink_en: category)
+    return grouped_mostras_for(mostra, importacao_id) if mostra
+
+    current_mostras_for(category, importacao_id)
+  end
+
+  def grouped_mostras_for(mostra, importacao_id)
+    display_name = mostra.display_name
+    Mostra.where(importacao_id: importacao_id)
+          .where(
+            "nome_abreviado = :cat OR nome_abreviado LIKE :pre_dash OR nome_abreviado LIKE :pre_colon",
+            cat: display_name,
+            pre_dash: "#{display_name}-%",
+            pre_colon: "#{display_name}:%"
+          )
+  end
+
+  def current_mostras_for(category, importacao_id)
+    Mostra.where(importacao_id: importacao_id).where(
+      "nome_abreviado = :cat OR nome_abreviado LIKE :pre_dash OR nome_abreviado LIKE :pre_colon",
+      cat: category,
+      pre_dash: "#{category}-%",
+      pre_colon: "#{category}:%"
+    )
   end
 end
