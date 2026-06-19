@@ -14,7 +14,7 @@ class NoticiasFilter
   def initialize(relation:, params:, locale: I18n.locale, cadernos_relation: Caderno.all, date_mode: :from_date)
     @relation = relation
     @params = params
-    @locale = locale.to_sym
+    @locale = (locale || I18n.locale).to_sym
     @cadernos_relation = cadernos_relation
     @date_mode = date_mode
   end
@@ -26,8 +26,8 @@ class NoticiasFilter
     selected_caderno = nil
     relation = @relation
 
-    if @params[:query].present?
-      query = @params[:query].to_s.strip
+    query = @params[:query].to_s.strip
+    if query.present?
       term = "%#{ActiveRecord::Base.sanitize_sql_like(query.downcase)}%"
       relation = relation.where(
         "LOWER(noticias.titulo) LIKE :term OR LOWER(noticias.chamada) LIKE :term",
@@ -84,7 +84,7 @@ class NoticiasFilter
     @cadernos_relation
       .where.not(permalink_column => [ nil, "" ])
       .pluck(permalink_column, display_column)
-      .compact_blank
+      .reject { |permalink, display| permalink.blank? || display.blank? }
       .uniq
       .sort
       .map { |item| Caderno.build_filter_json(item, :caderno) }
