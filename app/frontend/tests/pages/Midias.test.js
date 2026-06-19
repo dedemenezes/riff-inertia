@@ -50,7 +50,7 @@ describe("Midias FotosEVideos", () => {
         heroPhoto: {
           title: "Troféu Redentor",
           caption: "Troféu Redentor",
-          imageUrl: "",
+          imageKey: "trofeu-redentor",
         },
         videos: [
           { title: "TV Festival", embedUrl: "" },
@@ -62,7 +62,7 @@ describe("Midias FotosEVideos", () => {
 
     expect(wrapper.find('[data-testid="menu-context"]').text()).toContain("midias Fotos & Vídeos");
     expect(wrapper.text()).toContain("Ir para Flickr do Festival");
-    expect(wrapper.text()).toContain("Troféu Redentor");
+    expect(wrapper.find('img[alt="Troféu Redentor"]').exists()).toBe(true);
     expect(wrapper.findAll('[data-testid="video-card"]')).toHaveLength(2);
   });
 });
@@ -74,9 +74,9 @@ describe("Midias Impressos", () => {
         title: "Impressos",
         activePage: "Impressos",
         printMaterials: [
-          { title: "Revista de programação", pdfUrl: "#", coverTone: "purple" },
-          { title: "Catálogo oficial", pdfUrl: "#", coverTone: "magenta" },
-          { title: "Cartazes", pdfUrl: "#", coverTone: "orange" },
+          { title: "Revista de programação", pdfUrl: null, coverImageKey: "revista-programacao" },
+          { title: "Catálogo oficial", pdfUrl: null, coverImageKey: "catalogo-oficial" },
+          { title: "Cartazes", pdfUrl: null, coverImageKey: "cartazes" },
         ],
       },
       global: { stubs },

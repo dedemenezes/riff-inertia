@@ -17,7 +17,15 @@ const coverClasses = {
 
 <template>
   <article class="flex w-full flex-col items-center gap-600 text-center md:w-[304px]">
+    <img
+      v-if="props.material.coverImageUrl"
+      :src="props.material.coverImageUrl"
+      :alt="props.material.coverAlt || props.material.title"
+      class="h-[200px] max-w-[162px] object-contain drop-shadow-[10px_10px_24px_rgba(82,81,81,0.18)]"
+    />
+
     <div
+      v-else
       class="relative h-[178px] w-[120px] overflow-hidden rounded-sm bg-gradient-to-br shadow-[10px_10px_35px_6px_rgba(82,81,81,0.10)]"
       :class="coverClasses[props.material.coverTone] || coverClasses.purple"
       aria-hidden="true"
@@ -35,6 +43,7 @@ const coverClasses = {
       </h2>
 
       <a
+        v-if="props.material.pdfUrl"
         :href="props.material.pdfUrl"
         target="_blank"
         rel="noopener noreferrer"
@@ -43,6 +52,15 @@ const coverClasses = {
         {{ props.material.cta }}
         <IconBoxArrowUp width="14" height="14" />
       </a>
+
+      <span
+        v-else
+        class="inline-flex items-center gap-200 rounded p-100 text-md font-semibold leading-[22.4px] text-neutrals-600"
+        aria-disabled="true"
+      >
+        {{ props.material.cta }}
+        <IconBoxArrowUp width="14" height="14" />
+      </span>
     </div>
   </article>
 </template>

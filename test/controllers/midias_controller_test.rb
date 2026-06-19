@@ -19,6 +19,7 @@ class MidiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal "https://www.flickr.com/photos/festivaldorio/", props["galleryLink"]["href"]
     assert_equal "Ir para YouTube do Festival", props["youtubeLink"]["label"]
     assert_equal "Troféu Redentor", props["heroPhoto"]["title"]
+    assert_equal "trofeu-redentor", props["heroPhoto"]["imageKey"]
     assert_equal 2, props["videos"].length
 
     assert_equal(
@@ -42,6 +43,11 @@ class MidiasControllerTest < ActionDispatch::IntegrationTest
       [ "Revista de programação", "Catálogo oficial", "Cartazes" ],
       props["printMaterials"].map { |material| material["title"] }
     )
+    assert_equal(
+      [ "revista-programacao", "catalogo-oficial", "cartazes" ],
+      props["printMaterials"].map { |material| material["coverImageKey"] }
+    )
+    assert_empty props["printMaterials"].filter_map { |material| material["pdfUrl"] }
     assert_equal [ "image", "book" ], props["menuContext"]["midias"].map { |item| item["icon"] }
   end
 

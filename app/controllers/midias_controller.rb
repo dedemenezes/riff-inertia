@@ -20,7 +20,7 @@ class MidiasController < ApplicationController
       heroPhoto: {
         title: "Troféu Redentor",
         caption: "Troféu Redentor",
-        imageUrl: nil
+        imageKey: "trofeu-redentor"
       },
       videos: [
         {
@@ -43,20 +43,23 @@ class MidiasController < ApplicationController
         {
           title: "Revista de programação",
           cta: "Abrir PDF",
-          pdfUrl: "#",
-          coverTone: "purple"
+          pdfUrl: nil,
+          coverImageKey: "revista-programacao",
+          coverAlt: "Capa da revista de programação"
         },
         {
           title: "Catálogo oficial",
           cta: "Abrir PDF",
-          pdfUrl: "#",
-          coverTone: "magenta"
+          pdfUrl: nil,
+          coverImageKey: "catalogo-oficial",
+          coverAlt: "Capa do catálogo oficial"
         },
         {
           title: "Cartazes",
           cta: "Abrir PDF",
-          pdfUrl: "#",
-          coverTone: "orange"
+          pdfUrl: nil,
+          coverImageKey: "cartazes",
+          coverAlt: "Cartaz do Festival do Rio"
         }
       ]
     }

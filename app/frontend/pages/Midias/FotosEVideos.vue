@@ -1,9 +1,11 @@
 <script setup>
+import { computed } from "vue";
 import { Head } from "@inertiajs/vue3";
 import TwContainer from "@/components/layout/TwContainer.vue";
 import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import MediaExternalLink from "@/components/features/midias/MediaExternalLink.vue";
 import MediaVideoEmbed from "@/components/features/midias/MediaVideoEmbed.vue";
+import trofeuRedentorImage from "@assets/images/midias/trofeu-redentor.png";
 
 const props = defineProps({
   title: { type: String, default: "" },
@@ -25,6 +27,14 @@ const props = defineProps({
     default: () => [],
   },
 });
+
+const heroImages = {
+  "trofeu-redentor": trofeuRedentorImage,
+};
+
+const heroImageUrl = computed(() => {
+  return props.heroPhoto.imageUrl || heroImages[props.heroPhoto.imageKey] || "";
+});
 </script>
 
 <template>
@@ -44,8 +54,8 @@ const props = defineProps({
 
       <figure class="relative w-full max-w-[1428px] overflow-hidden rounded-lg bg-neutrals-1000 shadow-[4px_4px_14px_6px_rgba(82,81,81,0.10)]">
         <img
-          v-if="props.heroPhoto.imageUrl"
-          :src="props.heroPhoto.imageUrl"
+          v-if="heroImageUrl"
+          :src="heroImageUrl"
           :alt="props.heroPhoto.title"
           class="h-[260px] w-full object-cover md:h-[688px]"
         />
