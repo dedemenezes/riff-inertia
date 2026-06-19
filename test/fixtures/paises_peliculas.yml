@@ -44,3 +44,19 @@ paises_peliculas_<%= i %>:
   pais: br
   pelicula: test_<%= i %>
 <% end %>
+
+filme_premiere_longa_br:
+  pais: br
+  pelicula: filme_premiere_longa
+
+filme_premiere_curta_br:
+  pais: br
+  pelicula: filme_premiere_curta
+
+filme_abertura_2023_old_br:
+  pais: br
+  pelicula: filme_abertura_2023_old
+
+filme_abertura_2023_br:
+  pais: br
+  pelicula: filme_abertura_2023
