@@ -14,9 +14,18 @@ class Noticia < ApplicationRecord
   scope :published, -> { where(ativo: true) }
 
   def display_title
-    fragment = Nokogiri::HTML.fragment(titulo.to_s)
-    fragment.css("script, style").remove
-    fragment.text.squish
+    title = titulo.to_s
+    return @display_title if defined?(@display_title_source) && @display_title_source == title
+
+    @display_title_source = title
+    @display_title =
+      if title.include?("<") || title.include?("&")
+        fragment = Nokogiri::HTML.fragment(title)
+        fragment.css("script, style").remove
+        fragment.text.squish
+      else
+        title.squish
+      end
   end
 
   def breadcrumb_title

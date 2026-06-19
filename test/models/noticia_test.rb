@@ -33,6 +33,15 @@ class NoticiaTest < ActiveSupport::TestCase
     assert_equal "Birdman, novo Iñárritu, vai abrir o Festival de Veneza", @valid.display_title
   end
 
+  test "display_title updates memoized value when title changes" do
+    @valid.titulo = "Título sem HTML"
+    assert_equal "Título sem HTML", @valid.display_title
+
+    @valid.titulo = "<i>Birdman</i>, novo Iñárritu"
+
+    assert_equal "Birdman, novo Iñárritu", @valid.display_title
+  end
+
   test "requires permalink" do
     @valid.permalink = nil
     assert_not @valid.valid?
