@@ -26,10 +26,12 @@ class PagesController < ApplicationController
               .includes(:caderno)
               .order(created: :desc)
               .limit(6)
-              .as_json(
-                only: %i[id titulo permalink chamada imagem],
-                methods: [ :caderno_nome, :display_date ],
-              )
+              .map { |noticia|
+                noticia.listing_as_json(
+                  only: %i[id permalink chamada imagem],
+                  methods: [ :caderno_nome, :display_date ],
+                )
+              }
     # root_url = request.base_url
 
     # TODO: Refac move to service

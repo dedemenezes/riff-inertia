@@ -3,7 +3,7 @@ class Edicoes::NoticiasController < ApplicationController
   include InfiniteScrollable
 
   PER_PAGE = 9
-  NEWS_COLUMNS = %i[id titulo permalink chamada].freeze
+  NEWS_COLUMNS = %i[id permalink chamada].freeze
   NEWS_METHODS = %i[caderno_nome display_date image_url].freeze
 
   before_action :set_edicao
@@ -29,10 +29,12 @@ class Edicoes::NoticiasController < ApplicationController
 
     render inertia: "Edicoes/Noticias", props: {
       edicao: @edicao.as_json(only: %i[id descricao], methods: %i[cartazURL]),
-      elements: @noticias.as_json(
-        only: NEWS_COLUMNS,
-        methods: NEWS_METHODS
-      ),
+      elements: @noticias.map { |noticia|
+        noticia.listing_as_json(
+          only: NEWS_COLUMNS,
+          methods: NEWS_METHODS
+        )
+      },
       pagy: {
         page: @pagy.page,
         pages: @pagy.pages,

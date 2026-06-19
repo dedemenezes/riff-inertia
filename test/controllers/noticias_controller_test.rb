@@ -12,6 +12,36 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert props["elements"].any?, "Expected at least one element"
   end
 
+  test "index strips legacy HTML tags from news card titles" do
+    noticias(:one_talents).update!(
+      titulo: "<i>Birdman</i>, novo Iñárritu, vai abrir o Festival de Veneza"
+    )
+
+    get noticias_url, params: { query: "birdman" }
+
+    assert_response :success
+    props = inertia_props
+    titles = props["elements"].map { |element| element["titulo"] }
+
+    assert_includes titles, "Birdman, novo Iñárritu, vai abrir o Festival de Veneza"
+    titles.each { |title| assert_no_match(/<[^>]+>/, title) }
+  end
+
+  test "show strips legacy HTML tags from page title and breadcrumb" do
+    noticia = noticias(:one_talents)
+    noticia.update!(
+      titulo: "<i>Birdman</i>, novo Iñárritu, vai abrir o Festival de Veneza"
+    )
+
+    get noticia_url(noticia, locale: :pt)
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal "Birdman, novo Iñárritu, vai abrir o Festival de Veneza", props["titulo"]
+    props["breadcrumbs"].flatten.each { |text| assert_no_match(/<[^>]+>/, text.to_s) }
+  end
+
   test "returns correct cadernos options in props" do
     get noticias_url(locale: :pt)
 

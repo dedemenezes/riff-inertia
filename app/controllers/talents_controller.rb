@@ -42,10 +42,12 @@ class TalentsController < ApplicationController
     render inertia: "Talents/NoticiasECriticas", props: {
       crumbs: talents_crumbs,
       tabs: TalentsTabs.build(active: "noticias_e_criticas"),
-      noticias: noticias.as_json(
-        only: %i[id titulo permalink chamada],
-        methods: [ :caderno_nome, :display_date, :image_url ]
-      )
+      noticias: noticias.map { |noticia|
+        noticia.listing_as_json(
+          only: %i[id permalink chamada],
+          methods: [ :caderno_nome, :display_date, :image_url ]
+        )
+      }
     }
   end
 
