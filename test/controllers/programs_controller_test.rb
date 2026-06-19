@@ -463,13 +463,15 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     mostras_filter = props["mostras"]
-    assert_equal 4, mostras_filter.length
+    assert_equal Mostra.where(edicao_id: Edicao.current.id).count, mostras_filter.length
 
     # Check that all mostras are included
     permalinks = mostras_filter.map { |m| m["permalink_pt"] }
     assert_includes permalinks, "competicao-nacional"
     assert_includes permalinks, "mostra-internacional"
     assert_includes permalinks, "documentarios"
+    assert_includes permalinks, "premiere-brasil-longas"
+    assert_includes permalinks, "premiere-brasil-curtas"
 
     # Check structure of mostra objects
     mostra = mostras_filter.first

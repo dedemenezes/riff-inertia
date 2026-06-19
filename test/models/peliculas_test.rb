@@ -229,7 +229,13 @@ class PeliculaTest < ActiveSupport::TestCase
   #   Rails.cache = original_cache
   # end
   test "collection_for elenco returns all actors" do
-    expected = Pelicula.pluck(:elenco_coord_int).map { _1.split(",") }.flatten.uniq.map(&:strip).count
+    expected = Pelicula.where(edicao_id: Edicao.current.id)
+                       .where.not(elenco_coord_int: [ nil, "" ])
+                       .pluck(:elenco_coord_int)
+                       .flat_map { _1.split(",").map(&:strip) }
+                       .compact_blank
+                       .uniq
+                       .count
     actual = @collection_service.collection_for_actors
     assert_equal expected, actual.count
   end
