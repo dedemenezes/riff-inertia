@@ -66,6 +66,24 @@ class Edicoes::NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert props["has_active_filters"]
   end
 
+  test "index strips legacy HTML tags from previous edition news card titles" do
+    create_news!(
+      title: "<i>Birdman</i>, novo Iñárritu, vai abrir o Festival de Veneza",
+      permalink: "i-birdman-i-novo-inarritu-vai-abrir-o-festival-de-veneza",
+      caderno: @talents,
+      data: "2024-10-06",
+      created: Time.current
+    )
+
+    get edicao_anterior_noticias_path(@edicao, locale: :pt, query: "birdman")
+
+    assert_response :success
+
+    titles = inertia_props["elements"].map { |news| news["titulo"] }
+    assert_equal [ "Birdman, novo Iñárritu, vai abrir o Festival de Veneza" ], titles
+    titles.each { |title| assert_no_match(/<[^>]+>/, title) }
+  end
+
   test "caderno filter narrows previous edition news" do
     get edicao_anterior_noticias_path(@edicao, locale: :pt, caderno: @felix.permalink_pt)
 
