@@ -21,6 +21,7 @@ const cadernosOptions = computed(() => {
   }));
 });
 const cadernoLabel = computed(() => simpleTranslation("Assunto", "Subject"))
+const datePickerLocale = computed(() => page.props.currentLocale === "pt" ? "pt-BR" : "en-US")
 
 const getCadernoObjectFromPermalink = (inputValue) => {
   return props.cadernos.find(c => c.filter_value === inputValue) || null;
@@ -50,7 +51,8 @@ const getQueryObject = (value) => {
     </p>
     <DatePickerComponent
       :model-value="props.modelValue.data?.filter_value"
-      placeholder="Pick session date"
+      :placeholder="simpleTranslation('Escolha uma data', 'Pick a date')"
+      :locale="datePickerLocale"
       @update:model-value="updateField('data', getDateFromInput($event))"
     />
   </div>

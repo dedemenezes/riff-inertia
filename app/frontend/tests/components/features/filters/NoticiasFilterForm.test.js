@@ -17,8 +17,8 @@ vi.mock("@inertiajs/vue3", () => ({
 
 const stubs = {
   DatePickerComponent: {
-    props: ["modelValue"],
-    template: `<button data-testid="date-picker" @click="$emit('update:modelValue', '2024-10-04')">date</button>`,
+    props: ["modelValue", "placeholder", "locale"],
+    template: `<button data-testid="date-picker" @click="$emit('update:modelValue', '2024-10-04')">{{ placeholder }} {{ locale }}</button>`,
   },
   ComboboxComponent: {
     props: ["collection", "modelValue", "placeholder"],
@@ -50,6 +50,7 @@ describe("NoticiasFilterForm", () => {
     await flushPromises();
 
     expect(wrapper.text()).toContain("Data de publicação");
+    expect(wrapper.text()).toContain("Escolha uma data pt-BR");
     expect(wrapper.text()).toContain("Assunto");
     expect(wrapper.text()).toContain("Palavra-chave");
     expect(wrapper.find('[data-testid="date-picker"]').exists()).toBe(true);
