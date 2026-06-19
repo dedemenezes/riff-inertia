@@ -11,15 +11,6 @@ vi.mock("@inertiajs/vue3", () => ({
 }));
 
 const stubs = {
-  AccordionGroup: {
-    props: ["text", "isOpen"],
-    template: `
-      <details :open="isOpen">
-        <summary>{{ text }}</summary>
-        <slot name="content" />
-      </details>
-    `,
-  },
   ComboboxComponent: {
     props: ["collection", "modelValue", "placeholder"],
     template: `<div data-testid="combobox-control">{{ placeholder }}</div>`,
