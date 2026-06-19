@@ -22,7 +22,7 @@ class Noticia < ApplicationRecord
   end
 
   def display_date
-    updated.strftime("%d.%m.%Y")
+    data.strftime("%d.%m.%Y")
   end
 
   def to_param
