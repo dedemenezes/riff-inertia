@@ -106,7 +106,8 @@ come from `filter_label` or from controller-provided option labels.
 
 - `app/frontend/components/features/filters/NoticiasFilterForm.vue`
   - Used by news listings.
-  - Handles publication date and news section/category filters.
+  - Handles publication date, subject/category (`caderno`), and keyword search
+    filters.
 
 ### Field Controls
 
@@ -157,6 +158,16 @@ come from `filter_label` or from controller-provided option labels.
   - Uses `MostrasFilterForm`.
   - Also manages sort state, so filter navigation must preserve the sort param.
 
+- `app/frontend/pages/Edicoes/Noticias.vue`
+  - Previous-edition news listing (`EdicaoHeader`, `MenuContext
+    nav="edicoes_anteriores"`).
+  - Uses `SearchFilter` directly inside a page-owned drawer and
+    `NoticiasFilterForm` for `data`, `caderno`, and `query`.
+  - Rails scopes the base news relation by the selected `Edicao` date range
+    before applying filters.
+  - Also manages sort state, so filter navigation must preserve the `sort`
+    param alongside `query`, `data`, and `caderno`.
+
 - `app/frontend/pages/Noticias/Index.vue`
   - Uses `ResponsiveFilterMenu` with `NoticiasFilterForm`.
   - Uses the shared filter composable and active filter tags.
@@ -182,6 +193,9 @@ For infinite-scroll pages, filter navigation must keep the first-page URL and
 pagination props consistent. Do not update the visual filter state without also
 considering how `InfiniteScrollLayout` will read the current URL params for
 subsequent pages.
+
+Pages with ordering controls, such as previous-edition films and news, preserve
+`sort` as page-owned URL state whenever filters or search terms are applied.
 
 ## Clearing and Removing Filters
 

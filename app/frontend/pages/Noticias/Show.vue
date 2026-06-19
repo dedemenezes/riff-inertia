@@ -10,6 +10,8 @@ const props = defineProps({
   conteudo: { type: String, required: true, default: '' },
   titulo: { type: String, required: true, default: '' },
   chamada: { type: String, required: true, default: '' },
+  data: { type: String, required: true, default: '' },
+  caderno: { type: String, required: true, default: '' },
   breadcrumbs: { type: Array, default: () => []}
 })
 
@@ -56,7 +58,7 @@ const isIconActive = computed(() => isActive.value);
       <div class="flex flex-col gap-600 mb-800">
         <h1 class="text-header-lg">{{ props.titulo }}</h1>
         <p class="text-body-regular-lg">{{ props.chamada }}</p>
-        <p class="flex items-center gap-[8px] text-overline text-neutrals-900"><span class="date">22.07.25</span> <img style="height: 16px;" src="@assets/icons/divisor.svg" alt="Divisor"> <span class="caderno">ESTREIA DA SEMANA</span></p>
+        <p class="flex items-center gap-[8px] text-overline text-neutrals-900"><span class="date">{{ props.data }}</span> <img style="height: 16px;" src="@assets/icons/divisor.svg" alt="Divisor"> <span class="caderno">{{ props.caderno }}</span></p>
         <ButtonText
           @click="copyURL"
           tag="button"

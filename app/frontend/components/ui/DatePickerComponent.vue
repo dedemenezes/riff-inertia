@@ -14,6 +14,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 const props = defineProps({
   modelValue: String, // ISO format date, e.g., "2025-10-09"
+  placeholder: { type: String, default: "Pick a date" },
+  locale: { type: String, default: "en-US" },
 })
 const emit = defineEmits(["update:modelValue"])
 
@@ -38,8 +40,7 @@ watch(value, (newVal) => {
   }
 })
 
-// For display in the button
-const df = new DateFormatter("en-US", {
+const df = new DateFormatter(props.locale, {
   dateStyle: "long",
 })
 </script>
@@ -50,19 +51,22 @@ const df = new DateFormatter("en-US", {
       <Button
         variant="outline"
         :class="cn(
-          'w-full justify-start text-left font-normal',
-          !value && 'text-muted-foreground',
+          'w-full h-[45px] justify-start gap-300 rounded-[5px] border-neutrals-300 bg-white px-300 py-300 font-body text-sm font-normal leading-[150%] shadow-none hover:bg-white hover:text-neutrals-900 focus-visible:border-neutrals-600 focus-visible:ring-0 focus-visible:ring-offset-0',
+          value ? 'text-neutrals-900' : 'text-neutrals-400',
         )"
       >
-        <CalendarIcon class="mr-2 h-4 w-4" />
+        <CalendarIcon
+          class="h-4 w-4"
+          :class="value ? 'text-neutrals-700' : 'text-neutrals-400'"
+        />
         {{
           value
             ? df.format(value.toDate(getLocalTimeZone()))
-            : "Pick a date"
+            : props.placeholder
         }}
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-auto p-0">
+    <PopoverContent class="w-auto p-0 border-neutrals-300">
       <Calendar v-model="value" initial-focus />
     </PopoverContent>
   </Popover>

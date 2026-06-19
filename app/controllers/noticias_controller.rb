@@ -57,6 +57,8 @@ class NoticiasController < ApplicationController
       conteudo: @noticia.conteudo,
       titulo: @noticia.titulo,
       chamada: @noticia.chamada,
+      data: @noticia.display_date,
+      caderno: @noticia.caderno_nome,
       breadcrumbs: breadcrumbs(
         [ "Home", @root_url ],
         [ "Notícias", noticias_url ],
