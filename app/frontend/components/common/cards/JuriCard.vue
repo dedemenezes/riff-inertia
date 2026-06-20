@@ -30,21 +30,22 @@ const bioClass = computed(() =>
 </script>
 
 <template>
-  <div class="flex gap-400 items-start text-primary">
+  <div class="flex items-start gap-400 overflow-hidden rounded-b-200 pb-0 text-primary">
     <img
       :src="photo"
       :alt="name"
-      class="size-[180px] shrink-0 object-cover rounded-200"
+      class="size-[107px] shrink-0 rounded-100 object-cover md:size-[180px] md:rounded-200"
       loading="lazy"
     />
-    <div class="flex-1 flex flex-col gap-150">
-      <p class="text-header-sm">{{ name }}</p>
-      <p v-if="role" class="font-body text-md font-regular leading-[150%]">
+    <div class="flex min-w-0 flex-1 flex-col gap-150">
+      <p class="w-full text-header-sm">{{ name }}</p>
+      <p v-if="role" class="w-full font-body text-md font-regular leading-[150%]">
         {{ role }}
       </p>
       <p
         v-for="(paragraph, idx) in bioParagraphs"
         :key="idx"
+        class="w-full"
         :class="bioClass"
       >
         {{ paragraph }}
