@@ -91,6 +91,7 @@ class ProgramsController < ApplicationController
       directors: @directors_filter,
       actors: @actors_filter,
       menuTabs: @menu_tabs,
+      session_type_nav: session_type_nav(@selected_session_type),
       current_filters: { # those are the ones used as modelValue
         query: @selected_query,
         mostra: @selected_mostra,
@@ -113,6 +114,39 @@ class ProgramsController < ApplicationController
   end
 
   private
+
+  def session_type_nav(current_session_type)
+    [
+      {
+        label: I18n.t("navigation.programming.name"),
+        href: program_path,
+        icon: "program",
+        session_type: nil,
+        active: current_session_type.blank?
+      },
+      {
+        label: I18n.t("navigation.programming.special"),
+        href: program_path(tipo_sessao: "especial"),
+        icon: "star",
+        session_type: "especial",
+        active: current_session_type == "especial"
+      },
+      {
+        label: I18n.t("navigation.programming.with_gratuity"),
+        href: program_path(tipo_sessao: "gratuidade"),
+        icon: "ticket",
+        session_type: "gratuidade",
+        active: current_session_type == "gratuidade"
+      },
+      {
+        label: I18n.t("navigation.programming.with_debates"),
+        href: program_path(tipo_sessao: "debate"),
+        icon: "chatDots",
+        session_type: "debate",
+        active: current_session_type == "debate"
+      }
+    ]
+  end
 
   def build_tab_url(date, filters, session_type)
     query_params = {}

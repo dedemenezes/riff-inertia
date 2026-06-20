@@ -724,4 +724,39 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
       refute_match %r{\Ahttps?://}, path
     end
   end
+
+  test "programming page exposes local session type navigation" do
+    get program_url, params: { tipo_sessao: "gratuidade" }
+
+    assert_response :success
+    session_type_nav = inertia_props["session_type_nav"]
+
+    assert_equal [
+      "Programação",
+      "Sessões especiais",
+      "Sessões com gratuidade",
+      "Sessões com debates"
+    ], session_type_nav.map { _1["label"] }
+
+    assert_equal [
+      nil,
+      "especial",
+      "gratuidade",
+      "debate"
+    ], session_type_nav.map { _1["session_type"] }
+
+    assert_equal [ "Sessões com gratuidade" ], session_type_nav.select { _1["active"] }.map { _1["label"] }
+
+    assert_equal [
+      program_path,
+      program_path(tipo_sessao: "especial"),
+      program_path(tipo_sessao: "gratuidade"),
+      program_path(tipo_sessao: "debate")
+    ], session_type_nav.map { _1["href"] }
+
+    session_type_nav.map { _1["href"] }.each do |href|
+      assert href.start_with?("/")
+      refute_match %r{\Ahttps?://}, href
+    end
+  end
 end

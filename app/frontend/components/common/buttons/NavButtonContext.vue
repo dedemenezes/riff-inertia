@@ -43,7 +43,7 @@ const navRef = useTabScroll(routeActive);
   <Link
     :href="props.route"
     class=""
-    :class="{ 'route-active-TEST': $page.url == props.route }"
+    :class="{ 'route-active-TEST': routeActive }"
     :aria-label="`Navegar para ${props.content}`"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
