@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path },
         { name: I18n.t("navigation.mostras"), path: mostras_path },
         { name: I18n.t("navigation.cinemas"), path: cinemas_path },
-        { name: I18n.t("navigation.juri"), path: "" },
+        { name: I18n.t("navigation.juri"), path: festival_juri_path(locale: I18n.locale) },
         { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale) }
       ],
       I18n.t("navigation.festival.name") => [
@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
         { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path, icon: "program" },
         { name: I18n.t("navigation.mostras"), path: mostras_path, icon: "grid" },
         { name: I18n.t("navigation.cinemas"), path: cinemas_path, icon: "pin" },
-        { name: I18n.t("navigation.juri"), path: "", icon: "trophy" },
+        { name: I18n.t("navigation.juri"), path: festival_juri_path(locale: I18n.locale), icon: "trophy" },
         { name: I18n.t("navigation.edition.team"), path: equipe_path(locale: I18n.locale), icon: "people" }
       ],
       "sobre" => [
