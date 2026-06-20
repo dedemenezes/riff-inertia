@@ -102,6 +102,44 @@ class JuriContentParserTest < ActiveSupport::TestCase
     assert sections.all? { |section| section[:jurors].none? { |juror| juror[:name].blank? } }
   end
 
+  test "parses jury content wrapped by container elements" do
+    html = <<~HTML
+      <div class="ckeditor-content">
+        <section>
+          <h3>PRÊMIO FELIX</h3>
+          <p><b>Carolina Durão</b></p>
+          <p><img src="https://example.com/carolina.jpg"></p>
+          <p>Diretora Geral.</p>
+        </section>
+      </div>
+    HTML
+
+    section = JuriContentParser.parse(html).first
+
+    assert_equal "Prêmio Félix", section[:tab_label]
+    assert_equal "Carolina Durão", section[:jurors].first[:name]
+    assert_equal "https://example.com/carolina.jpg", section[:jurors].first[:photo]
+  end
+
+  test "splits juror roles with typographic dashes" do
+    html = <<~HTML
+      <h3>PREMIERE BRASIL</h3>
+      <p><b>Eric Lagesse – Presidente do Júri</b></p>
+      <p><img src="https://example.com/eric.jpg"></p>
+      <p>Distribuidor.</p>
+      <p><b>Beth Formaggini — Presidenta do Júri</b></p>
+      <p><img src="https://example.com/beth.jpg"></p>
+      <p>Diretora.</p>
+    HTML
+
+    jurors = JuriContentParser.parse(html).first[:jurors]
+
+    assert_equal "Eric Lagesse", jurors.first[:name]
+    assert_equal "Presidente do Júri", jurors.first[:role]
+    assert_equal "Beth Formaggini", jurors.second[:name]
+    assert_equal "Presidenta do Júri", jurors.second[:role]
+  end
+
   test "removes script and style nodes before parsing" do
     html = <<~HTML
       <h3>PRÊMIO FELIX</h3>

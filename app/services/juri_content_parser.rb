@@ -23,9 +23,7 @@ class JuriContentParser
     @current_section = nil
     @current_juror = nil
 
-    fragment.children.each do |node|
-      next unless node.element?
-
+    fragment.css("h3, p, h4, hr").each do |node|
       if section_heading?(node)
         start_section(node)
       elsif @current_section
@@ -77,7 +75,7 @@ class JuriContentParser
   def start_juror(raw_name)
     finish_current_juror
 
-    name, role = raw_name.split(/\s+-\s+/, 2).map { |part| normalize_text(part) }
+    name, role = raw_name.split(/\s+[-–—]\s+/, 2).map { |part| normalize_text(part) }
     @current_juror = {
       name: name,
       role: role.to_s,
