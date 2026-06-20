@@ -7,24 +7,6 @@ vi.mock("@inertiajs/vue3", () => ({
     name: "Head",
     template: "<div><slot /></div>",
   },
-  usePage: () => ({
-    props: { currentLocale: "pt" },
-  }),
-}));
-
-vi.mock("@/components/common/icons", () => ({
-  IconSearch: {
-    name: "IconSearch",
-    template: "<span data-test='icon-search' />",
-  },
-  IconClose: {
-    name: "IconClose",
-    template: "<span data-test='icon-close' />",
-  },
-  IconFilter: {
-    name: "IconFilter",
-    template: "<span data-test='icon-filter' />",
-  },
 }));
 
 const sections = [
@@ -96,14 +78,16 @@ describe("Juri Index", () => {
     expect(images.map((img) => img.attributes("alt"))).toContain("Eric Lagesse");
   });
 
-  it("renders the mobile filter bar and compact section title", () => {
+  it("renders compact tabs and title without filter controls", () => {
     const wrapper = mountPage();
 
-    expect(wrapper.find("[data-test='juri-filter-bar']").exists()).toBe(true);
-    expect(wrapper.find("input").attributes("placeholder")).toBe("Pesquisar");
-    expect(wrapper.find("[data-test='juri-sort-button']").text()).toContain("A - Z");
-    expect(wrapper.find("[data-test='juri-filter-button']").text()).toContain("Filtros");
+    expect(wrapper.find("[data-test='juri-filter-bar']").exists()).toBe(false);
+    expect(wrapper.find("[data-test='juri-sort-button']").exists()).toBe(false);
+    expect(wrapper.find("[data-test='juri-filter-button']").exists()).toBe(false);
     expect(wrapper.find("[data-test='juri-title-block']").attributes("class")).not.toContain("border-t");
+    expect(wrapper.find("[data-test='juri-tabs-block']").classes()).toEqual(
+      expect.arrayContaining([ "pt-600", "lg:pt-1200" ]),
+    );
     expect(wrapper.find("[role='tablist']").classes()).not.toContain("px-400");
   });
 
@@ -116,26 +100,5 @@ describe("Juri Index", () => {
     expect(wrapper.text()).toContain("Beth Formaggini");
     expect(wrapper.text()).toContain("Presidenta do Júri");
     expect(wrapper.text()).not.toContain("Eric Lagesse");
-  });
-
-  it("filters visible jurors by search text", async () => {
-    const wrapper = mountPage();
-
-    await wrapper.find("input").setValue("ana");
-
-    expect(wrapper.text()).toContain("Ana Souza");
-    expect(wrapper.text()).not.toContain("Eric Lagesse");
-  });
-
-  it("toggles jury sort order", async () => {
-    const wrapper = mountPage();
-
-    const namesBeforeSort = wrapper.findAllComponents({ name: "JuriCard" }).map((card) => card.props("name"));
-    expect(namesBeforeSort).toEqual([ "Eric Lagesse", "Ana Souza" ]);
-
-    await wrapper.find("[data-test='juri-sort-button']").trigger("click");
-
-    const namesAfterSort = wrapper.findAllComponents({ name: "JuriCard" }).map((card) => card.props("name"));
-    expect(namesAfterSort).toEqual([ "Ana Souza", "Eric Lagesse" ]);
   });
 });
