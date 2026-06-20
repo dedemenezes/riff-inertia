@@ -1,16 +1,15 @@
 import PageLayout from '@pages/PageLayout.vue'
 
 const wrappedPages = new WeakSet()
-const pages = import.meta.glob('../pages/**/*.vue')
+const pages = import.meta.glob('../pages/**/*.vue', { eager: true })
 
-export async function resolvePage(name) {
-  const loadPage = pages[`../pages/${name}.vue`]
+export function resolvePage(name) {
+  const page = pages[`../pages/${name}.vue`]
 
-  if (!loadPage) {
+  if (!page) {
     throw new Error(`Inertia page not found: ${name}`)
   }
 
-  const page = await loadPage()
   wrapWithDefaultLayout(page.default)
 
   return page

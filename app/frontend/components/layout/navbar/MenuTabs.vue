@@ -16,11 +16,16 @@ const currentStartIndex = ref(0);
 const isDesktop = useUpdateWindowWidth();
 // Show 3 tabs at a time
 const visibleTabsCount = computed(() => isDesktop.value ? 3 : 1);
+const maxStartIndex = computed(() => Math.max(0, props.tabs.length - visibleTabsCount.value));
 
 // Find the active tab index
 const activeTabIndex = computed(() => {
   return props.tabs.findIndex(tab => tab.active);
 });
+
+const clampCurrentStartIndex = () => {
+  currentStartIndex.value = Math.min(currentStartIndex.value, maxStartIndex.value);
+};
 
 // Auto-center the active tab
 const centerActiveTab = () => {
@@ -29,8 +34,7 @@ const centerActiveTab = () => {
     const idealStart = activeTabIndex.value - Math.floor(visibleTabsCount.value / 2);
 
     // Ensure we don't go below 0 or beyond the valid range
-    const maxStart = props.tabs.length - visibleTabsCount.value;
-    currentStartIndex.value = Math.max(0, Math.min(idealStart, maxStart));
+    currentStartIndex.value = Math.max(0, Math.min(idealStart, maxStartIndex.value));
   }
 };
 
@@ -38,6 +42,10 @@ const centerActiveTab = () => {
 watch(() => activeTabIndex.value, () => {
   centerActiveTab();
 }, { immediate: true });
+
+watch([visibleTabsCount, () => props.tabs.length], () => {
+  clampCurrentStartIndex();
+});
 
 // Get the currently visible tabs
 const visibleTabs = computed(() => {
@@ -56,7 +64,7 @@ const scrollLeft = () => {
 
 const scrollRight = () => {
   if (canScrollRight.value) {
-    currentStartIndex.value = Math.min(props.tabs.length - visibleTabsCount.value, currentStartIndex.value + 1);
+    currentStartIndex.value = Math.min(maxStartIndex.value, currentStartIndex.value + 1);
   }
 };
 </script>
