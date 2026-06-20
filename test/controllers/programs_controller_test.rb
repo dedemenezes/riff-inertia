@@ -718,8 +718,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "debate", props["current_session_type"]
+    assert_equal "2024-10-05", props["current_filters"]["date"]["filter_value"]
     assert_equal [ "Batman" ], program_sessions(props).map { _1["titulo"] }.uniq
-    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], program_section_labels(props)
+    assert_equal [ "Sáb, 5 Out" ], program_section_labels(props)
   end
 
   test "filters session menu by free and limited gratuity sessions" do
@@ -729,8 +730,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "gratuidade", props["current_session_type"]
+    assert_equal "2024-10-05", props["current_filters"]["date"]["filter_value"]
     assert_includes program_sessions(props).map { _1["titulo"] }, "Batman"
-    assert_includes program_section_labels(props), "Dom, 6 Out"
+    assert_equal [ "Sáb, 5 Out" ], program_section_labels(props)
   end
 
   test "programming menu context exposes session filters and one active item" do
