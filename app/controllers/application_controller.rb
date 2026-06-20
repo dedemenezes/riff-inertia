@@ -83,10 +83,10 @@ class ApplicationController < ActionController::Base
 
     {
       "programacao" => [
-        { name: I18n.t("navigation.programming.name"), path: program_url, icon: "program", active: current_session_type.blank? },
-        { name: I18n.t("navigation.programming.special"), path: program_url(tipo_sessao: "especial"), icon: "star", active: current_session_type == "especial" },
-        { name: I18n.t("navigation.programming.with_gratuity"), path: program_url(tipo_sessao: "gratuidade"), icon: "ticket", active: current_session_type == "gratuidade" },
-        { name: I18n.t("navigation.programming.with_debates"), path: program_url(tipo_sessao: "debate"), icon: "chatDots", active: current_session_type == "debate" },
+        { name: I18n.t("navigation.programming.name"), path: program_path, icon: "program", active: current_session_type.blank? },
+        { name: I18n.t("navigation.programming.special"), path: program_path(tipo_sessao: "especial"), icon: "star", active: current_session_type == "especial" },
+        { name: I18n.t("navigation.programming.with_gratuity"), path: program_path(tipo_sessao: "gratuidade"), icon: "ticket", active: current_session_type == "gratuidade" },
+        { name: I18n.t("navigation.programming.with_debates"), path: program_path(tipo_sessao: "debate"), icon: "chatDots", active: current_session_type == "debate" },
         { name: I18n.t("navigation.mudancas_na_programacao"), path: "", icon: "change", active: false }
       ],
       "edicao" => [

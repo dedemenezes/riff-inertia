@@ -24,24 +24,23 @@ const handleBlur = () => {
   isFocused.value = false;
 };
 
-const { url } = usePage();
+const page = usePage();
 
 const getPath = (url) => {
   const u = new URL(url, window.location.origin);
   return u.pathname;
 };
 
-const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route
+const isActive = computed(() => getPath(page.url) === getPath(props.route)); // Check if current URL matches the route
 const hasExplicitActive = computed(() => props.active !== undefined);
 const routeActive = computed(() => hasExplicitActive.value ? props.active : isActive.value);
 const isIconActive = computed(() => isHovered.value || isFocused.value || routeActive.value);
 
-const navRef = useTabScroll(routeActive.value);
+const navRef = useTabScroll(routeActive);
 </script>
 
 <template>
   <Link
-    ref="navRef"
     :href="props.route"
     class=""
     :class="{ 'route-active-TEST': $page.url == props.route }"
@@ -51,7 +50,7 @@ const navRef = useTabScroll(routeActive.value);
     @focus="handleFocus"
     @blur="handleBlur"
   >
-    <div class="flex flex-col items-center gap-200">
+    <div ref="navRef" class="flex flex-col items-center gap-200">
       <slot
         name="icon"
         :hovered="isHovered"

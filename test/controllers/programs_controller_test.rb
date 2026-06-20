@@ -710,5 +710,18 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     ], program_menu.map { _1["name"] }
     assert_equal [ "Sessões com debates" ], program_menu.select { _1["active"] }.map { _1["name"] }
     assert_nil program_menu.find { _1["name"] == "Sessões com convidados" }
+
+    assert_equal [
+      program_path,
+      program_path(tipo_sessao: "especial"),
+      program_path(tipo_sessao: "gratuidade"),
+      program_path(tipo_sessao: "debate"),
+      ""
+    ], program_menu.map { _1["path"] }
+
+    program_menu.map { _1["path"] }.reject(&:blank?).each do |path|
+      assert path.start_with?("/")
+      refute_match %r{\Ahttps?://}, path
+    end
   end
 end
