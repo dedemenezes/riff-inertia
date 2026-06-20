@@ -11,7 +11,7 @@ const page = usePage();
 
 const currentLocale = computed(() => {
   // locale from ApplicationController
-  return page.props.currentLocale || "pt";
+  return page.props?.currentLocale || "pt";
 });
 
 const switchLanguage = (targetLocale) => {

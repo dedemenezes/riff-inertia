@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:ssr": "vite build --ssr \"$PWD/app/frontend/ssr/ssr.js\" --outDir public/vite-ssr",
+    "build:ssr": "node app/frontend/ssr/build.js",
     "dev": "bin/vite dev",
     "ssr": "node public/vite-ssr/ssr.js",
     "test": "vitest"

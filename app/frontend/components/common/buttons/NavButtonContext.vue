@@ -27,8 +27,14 @@ const handleBlur = () => {
 const { url } = usePage();
 
 const getPath = (url) => {
-  const u = new URL(url, "http://inertia.local");
-  return u.pathname;
+  if (!url) return "";
+
+  try {
+    const u = new URL(url, "http://inertia.local");
+    return u.pathname;
+  } catch {
+    return "";
+  }
 };
 
 const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route

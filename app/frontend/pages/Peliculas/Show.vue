@@ -60,7 +60,7 @@ let lightbox;
 
 onMounted(() => {
   lightbox = new PhotoSwipeLightbox({
-    gallery: "#pelicua-banner",
+    gallery: "#pelicula-banner",
     children: "a",
     pswpModule: () => import("photoswipe"),
   });
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicua-banner. -->
+  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicula-banner. -->
   <div id="pelicula-banner">
     <Carousel v-if="bannerImages.length > 0" class="w-full">
       <CarouselContent class="-ml-0">
