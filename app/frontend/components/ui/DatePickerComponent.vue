@@ -11,6 +11,11 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  inputFieldButtonClasses,
+  inputFieldPlaceholderTextClasses,
+  inputFieldValueTextClasses,
+} from "@/components/ui/inputStyles"
 
 const props = defineProps({
   modelValue: String, // ISO format date, e.g., "2025-10-09"
@@ -51,8 +56,9 @@ const df = new DateFormatter(props.locale, {
       <Button
         variant="outline"
         :class="cn(
-          'w-full h-[45px] justify-start gap-300 rounded-[5px] border-neutrals-300 bg-white px-300 py-300 font-body text-sm font-normal leading-[150%] shadow-none hover:bg-white hover:text-neutrals-900 focus-visible:border-neutrals-600 focus-visible:ring-0 focus-visible:ring-offset-0',
-          value ? 'text-neutrals-900' : 'text-neutrals-400',
+          inputFieldButtonClasses,
+          'justify-start gap-300 hover:bg-white hover:text-neutrals-900',
+          value ? inputFieldValueTextClasses : inputFieldPlaceholderTextClasses,
         )"
       >
         <CalendarIcon

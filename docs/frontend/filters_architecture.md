@@ -123,6 +123,13 @@ come from `filter_label` or from controller-provided option labels.
 - `app/frontend/components/ui/DatePickerComponent.vue`
   - Used for date filters.
 
+Filter field controls share the Figma input contract through
+`app/frontend/components/ui/inputStyles.js`: 45px height, 12px horizontal and
+vertical padding, `radius-100` (4px), `neutrals-300` border, white background,
+and Inter 14px/150% text. Text search, date picker, combobox, select trigger,
+and the base UI input should all use this contract so filter fields keep the
+same visual appearance across desktop and mobile drawers.
+
 ### Non-Filter Accordion
 
 - `app/frontend/components/AccordionGroup.vue`

@@ -16,6 +16,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import {
+  inputFieldButtonClasses,
+  inputFieldPlaceholderTextClasses,
+  inputFieldValueTextClasses,
+} from "@/components/ui/inputStyles";
 
 // const frameworks = [
 //   { value: 'next.js', label: 'Next.js' },
@@ -72,11 +77,14 @@ const iconColor = (value) =>
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="w-[-webkit-fill-available] justify-between"
+        :class="cn(
+          inputFieldButtonClasses,
+          'w-[-webkit-fill-available] justify-between hover:bg-white hover:text-neutrals-900',
+        )"
       >
         <div
           class="flex gap-300 items-center"
-          :class="value ? 'text-primary' : 'text-secondary-gray'"
+          :class="value ? inputFieldValueTextClasses : inputFieldPlaceholderTextClasses"
         >
           <span
             v-if="withIcon && value"
