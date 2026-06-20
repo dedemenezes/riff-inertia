@@ -17,6 +17,15 @@ describe("JuriCard", () => {
     expect(img.attributes("alt")).toBe(baseProps.name);
   });
 
+  it("uses compact mobile image sizing from the jury design", () => {
+    const wrapper = mount(JuriCard, { props: baseProps });
+
+    const img = wrapper.find("img");
+    expect(img.classes()).toContain("size-[107px]");
+    expect(img.classes()).toContain("md:size-[180px]");
+    expect(img.classes()).toContain("rounded-100");
+  });
+
   it("renders role when provided", () => {
     const wrapper = mount(JuriCard, {
       props: { ...baseProps, role: "Presidenta do júri" },

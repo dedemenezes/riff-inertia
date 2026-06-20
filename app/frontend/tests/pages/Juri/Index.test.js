@@ -21,6 +21,12 @@ const sections = [
         photo: "https://example.com/eric.jpg",
         bio: [ "Distribuidor, agente de vendas e produtor francês." ],
       },
+      {
+        name: "Ana Souza",
+        role: "Jurade",
+        photo: "https://example.com/ana.jpg",
+        bio: [ "Crítica de cinema brasileira." ],
+      },
     ],
   },
   {
@@ -67,9 +73,22 @@ describe("Juri Index", () => {
     expect(wrapper.text()).toContain("Distribuidor, agente de vendas e produtor francês.");
     expect(wrapper.text()).not.toContain("Beth Formaggini");
 
-    const img = wrapper.find("img");
-    expect(img.attributes("src")).toBe("https://example.com/eric.jpg");
-    expect(img.attributes("alt")).toBe("Eric Lagesse");
+    const images = wrapper.findAll("img");
+    expect(images.map((img) => img.attributes("src"))).toContain("https://example.com/eric.jpg");
+    expect(images.map((img) => img.attributes("alt"))).toContain("Eric Lagesse");
+  });
+
+  it("renders compact tabs and title without filter controls", () => {
+    const wrapper = mountPage();
+
+    expect(wrapper.find("[data-test='juri-filter-bar']").exists()).toBe(false);
+    expect(wrapper.find("[data-test='juri-sort-button']").exists()).toBe(false);
+    expect(wrapper.find("[data-test='juri-filter-button']").exists()).toBe(false);
+    expect(wrapper.find("[data-test='juri-title-block']").attributes("class")).not.toContain("border-t");
+    expect(wrapper.find("[data-test='juri-tabs-block']").classes()).toEqual(
+      expect.arrayContaining([ "pt-600", "lg:pt-1200" ]),
+    );
+    expect(wrapper.find("[role='tablist']").classes()).not.toContain("px-400");
   });
 
   it("switches visible jurors when another tab is selected", async () => {

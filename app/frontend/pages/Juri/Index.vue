@@ -36,41 +36,57 @@ const selectSection = (section) => {
   <MenuContext nav="edicao" :active-page="props.activePage" />
   <hr class="text-neutrals-300" />
 
-  <TwContainer>
-    <section class="flex flex-col gap-1200 py-1200">
-      <nav
+  <section>
+    <TwContainer>
+      <div
         v-if="props.sections.length"
-        role="tablist"
-        class="mx-auto flex w-full max-w-[940px] items-center gap-300 px-400"
+        data-test="juri-tabs-block"
+        class="pt-600 lg:pt-1200"
       >
-        <button
-          v-for="section in props.sections"
-          :id="`juri-tab-${section.id}`"
-          :key="section.id"
-          type="button"
-          role="tab"
-          :aria-controls="`juri-panel-${section.id}`"
-          :aria-selected="selectedSection?.id === section.id"
-          class="flex-1 cursor-pointer border-b pb-150 pt-150 text-body-strong-sm uppercase"
-          :class="selectedSection?.id === section.id ? 'border-magenta-600 text-primary' : 'border-neutrals-300 text-neutrals-700'"
-          @click="selectSection(section)"
+        <nav
+          role="tablist"
+          class="mx-auto flex h-[32px] w-full max-w-[940px] items-center gap-300 overflow-x-auto no-scroll-bar"
         >
-          {{ section.tab_label }}
-        </button>
-      </nav>
+          <button
+            v-for="section in props.sections"
+            :id="`juri-tab-${section.id}`"
+            :key="section.id"
+            type="button"
+            role="tab"
+            :aria-controls="`juri-panel-${section.id}`"
+            :aria-selected="selectedSection?.id === section.id"
+            class="flex h-full min-w-fit flex-1 cursor-pointer items-center justify-center border-b text-body-strong-sm uppercase"
+            :class="selectedSection?.id === section.id ? 'border-magenta-600 text-primary' : 'border-neutrals-300 text-neutrals-700'"
+            @click="selectSection(section)"
+          >
+            {{ section.tab_label }}
+          </button>
+        </nav>
+      </div>
+    </TwContainer>
 
+    <div
+      v-if="selectedSection"
+      data-test="juri-title-block"
+      class="border-neutrals-300 py-400"
+    >
+      <TwContainer>
+        <div class="py-400">
+          <h1 class="text-header-lg text-primary">
+            {{ selectedSection.tab_label }}
+          </h1>
+        </div>
+      </TwContainer>
+    </div>
+
+    <TwContainer>
       <section
         v-if="selectedSection"
         :id="`juri-panel-${selectedSection.id}`"
         role="tabpanel"
         :aria-labelledby="`juri-tab-${selectedSection.id}`"
-        class="flex flex-col gap-800"
       >
-        <h1 class="text-header-lg text-primary">
-          {{ selectedSection.tab_label }}
-        </h1>
-
-        <ul class="grid grid-cols-1 gap-800 lg:grid-cols-2">
+        <ul class="flex flex-col gap-800 py-0 lg:grid lg:grid-cols-2">
           <li
             v-for="juror in selectedSection.jurors"
             :key="juror.name"
@@ -85,6 +101,6 @@ const selectSection = (section) => {
           </li>
         </ul>
       </section>
-    </section>
-  </TwContainer>
+    </TwContainer>
+  </section>
 </template>
