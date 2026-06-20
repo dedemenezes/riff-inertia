@@ -21,6 +21,7 @@ class ProgramsController < ApplicationController
       relation: base_scope,
       params: params,
       filter_options: {
+        dates: @dates_filter,
         mostras: @mostras_filter,
         cinemas: @cinemas_filter,
         paises: @paises_filter,
@@ -56,6 +57,7 @@ class ProgramsController < ApplicationController
       tabBaseUrl: program_url,
       elements: @programacoes,
       pagy: @pagy,
+      dates: @dates_filter,
       mostras: @mostras_filter,
       cinemas: @cinemas_filter,
       paises: @paises_filter,
@@ -72,10 +74,11 @@ class ProgramsController < ApplicationController
         genero: @selected_genre,
         sessao: @selected_sessao,
         elenco: @selected_actor,
-        direcao: @selected_director
+        direcao: @selected_director,
+        date: @selected_filters[:date]
       },
       current_session_type: @selected_session_type,
-      has_active_filters: params.permit(:query, :mostra).to_h.values.any?(&:present?),
+      has_active_filters: @selected_filters.values.any?(&:present?),
       crumbs: breadcrumbs(
         [ "", @root_url ],
         [ "Programação", "" ],
