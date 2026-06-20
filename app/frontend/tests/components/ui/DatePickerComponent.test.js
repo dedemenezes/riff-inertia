@@ -39,9 +39,9 @@ describe("DatePickerComponent", () => {
     const trigger = wrapper.find('[data-testid="datepicker-trigger"]');
     expect(trigger.text()).toContain("Escolha uma data");
     expect(trigger.classes()).toContain("h-[45px]");
-    expect(trigger.classes()).toContain("rounded-[5px]");
+    expect(trigger.classes()).toContain("rounded-100");
     expect(trigger.classes()).toContain("border-neutrals-300");
-    expect(trigger.classes()).toContain("text-neutrals-400");
+    expect(trigger.classes()).toContain("text-neutrals-700");
 
     const popover = wrapper.find('[data-testid="popover-content"]');
     expect(popover.classes()).toContain("w-auto");
