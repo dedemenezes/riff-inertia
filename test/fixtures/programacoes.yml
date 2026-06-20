@@ -13,6 +13,7 @@ program_batman:
   filmecolado: "N"
   sessao_fechada_manual: 0
   gratuito: 0
+  gratuidade_limitada: 1
   acessibilidade: 1
   deletado: 0
   created: <%= Date.yesterday %>

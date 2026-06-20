@@ -16,11 +16,11 @@
 
 import TwContainer from "@/components/layout/TwContainer.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
-import MenuContext from "@/components/layout/navbar/MenuContext.vue";
 import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import TagFilter from "@/components/common/tags/TagFilter.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
+import ProgramSessionTypeNav from "@/components/features/program/ProgramSessionTypeNav.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
@@ -47,7 +47,9 @@ const props = defineProps({
   ,actors: { type: Array, default: () => [] }
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
+  ,session_type_nav: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
+  ,current_session_type: { type: String, default: null }
   ,has_active_filters: { type: Boolean, default: false }
   ,crumbs: { type: Array, required: true }
   ,endMessage: { type: String, required: true }
@@ -94,9 +96,7 @@ const debugMode = false;
     <Breadcrumb :crumbs="props.crumbs" />
   </TwContainer>
 
-  <MenuContext
-    nav="programacao"
-  />
+  <ProgramSessionTypeNav :items="props.session_type_nav" />
 
   <hr class="text-neutrals-300">
 

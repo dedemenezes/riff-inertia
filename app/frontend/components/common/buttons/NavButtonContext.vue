@@ -6,7 +6,7 @@ import { useTabScroll } from '@/components/common/tabs/useTabScroll'
 const props = defineProps({
   content: { type: String, required: true },
   route: { type: String, default: "#" },
-  active: {type: Boolean }
+  active: { type: Boolean, default: undefined }
 });
 const isHovered = ref(false);
 const handleMouseEnter = () => {
@@ -24,37 +24,38 @@ const handleBlur = () => {
   isFocused.value = false;
 };
 
-const { url } = usePage();
+const page = usePage();
 
 const getPath = (url) => {
   const u = new URL(url, window.location.origin);
   return u.pathname;
 };
 
-const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route
-const isIconActive = computed(() => isHovered.value || isFocused.value || isActive.value);
+const isActive = computed(() => getPath(page.url) === getPath(props.route)); // Check if current URL matches the route
+const hasExplicitActive = computed(() => props.active !== undefined);
+const routeActive = computed(() => hasExplicitActive.value ? props.active : isActive.value);
+const isIconActive = computed(() => isHovered.value || isFocused.value || routeActive.value);
 
-const navRef = useTabScroll(isActive.value);
+const navRef = useTabScroll(routeActive);
 </script>
 
 <template>
   <Link
-    ref="navRef"
     :href="props.route"
     class=""
-    :class="{ 'route-active-TEST': $page.url == props.route }"
+    :class="{ 'route-active-TEST': routeActive }"
     :aria-label="`Navegar para ${props.content}`"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     @focus="handleFocus"
     @blur="handleBlur"
   >
-    <div class="flex flex-col items-center gap-200">
+    <div ref="navRef" class="flex flex-col items-center gap-200">
       <slot
         name="icon"
         :hovered="isHovered"
-        :active="props.active || isIconActive"
-        :routeActive="isActive"
+        :active="isIconActive"
+        :routeActive="routeActive"
       />
       <p class="text-body-strong-xs text-primary text-center uppercase">
         {{ props.content }}
