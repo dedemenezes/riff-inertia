@@ -2,9 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import ProgramSessionTypeNav from "@/components/features/program/ProgramSessionTypeNav.vue";
 
-const IconStub = {
-  template: "<span data-test='icon' />",
-};
+const { IconStub } = vi.hoisted(() => ({
+  IconStub: {
+    template: "<span data-test='icon' />",
+  },
+}));
 
 vi.mock("@/components/common/icons/misc/IconProgram.vue", () => ({ default: IconStub }));
 vi.mock("@/components/common/icons/misc/IconStar.vue", () => ({ default: IconStub }));
@@ -73,7 +75,6 @@ describe("ProgramSessionTypeNav", () => {
     expect(partialProps).toEqual(expect.arrayContaining([
       "elements",
       "pagy",
-      "menuTabs",
       "session_type_nav",
       "current_session_type",
       "current_filters",

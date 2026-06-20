@@ -1,6 +1,9 @@
 <script setup>
 import NavButtonContext from "@/components/common/buttons/NavButtonContext.vue";
-import { defineAsyncComponent, watchEffect } from "vue";
+import IconProgram from "@/components/common/icons/misc/IconProgram.vue";
+import IconStar from "@/components/common/icons/misc/IconStar.vue";
+import IconTicket from "@/components/common/icons/misc/IconTicket.vue";
+import IconChatDots from "@/components/common/icons/misc/IconChatDots.vue";
 
 const props = defineProps({
   items: { type: Array, required: true },
@@ -9,31 +12,22 @@ const props = defineProps({
 const PARTIAL_RELOAD_PROPS = [
   "elements",
   "pagy",
-  "menuTabs",
   "session_type_nav",
   "current_session_type",
   "current_filters",
   "has_active_filters",
 ];
 
-const loaders = {
-  program: () => import("@/components/common/icons/misc/IconProgram.vue"),
-  star: () => import("@/components/common/icons/misc/IconStar.vue"),
-  ticket: () => import("@/components/common/icons/misc/IconTicket.vue"),
-  chatDots: () => import("@/components/common/icons/misc/IconChatDots.vue"),
+const icons = {
+  program: IconProgram,
+  star: IconStar,
+  ticket: IconTicket,
+  chatDots: IconChatDots,
 };
 
-const cache = new Map();
-
 function getIconComp(name) {
-  if (!name || !loaders[name]) return null;
-  if (!cache.has(name)) cache.set(name, defineAsyncComponent(loaders[name]));
-  return cache.get(name);
+  return icons[name] || null;
 }
-
-watchEffect(() => {
-  props.items.forEach((item) => { void loaders[item.icon]?.() });
-});
 </script>
 
 <template>
@@ -53,18 +47,12 @@ watchEffect(() => {
         :aria-label="`Filtrar programação por ${item.label}`"
       >
         <template #icon="{ active }">
-          <Suspense>
-            <component
-              :is="getIconComp(item.icon)"
-              height="30px"
-              width="30px"
-              :active="active"
-            />
-
-            <template #fallback>
-              <span class="inline-block h-[20px] w-[20px] rounded bg-neutral-200/70" />
-            </template>
-          </Suspense>
+          <component
+            :is="getIconComp(item.icon)"
+            height="30px"
+            width="30px"
+            :active="active"
+          />
         </template>
       </NavButtonContext>
     </div>

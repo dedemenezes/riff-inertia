@@ -17,8 +17,6 @@ class ProgramacoesFilter
     :selected_director,
     :selected_actor,
     :selected_session_type,
-    :selected_date,
-    :available_dates,
     keyword_init: true
   )
 
@@ -144,17 +142,6 @@ class ProgramacoesFilter
       end
     end
 
-    available_dates = relation.distinct.pluck(:data).sort
-    selected_date = available_dates.first
-
-    if @params[:date].present?
-      parsed_date = Date.parse(@params[:date]) rescue nil
-      if parsed_date&.in?(available_dates)
-        selected_date = parsed_date
-      end
-    end
-    selected_filters[:date] = selected_date
-
     Result.new(
       relation: relation,
       selected_filters: selected_filters,
@@ -166,9 +153,7 @@ class ProgramacoesFilter
       selected_genre: selected_genre,
       selected_director: selected_director,
       selected_actor: selected_actor,
-      selected_session_type: selected_session_type,
-      selected_date: selected_date,
-      available_dates: available_dates
+      selected_session_type: selected_session_type
     )
   end
 
