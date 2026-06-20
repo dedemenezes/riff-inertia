@@ -144,12 +144,11 @@ class ProgramacoesFilter
       end
     end
 
-    available_dates = relation.where.not(data: nil).distinct.pluck(:data).sort
-
     if @params[:date].present?
       parsed_date = Date.parse(@params[:date]) rescue nil
-      if parsed_date&.in?(available_dates)
-        selected_date_filter = @dates_filter.find { |date_filter| date_filter["filter_value"] == parsed_date.iso8601 }
+      selected_date_filter = @dates_filter.find { |date_filter| date_filter["filter_value"] == parsed_date&.iso8601 }
+
+      if selected_date_filter
         relation = relation.where(data: parsed_date)
       end
     end

@@ -162,6 +162,17 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "preserves date filter when search has no results on selected date" do
+    get program_url, params: { query: "Batman", date: "2024-10-07" }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
+    assert_equal "2024-10-07", props["current_filters"]["date"]["filter_value"]
+    assert_equal [], program_sections(props)
+  end
+
   test "pagination returns 1st page with search and date filters" do
     get program_url, params: {
       query: "test",
