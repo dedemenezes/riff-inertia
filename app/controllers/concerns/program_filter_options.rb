@@ -1,6 +1,7 @@
 module ProgramFilterOptions
   extend ActiveSupport::Concern
   def set_filter_options(base_scope)
+    @dates_filter = build_dates_filter(base_scope)
     @paises_filter   = build_paises_filter(base_scope)
 
     @mostras_filter  = build_mostra_filter
@@ -16,6 +17,17 @@ module ProgramFilterOptions
 
     actors = @pelicula_collection_service.collection_for_actors
     @actors_filter = strings_to_filter_collection(actors, "elenco")
+  end
+
+  def build_dates_filter(base_scope, locale: I18n.locale)
+    label = I18n.t("filter.session_date", locale:)
+    base_scope.where.not(data: nil).distinct.pluck(:data).sort.map do |date|
+      {
+        "filter_value" => date.iso8601,
+        "filter_display" => display_filter_date(date, locale:),
+        "filter_label" => label
+      }
+    end
   end
 
   def build_sessoes_filter
@@ -76,6 +88,11 @@ module ProgramFilterOptions
   end
 
   private
+
+  def display_filter_date(date, locale: I18n.locale)
+    format = locale.to_sym == :pt ? "%A, %-d de %B" : "%A, %B %-d"
+    I18n.l(date, format:, locale:)
+  end
 
   def to_filter_collection(records, label_key, locale: I18n.locale)
     label = I18n.t("filter.#{label_key}", locale:)

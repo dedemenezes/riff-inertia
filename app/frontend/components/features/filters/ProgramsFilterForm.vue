@@ -10,6 +10,7 @@ import { usePage } from "@inertiajs/vue3";
 const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
+  dates: { type: Array, default: () => [] },
   mostras: { type: Array, default: () => [] }, // Program-specific prop
   cinemas: { type: Array, default: () => [] }, // Program-specific prop
   paises: { type: Array, default: () => [] },
@@ -25,6 +26,9 @@ const mapFilterOptions = (filterList) => {
     value: option.filter_value,
   }));
 }
+
+const datesFilterOptions = computed(() => mapFilterOptions(props.dates));
+const dateLabel = computed(() => props.dates[0]?.filter_label)
 
 const mostrasFilterOptions = computed(() => mapFilterOptions(props.mostras));
 const mostraLabel = computed(() => props.mostras[0].filter_label)
@@ -80,6 +84,19 @@ const getQueryObject = (filter_value) => {
        @update:modelValue="(val) => props.updateField('query', getQueryObject(val))"
 
        />
+   </div>
+
+   <!-- DATA -->
+   <div>
+     <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+       {{ dateLabel }}
+     </p>
+     <SelectComponent
+       :modelValue="props.modelValue.date?.filter_value || null"
+       @update:modelValue="(val) => props.updateField('date', getSelectedFrom('dates', val))"
+       :collection="datesFilterOptions"
+       :placeholder="simpleTranslation('Selecione uma data', 'Choose a date')"
+     />
    </div>
 
    <!-- HORARIO -->

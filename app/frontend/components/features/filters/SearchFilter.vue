@@ -4,7 +4,7 @@ import { toRaw } from "vue";
 import { cleanObject, toHHMM } from "@/lib/utils";
 const FilterActions =  defineAsyncComponent(() => import("@/components/features/filters/FilterActions.vue"));
 
-const FILTER_KEYS_TO_IGNORE = ['page', 'date'];
+const FILTER_KEYS_TO_IGNORE = ['page'];
 
 const closeMenu = () => {
   emit("close-filter-menu", false);

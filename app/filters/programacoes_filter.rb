@@ -24,6 +24,7 @@ class ProgramacoesFilter
     @relation = relation
     @params = params
     @edicao_id = Edicao.current.id
+    @dates_filter = filter_options.fetch(:dates)
     @mostras_filter = filter_options.fetch(:mostras)
     @cinemas_filter = filter_options.fetch(:cinemas)
     @paises_filter = filter_options.fetch(:paises)
@@ -46,6 +47,7 @@ class ProgramacoesFilter
     selected_director = nil
     selected_actor = nil
     selected_session_type = nil
+    selected_date_filter = nil
 
     if SESSION_TYPE_FILTERS.include?(@params[:tipo_sessao])
       selected_session_type = @params[:tipo_sessao]
@@ -141,6 +143,16 @@ class ProgramacoesFilter
         relation = relation.where(pelicula_id: pelicula_ids)
       end
     end
+
+    if @params[:date].present?
+      parsed_date = Date.parse(@params[:date]) rescue nil
+      selected_date_filter = @dates_filter.find { |date_filter| date_filter["filter_value"] == parsed_date&.iso8601 }
+
+      if selected_date_filter
+        relation = relation.where(data: parsed_date)
+      end
+    end
+    selected_filters[:date] = selected_date_filter if selected_date_filter
 
     Result.new(
       relation: relation,
