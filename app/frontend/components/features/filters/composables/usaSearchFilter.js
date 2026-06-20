@@ -7,7 +7,7 @@ import { extractFilterValues } from "@/lib/filterUtils";
  */
 export function useSearchFilter(props) {
   // Props that will change when updating filters
-  const propsToUpdate = ['elements', 'pagy', 'current_filters', 'current_session_type', 'has_active_filters', 'menuTabs']
+  const propsToUpdate = ['elements', 'pagy', 'current_filters', 'current_session_type', 'has_active_filters']
 
   // Main filter state - this is passed to SearchFilter via ResponsiveFilterMenu
   const filters = ref({ ...props.current_filters });

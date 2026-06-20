@@ -9,7 +9,6 @@ const props = defineProps({
 const PARTIAL_RELOAD_PROPS = [
   "elements",
   "pagy",
-  "menuTabs",
   "session_type_nav",
   "current_session_type",
   "current_filters",

@@ -41,20 +41,19 @@ class ProgramsController < ApplicationController
     @selected_director = filter_result.selected_director
     @selected_actor = filter_result.selected_actor
     @selected_session_type = filter_result.selected_session_type
-    @selected_date = filter_result.selected_date
-    available_dates = filter_result.available_dates
     base_scope = filter_result.relation
 
-    programacoes_for_date = base_scope.where(data: @selected_date).order(:sessao)
+    programacoes_scope = base_scope.order(:data, :sessao)
 
     current_page = params[:page].to_i ||= 1
 
-    @pagy, @programacoes = pagy_infinite(programacoes_for_date, current_page)
+    @pagy, @programacoes = pagy_infinite(programacoes_scope, current_page)
 
     @programacoes = @programacoes.map do |programacao|
       {
         id: programacao.id,
         data: programacao.data,
+        date_label: programacao.display_date,
         sessao: [ programacao.display_sessao ],
         cinema: programacao.cinema&.nome,
         titulo: programacao.pelicula&.titulo_portugues_coord_int,
@@ -66,15 +65,6 @@ class ProgramsController < ApplicationController
         mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
         pelicula_url: pelicula_path(programacao.pelicula.permalink),
         gratuito:  ActiveRecord::Type::Boolean.new.cast(programacao.gratuito)
-      }
-    end
-
-    # display_@selected_date = I18n.l(@selected_date, format: "%a, %e %b", locale: :pt) if @selected_date
-    @menu_tabs = available_dates.map do |date|
-      {
-        date: I18n.l(date, format: "%a, %-d %b"),
-        url: build_tab_url(date, @selected_filters, @selected_session_type),
-        active: date.to_s == params[:date] || (date == @selected_date && !params[:date])
       }
     end
 
@@ -90,7 +80,6 @@ class ProgramsController < ApplicationController
       sessoes: @sessoes,
       directors: @directors_filter,
       actors: @actors_filter,
-      menuTabs: @menu_tabs,
       session_type_nav: session_type_nav(@selected_session_type),
       current_filters: { # those are the ones used as modelValue
         query: @selected_query,
@@ -148,17 +137,4 @@ class ProgramsController < ApplicationController
     ]
   end
 
-  def build_tab_url(date, filters, session_type)
-    query_params = {}
-    query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
-    query_params[:cinema]= filters[:cinema]["filter_value"] if filters[:cinema].present?
-    query_params[:pais]= filters[:pais]["filter_value"] if filters[:pais].present?
-    query_params[:genero]= filters[:genero]["filter_value"] if filters[:genero].present?
-    query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
-    query_params[:direcao]= filters[:direcao]["filter_value"] if filters[:direcao].present?
-    query_params[:elenco]= filters[:elenco]["filter_value"] if filters[:elenco].present?
-    query_params[:tipo_sessao] = session_type if session_type.present?
-    query_params[:date] = date
-    url_for(params: query_params, only_path: true)
-  end
 end

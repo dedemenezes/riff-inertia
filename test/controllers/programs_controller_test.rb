@@ -14,8 +14,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "pt", props["currentLocale"], "no locale"
-    assert props["menuTabs"].is_a?(Array), "not an array"
     assert props["elements"].any?, "Expected at least one program element"
+    assert props["elements"].all? { _1["date_label"].present? }, "Expected each program element to expose a date label"
   end
 
   test "should return matching elements when query is provided" do
@@ -26,8 +26,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     # Ensure the correct elements are returned
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
+    assert_equal 2, elements.length
+    assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
   end
 
   test "should return all elements for 2024-10-05 when no query is provided" do
@@ -47,8 +47,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
+    assert_equal 2, elements.length
+    assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
   end
 
   test "should return elements for partial title" do
@@ -58,7 +58,9 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 2, elements.length
+    assert elements.length >= 2
+    titles = elements.map { _1["titulo"] }
+    assert_includes titles, "Amazônia Selvagem"
   end
 
   test "should handle special characters" do
@@ -71,31 +73,26 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, elements.length
   end
 
-  test "preserves search query when navigating to different date" do
-    # 1. Make request with both query and date
+  test "ignores date param while preserving search query" do
     get program_url, params: { query: "Batman", date: "2024-10-05" }
 
-    # 2. Assert response is successful
     assert_response :success
 
-    # 3. Check that search query is preserved in props
     props = inertia_props
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
 
-    # 4. Verify results are filtered by both query AND date
     elements = props["elements"]
     elements.each do |element|
       assert_includes element["titulo"], "Batman"
-      assert_equal "2024-10-05", element["data"].to_s
     end
   end
 
-  test "menuTabs only includes dates with matching movies" do
+  test "elements expose dates with matching movies" do
     # 1. Search for a specific term
     get program_url, params: { query: "Batman" }
 
     props = inertia_props
-    available_dates = props["menuTabs"].map { _1["date"] }
+    available_dates = props["elements"].map { _1["date_label"] }.uniq
     expected = [ "Sáb, 5 Out", "Dom, 6 Out" ]
     # 2. Verify each date actually has matching movies
     assert_equal expected, available_dates
@@ -108,23 +105,20 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Should return empty arrays, not break
-    assert_equal [], props["menuTabs"].map { _1["date"] }
     assert_equal [], props["elements"]
-    # assert_equal "", props["menuTabs"].map { _1["date"] }
   end
 
-  test "handles invalid date parameter gracefully" do
+  test "handles invalid date parameter gracefully without filtering by date" do
     get program_url, params: { query: "Batman", date: "invalid-date" }
 
     assert_response :success
     props = inertia_props
 
-    # Should fall back to first available date
-    assert props["menuTabs"].present?
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
+    assert props["elements"].all? { _1["titulo"].include?("Batman") }
   end
 
-  test "pagination returns 1st page with search and date filters" do
+  test "pagination returns 1st page while ignoring date param" do
     get program_url, params: {
       query: "test",
       date: "2024-10-07"
@@ -216,8 +210,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # Preserve search across dates
-  test "preserves search across dates when navigating" do
+  test "preserves search when date param is present" do
     get program_url, params: { query: "Batman" }
     assert_response :success
 
@@ -226,7 +219,6 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     props = inertia_props
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Dom, 6 Out"
 
     elements = props["elements"]
     elements.each do |element|
@@ -234,7 +226,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "selects first available date when searching" do
+  test "exposes matching date labels when searching" do
     get program_url, params: { query: "est" }
 
     # 3. Assert response
@@ -243,38 +235,24 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     # 4. Check props
     props = inertia_props
 
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
+    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
   end
 
-  test "handles dates with no matching movies via direct URL" do
-    # User directly accesses URL with search + date that has no matches
+  test "ignores direct date URLs with no matching movies" do
     get program_url, params: { query: "Batman", date: "2024-10-04" }
 
     assert_response :success
     props = inertia_props
 
-    # Should handle gracefully - empty results, preserved search, fallback date
-    assert_equal 1, props["elements"].count
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    # Should fallback to first available date with Batman movies
-    assert_not_equal "2024-10-04", props["menuTabs"].map { _1["date"] }
-    assert_includes props["menuTabs"].map { _1["date"] }, "Sáb, 5 Out"
+    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }.uniq
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["elements"].map { _1["date_label"] }.uniq
   end
 
-  test "search changes available dates when results are filtered" do
-    # First, get all results without search to see total pages
-    get program_url
+  test "search exposes date labels for filtered results" do
+    get program_url, params: { query: "Batman" }
     assert_response :success
-    available_dates_count = inertia_props["menuTabs"].map { _1["date"] }.count
-    # total_pages_unfiltered = all_results_pagy["pages"]
-
-    # Now search for something specific that should have fewer results
-    get program_url, params: { query: "test" }
-    assert_response :success
-    filtered_available_dates_count = inertia_props["menuTabs"].map { _1["date"] }.count
-    # Filtered results should have fewer pages than unfiltered
-    assert filtered_available_dates_count < available_dates_count,
-      "Expected filtered search to have fewer dates (#{filtered_available_dates_count}) than unfiltered (#{available_dates_count})"
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], inertia_props["elements"].map { _1["date_label"] }.uniq
   end
 
   test "filters by mostra - competicao nacional" do
@@ -284,7 +262,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 2, elements.length
+    assert elements.length >= 2
 
     elements.each do |element|
       assert_includes [ "Cidade Perdida", "Amor em Brasília" ], element["titulo"]
@@ -298,7 +276,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 2, elements.length
+    assert elements.length >= 2
 
     elements.each do |element|
       assert_includes [ "Berlin Nights", "Paris Stories" ], element["titulo"]
@@ -312,8 +290,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    # Only 1 element on first available date (2024-10-05)
-    assert_equal 1, elements.length
+    assert elements.length > 1
     elements.each do |element|
       assert_includes [ "Amazônia Selvagem", "Cidade em Transformação" ], element["titulo"]
     end
@@ -345,8 +322,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade Perdida", elements.first["titulo"]
+    assert elements.length >= 1
+    assert_equal [ "Cidade Perdida" ], elements.map { _1["titulo"] }.uniq
 
     # Verify both filters are preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
@@ -378,26 +355,26 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 2, elements.length
+    assert elements.length >= 2
 
     titles = elements.map { |e| e["titulo"] }
     assert_includes titles, "Cidade Perdida" # from competicao-nacional
     assert_includes titles, "Cidade em Transformação" # from documentarios
   end
 
-  test "mostra filter affects available dates" do
+  test "mostra filter affects rendered date sections" do
     # Documentarios only has content on 2024-10-05, 2024-10-06 and 2024-10-07
     get program_url, params: { mostra: "documentarios" }
 
     assert_response :success
     props = inertia_props
 
-    available_dates = props["menuTabs"].map { _1["date"] }
+    available_dates = props["elements"].map { _1["date_label"] }.uniq
     expected_dates = [ "Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out" ]
     assert_equal expected_dates, available_dates
   end
 
-  test "preserves mostra filter when navigating dates" do
+  test "preserves mostra filter when date param is present" do
     get program_url, params: {
       mostra: "competicao-nacional",
       date: "2024-10-06"
@@ -406,16 +383,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    # Should show nacional movie on 2024-10-06
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade Perdida", elements.first["titulo"]
+    assert_equal [ "Cidade Perdida", "Amor em Brasília" ], elements.map { _1["titulo"] }.uniq
 
     # Filter should be preserved
     assert_equal "competicao-nacional", props["current_filters"]["mostra"]["permalink_pt"]
   end
 
-  test "combines all filters - search, mostra, and date" do
+  test "combines search and mostra while ignoring date param" do
     get program_url, params: {
       query: "Cidade",
       mostra: "documentarios",
@@ -426,13 +401,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade em Transformação", elements.first["titulo"]
+    assert elements.length >= 1
+    assert_equal [ "Cidade em Transformação" ], elements.map { _1["titulo"] }.uniq
 
     # All filters should be preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal "documentarios", props["current_filters"]["mostra"]["permalink_pt"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
+    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
   end
 
   test "mostra filter with pagination" do
@@ -541,8 +516,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Batman", elements.first["titulo"]
+    assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
 
     # Filters preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
@@ -579,18 +553,18 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_includes titles, "Cidade em Transformação"
   end
 
-  test "cinema filter affects available dates" do
+  test "cinema filter affects rendered date sections" do
     cine_brasilia = cinemas(:cine_brasilia)
     get program_url, params: { cinema: cine_brasilia.id }
 
     assert_response :success
     props = inertia_props
 
-    available_dates = props["menuTabs"].map { _1["date"] }
+    available_dates = props["elements"].map { _1["date_label"] }.uniq
     assert_equal [ "Seg, 7 Out" ], available_dates.uniq
   end
 
-  test "preserves cinema filter when navigating dates" do
+  test "preserves cinema filter when date param is present" do
     cinepolis = cinemas(:cinepolis)
     get program_url, params: {
       cinema: cinepolis.id,
@@ -602,8 +576,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     elements = props["elements"]
     titles = elements.map { |e| e["titulo"] }
-    assert_includes titles, "Amazônia Selvagem"
-    assert_includes titles, "Matrix"
+    assert_includes titles, "Cidade Perdida"
+    assert_includes titles, "Cidade em Transformação"
 
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
   end
@@ -620,12 +594,12 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     elements = props["elements"]
-    assert_equal 1, elements.length
-    assert_equal "Cidade em Transformação", elements.first["titulo"]
+    assert elements.length >= 1
+    assert_equal [ "Cidade Perdida", "Cidade em Transformação" ], elements.map { _1["titulo"] }.uniq
 
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-    assert_includes props["menuTabs"].map { _1["date"] }, "Seg, 7 Out"
+    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
   end
 
   test "cinema filter with pagination" do
@@ -667,8 +641,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "especial", props["current_session_type"]
     assert_equal [ "Berlin Nights" ], props["elements"].map { _1["titulo"] }
-    assert_equal [ "Sáb, 5 Out" ], props["menuTabs"].map { _1["date"] }
-    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=especial") }
+    assert_equal [ "Sáb, 5 Out" ], props["elements"].map { _1["date_label"] }.uniq
   end
 
   test "filters session menu by debate sessions only" do
@@ -678,9 +651,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "debate", props["current_session_type"]
-    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }
-    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["menuTabs"].map { _1["date"] }
-    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=debate") }
+    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }.uniq
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["elements"].map { _1["date_label"] }.uniq
   end
 
   test "filters session menu by free and limited gratuity sessions" do
@@ -691,8 +663,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal "gratuidade", props["current_session_type"]
     assert_includes props["elements"].map { _1["titulo"] }, "Batman"
-    assert_includes props["menuTabs"].map { _1["date"] }, "Dom, 6 Out"
-    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=gratuidade") }
+    assert_includes props["elements"].map { _1["date_label"] }, "Dom, 6 Out"
   end
 
   test "programming menu context exposes session filters and one active item" do

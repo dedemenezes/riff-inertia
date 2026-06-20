@@ -73,7 +73,6 @@ describe("ProgramSessionTypeNav", () => {
     expect(partialProps).toEqual(expect.arrayContaining([
       "elements",
       "pagy",
-      "menuTabs",
       "session_type_nav",
       "current_session_type",
       "current_filters",

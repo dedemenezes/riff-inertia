@@ -16,7 +16,6 @@
 
 import TwContainer from "@/components/layout/TwContainer.vue";
 import InfiniteScrollLayout from "@/components/layout/InfiniteScrollLayout.vue";
-import MenuTabs from "@/components/layout/navbar/MenuTabs.vue";
 import TagFilter from "@/components/common/tags/TagFilter.vue";
 import MobileTrigger from "@/components/features/filters/MobileTrigger.vue";
 import ProgramsFilterForm from "@/components/features/filters/ProgramsFilterForm.vue";
@@ -24,7 +23,6 @@ import ProgramSessionTypeNav from "@/components/features/program/ProgramSessionT
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 
 import { useMobileTrigger } from "@/components/features/filters/composables/useMobileTrigger";
-import { useStickyMenuTabs } from "@/components/layout/navbar/composables/useStickyMenuTabs";
 
 import ResponsiveFilterMenu from "@/components/features/filters/ResponsiveFilterMenu.vue";
 import Breadcrumb from "@/components/common/Breadcrumb.vue";
@@ -45,8 +43,6 @@ const props = defineProps({
   ,sessoes: { type: Array, default: () => [] }
   ,directors: { type: Array, default: () => [] }
   ,actors: { type: Array, default: () => [] }
-  // NEW LIFE
-  ,menuTabs: { type: Array, required: true }
   ,session_type_nav: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
   ,current_session_type: { type: String, default: null }
@@ -80,8 +76,29 @@ const {
 // UI UTILITIES
 // ============================================================================
 
-// sticket menutabs
-const { sentinel, isSticky } = useStickyMenuTabs();
+function groupElementsByDate(elements = []) {
+  const groups = [];
+  const groupsByDate = new Map();
+
+  elements.forEach((session) => {
+    const date = session.data;
+
+    if (!groupsByDate.has(date)) {
+      const group = {
+        date,
+        label: session.date_label || date,
+        sessions: [],
+      };
+
+      groupsByDate.set(date, group);
+      groups.push(group);
+    }
+
+    groupsByDate.get(date).sessions.push(session);
+  });
+
+  return groups;
+}
 
 const debugMode = false;
 </script>
@@ -100,7 +117,7 @@ const debugMode = false;
 
   <hr class="text-neutrals-300">
 
-  <TwContainer class="relative">
+  <TwContainer class="relative pt-400 lg:pt-600">
     <div class="filter flex lg:hidden items-center justify-end py-300 bg-white">
       <MobileTrigger @open-menu="openMenu" />
     </div>
@@ -120,15 +137,9 @@ const debugMode = false;
     </div>
 
     <div class="grid grid-cols-12">
-      <div class="col-span-12 md:col-span-6">
-        <div ref="sentinel" class="h-1"></div>
-        <MenuTabs
-          :is-sticky="isSticky"
-          :tabs="menuTabs"
-          class="h-15"
-        />
+      <div class="col-span-12 md:col-span-6 lg:pt-400">
         <div
-          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-13 z-10 bg-white"
+          class="hidden lg:flex gap-300 pt-200 pb-300 overflow-x-auto no-scroll-bar sticky top-0 z-10 bg-white"
           v-if="Object.values(props.current_filters).some((item) => item !== null)"
         >
           <TagFilter
@@ -145,9 +156,23 @@ const debugMode = false;
           :pagy="props.pagy"
           :end-message="props.endMessage"
         >
-          <SessionCard v-for="session in allElements"
-            :session="session"
-          />
+          <section
+            v-for="section in groupElementsByDate(allElements)"
+            :key="section.date"
+            class="space-y-800"
+          >
+            <h2 class="text-header-sm text-primary">
+              {{ section.label }}
+            </h2>
+
+            <div class="space-y-800">
+              <SessionCard
+                v-for="session in section.sessions"
+                :key="session.id"
+                :session="session"
+              />
+            </div>
+          </section>
         </InfiniteScrollLayout>
       </div>
 
