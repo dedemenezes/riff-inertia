@@ -31,11 +31,11 @@ export function useSearchFilter(props) {
 
   const withSessionType = (params = {}) => {
     const queryParams = params instanceof URLSearchParams
-      ? new URLSearchParams(params)
-      : new URLSearchParams(params);
+      ? Object.fromEntries(params)
+      : { ...params };
 
     if (props.current_session_type) {
-      queryParams.set('tipo_sessao', props.current_session_type);
+      queryParams.tipo_sessao = props.current_session_type;
     }
 
     return queryParams;
