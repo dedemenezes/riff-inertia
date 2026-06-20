@@ -16,8 +16,13 @@ const stubs = {
     template: `<div data-testid="combobox-control">{{ placeholder }}</div>`,
   },
   SelectComponent: {
-    props: ["collection", "modelValue"],
-    template: `<select data-testid="select-control"></select>`,
+    props: ["collection", "modelValue", "placeholder"],
+    emits: ["update:modelValue"],
+    template: `
+      <select data-testid="select-control" :value="modelValue" @change="$emit('update:modelValue', $event.target.value)">
+        <option v-for="option in collection" :key="option.value" :value="option.value">{{ option.label }}</option>
+      </select>
+    `,
   },
   SearchBar: {
     props: ["modelValue"],
@@ -34,6 +39,7 @@ const option = (label, value = "value") => ({
 const props = {
   modelValue: {},
   updateField: vi.fn(),
+  dates: [option("Data da sessão", "2024-10-05")],
   sessoes: [option("Sessão", "20:00")],
   mostras: [option("Mostra", "premiere-brasil")],
   cinemas: [option("Cinema", "cine-odeon")],
@@ -51,12 +57,25 @@ describe("ProgramsFilterForm", () => {
     expect(wrapper.find("details").exists()).toBe(false);
     expect(wrapper.find("summary").exists()).toBe(false);
 
-    ["Sessão", "Mostra", "Cinema", "Genero", "País", "Direção", "Elenco"].forEach((label) => {
+    ["Data da sessão", "Sessão", "Mostra", "Cinema", "Genero", "País", "Direção", "Elenco"].forEach((label) => {
       expect(wrapper.text()).toContain(label);
     });
 
     expect(wrapper.find('[data-testid="search-bar"]').exists()).toBe(true);
-    expect(wrapper.find('[data-testid="select-control"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-testid="select-control"]')).toHaveLength(2);
     expect(wrapper.findAll('[data-testid="combobox-control"]')).toHaveLength(6);
+  });
+
+  it("updates date when the date select changes", async () => {
+    const updateField = vi.fn();
+    const wrapper = mount(ProgramsFilterForm, {
+      props: { ...props, updateField },
+      global: { stubs },
+    });
+    await flushPromises();
+
+    await wrapper.findAll('[data-testid="select-control"]')[0].setValue("2024-10-05");
+
+    expect(updateField).toHaveBeenCalledWith("date", props.dates[0]);
   });
 });

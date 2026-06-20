@@ -36,6 +36,7 @@ const props = defineProps({
   tabBaseUrl: { type: String, required: true }
   ,elements: { type: Object, required: true }
   ,pagy: { type: Object, required: true }
+  ,dates: { type: Array, default: () => [] }
   ,mostras: { type: Array, default: () => [] }
   ,cinemas: { type: Array, default: () => [] }
   ,paises: { type: Array, default: () => [] }
@@ -163,6 +164,7 @@ const debugMode = false;
             <ProgramsFilterForm
               :model-value="searchFilterProps.modelValue"
               :update-field="searchFilterProps.updateField"
+              :dates="props.dates"
               :mostras="props.mostras"
               :cinemas="props.cinemas"
               :paises="props.paises"

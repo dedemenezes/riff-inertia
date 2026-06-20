@@ -7,7 +7,7 @@ import { extractFilterValues } from "@/lib/filterUtils";
  */
 export function useSearchFilter(props) {
   // Props that will change when updating filters
-  const propsToUpdate = ['elements', 'pagy', 'current_filters', 'current_session_type', 'has_active_filters']
+  const propsToUpdate = ['elements', 'pagy', 'dates', 'current_filters', 'current_session_type', 'has_active_filters']
 
   // Main filter state - this is passed to SearchFilter via ResponsiveFilterMenu
   const filters = ref({ ...props.current_filters });
@@ -81,6 +81,8 @@ export function useSearchFilter(props) {
     const filterKeyMap = {
       'Time': 'sessao',
       'Sessão': 'sessao',
+      'Session date': 'date',
+      'Data da sessão': 'date',
       'Showcase': 'mostra',
       'Mostra': 'mostra',
       'Cinema': 'cinema',
