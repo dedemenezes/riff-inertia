@@ -26,7 +26,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: simpleTranslation('Selecione um horário', 'Choose starting time')
+    default: () => simpleTranslation('Selecione um horário', 'Choose starting time')
   }
 })
 

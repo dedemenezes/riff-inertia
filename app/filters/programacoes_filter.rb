@@ -144,7 +144,7 @@ class ProgramacoesFilter
       end
     end
 
-    available_dates = relation.distinct.pluck(:data).sort
+    available_dates = relation.where.not(data: nil).distinct.pluck(:data).sort
 
     if @params[:date].present?
       parsed_date = Date.parse(@params[:date]) rescue nil

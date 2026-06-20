@@ -21,7 +21,7 @@ module ProgramFilterOptions
 
   def build_dates_filter(base_scope, locale: I18n.locale)
     label = I18n.t("filter.session_date", locale:)
-    base_scope.distinct.pluck(:data).sort.map do |date|
+    base_scope.where.not(data: nil).distinct.pluck(:data).sort.map do |date|
       {
         "filter_value" => date.iso8601,
         "filter_display" => display_filter_date(date, locale:),
