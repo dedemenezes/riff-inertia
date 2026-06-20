@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
     scope :festival do
       get "sobre-nos", to: "sobre_nos#index", as: :festival_sobre_nos
+      get "juri", to: "juri#index", as: :festival_juri
       get "parceiros", to: "parceiros#index", as: :festival_parceiros
       get "parceiros/editoriais", to: "parceiros#editoriais", as: :festival_parceiros_editoriais
     end
