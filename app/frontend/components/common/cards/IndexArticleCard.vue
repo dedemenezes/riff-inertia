@@ -10,18 +10,23 @@ const props = defineProps({
   imagem: { type: String, required: true },
   title: { type: String, required: true },
   chamada: { type: String, required: true },
+  href: { type: String, default: null },
 })
 
 const imageUrl = computed(() => {
   return `https://s3.amazonaws.com/festivaldorio/imagens/noticias/medium2/${props.imagem}`
 })
+
+const articleHref = computed(() => {
+  return props.href || `/${page.props.currentLocale}/noticias/${props.permalink}`;
+});
 </script>
 
 <template>
   <div class="flex flex-col gap-200 md:flex-row md:gap-400">
     <!-- TODO: Review for locale ✅ filtering from controller by idioma -->
     <Link
-      :href="`/${page.props.currentLocale}/noticias/${props.permalink}`"
+      :href="articleHref"
       class="w-full md:w-auto md:flex-shrink-0"
     >
       <img
@@ -43,7 +48,7 @@ const imageUrl = computed(() => {
         </span>
       </div>
       <h3 class="text-header-medium-sm text-neutrals-900">
-        <Link :href="`/pt/noticias/${props.permalink}`">
+        <Link :href="articleHref">
           {{ props.title }}
         </Link>
       </h3>

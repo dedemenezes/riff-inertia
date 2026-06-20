@@ -34,10 +34,12 @@ class NoticiasController < ApplicationController
         [ "", @root_url ],
         [ "Notícias", "" ],
       ),
-      elements: @noticias.as_json(
-                only: %i[id titulo permalink chamada imagem],
-                methods: [ :caderno_nome, :display_date ]
-              ),
+      elements: @noticias.map { |noticia|
+        noticia.listing_as_json(
+          only: %i[id permalink chamada imagem],
+          methods: [ :caderno_nome, :display_date ]
+        )
+      },
       pagy:  {
         page: @pagy.page,
         pages: @pagy.pages,
@@ -55,8 +57,10 @@ class NoticiasController < ApplicationController
     @noticia = Noticia.find_by_permalink(params[:permalink])
     render inertia: "Noticias/Show", props: {
       conteudo: @noticia.conteudo,
-      titulo: @noticia.titulo,
+      titulo: @noticia.display_title,
       chamada: @noticia.chamada,
+      data: @noticia.display_date,
+      caderno: @noticia.caderno_nome,
       breadcrumbs: breadcrumbs(
         [ "Home", @root_url ],
         [ "Notícias", noticias_url ],

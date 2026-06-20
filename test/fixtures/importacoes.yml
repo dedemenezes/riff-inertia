@@ -1,0 +1,21 @@
+# Latest (and only) importacao for edicao 12. Matches the importacao_id used
+# across peliculas/mostras fixtures so edition-scoped queries return data.
+importacao_2024:
+  id: 1
+  edicao_id: 12
+  created: <%= Time.current %>
+
+importacao_2023_old:
+  id: 20
+  edicao_id: 13
+  created: <%= 2.days.ago %>
+
+importacao_2023:
+  id: 21
+  edicao_id: 13
+  created: <%= 1.day.ago %>
+
+importacao_2022:
+  id: 22
+  edicao_id: 14
+  created: <%= 3.days.ago %>

@@ -1,6 +1,5 @@
   <script setup>
 import { computed, defineAsyncComponent } from "vue";
-const AccordionGroup = defineAsyncComponent(() => import("@/components/AccordionGroup.vue"));
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'));
 import SearchBar from "@/components/features/filters/SearchBar.vue";
 import { simpleTranslation } from "@/lib/utils";
@@ -55,88 +54,79 @@ const getQueryObject = (filter_value) => {
   </div>
 
   <!-- SUBMOSTRAS -->
-  <AccordionGroup
+  <div
     v-if="props.submostras.length > 1"
-    :text="submostraLabel"
-    :isOpen="!!props.modelValue.mostra"
   >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="submostrasFilterOptions"
-          :modelValue="props.modelValue.mostra?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('mostra', getSelectedFrom('submostras', val))"
-          :placeholder="simpleTranslation('Selecione uma mostra', 'Choose a showcase')"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ submostraLabel }}
+    </p>
+    <div class="overflow-hidden w-full">
+      <ComboboxComponent
+        :collection="submostrasFilterOptions"
+        :modelValue="props.modelValue.mostra?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('mostra', getSelectedFrom('submostras', val))"
+        :placeholder="simpleTranslation('Selecione uma mostra', 'Choose a showcase')"
+      />
+    </div>
+  </div>
 
   <!-- GENRES -->
-  <AccordionGroup
-    :text="genreLabel"
-    :isOpen="!!props.modelValue.genero"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="genresFilterOptions"
-          :modelValue="props.modelValue.genero?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('genero', getSelectedFrom('genres', val))"
-          :placeholder="simpleTranslation('Selecione um gênero', 'Choose a genre')"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+  <div>
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ genreLabel }}
+    </p>
+    <div class="overflow-hidden w-full">
+      <ComboboxComponent
+        :collection="genresFilterOptions"
+        :modelValue="props.modelValue.genero?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('genero', getSelectedFrom('genres', val))"
+        :placeholder="simpleTranslation('Selecione um gênero', 'Choose a genre')"
+      />
+    </div>
+  </div>
 
   <!-- PAISES -->
-  <AccordionGroup
-    :text="paisLabel"
-    :isOpen="!!props.modelValue.pais"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="paisesFilterOptions"
-          :modelValue="props.modelValue.pais?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('pais', getSelectedFrom('paises', val))"
-          :placeholder="simpleTranslation('Selecione um país', 'Choose a country')"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+  <div>
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ paisLabel }}
+    </p>
+    <div class="overflow-hidden w-full">
+      <ComboboxComponent
+        :collection="paisesFilterOptions"
+        :modelValue="props.modelValue.pais?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('pais', getSelectedFrom('paises', val))"
+        :placeholder="simpleTranslation('Selecione um país', 'Choose a country')"
+      />
+    </div>
+  </div>
 
   <!-- DIRETORES -->
-  <AccordionGroup
-    :text="directorLabel"
-    :isOpen="!!props.modelValue.direcao"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="directorsOptions"
-          :modelValue="props.modelValue.direcao?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('direcao', getSelectedFrom('directors', val))"
-          :placeholder="simpleTranslation('Selecione um diretor', 'Choose a director')"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+  <div>
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ directorLabel }}
+    </p>
+    <div class="overflow-hidden w-full">
+      <ComboboxComponent
+        :collection="directorsOptions"
+        :modelValue="props.modelValue.direcao?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('direcao', getSelectedFrom('directors', val))"
+        :placeholder="simpleTranslation('Selecione um diretor', 'Choose a director')"
+      />
+    </div>
+  </div>
 
   <!-- ACTORS -->
-  <AccordionGroup
-    :text="actorsLabel"
-    :isOpen="!!props.modelValue.elenco"
-  >
-    <template v-slot:content>
-      <div class="overflow-hidden w-full">
-        <ComboboxComponent
-          :collection="actorsFilterOptions"
-          :modelValue="props.modelValue.elenco?.filter_value || null"
-          @update:modelValue="(val) => props.updateField('elenco', getSelectedFrom('actors', val))"
-          :placeholder="simpleTranslation('Selecione um ator(a)', 'Choose an actor')"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
+  <div>
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ actorsLabel }}
+    </p>
+    <div class="overflow-hidden w-full">
+      <ComboboxComponent
+        :collection="actorsFilterOptions"
+        :modelValue="props.modelValue.elenco?.filter_value || null"
+        @update:modelValue="(val) => props.updateField('elenco', getSelectedFrom('actors', val))"
+        :placeholder="simpleTranslation('Selecione um ator(a)', 'Choose an actor')"
+      />
+    </div>
+  </div>
 </template>

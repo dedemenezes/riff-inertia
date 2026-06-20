@@ -72,7 +72,7 @@ const iconColor = (value) =>
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="w-[-webkit-fill-available] justify-between m-100"
+        class="w-[-webkit-fill-available] justify-between"
       >
         <div
           class="flex gap-300 items-center"

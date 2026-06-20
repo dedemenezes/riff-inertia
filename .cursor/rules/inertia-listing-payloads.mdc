@@ -1,0 +1,25 @@
+---
+description: Backend conventions for Inertia listing payloads, pagination, and previous-edition imports
+alwaysApply: true
+---
+
+# Inertia Listing Payloads
+
+When building Rails controllers for Inertia listing pages:
+
+- Keep list payloads minimal. Do not reuse broad show-page serializers/constants when a card/list only needs a few fields.
+- For film cards, avoid `Pelicula::METHODS_NEEDED` unless the page truly needs heavy show data such as `programacoesAsJson`, `banner_image`, `carousel_images`, `teams`, or director images.
+- Prefer controller-local payload constants for list-specific needs, for example `FILM_COLUMNS` and `FILM_METHODS`.
+- Add tests that assert expensive fields are absent when optimizing a listing payload.
+
+For pagination/infinite scroll:
+
+- Sanitize page params to page `1` or higher before passing them to Pagy.
+- If using `pagy_infinite`, pass `page:` explicitly on the first page path so invalid `params[:page]` cannot reach Pagy.
+- Add a request/controller test for invalid page params (`0`, negative, non-numeric) when adding paginated listings.
+
+For previous-edition pages:
+
+- Scope the listed records to the latest `Importacao` for the referenced `Edicao`.
+- Keep filter-option behavior aligned with the legacy site. For films, direction/cast options are intentionally not scoped to the previous edition importacao.
+- When tests depend on `importacao_id`, ensure matching `test/fixtures/importacoes.yml` data exists.

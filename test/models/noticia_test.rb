@@ -27,6 +27,21 @@ class NoticiaTest < ActiveSupport::TestCase
     assert @valid.errors[:titulo].any?
   end
 
+  test "display_title strips legacy HTML tags from title" do
+    @valid.titulo = "<i>Birdman</i>, novo Iñárritu, vai abrir o Festival de Veneza"
+
+    assert_equal "Birdman, novo Iñárritu, vai abrir o Festival de Veneza", @valid.display_title
+  end
+
+  test "display_title updates memoized value when title changes" do
+    @valid.titulo = "Título sem HTML"
+    assert_equal "Título sem HTML", @valid.display_title
+
+    @valid.titulo = "<i>Birdman</i>, novo Iñárritu"
+
+    assert_equal "Birdman, novo Iñárritu", @valid.display_title
+  end
+
   test "requires permalink" do
     @valid.permalink = nil
     assert_not @valid.valid?

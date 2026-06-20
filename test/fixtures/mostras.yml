@@ -71,3 +71,93 @@ documentarios:
   ordem: 3
   created: <%= Date.today %>
   updated: <%= Date.today %>
+
+premiere_brasil_longas:
+  nome_abreviado: "Première Brasil-Longas"
+  permalink_pt: "premiere-brasil-longas"
+  permalink_en: "premiere-brazil-features"
+  importacao_id: 1
+  edicao_id: 12
+  nome_pt: "Première Brasil Longas"
+  nome_en: "Premiere Brazil Features"
+  chamada_pt: "Longas brasileiros inéditos"
+  chamada_en: "Brazilian feature premieres"
+  conteudo_pt: "Conteúdo em português"
+  conteudo_en: "English content"
+  imagem: "premiere-longas.jpg"
+  premiere: 1
+  ordem: 4
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+premiere_brasil_curtas:
+  nome_abreviado: "Première Brasil:Curtas"
+  permalink_pt: "premiere-brasil-curtas"
+  permalink_en: "premiere-brazil-shorts"
+  importacao_id: 1
+  edicao_id: 12
+  nome_pt: "Première Brasil Curtas"
+  nome_en: "Premiere Brazil Shorts"
+  chamada_pt: "Curtas brasileiros inéditos"
+  chamada_en: "Brazilian short premieres"
+  conteudo_pt: "Conteúdo em português"
+  conteudo_en: "English content"
+  imagem: "premiere-curtas.jpg"
+  premiere: 1
+  ordem: 5
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+noite_abertura_2023_old:
+  nome_abreviado: "Noite de Abertura"
+  permalink_pt: "noite-abertura-2023-old"
+  permalink_en: "opening-night-2023-old"
+  importacao_id: 20
+  edicao_id: 13
+  nome_pt: "Noite de Abertura"
+  nome_en: "Opening Night"
+  chamada_pt: "Mostra da importação antiga"
+  chamada_en: "Old import showcase"
+  conteudo_pt: "Conteúdo antigo"
+  conteudo_en: "Old content"
+  imagem: "abertura-old.jpg"
+  premiere: 0
+  ordem: 1
+  created: <%= 2.days.ago %>
+  updated: <%= 2.days.ago %>
+
+noite_abertura_2023:
+  nome_abreviado: "Noite de Abertura"
+  permalink_pt: "noite-abertura-2023"
+  permalink_en: "opening-night-2023"
+  importacao_id: 21
+  edicao_id: 13
+  nome_pt: "Noite de Abertura"
+  nome_en: "Opening Night"
+  chamada_pt: "Filmes de abertura de 2023"
+  chamada_en: "Opening films from 2023"
+  conteudo_pt: "Conteúdo em português"
+  conteudo_en: "English content"
+  imagem: "abertura-2023.jpg"
+  premiere: 0
+  ordem: 1
+  created: <%= 1.day.ago %>
+  updated: <%= 1.day.ago %>
+
+panorama_2022:
+  nome_abreviado: "Panorama"
+  permalink_pt: "panorama-2022"
+  permalink_en: "panorama-2022"
+  importacao_id: 22
+  edicao_id: 14
+  nome_pt: "Panorama"
+  nome_en: "Panorama"
+  chamada_pt: "Panorama de 2022"
+  chamada_en: "2022 panorama"
+  conteudo_pt: "Conteúdo em português"
+  conteudo_en: "English content"
+  imagem: "panorama-2022.jpg"
+  premiere: 0
+  ordem: 1
+  created: <%= 3.days.ago %>
+  updated: <%= 3.days.ago %>

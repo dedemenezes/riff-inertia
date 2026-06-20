@@ -222,3 +222,91 @@ cidade_transformacao:
   ativo: 1
   created: <%= Date.today %>
   updated: <%= Date.today %>
+
+filme_premiere_longa:
+  titulo_portugues_coord_int: "Filme Première Longa"
+  titulo_original_coord_int: "Filme Première Longa"
+  titulo_ingles_coord_int: "Premiere Feature Film"
+  titulo_ingles_semartigo: "Premiere Feature Film"
+  titulo_portugues_semartigo: "Filme Première Longa"
+  permalink: "filme-premiere-longa"
+  importacao_id: 1
+  catalogo_ficha_2007: "Drama/Drama"
+  edicao_id: 12
+  mostra: premiere_brasil_longas
+  imagem: "premiere_longa.jpg"
+  imagem_producao: "p01_premiere_longa.jpg"
+  duracao_coord_int: 100
+  diretor_coord_int: "Diretora Premiere"
+  elenco_coord_int: "Atriz Premiere, Ator Premiere"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Longa da Première Brasil."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+filme_premiere_curta:
+  titulo_portugues_coord_int: "Filme Première Curta"
+  titulo_original_coord_int: "Filme Première Curta"
+  titulo_ingles_coord_int: "Premiere Short Film"
+  titulo_ingles_semartigo: "Premiere Short Film"
+  titulo_portugues_semartigo: "Filme Première Curta"
+  permalink: "filme-premiere-curta"
+  importacao_id: 1
+  catalogo_ficha_2007: "Drama/Drama"
+  edicao_id: 12
+  mostra: premiere_brasil_curtas
+  imagem: "premiere_curta.jpg"
+  imagem_producao: "p01_premiere_curta.jpg"
+  duracao_coord_int: 18
+  diretor_coord_int: "Diretor Curta"
+  elenco_coord_int: "Atriz Curta"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Curta da Première Brasil."
+  ativo: 1
+  created: <%= Date.today %>
+  updated: <%= Date.today %>
+
+filme_abertura_2023_old:
+  titulo_portugues_coord_int: "Filme Abertura 2023 Antigo"
+  titulo_original_coord_int: "Filme Abertura 2023 Antigo"
+  titulo_ingles_coord_int: "Old Opening Film"
+  titulo_ingles_semartigo: "Old Opening Film"
+  titulo_portugues_semartigo: "Filme Abertura 2023 Antigo"
+  permalink: "filme-abertura-2023-antigo"
+  importacao_id: 20
+  catalogo_ficha_2007: "Drama/Drama"
+  edicao_id: 13
+  mostra: noite_abertura_2023_old
+  imagem: "abertura_old.jpg"
+  imagem_producao: "p01_abertura_old.jpg"
+  duracao_coord_int: 90
+  diretor_coord_int: "Diretora Antiga"
+  elenco_coord_int: "Elenco Antigo"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Filme da importação antiga."
+  ativo: 1
+  created: <%= 2.days.ago %>
+  updated: <%= 2.days.ago %>
+
+filme_abertura_2023:
+  titulo_portugues_coord_int: "Filme Abertura 2023"
+  titulo_original_coord_int: "Filme Abertura 2023"
+  titulo_ingles_coord_int: "Opening Film 2023"
+  titulo_ingles_semartigo: "Opening Film 2023"
+  titulo_portugues_semartigo: "Filme Abertura 2023"
+  permalink: "filme-abertura-2023"
+  importacao_id: 21
+  catalogo_ficha_2007: "Drama/Drama"
+  edicao_id: 13
+  mostra: noite_abertura_2023
+  imagem: "abertura_2023.jpg"
+  imagem_producao: "p01_abertura_2023.jpg"
+  duracao_coord_int: 92
+  diretor_coord_int: "Diretora 2023"
+  elenco_coord_int: "Elenco 2023"
+  paiscompleto_coord_int: "Brasil"
+  sinopse_port_export: "Filme de abertura de 2023."
+  ativo: 1
+  created: <%= 1.day.ago %>
+  updated: <%= 1.day.ago %>

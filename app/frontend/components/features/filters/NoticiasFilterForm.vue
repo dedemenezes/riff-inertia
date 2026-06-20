@@ -1,8 +1,9 @@
 <script setup>
 import { computed, defineAsyncComponent } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import AccordionGroup from "@/components/AccordionGroup.vue";
 import DatePickerComponent from "@/components/ui/DatePickerComponent.vue";
+import SearchBar from "@/components/features/filters/SearchBar.vue";
+import { simpleTranslation } from "@/lib/utils";
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
 const page = usePage()
 const props = defineProps({
@@ -19,29 +20,48 @@ const cadernosOptions = computed(() => {
     value: caderno.filter_value,
   }));
 });
-const cadernoLabel = computed(() => props.cadernos[0].filter_label)
+const cadernoLabel = computed(() => simpleTranslation("Assunto", "Subject"))
+const datePickerLocale = computed(() => page.props.currentLocale === "pt" ? "pt-BR" : "en-US")
 
 const getCadernoObjectFromPermalink = (inputValue) => {
   return props.cadernos.find(c => c.filter_value === inputValue) || null;
 };
 
 const getDateFromInput = (value) => {
-  // debugger
-  return { "filter_display": value, "filter_value": value, filter_label: props.dataLabel } || null;
+  return value
+    ? { filter_display: value, filter_value: value, filter_label: props.dataLabel }
+    : null;
+}
+
+const getQueryObject = (value) => {
+  return value
+    ? {
+        filter_display: value,
+        filter_value: value,
+        filter_label: simpleTranslation("Busca", "Search"),
+      }
+    : null;
 }
 </script>
 
 <template>
   <div class="w-full">
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ props.dataLabel }}
+    </p>
     <DatePickerComponent
       :model-value="props.modelValue.data?.filter_value"
-      placeholder="Pick session date"
+      :placeholder="simpleTranslation('Escolha uma data', 'Pick a date')"
+      :locale="datePickerLocale"
       @update:model-value="updateField('data', getDateFromInput($event))"
     />
   </div>
   <!-- Article-specific filter content -->
 
   <div class="pt-400 overflow-hidden w-full">
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ cadernoLabel }}
+    </p>
     <ComboboxComponent
       :collection="cadernosOptions"
       :modelValue="props.modelValue.caderno?.filter_value || null"
@@ -49,21 +69,14 @@ const getDateFromInput = (value) => {
       @update:modelValue="(val) => props.updateField('caderno', getCadernoObjectFromPermalink(val))"
     />
   </div>
-  <!-- Add other article-specific filters -->
-  <!--
-  <AccordionGroup
-    text="Categoria"
-    :isOpen="props.modelValue.categoria != null"
-  >
-    <template v-slot:content>
-      <div class="pt-400 overflow-hidden">
-        <ComboboxComponent
-          :collection="categorias"
-          :modelValue="props.modelValue.categoria"
-          @update:modelValue="(val) => props.updateField('categoria', val)"
-        />
-      </div>
-    </template>
-  </AccordionGroup>
-  -->
+
+  <div class="pt-400 w-full">
+    <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
+      {{ simpleTranslation("Palavra-chave", "Keyword") }}
+    </p>
+    <SearchBar
+      :model-value="props.modelValue.query?.filter_value"
+      @update:model-value="(val) => props.updateField('query', getQueryObject(val))"
+    />
+  </div>
 </template>

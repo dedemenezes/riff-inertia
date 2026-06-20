@@ -42,6 +42,18 @@ class TalentsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes titles, "TEST FELIX TWO titulo"
   end
 
+  test "news strips legacy HTML tags from card titles" do
+    noticias(:one_talents).update!(
+      titulo: "<i>Birdman</i>, novo Iñárritu, vai abrir o Festival de Veneza"
+    )
+
+    get talents_news_url(locale: :pt)
+
+    titles = inertia_props["noticias"].map { |n| n["titulo"] }
+    assert_includes titles, "Birdman, novo Iñárritu, vai abrir o Festival de Veneza"
+    titles.each { |title| assert_no_match(/<[^>]+>/, title) }
+  end
+
   test "news in en locale returns english talents noticias" do
     get talents_news_url(locale: :en)
 
