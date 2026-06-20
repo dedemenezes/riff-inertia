@@ -7,7 +7,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
   end
 
@@ -17,7 +17,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_includes elements.map { _1["titulo"] }, "Matrix"
 
     # Check total count via pagination
@@ -31,7 +31,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Cidade Perdida" ], elements.map { _1["titulo"] }.uniq
   end
 
@@ -41,7 +41,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
 
     elements.each do |element|
@@ -55,7 +55,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Berlin Nights" ], elements.map { _1["titulo"] }.uniq
   end
 
@@ -65,7 +65,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
 
     elements.each do |element|
@@ -79,7 +79,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
 
     elements.each do |element|
@@ -93,7 +93,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Cidade em Transformação" ], elements.map { _1["titulo"] }.uniq
   end
 
@@ -103,7 +103,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
 
     elements.each do |element|
@@ -121,7 +121,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
 
     # Verify both filters are preserved
@@ -139,7 +139,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Batman is directed by Christopher Nolan, not Wachowskis
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 0, elements.length
 
     # Filters should still be preserved
@@ -153,7 +153,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 2
 
     titles = elements.map { |e| e["titulo"] }
@@ -171,7 +171,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Cidade Perdida" ], elements.map { _1["titulo"] }.uniq
 
     # Verify both filters are preserved
@@ -189,7 +189,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Christopher Nolan's Batman is in sci_fi mostra, not competicao-nacional
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 0, elements.length
 
     # Filters should still be preserved
@@ -207,10 +207,10 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     # This depends on which cinemas show João Silva's movies
     # Adjust expected count based on fixtures
-    assert elements.length >= 0
+    assert elements.is_a?(Array)
 
     elements.each do |element|
     end
@@ -226,10 +226,9 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    available_dates = props["elements"].map { _1["date_label"] }.uniq
+    available_dates = program_section_labels(props)
     # Should only show dates where Christopher Nolan movies are programmed
-    # Adjust expected dates based on your programacoes fixtures
-    assert available_dates.length >= 0
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], available_dates
   end
 
   test "preserves director filter when date param is present" do
@@ -241,7 +240,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     elements.each do |element|
     end
 
@@ -262,7 +261,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     # Expect 1 result if all filters align, 0 if they don't
     elements.each do |element|
       assert_includes element["titulo"], "Matrix"
@@ -313,7 +312,7 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Empty filter should behave like no filter - return all elements
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length > 0
 
     selected_filters = props["current_filters"]
@@ -329,8 +328,22 @@ class ProgramsController::DirectorFilterTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
     assert_equal "São Paulo", elements.first["titulo"]
+  end
+
+  private
+
+  def program_sections(props = inertia_props)
+    props["elements"]
+  end
+
+  def program_sessions(props = inertia_props)
+    program_sections(props).flat_map { _1["sessions"] }
+  end
+
+  def program_section_labels(props = inertia_props)
+    program_sections(props).map { _1["label"] }
   end
 end

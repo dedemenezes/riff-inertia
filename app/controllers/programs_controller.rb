@@ -12,7 +12,7 @@ class ProgramsController < ApplicationController
 
     base_scope = Programacao
       .joins(pelicula: :mostra)
-      .includes(:cinema, pelicula: :mostra)
+      .includes(:cinema, pelicula: [ :mostra, :paises ])
       .where(importacoesprog_id: last_import_id, edicao_id: Edicao.current.id, deletado: 0) # TODO: remover importacoes?
 
     set_filter_options(base_scope)
@@ -49,24 +49,7 @@ class ProgramsController < ApplicationController
 
     @pagy, @programacoes = pagy_infinite(programacoes_scope, current_page)
 
-    @programacoes = @programacoes.map do |programacao|
-      {
-        id: programacao.id,
-        data: programacao.data,
-        date_label: programacao.display_date,
-        sessao: [ programacao.display_sessao ],
-        cinema: programacao.cinema&.nome,
-        titulo: programacao.pelicula&.titulo_portugues_coord_int,
-        duracao: programacao.pelicula&.duracao_coord_int,
-        imagem_url: programacao.pelicula&.imageURL,
-        genero: programacao.pelicula&.genre,
-        paises: programacao.pelicula&.display_paises,
-        mostra: programacao.pelicula&.mostra&.display_name,
-        mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
-        pelicula_url: pelicula_path(programacao.pelicula.permalink),
-        gratuito:  ActiveRecord::Type::Boolean.new.cast(programacao.gratuito)
-      }
-    end
+    @programacoes = group_programacoes_by_date(@programacoes.map { serialize_programacao(_1) })
 
     # Build breadcrumbs
     render inertia: "ProgramPage", props: {
@@ -103,6 +86,35 @@ class ProgramsController < ApplicationController
   end
 
   private
+
+  def serialize_programacao(programacao)
+    {
+      id: programacao.id,
+      data: programacao.data,
+      date_label: programacao.display_date,
+      sessao: [ programacao.display_sessao ],
+      cinema: programacao.cinema&.nome,
+      titulo: programacao.pelicula&.titulo_portugues_coord_int,
+      duracao: programacao.pelicula&.duracao_coord_int,
+      imagem_url: programacao.pelicula&.imageURL,
+      genero: programacao.pelicula&.genre,
+      paises: programacao.pelicula&.display_paises,
+      mostra: programacao.pelicula&.mostra&.display_name,
+      mostra_tag_class: programacao.pelicula&.mostra&.tag_class,
+      pelicula_url: pelicula_path(programacao.pelicula.permalink),
+      gratuito: ActiveRecord::Type::Boolean.new.cast(programacao.gratuito)
+    }
+  end
+
+  def group_programacoes_by_date(programacoes)
+    programacoes.group_by { _1[:data] }.map do |date, sessions|
+      {
+        date: date,
+        label: sessions.first[:date_label],
+        sessions: sessions
+      }
+    end
+  end
 
   def session_type_nav(current_session_type)
     [

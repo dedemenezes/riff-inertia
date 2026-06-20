@@ -72,34 +72,6 @@ const {
     handleClear
 }  = useSearchFilter(props)
 
-// ============================================================================
-// UI UTILITIES
-// ============================================================================
-
-function groupElementsByDate(elements = []) {
-  const groups = [];
-  const groupsByDate = new Map();
-
-  elements.forEach((session) => {
-    const date = session.data;
-
-    if (!groupsByDate.has(date)) {
-      const group = {
-        date,
-        label: session.date_label || date,
-        sessions: [],
-      };
-
-      groupsByDate.set(date, group);
-      groups.push(group);
-    }
-
-    groupsByDate.get(date).sessions.push(session);
-  });
-
-  return groups;
-}
-
 const debugMode = false;
 </script>
 
@@ -157,7 +129,7 @@ const debugMode = false;
           :end-message="props.endMessage"
         >
           <section
-            v-for="section in groupElementsByDate(allElements)"
+            v-for="section in allElements"
             :key="section.date"
             class="space-y-800"
           >

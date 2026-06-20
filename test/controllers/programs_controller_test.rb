@@ -14,8 +14,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "pt", props["currentLocale"], "no locale"
-    assert props["elements"].any?, "Expected at least one program element"
-    assert props["elements"].all? { _1["date_label"].present? }, "Expected each program element to expose a date label"
+    assert program_sections(props).any?, "Expected at least one program section"
+    assert program_sections(props).all? { _1["label"].present? }, "Expected each program section to expose a date label"
   end
 
   test "should return matching elements when query is provided" do
@@ -25,7 +25,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Ensure the correct elements are returned
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 2, elements.length
     assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
   end
@@ -36,7 +36,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 5, elements.length
   end
 
@@ -46,7 +46,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 2, elements.length
     assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
   end
@@ -57,7 +57,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 2
     titles = elements.map { _1["titulo"] }
     assert_includes titles, "Amazônia Selvagem"
@@ -69,7 +69,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 1, elements.length
   end
 
@@ -81,7 +81,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     elements.each do |element|
       assert_includes element["titulo"], "Batman"
     end
@@ -92,7 +92,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     get program_url, params: { query: "Batman" }
 
     props = inertia_props
-    available_dates = props["elements"].map { _1["date_label"] }.uniq
+    available_dates = program_section_labels(props)
     expected = [ "Sáb, 5 Out", "Dom, 6 Out" ]
     # 2. Verify each date actually has matching movies
     assert_equal expected, available_dates
@@ -105,7 +105,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Should return empty arrays, not break
-    assert_equal [], props["elements"]
+    assert_equal [], program_sections(props)
   end
 
   test "handles invalid date parameter gracefully without filtering by date" do
@@ -115,7 +115,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert props["elements"].all? { _1["titulo"].include?("Batman") }
+    assert program_sessions(props).all? { _1["titulo"].include?("Batman") }
   end
 
   test "pagination returns 1st page while ignoring date param" do
@@ -131,16 +131,16 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, pagy["page"]
 
     # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 5, props["elements"].count
+    elements = program_sessions(props)
+    assert_equal 5, elements.count
 
     elements.each do |element|
       assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
     end
+    assert_sessions_ordered_by_date_and_time(elements)
   end
 
-  test "pagination returns 2nd page with search, date and page filters" do
+  test "pagination returns 2nd page with search and page params while ignoring date" do
     get program_url, params: {
       query: "test",
       date: "2024-10-07",
@@ -155,15 +155,16 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, pagy["page"]
 
     # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 10, props["elements"].count
+    elements = program_sessions(props)
+    assert_equal 10, elements.count
 
     elements.each do |element|
       assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
     end
+    assert_sessions_ordered_by_date_and_time(elements)
   end
-  test "pagination returns 3rd page with search, date and page filters" do
+
+  test "pagination returns 3rd page with search and page params while ignoring date" do
     get program_url, params: {
       query: "test",
       date: "2024-10-07",
@@ -178,15 +179,16 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 3, pagy["page"]
 
     # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 15, props["elements"].count
+    elements = program_sessions(props)
+    assert_equal 15, elements.count
 
     elements.each do |element|
       assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
     end
+    assert_sessions_ordered_by_date_and_time(elements)
   end
-  test "pagination returns 4th page with search, date and page filters" do
+
+  test "pagination returns 4th page with search and page params while ignoring date" do
     get program_url, params: {
       query: "test",
       date: "2024-10-07",
@@ -201,13 +203,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, pagy["page"]
 
     # 3. Verify all results are still filtered
-    elements = props["elements"]
-    assert_equal 17, props["elements"].count
+    elements = program_sessions(props)
+    assert_equal 17, elements.count
 
     elements.each do |element|
       assert_includes element["titulo"], "test"
-      assert_equal "2024-10-07", element["data"].to_s
     end
+    assert_sessions_ordered_by_date_and_time(elements)
   end
 
   test "preserves search when date param is present" do
@@ -220,7 +222,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     elements.each do |element|
       assert_includes element["titulo"], "Batman"
     end
@@ -235,7 +237,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     # 4. Check props
     props = inertia_props
 
-    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
+    assert_includes program_section_labels(props), "Seg, 7 Out"
   end
 
   test "ignores direct date URLs with no matching movies" do
@@ -245,14 +247,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
-    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }.uniq
-    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["elements"].map { _1["date_label"] }.uniq
+    assert_equal [ "Batman" ], program_sessions(props).map { _1["titulo"] }.uniq
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], program_section_labels(props)
   end
 
   test "search exposes date labels for filtered results" do
     get program_url, params: { query: "Batman" }
     assert_response :success
-    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], inertia_props["elements"].map { _1["date_label"] }.uniq
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], program_section_labels
   end
 
   test "filters by mostra - competicao nacional" do
@@ -261,7 +263,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 2
 
     elements.each do |element|
@@ -275,7 +277,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 2
 
     elements.each do |element|
@@ -289,7 +291,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length > 1
     elements.each do |element|
       assert_includes [ "Amazônia Selvagem", "Cidade em Transformação" ], element["titulo"]
@@ -303,7 +305,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Should return all elements (no filter applied)
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length > 0
 
     # selectedFilters should be empty
@@ -321,7 +323,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 1
     assert_equal [ "Cidade Perdida" ], elements.map { _1["titulo"] }.uniq
 
@@ -340,7 +342,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Paris is in internacional mostra, not competicao-nacional
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 0, elements.length
 
     # Filters should still be preserved
@@ -354,7 +356,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 2
 
     titles = elements.map { |e| e["titulo"] }
@@ -369,7 +371,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    available_dates = props["elements"].map { _1["date_label"] }.uniq
+    available_dates = program_section_labels(props)
     expected_dates = [ "Sáb, 5 Out", "Dom, 6 Out", "Seg, 7 Out" ]
     assert_equal expected_dates, available_dates
   end
@@ -383,7 +385,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Cidade Perdida", "Amor em Brasília" ], elements.map { _1["titulo"] }.uniq
 
     # Filter should be preserved
@@ -400,14 +402,14 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 1
     assert_equal [ "Cidade em Transformação" ], elements.map { _1["titulo"] }.uniq
 
     # All filters should be preserved
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal "documentarios", props["current_filters"]["mostra"]["permalink_pt"]
-    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
+    assert_includes program_section_labels(props), "Seg, 7 Out"
   end
 
   test "mostra filter with pagination" do
@@ -419,7 +421,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Should have filtered results
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length > 0
 
     elements.each do |element|
@@ -471,7 +473,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # 17 total only 5 first page
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal 5, elements.length
     # 17 total so 5 pages
     total_elements = props["pagy"]["count"]
@@ -484,7 +486,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     titles = elements.map { |e| e["titulo"] }
 
     # Movies associated with cinepolis only
@@ -499,7 +501,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     # Should fallback to all movies (no filter)
-    assert props["elements"].length > 0
+    assert program_sessions(props).length > 0
 
     selected_filters = props["current_filters"]
     assert_nil selected_filters["cinema"]
@@ -515,7 +517,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert_equal [ "Batman" ], elements.map { _1["titulo"] }.uniq
 
     # Filters preserved
@@ -533,7 +535,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    assert_equal 0, props["elements"].length
+    assert_equal 0, program_sessions(props).length
 
     # Filters preserved
     assert_equal "Batman", props["current_filters"]["query"]["filter_value"]
@@ -546,7 +548,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     titles = elements.map { |e| e["titulo"] }
 
     assert_includes titles, "Cidade Perdida"
@@ -560,7 +562,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    available_dates = props["elements"].map { _1["date_label"] }.uniq
+    available_dates = program_section_labels(props)
     assert_equal [ "Seg, 7 Out" ], available_dates.uniq
   end
 
@@ -574,7 +576,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     titles = elements.map { |e| e["titulo"] }
     assert_includes titles, "Cidade Perdida"
     assert_includes titles, "Cidade em Transformação"
@@ -593,13 +595,13 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    elements = props["elements"]
+    elements = program_sessions(props)
     assert elements.length >= 1
     assert_equal [ "Cidade Perdida", "Cidade em Transformação" ], elements.map { _1["titulo"] }.uniq
 
     assert_equal "Cidade", props["current_filters"]["query"]["filter_value"]
     assert_equal cinepolis.id, props["current_filters"]["cinema"]["id"]
-    assert_includes props["elements"].map { _1["date_label"] }, "Seg, 7 Out"
+    assert_includes program_section_labels(props), "Seg, 7 Out"
   end
 
   test "cinema filter with pagination" do
@@ -609,7 +611,7 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     props = inertia_props
 
-    assert_equal 5, props["elements"].length
+    assert_equal 5, program_sessions(props).length
     assert_equal 1, props["pagy"]["page"]
     assert_equal 17, props["pagy"]["count"]
   end
@@ -640,8 +642,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "especial", props["current_session_type"]
-    assert_equal [ "Berlin Nights" ], props["elements"].map { _1["titulo"] }
-    assert_equal [ "Sáb, 5 Out" ], props["elements"].map { _1["date_label"] }.uniq
+    assert_equal [ "Berlin Nights" ], program_sessions(props).map { _1["titulo"] }
+    assert_equal [ "Sáb, 5 Out" ], program_section_labels(props)
   end
 
   test "filters session menu by debate sessions only" do
@@ -651,8 +653,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "debate", props["current_session_type"]
-    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }.uniq
-    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["elements"].map { _1["date_label"] }.uniq
+    assert_equal [ "Batman" ], program_sessions(props).map { _1["titulo"] }.uniq
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], program_section_labels(props)
   end
 
   test "filters session menu by free and limited gratuity sessions" do
@@ -662,8 +664,8 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     props = inertia_props
 
     assert_equal "gratuidade", props["current_session_type"]
-    assert_includes props["elements"].map { _1["titulo"] }, "Batman"
-    assert_includes props["elements"].map { _1["date_label"] }, "Dom, 6 Out"
+    assert_includes program_sessions(props).map { _1["titulo"] }, "Batman"
+    assert_includes program_section_labels(props), "Dom, 6 Out"
   end
 
   test "programming menu context exposes session filters and one active item" do
@@ -729,5 +731,23 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
       assert href.start_with?("/")
       refute_match %r{\Ahttps?://}, href
     end
+  end
+
+  private
+
+  def program_sections(props = inertia_props)
+    props["elements"]
+  end
+
+  def program_sessions(props = inertia_props)
+    program_sections(props).flat_map { _1["sessions"] }
+  end
+
+  def program_section_labels(props = inertia_props)
+    program_sections(props).map { _1["label"] }
+  end
+
+  def assert_sessions_ordered_by_date_and_time(sessions)
+    assert_equal sessions.sort_by { [ _1["data"], _1["sessao"].first ] }, sessions
   end
 end
