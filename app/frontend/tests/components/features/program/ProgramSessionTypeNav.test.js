@@ -2,9 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import ProgramSessionTypeNav from "@/components/features/program/ProgramSessionTypeNav.vue";
 
-const IconStub = {
-  template: "<span data-test='icon' />",
-};
+const { IconStub } = vi.hoisted(() => ({
+  IconStub: {
+    template: "<span data-test='icon' />",
+  },
+}));
 
 vi.mock("@/components/common/icons/misc/IconProgram.vue", () => ({ default: IconStub }));
 vi.mock("@/components/common/icons/misc/IconStar.vue", () => ({ default: IconStub }));
