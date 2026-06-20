@@ -658,4 +658,57 @@ class ProgramsControllerTest < ActionDispatch::IntegrationTest
     assert cinema["id"].present?
     assert cinema["nome"].present?
   end
+
+  test "filters session menu by special sessions only" do
+    get program_url, params: { tipo_sessao: "especial", query: "Berlin", date: "2024-10-05" }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal "especial", props["current_session_type"]
+    assert_equal [ "Berlin Nights" ], props["elements"].map { _1["titulo"] }
+    assert_equal [ "Sáb, 5 Out" ], props["menuTabs"].map { _1["date"] }
+    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=especial") }
+  end
+
+  test "filters session menu by debate sessions only" do
+    get program_url, params: { tipo_sessao: "debate", query: "Batman", date: "2024-10-05" }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal "debate", props["current_session_type"]
+    assert_equal [ "Batman" ], props["elements"].map { _1["titulo"] }
+    assert_equal [ "Sáb, 5 Out", "Dom, 6 Out" ], props["menuTabs"].map { _1["date"] }
+    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=debate") }
+  end
+
+  test "filters session menu by free and limited gratuity sessions" do
+    get program_url, params: { tipo_sessao: "gratuidade", date: "2024-10-05" }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal "gratuidade", props["current_session_type"]
+    assert_includes props["elements"].map { _1["titulo"] }, "Batman"
+    assert_includes props["menuTabs"].map { _1["date"] }, "Dom, 6 Out"
+    assert props["menuTabs"].all? { |tab| URI.parse(tab["url"]).query.include?("tipo_sessao=gratuidade") }
+  end
+
+  test "programming menu context exposes session filters and one active item" do
+    get program_url, params: { tipo_sessao: "debate" }
+
+    assert_response :success
+    program_menu = inertia_props["menuContext"]["programacao"]
+
+    assert_equal [
+      "Programação",
+      "Sessões especiais",
+      "Sessões com gratuidade",
+      "Sessões com debates",
+      "Mudanças na programação"
+    ], program_menu.map { _1["name"] }
+    assert_equal [ "Sessões com debates" ], program_menu.select { _1["active"] }.map { _1["name"] }
+    assert_nil program_menu.find { _1["name"] == "Sessões com convidados" }
+  end
 end

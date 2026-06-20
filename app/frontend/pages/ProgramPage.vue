@@ -48,6 +48,7 @@ const props = defineProps({
   // NEW LIFE
   ,menuTabs: { type: Array, required: true }
   ,current_filters: { type: Object, default: () => ({}) }
+  ,current_session_type: { type: String, default: null }
   ,has_active_filters: { type: Boolean, default: false }
   ,crumbs: { type: Array, required: true }
   ,endMessage: { type: String, required: true }

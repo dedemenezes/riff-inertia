@@ -6,7 +6,7 @@ import { useTabScroll } from '@/components/common/tabs/useTabScroll'
 const props = defineProps({
   content: { type: String, required: true },
   route: { type: String, default: "#" },
-  active: {type: Boolean }
+  active: { type: Boolean, default: undefined }
 });
 const isHovered = ref(false);
 const handleMouseEnter = () => {
@@ -32,9 +32,11 @@ const getPath = (url) => {
 };
 
 const isActive = computed(() => getPath(url) === getPath(props.route)); // Check if current URL matches the route
-const isIconActive = computed(() => isHovered.value || isFocused.value || isActive.value);
+const hasExplicitActive = computed(() => props.active !== undefined);
+const routeActive = computed(() => hasExplicitActive.value ? props.active : isActive.value);
+const isIconActive = computed(() => isHovered.value || isFocused.value || routeActive.value);
 
-const navRef = useTabScroll(isActive.value);
+const navRef = useTabScroll(routeActive.value);
 </script>
 
 <template>
@@ -53,8 +55,8 @@ const navRef = useTabScroll(isActive.value);
       <slot
         name="icon"
         :hovered="isHovered"
-        :active="props.active || isIconActive"
-        :routeActive="isActive"
+        :active="isIconActive"
+        :routeActive="routeActive"
       />
       <p class="text-body-strong-xs text-primary text-center uppercase">
         {{ props.content }}

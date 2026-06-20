@@ -40,6 +40,7 @@ class ProgramsController < ApplicationController
     @selected_genre = filter_result.selected_genre
     @selected_director = filter_result.selected_director
     @selected_actor = filter_result.selected_actor
+    @selected_session_type = filter_result.selected_session_type
     @selected_date = filter_result.selected_date
     available_dates = filter_result.available_dates
     base_scope = filter_result.relation
@@ -72,7 +73,7 @@ class ProgramsController < ApplicationController
     @menu_tabs = available_dates.map do |date|
       {
         date: I18n.l(date, format: "%a, %-d %b"),
-        url: build_tab_url(date, @selected_filters),
+        url: build_tab_url(date, @selected_filters, @selected_session_type),
         active: date.to_s == params[:date] || (date == @selected_date && !params[:date])
       }
     end
@@ -100,6 +101,7 @@ class ProgramsController < ApplicationController
         elenco: @selected_actor,
         direcao: @selected_director
       },
+      current_session_type: @selected_session_type,
       has_active_filters: params.permit(:query, :mostra).to_h.values.any?(&:present?),
       crumbs: breadcrumbs(
         [ "", @root_url ],
@@ -112,7 +114,7 @@ class ProgramsController < ApplicationController
 
   private
 
-  def build_tab_url(date, filters)
+  def build_tab_url(date, filters, session_type)
     query_params = {}
     query_params[:mostra]= filters[:mostra]["filter_value"] if filters[:mostra].present?
     query_params[:cinema]= filters[:cinema]["filter_value"] if filters[:cinema].present?
@@ -121,8 +123,8 @@ class ProgramsController < ApplicationController
     query_params[:sessao]= filters[:sessao]["filter_value"] if filters[:sessao].present?
     query_params[:direcao]= filters[:direcao]["filter_value"] if filters[:direcao].present?
     query_params[:elenco]= filters[:elenco]["filter_value"] if filters[:elenco].present?
+    query_params[:tipo_sessao] = session_type if session_type.present?
     query_params[:date] = date
-    query_params[:free] = params[:free] if params[:free].present?
     url_for(params: query_params, only_path: true)
   end
 end

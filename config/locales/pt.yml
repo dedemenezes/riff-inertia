@@ -42,7 +42,10 @@ pt:
       name: "Programação"
       full_schedule: "Programação completa"
       with_guests: "Sessões com convidados"
+      special: "Sessões especiais"
       free: "Programação gratuita"
+      with_gratuity: "Sessões com gratuidade"
+      with_debates: "Sessões com debates"
       updates: "Mudanças na programação"
     media:
       name: "Mídias"

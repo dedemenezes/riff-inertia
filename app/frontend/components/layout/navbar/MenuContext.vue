@@ -19,6 +19,8 @@ const props = defineProps({
 const loaders = {
   program: () => import('@/components/common/icons/misc/IconProgram.vue'),
   newUser: () => import('@/components/common/icons/misc/IconNewUser.vue'),
+  star: () => import('@/components/common/icons/misc/IconStar.vue'),
+  chatDots: () => import('@/components/common/icons/misc/IconChatDots.vue'),
   change: () => import('@/components/common/icons/misc/IconChange.vue'),
   ticket: () => import('@/components/common/icons/misc/IconTicket.vue'),
   grid: () => import('@/components/common/icons/misc/IconGrid.vue'),
@@ -36,7 +38,7 @@ const loaders = {
 }
 
 const loadersPerNav = {
-  programacao: ["program", "newUser", "change", "ticket"],
+  programacao: ["program", "star", "ticket", "chatDots", "change"],
   edicao: ["program", "grid", "pin", "trophy", "people"],
   sobre: ["logoFest", "calendar", "talentPress", "handshake"],
   midias: ["image", "book"],
@@ -87,7 +89,7 @@ watchEffect(() => {
         class="flex-shrink-0"
         :content="item.name"
         :route="item.path"
-        :active="props.activePage === item.name"
+        :active="item.active ?? (props.activePage ? props.activePage === item.name : undefined)"
       >
         <template #icon="{ active }">
           <Suspense>

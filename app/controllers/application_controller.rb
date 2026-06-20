@@ -79,12 +79,15 @@ class ApplicationController < ActionController::Base
   end
 
   def set_menu_context
+    current_session_type = params[:tipo_sessao].presence
+
     {
       "programacao" => [
-        { name: I18n.t("navigation.programming.name"), path: program_url, icon: "program" },
-        { name: I18n.t("navigation.programming.with_guests"), path: "", icon: "newUser" },
-        { name: I18n.t("navigation.mudancas_na_programacao"), path: "", icon: "change" },
-        { name: I18n.t("navigation.programming.free"), path: "", icon: "ticket" }
+        { name: I18n.t("navigation.programming.name"), path: program_url, icon: "program", active: current_session_type.blank? },
+        { name: I18n.t("navigation.programming.special"), path: program_url(tipo_sessao: "especial"), icon: "star", active: current_session_type == "especial" },
+        { name: I18n.t("navigation.programming.with_gratuity"), path: program_url(tipo_sessao: "gratuidade"), icon: "ticket", active: current_session_type == "gratuidade" },
+        { name: I18n.t("navigation.programming.with_debates"), path: program_url(tipo_sessao: "debate"), icon: "chatDots", active: current_session_type == "debate" },
+        { name: I18n.t("navigation.mudancas_na_programacao"), path: "", icon: "change", active: false }
       ],
       "edicao" => [
         { name: I18n.t("navigation.todos_os_filmes"), path: peliculas_path, icon: "program" },
