@@ -26,6 +26,7 @@ const props = defineProps({
   breadcrumbs: { type: Array, default: () => []},
   tabBaseUrl: { type: String, default: "MISSING" },
   dataLabel: { type: String, required: true },
+  dateFilter: { type: Object, default: () => ({}) },
   elements: { type: Array, default: () => []},
   cadernos: { type: Array, required: true },
   current_filters: { type: Object, default: () => {} },
@@ -115,6 +116,7 @@ console.log(filters);
               :model-value="modelValue"
               :update-field="updateField"
               :data-label="props.dataLabel"
+              :date-filter="props.dateFilter"
               :cadernos="props.cadernos"
             />
           </template>

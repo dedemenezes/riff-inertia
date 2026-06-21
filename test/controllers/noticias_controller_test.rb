@@ -10,6 +10,9 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal "pt", props["currentLocale"]
     assert props["elements"].is_a?(Array), "Expected elements to be an array"
     assert props["elements"].any?, "Expected at least one element"
+    assert_nil props["dateFilter"]["min"]
+    assert props["dateFilter"]["max"].present?
+    assert props["dateFilter"]["default_month"].present?
   end
 
   test "index strips legacy HTML tags from news card titles" do
@@ -103,8 +106,8 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "filters by date - 2025-08-05 - returns all" do
-    get noticias_url(locale: :pt), params: { data: "2025-08-05" }
+  test "filters by start date - 2025-08-05 - returns all" do
+    get noticias_url(locale: :pt), params: { data_inicio: "2025-08-05" }
 
     assert_response :success
     props = inertia_props
@@ -113,14 +116,15 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, elements.length
 
     assert_equal "2025-08-05", props["current_filters"]["data"]["filter_value"]
+    assert_equal({ "data_inicio" => "2025-08-05" }, props["current_filters"]["data"]["filter_params"])
 
     elements.each do |element|
       assert_includes [ "TEST TALENTS ONE titulo", "TEST FELIX TWO titulo" ], element["titulo"]
     end
   end
 
-  test "filters by date in PT - 2025-08-11 returns only one" do
-    get noticias_url(locale: :pt), params: { data: "2025-08-11" }
+  test "filters by start date in PT - 2025-08-11 returns only one" do
+    get noticias_url(locale: :pt), params: { data_inicio: "2025-08-11" }
 
     assert_response :success
     props = inertia_props
@@ -135,10 +139,24 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal "2025-08-11", props["current_filters"]["data"]["filter_value"]
   end
 
+  test "filters by publication date range" do
+    get noticias_url(locale: :pt), params: { data_inicio: "2025-08-10", data_fim: "2025-08-10" }
+
+    assert_response :success
+    props = inertia_props
+
+    assert_equal [ "TEST TALENTS ONE titulo" ], props["elements"].map { |element| element["titulo"] }
+    assert_equal "2025-08-10..2025-08-10", props["current_filters"]["data"]["filter_value"]
+    assert_equal(
+      { "data_inicio" => "2025-08-10", "data_fim" => "2025-08-10" },
+      props["current_filters"]["data"]["filter_params"]
+    )
+  end
+
   def test_combines_date_and_caderno_filter_in_pt
     caderno = cadernos(:felix)
     get noticias_url, params: {
-      data: "2025-08-11",
+      data_inicio: "2025-08-11",
       caderno: caderno.permalink_pt
     }
 
@@ -157,7 +175,7 @@ class NoticiasControllerTest < ActionDispatch::IntegrationTest
   def test_combines_date_and_caderno_filter_in_en
     caderno = cadernos(:felix)
     get noticias_url(locale: :en), params: {
-      data: "2025-08-11",
+      data_inicio: "2025-08-11",
       caderno: caderno.permalink_en
     }
 

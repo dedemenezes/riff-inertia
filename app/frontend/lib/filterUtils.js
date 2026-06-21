@@ -8,11 +8,18 @@ export function extractFilterValues(filters) {
 
   for (const [key, value] of Object.entries(filters)) {
     if (value == null) continue
+    const filterParams = value?.filter_params
     const filterVal = value?.filter_value
 
     const isPrimitive = ['string', 'number', 'boolean'].includes(typeof filterVal)
 
-    if (typeof value === 'object' && isPrimitive) {
+    if (filterParams && typeof filterParams === 'object') {
+      for (const [paramKey, paramValue] of Object.entries(filterParams)) {
+        if (paramValue !== null && paramValue !== undefined && paramValue !== '') {
+          cleanedFilters[paramKey] = paramValue
+        }
+      }
+    } else if (typeof value === 'object' && isPrimitive) {
       cleanedFilters[key] = filterVal
     } else if (key === "query" && typeof value === 'string') {
       cleanedFilters[key] = value

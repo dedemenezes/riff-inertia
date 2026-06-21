@@ -20,7 +20,10 @@ class Edicoes::NoticiasController < ApplicationController
       params: params,
       locale: I18n.locale,
       cadernos_relation: Caderno.where(id: base_scope.select(:caderno_id)),
-      date_mode: :exact
+      date_bounds: {
+        min: @edicao.data_inicio,
+        max: @edicao.data_termino
+      }
     ).call
 
     filtered_relation = filter_result.relation.order(titulo: sort_direction)
@@ -41,12 +44,21 @@ class Edicoes::NoticiasController < ApplicationController
         last: @pagy.last
       },
       cadernos: filter_result.cadernos,
+      dateFilter: {
+        min: @edicao.data_inicio.iso8601,
+        max: @edicao.data_termino.iso8601,
+        default_month: @edicao.data_inicio.iso8601
+      },
       current_filters: {
         query: filter_result.selected_query,
         data: filter_result.selected_date,
         caderno: filter_result.selected_caderno
       },
-      has_active_filters: params.permit(:query, :data, :caderno).to_h.values.any?(&:present?),
+      has_active_filters: [
+        filter_result.selected_query,
+        filter_result.selected_date,
+        filter_result.selected_caderno
+      ].any?(&:present?),
       sort: sort_direction.to_s,
       tabBaseUrl: edicao_anterior_noticias_path(@edicao),
       fallBackUrl: edicoes_anteriores_path,

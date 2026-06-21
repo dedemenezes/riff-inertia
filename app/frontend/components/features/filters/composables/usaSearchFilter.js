@@ -106,18 +106,7 @@ export function useSearchFilter(props) {
       // Updated local filter state
       filters.value[filterKey] = null;
 
-      // Build new URL params from remaining filters
-      const newParams = new URLSearchParams();
-      Object.entries(filters.value).forEach(([key, value]) => {
-        if (
-          value !== null &&
-          value !== undefined &&
-          value !== "" &&
-          value?.filter_value
-        ) {
-          newParams.set(key, value.filter_value);
-        }
-      });
+      const newParams = extractFilterValues(filters.value);
 
       router.get(props.tabBaseUrl, withSessionType(newParams), {
         preserveScroll: true,

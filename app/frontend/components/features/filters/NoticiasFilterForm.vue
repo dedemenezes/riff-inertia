@@ -1,7 +1,7 @@
 <script setup>
 import { computed, defineAsyncComponent } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import DatePickerComponent from "@/components/ui/DatePickerComponent.vue";
+import NewsDateRangePicker from "@/components/features/filters/NewsDateRangePicker.vue";
 import SearchBar from "@/components/features/filters/SearchBar.vue";
 import { simpleTranslation } from "@/lib/utils";
 const ComboboxComponent = defineAsyncComponent(() => import('@/components/ui/ComboboxComponent.vue'))
@@ -10,6 +10,7 @@ const props = defineProps({
   modelValue: { type: Object, required: true },
   updateField: { type: Function, required: true },
   dataLabel: String,
+  dateFilter: { type: Object, default: () => ({}) },
   cadernos: { type: Array, default: () => [] }, // Article-specific prop
 });
 
@@ -27,12 +28,6 @@ const getCadernoObjectFromPermalink = (inputValue) => {
   return props.cadernos.find(c => c.filter_value === inputValue) || null;
 };
 
-const getDateFromInput = (value) => {
-  return value
-    ? { filter_display: value, filter_value: value, filter_label: props.dataLabel }
-    : null;
-}
-
 const getQueryObject = (value) => {
   return value
     ? {
@@ -49,11 +44,16 @@ const getQueryObject = (value) => {
     <p class="font-body font-semibold text-neutrals-900 text-sm pb-300">
       {{ props.dataLabel }}
     </p>
-    <DatePickerComponent
-      :model-value="props.modelValue.data?.filter_value"
+    <NewsDateRangePicker
+      :model-value="props.modelValue.data"
       :placeholder="simpleTranslation('Escolha uma data', 'Pick a date')"
       :locale="datePickerLocale"
-      @update:model-value="updateField('data', getDateFromInput($event))"
+      :label="props.dataLabel"
+      :min="props.dateFilter.min"
+      :max="props.dateFilter.max"
+      :default-month="props.dateFilter.default_month"
+      :clear-label="simpleTranslation('Limpar', 'Clear')"
+      @update:model-value="updateField('data', $event)"
     />
   </div>
   <!-- Article-specific filter content -->
