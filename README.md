@@ -107,7 +107,7 @@ INERTIA_SSR_PORT=13715 npm run ssr
 INERTIA_SSR_ENABLED=true INERTIA_SSR_URL=http://localhost:13715 bin/rails server
 ```
 
-Production deploys must build the SSR bundle with `npm run build:ssr`, run `npm run ssr` as a Node process reachable by Rails, and set `INERTIA_SSR_ENABLED=true`.
+Production deploys build the SSR bundle during `assets:precompile`, run `npm run ssr` as a Node process reachable by Rails, and require `INERTIA_SSR_ENABLED=true` to use SSR.
 
 The SSR entrypoint lives at `app/frontend/ssr/ssr.js`. It intentionally sits outside `app/frontend/entrypoints/` because Vite Ruby treats files in `entrypoints/` as browser bundles during the normal client build.
 
@@ -124,7 +124,10 @@ bin/rails test test/controllers/pages_controller_test.rb
 
 ## Deployment notes
 
-- `Procfile`: `web` runs Puma; `release` runs `rails assets:precompile` (includes Vite production build).
+- `Procfile`: `web` runs `bin/heroku-web`.
+- `rails assets:precompile` includes the normal Vite production build and `npm run build:ssr`.
+- On Heroku Common Runtime, `bin/heroku-web` runs Puma only when `INERTIA_SSR_ENABLED` is not `true`; with SSR enabled, it starts `npm run ssr` and Puma in the same web dyno so Rails can use `INERTIA_SSR_URL=http://localhost:13714`.
+- SSR rollback is environment-only: set `INERTIA_SSR_ENABLED=false` and restart the dyno.
 - Production does **not** run the Vite dev server.
 
 ---
