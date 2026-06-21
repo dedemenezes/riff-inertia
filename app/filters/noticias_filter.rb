@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Builds caderno filter options and applies date / caderno params to a Noticia relation.
+# Builds caderno filter options and applies date range / caderno params to a Noticia relation.
 class NoticiasFilter
   Result = Struct.new(
     :relation,
@@ -11,12 +11,12 @@ class NoticiasFilter
     keyword_init: true
   )
 
-  def initialize(relation:, params:, locale: I18n.locale, cadernos_relation: Caderno.all, date_mode: :from_date)
+  def initialize(relation:, params:, locale: I18n.locale, cadernos_relation: Caderno.all, date_bounds: {})
     @relation = relation
     @params = params
     @locale = (locale || I18n.locale).to_sym
     @cadernos_relation = cadernos_relation
-    @date_mode = date_mode
+    @date_bounds = normalize_date_bounds(date_bounds)
   end
 
   def call
@@ -40,17 +40,10 @@ class NoticiasFilter
       }
     end
 
-    if @params[:data].present?
-      parsed_date = parse_date(@params[:data])
-
-      if parsed_date
-        selected_date = {
-          "filter_display" => @params[:data],
-          "filter_value" => @params[:data],
-          "filter_label" => I18n.t("filter.date")
-        }
-        relation = relation.where(data: date_filter_for(parsed_date))
-      end
+    date_range = build_date_range
+    if date_range
+      relation = relation.where(data: date_range[:range])
+      selected_date = build_selected_date(date_range)
     end
 
     if @params[:caderno].present?
@@ -96,9 +89,54 @@ class NoticiasFilter
     nil
   end
 
-  def date_filter_for(date)
-    return date if @date_mode == :exact
-
-    date..Date.today
+  def normalize_date_bounds(date_bounds)
+    {
+      min: parse_optional_date(date_bounds[:min] || date_bounds["min"]),
+      max: parse_optional_date(date_bounds[:max] || date_bounds["max"])
+    }
   end
+
+  def parse_optional_date(value)
+    return value if value.is_a?(Date)
+    return nil if value.blank?
+
+    parse_date(value)
+  end
+
+  def build_date_range
+    start_date = parse_optional_date(@params[:data_inicio])
+    return nil unless start_date
+
+    end_date = parse_optional_date(@params[:data_fim])
+    return nil if end_date && end_date < start_date
+    return nil unless within_date_bounds?(start_date) && (!end_date || within_date_bounds?(end_date))
+
+    {
+      start_date: start_date,
+      end_date: end_date,
+      range: end_date ? start_date..end_date : start_date..
+    }
+  end
+
+  def within_date_bounds?(date)
+    return false if @date_bounds[:min] && date < @date_bounds[:min]
+    return false if @date_bounds[:max] && date > @date_bounds[:max]
+
+    true
+  end
+
+  def build_selected_date(date_range)
+    start_value = date_range[:start_date].iso8601
+    end_value = date_range[:end_date]&.iso8601
+    filter_params = { "data_inicio" => start_value }
+    filter_params["data_fim"] = end_value if end_value
+
+    {
+      "filter_display" => end_value ? "#{start_value} - #{end_value}" : start_value,
+      "filter_value" => end_value ? "#{start_value}..#{end_value}" : start_value,
+      "filter_label" => I18n.t("filter.date"),
+      "filter_params" => filter_params
+    }
+  end
+
 end

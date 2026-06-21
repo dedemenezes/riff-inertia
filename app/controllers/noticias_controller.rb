@@ -17,7 +17,8 @@ class NoticiasController < ApplicationController
     filter_result = NoticiasFilter.new(
       relation: base_scope,
       params: params,
-      locale: I18n.locale
+      locale: I18n.locale,
+      date_bounds: { max: Date.current }
     ).call
 
     current_page = params[:page].to_i
@@ -29,6 +30,11 @@ class NoticiasController < ApplicationController
     render inertia: "Noticias/Index", props: {
       tabBaseUrl: noticias_url,
       dataLabel: I18n.t("filter.date"),
+      dateFilter: {
+        min: nil,
+        max: Date.current.iso8601,
+        default_month: Date.current.iso8601
+      },
       cadernos: filter_result.cadernos,
       breadcrumbs: breadcrumbs(
         [ "", @root_url ],
@@ -46,6 +52,7 @@ class NoticiasController < ApplicationController
         last: @pagy.last
       },
       current_filters: {
+        query: filter_result.selected_query,
         data: filter_result.selected_date,
         caderno: filter_result.selected_caderno
       },
