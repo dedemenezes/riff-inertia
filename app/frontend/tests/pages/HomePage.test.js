@@ -100,6 +100,8 @@ describe("HomePage", () => {
     expect(images[0].attributes()).toMatchObject({
       src: webdoors[0].mobile_image_url,
       alt: webdoors[0].titulo,
+      width: "600",
+      height: "800",
       decoding: "async",
     });
   });

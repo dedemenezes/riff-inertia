@@ -74,6 +74,8 @@ const props = defineProps({
               <img
                 :src="webdoor.mobile_image_url || webdoor.desktop_image_url"
                 :alt="webdoor.titulo"
+                width="600"
+                height="800"
                 class="h-full w-full object-cover"
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
