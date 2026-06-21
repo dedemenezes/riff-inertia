@@ -37,6 +37,36 @@ class PeliculaTest < ActiveSupport::TestCase
     assert_nil pelicula.imageURL
   end
 
+  test "card_image returns responsive image data for listing cards" do
+    pelicula = peliculas(:batman)
+    base_url = ENV.fetch("IMAGES_BASE_URL")
+
+    card_image = pelicula.card_image
+
+    assert_equal "#{base_url}/2024/site/peliculas/medium2/batman.jpg", card_image[:src]
+    assert_includes card_image[:srcset], "#{base_url}/2024/site/peliculas/medium/batman.jpg 400w"
+    assert_includes card_image[:srcset], "#{base_url}/2024/site/peliculas/medium2/batman.jpg 600w"
+    assert_includes card_image[:srcset], "#{base_url}/2024/site/peliculas/large/batman.jpg 800w"
+    assert_equal Pelicula::CARD_IMAGE_SIZES, card_image[:sizes]
+    refute_includes card_image[:src], "/original/"
+  end
+
+  test "card_image falls back to production image when main image is blank" do
+    pelicula = peliculas(:batman)
+    pelicula.imagem = nil
+    base_url = ENV.fetch("IMAGES_BASE_URL")
+
+    assert_equal "#{base_url}/2024/site/peliculas/medium2/p01_batman.jpg", pelicula.card_image[:src]
+  end
+
+  test "card_image returns nil when both image fields are blank" do
+    pelicula = peliculas(:batman)
+    pelicula.imagem = nil
+    pelicula.imagem_producao = nil
+
+    assert_nil pelicula.card_image
+  end
+
   test "banner_image returns src, srcset and sizes" do
     pelicula = peliculas(:batman)
     base_url = ENV.fetch("IMAGES_BASE_URL")

@@ -4,16 +4,6 @@ class Edicoes::FilmesController < ApplicationController
   include MostraFilterOptions
 
   PER_PAGE = 9
-  FILM_COLUMNS = %i[edicao_id duracao_coord_int].freeze
-  FILM_METHODS = %i[
-    display_titulo
-    genre
-    display_paises
-    imageURL
-    mostra_tag_class
-    mostra_display_name
-    url
-  ].freeze
 
   before_action :set_edicao
 
@@ -50,8 +40,8 @@ class Edicoes::FilmesController < ApplicationController
     render inertia: "Edicoes/Filmes", props: {
       edicao: @edicao.as_json(only: %i[id descricao], methods: %i[cartazURL]),
       elements: @peliculas.as_json(
-        only: FILM_COLUMNS,
-        methods: FILM_METHODS
+        only: Pelicula::CARD_COLUMNS,
+        methods: Pelicula::CARD_METHODS
       ),
       pagy: {
         page: @pagy.page,

@@ -10,7 +10,10 @@ const props = defineProps({
   pelicula: { type: Object, required: true },
   linkable: { type: Boolean, default: true },
 });
-const moviePoster = computed(() => props.pelicula.imageURL || DefaultImage);
+const cardImage = computed(() => props.pelicula.card_image || null);
+const moviePoster = computed(
+  () => cardImage.value?.src || props.pelicula.imageURL || DefaultImage,
+);
 const movieGenre = computed(() => props.pelicula.genre || "TBD");
 const wrapperTag = computed(() => (props.linkable ? Link : "div"));
 const wrapperProps = computed(() =>
@@ -31,8 +34,12 @@ const wrapperProps = computed(() =>
       <div class="relative w-full">
         <img
           :src="moviePoster"
+          :srcset="cardImage?.srcset"
+          :sizes="cardImage?.sizes"
           :alt="props.pelicula.display_titulo"
           class="rounded-200 h-[268px] w-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
         <!-- Overlay -->
         <div
