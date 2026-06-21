@@ -5,7 +5,7 @@ class PeliculasController < ApplicationController
 
   def index
     @peliculas = Pelicula
-                  .includes(programacoes: :cinema)
+                  .includes(:paises, :mostra)
                   .where(edicao_id: Edicao.current.id)
                   .order(titulo_portugues_coord_int: :asc)
 

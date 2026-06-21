@@ -64,6 +64,14 @@ describe("PeliculaCard", () => {
     expect(img.attributes("decoding")).toBe("async");
   });
 
+  it("renders eager loading when lazy is false", () => {
+    const wrapper = shallowMount(PeliculaCard, {
+      props: { pelicula, linkable: false, lazy: false },
+    });
+
+    expect(wrapper.find("img").attributes("loading")).toBe("eager");
+  });
+
   it("falls back to the legacy imageURL when card_image is absent", () => {
     const legacyPelicula = { ...pelicula, card_image: null };
     const wrapper = shallowMount(PeliculaCard, {

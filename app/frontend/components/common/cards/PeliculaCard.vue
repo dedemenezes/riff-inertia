@@ -9,6 +9,7 @@ const isHovered = ref(false);
 const props = defineProps({
   pelicula: { type: Object, required: true },
   linkable: { type: Boolean, default: true },
+  lazy: { type: Boolean, default: true },
 });
 const cardImage = computed(() => props.pelicula.card_image || null);
 const moviePoster = computed(
@@ -38,7 +39,7 @@ const wrapperProps = computed(() =>
           :sizes="cardImage?.sizes"
           :alt="props.pelicula.display_titulo"
           class="rounded-200 h-[268px] w-full object-cover"
-          loading="lazy"
+          :loading="props.lazy ? 'lazy' : 'eager'"
           decoding="async"
         />
         <!-- Overlay -->
