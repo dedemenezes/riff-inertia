@@ -8,6 +8,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Image host for legacy/admin-generated assets. %>
+    <link rel="preconnect" href="https://s3.amazonaws.com" crossorigin>
+    <link rel="dns-prefetch" href="//s3.amazonaws.com">
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
