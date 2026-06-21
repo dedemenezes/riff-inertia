@@ -42,4 +42,18 @@ describe("VideoBanner", () => {
       fetchpriority: "high",
     });
   });
+
+  it("validates thumbnail loading attributes", () => {
+    const { thumbnailLoading, thumbnailFetchPriority } =
+      VideoBanner.props ?? VideoBanner.__props;
+
+    expect(thumbnailLoading.validator("lazy")).toBe(true);
+    expect(thumbnailLoading.validator("eager")).toBe(true);
+    expect(thumbnailLoading.validator("auto")).toBe(false);
+
+    expect(thumbnailFetchPriority.validator("high")).toBe(true);
+    expect(thumbnailFetchPriority.validator("low")).toBe(true);
+    expect(thumbnailFetchPriority.validator("auto")).toBe(true);
+    expect(thumbnailFetchPriority.validator("lazy")).toBe(false);
+  });
 });

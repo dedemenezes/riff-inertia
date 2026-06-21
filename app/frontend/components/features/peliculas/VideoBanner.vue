@@ -11,8 +11,16 @@ const props = defineProps({
   title: { type: String, default: "Video Banner" },
   showPlay: { type: Boolean, default: true },
   showTitle: { type: Boolean, default: true },
-  thumbnailLoading: { type: String, default: "lazy" },
-  thumbnailFetchPriority: { type: String, default: "low" },
+  thumbnailLoading: {
+    type: String,
+    default: "lazy",
+    validator: (value) => ["lazy", "eager"].includes(value),
+  },
+  thumbnailFetchPriority: {
+    type: String,
+    default: "low",
+    validator: (value) => ["high", "low", "auto"].includes(value),
+  },
 });
 
 const isPlaying = ref(false);
