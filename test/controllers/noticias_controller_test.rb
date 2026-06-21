@@ -1,6 +1,20 @@
 require "test_helper"
 
 class NoticiasControllerTest < ActionDispatch::IntegrationTest
+  test "show returns inertia response with article content" do
+    noticia = noticias(:one_talents)
+
+    get noticia_url(locale: :pt, permalink: noticia.permalink)
+
+    assert_response :success
+
+    props = inertia_props
+    assert_equal "pt", props["currentLocale"]
+    assert_equal noticia.titulo, props["titulo"]
+    assert_equal noticia.chamada, props["chamada"]
+    assert_includes props["conteudo"], "test TALENTS ONE conteudo"
+  end
+
   test "index returns inertia response with default locale and data" do
     get noticias_url
 

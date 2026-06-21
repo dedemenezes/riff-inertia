@@ -56,23 +56,24 @@ const { bannerImages, onImageError: onBannerImageError } = useBannerImages(
   () => props.pelicula,
 );
 
-const lightbox = new PhotoSwipeLightbox({
-  gallery: "#pelicua-banner",
-  children: "a",
-  pswpModule: () => import("photoswipe"),
-});
+let lightbox;
 
 onMounted(() => {
+  lightbox = new PhotoSwipeLightbox({
+    gallery: "#pelicula-banner",
+    children: "a",
+    pswpModule: () => import("photoswipe"),
+  });
   lightbox.init();
 });
 
 onBeforeUnmount(() => {
-  lightbox.destroy();
+  lightbox?.destroy();
 });
 </script>
 
 <template>
-  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicua-banner. -->
+  <!-- banner carousel: each <a> supplies PhotoSwipe href + data-pswp-* inside #pelicula-banner. -->
   <div id="pelicula-banner">
     <Carousel v-if="bannerImages.length > 0" class="w-full">
       <CarouselContent class="-ml-0">

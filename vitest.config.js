@@ -13,6 +13,7 @@ export default defineConfig({
       "@": resolve(__dirname, "app/frontend"),
       "@components": resolve(__dirname, "app/frontend/components"),
       "@assets": resolve(__dirname, "app/frontend/assets"),
+      "@pages": resolve(__dirname, "app/frontend/pages"),
     },
   },
 });

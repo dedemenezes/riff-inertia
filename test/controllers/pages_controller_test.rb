@@ -7,6 +7,11 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
+
+    props = inertia_props
+    assert_equal "pt", props["currentLocale"]
+    assert props["webdoors"].is_a?(Array), "Expected webdoors to be an array"
+    assert props["noticias"].is_a?(Array), "Expected noticias to be an array"
   end
 
   test "home strips legacy HTML tags from news card titles" do

@@ -5,6 +5,7 @@ export function useBannerImages(pelicula) {
   const brokenSrcs = ref(new Set());
 
   function preloadDims(url) {
+    if (typeof Image === 'undefined') return;
     if (!url || pswpDims.value.has(url)) return;
     const img = new Image();
     img.onload = () => {

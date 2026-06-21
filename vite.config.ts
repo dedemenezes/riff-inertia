@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import RubyPlugin from 'vite-plugin-ruby'
 import { fileURLToPath, URL } from 'node:url'
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     vue(),
     tailwindcss(),
@@ -22,9 +22,18 @@ export default defineConfig({
       "@pages": fileURLToPath(new URL('./app/frontend/pages', import.meta.url)),
     },
   },
+  ssr: {
+    noExternal: [
+      '@inertiajs/vue3',
+      'focus-trap',
+      'focus-trap-vue',
+      'embla-carousel-vue',
+      'photoswipe',
+    ],
+  },
   build: {
     chunkSizeWarningLimit: 1000, // Increase limit to 1MB
-    rollupOptions: {
+    rollupOptions: isSsrBuild ? {} : {
       output: {
         manualChunks: {
           vendor: ['vue', '@inertiajs/vue3'],
@@ -33,4 +42,4 @@ export default defineConfig({
       }
     }
   },
-})
+}))
