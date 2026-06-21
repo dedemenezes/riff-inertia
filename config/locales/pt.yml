@@ -42,7 +42,10 @@ pt:
       name: "Programação"
       full_schedule: "Programação completa"
       with_guests: "Sessões com convidados"
+      special: "Sessões especiais"
       free: "Programação gratuita"
+      with_gratuity: "Sessões com gratuidade"
+      with_debates: "Sessões com debates"
       updates: "Mudanças na programação"
     media:
       name: "Mídias"
@@ -98,6 +101,7 @@ pt:
     sessao: "Sessão"
     busca: "Busca"
     mostra: "Mostra"
+    session_date: "Data da sessão"
 
   filtro: "Filtro | Filtros"
 
@@ -127,6 +131,14 @@ pt:
     select: "Escolha um(a)"
 
   date:
+    day_names:
+      - Domingo
+      - Segunda
+      - Terça
+      - Quarta
+      - Quinta
+      - Sexta
+      - Sábado
     abbr_day_names:
       - Dom
       - Seg
@@ -135,6 +147,20 @@ pt:
       - Qui
       - Sex
       - Sáb
+    month_names:
+      - ""
+      - janeiro
+      - fevereiro
+      - março
+      - abril
+      - maio
+      - junho
+      - julho
+      - agosto
+      - setembro
+      - outubro
+      - novembro
+      - dezembro
     abbr_month_names:
       - ""
       - Jan

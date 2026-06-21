@@ -31,6 +31,7 @@ const props = defineProps({
   endMessage: { type: String, required: true },
   activePage: { type: String, required: true },
   dataLabel: { type: String, required: true },
+  dateFilter: { type: Object, default: () => ({}) },
 });
 
 const PROPS_TO_UPDATE = ["elements", "pagy", "current_filters", "has_active_filters"];
@@ -214,6 +215,7 @@ const onRemoveFilter = (filter) => {
                     :model-value="searchFilterProps.modelValue"
                     :update-field="searchFilterProps.updateField"
                     :data-label="dataLabel"
+                    :date-filter="dateFilter"
                     :cadernos="cadernos"
                   />
                 </template>

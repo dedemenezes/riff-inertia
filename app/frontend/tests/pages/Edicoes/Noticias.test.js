@@ -67,8 +67,8 @@ const stubs = {
     `,
   },
   NoticiasFilterForm: {
-    props: ["modelValue", "updateField", "dataLabel", "cadernos"],
-    template: `<div data-testid="noticias-filter-form">{{ dataLabel }} {{ cadernos.length }}</div>`,
+    props: ["modelValue", "updateField", "dataLabel", "dateFilter", "cadernos"],
+    template: `<div data-testid="noticias-filter-form">{{ dataLabel }} {{ cadernos.length }} {{ dateFilter.min }}</div>`,
   },
   InfiniteScrollLayout: {
     props: ["elements", "pagy", "endMessage"],
@@ -121,6 +121,11 @@ const baseProps = {
   endMessage: "Não há mais notícias.",
   activePage: "Todas as notícias",
   dataLabel: "Data de publicação",
+  dateFilter: {
+    min: "2024-10-02",
+    max: "2024-10-23",
+    default_month: "2024-10-02",
+  },
 };
 
 describe("Edicoes/Noticias", () => {
@@ -135,7 +140,7 @@ describe("Edicoes/Noticias", () => {
     expect(wrapper.findComponent({ name: "MenuContext" }).props("nav")).toBe("edicoes_anteriores");
     expect(wrapper.findComponent({ name: "MenuContext" }).props("activePage")).toBe("Todas as notícias");
     expect(wrapper.find('[data-testid="news-card"]').text()).toContain("Alpha notícia");
-    expect(wrapper.find('[data-testid="noticias-filter-form"]').text()).toContain("Data de publicação 1");
+    expect(wrapper.find('[data-testid="noticias-filter-form"]').text()).toContain("Data de publicação 1 2024-10-02");
   });
 
   it("navigates with query and sort params from the top bar", async () => {

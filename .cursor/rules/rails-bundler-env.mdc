@@ -1,0 +1,21 @@
+---
+description: Rails commands must ignore Cursor sandbox Bundler environment variables
+alwaysApply: true
+---
+
+# Rails Bundler Environment
+
+When running Rails, Rake, or Bundler commands in this project, clear Cursor's
+temporary Bundler environment first:
+
+```shell
+env -u BUNDLE_PATH -u GEM_SPEC_CACHE bundle exec rails test
+env -u BUNDLE_PATH -u GEM_SPEC_CACHE bundle exec rails runner '...'
+```
+
+Do this whenever a command would otherwise use `bin/rails`, `bundle exec rails`,
+`rails`, `rake`, or `bundle exec rake`.
+
+Why: Cursor may inject `BUNDLE_PATH` pointing at a sandbox cache that does not
+contain this app's gems, causing `Bundler::GemNotFound` even though the user's
+local environment is correctly installed.

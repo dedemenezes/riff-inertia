@@ -7,7 +7,7 @@ import { extractFilterValues } from "@/lib/filterUtils";
  */
 export function useSearchFilter(props) {
   // Props that will change when updating filters
-  const propsToUpdate = ['elements', 'pagy', 'current_filters', 'has_active_filters', 'menuTabs']
+  const propsToUpdate = ['elements', 'pagy', 'dates', 'current_filters', 'current_session_type', 'has_active_filters']
 
   // Main filter state - this is passed to SearchFilter via ResponsiveFilterMenu
   const filters = ref({ ...props.current_filters });
@@ -29,6 +29,24 @@ export function useSearchFilter(props) {
   // FILTER OPERATIONS - CALLED BY SEARCHFILTER VIA EVENTS
   // ============================================================================
 
+  const withSessionType = (params = {}) => {
+    const queryParams = params instanceof URLSearchParams
+      ? Object.fromEntries(params)
+      : { ...params };
+
+    if (props.current_session_type) {
+      queryParams.tipo_sessao = props.current_session_type;
+    }
+
+    return queryParams;
+  };
+
+  const initializeFilters = () => {
+    return Object.fromEntries(
+      Object.keys(props.current_filters).map((key) => [key, null])
+    );
+  };
+
   /**
    * Called when SearchFilter emits filtersApplied
    * This makes the actual router call to update the page
@@ -42,7 +60,7 @@ export function useSearchFilter(props) {
     // Build query params by rejecting any filter: null or ""
     const cleanedFilters = extractFilterValues(filtersFromSearchFilter || filters.value)
     // MAke search request and says which prop to update
-    router.get(props.tabBaseUrl, cleanedFilters, {
+    router.get(props.tabBaseUrl, withSessionType(cleanedFilters), {
       preserveScroll: true,
       only: propsToUpdate
     })
@@ -63,6 +81,8 @@ export function useSearchFilter(props) {
     const filterKeyMap = {
       'Time': 'sessao',
       'Sessão': 'sessao',
+      'Session date': 'date',
+      'Data da sessão': 'date',
       'Showcase': 'mostra',
       'Mostra': 'mostra',
       'Cinema': 'cinema',
@@ -86,20 +106,9 @@ export function useSearchFilter(props) {
       // Updated local filter state
       filters.value[filterKey] = null;
 
-      // Build new URL params from remaining filters
-      const newParams = new URLSearchParams();
-      Object.entries(filters.value).forEach(([key, value]) => {
-        if (
-          value !== null &&
-          value !== undefined &&
-          value !== "" &&
-          value?.filter_value
-        ) {
-          newParams.set(key, value.filter_value);
-        }
-      });
+      const newParams = extractFilterValues(filters.value);
 
-      router.get(props.tabBaseUrl, newParams, {
+      router.get(props.tabBaseUrl, withSessionType(newParams), {
         preserveScroll: true,
         only: propsToUpdate
       })
@@ -124,7 +133,7 @@ export function useSearchFilter(props) {
       ([key, value]) => value != null,
     );
     if (hasFiltersApplied) {
-      router.get(props.tabBaseUrl, {}, {
+      router.get(props.tabBaseUrl, withSessionType(), {
           preserveState: true,
           preserveScroll: true,
         only: propsToUpdate
@@ -145,6 +154,7 @@ export function useSearchFilter(props) {
   };
 
   return {
+    initializeFilters,
     filters,
     filterSearch,
     removeQuery,

@@ -1,37 +1,42 @@
-import { nextTick, ref, onMounted } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { nextTick, ref, onMounted, unref, watch } from 'vue';
 
 export function useTabScroll(isActive) {
   const tabRef = ref(null)
 
   onMounted(() => {
-    if (isActive) {
+    if (unref(isActive)) {
       scrollToTab()
     }
   })
 
-  router.on('success', () => {
-    if (isActive) {
-      scrollToTab()
-    }
-  })
+  watch(
+    () => unref(isActive),
+    (active) => {
+      if (active) {
+        scrollToTab()
+      }
+    },
+    { flush: 'post' }
+  )
 
   const scrollToTab = () => {
     setTimeout(() => {
-      if (tabRef.value) {
-        nextTick(() => {
-          if (tabRef.value) {
-            const scrollContainer = tabRef.value.closest('.overflow-x-auto')
+      nextTick(() => {
+        const tabElement = tabRef.value?.$el ?? tabRef.value
 
-            if (scrollContainer) {
-              const containerRect = scrollContainer.getBoundingClientRect()
-              const tabRect = tabRef.value.getBoundingClientRect()
+        if (!(tabElement instanceof Element)) {
+          return
+        }
 
-              scrollContainer.scrollLeft = tabRef.value.offsetLeft - (containerRect.width / 2) + (tabRect.width / 2)
-            }
-          }
-        })
-      }
+        const scrollContainer = tabElement.closest('.overflow-x-auto')
+
+        if (scrollContainer) {
+          const containerRect = scrollContainer.getBoundingClientRect()
+          const tabRect = tabElement.getBoundingClientRect()
+
+          scrollContainer.scrollLeft = tabElement.offsetLeft - (containerRect.width / 2) + (tabRect.width / 2)
+        }
+      })
     }, 50)
   }
   return tabRef

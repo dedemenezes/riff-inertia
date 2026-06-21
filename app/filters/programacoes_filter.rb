@@ -3,6 +3,8 @@
 # Applies program listing filters from request params to a Programacao relation
 # and builds selected filter state for Inertia props / tab URLs.
 class ProgramacoesFilter
+  SESSION_TYPE_FILTERS = %w[especial gratuidade debate].freeze
+
   Result = Struct.new(
     :relation,
     :selected_filters,
@@ -14,8 +16,7 @@ class ProgramacoesFilter
     :selected_genre,
     :selected_director,
     :selected_actor,
-    :selected_date,
-    :available_dates,
+    :selected_session_type,
     keyword_init: true
   )
 
@@ -23,6 +24,7 @@ class ProgramacoesFilter
     @relation = relation
     @params = params
     @edicao_id = Edicao.current.id
+    @dates_filter = filter_options.fetch(:dates)
     @mostras_filter = filter_options.fetch(:mostras)
     @cinemas_filter = filter_options.fetch(:cinemas)
     @paises_filter = filter_options.fetch(:paises)
@@ -44,6 +46,13 @@ class ProgramacoesFilter
     selected_genre = nil
     selected_director = nil
     selected_actor = nil
+    selected_session_type = nil
+    selected_date_filter = nil
+
+    if SESSION_TYPE_FILTERS.include?(@params[:tipo_sessao])
+      selected_session_type = @params[:tipo_sessao]
+      relation = apply_session_type_filter(relation, selected_session_type)
+    end
 
     if @params[:query].present?
       pelicula_ids = Pelicula.where(edicao_id: @edicao_id)
@@ -135,16 +144,15 @@ class ProgramacoesFilter
       end
     end
 
-    available_dates = relation.distinct.pluck(:data).sort
-    selected_date = available_dates.first
-
     if @params[:date].present?
       parsed_date = Date.parse(@params[:date]) rescue nil
-      if parsed_date&.in?(available_dates)
-        selected_date = parsed_date
+      selected_date_filter = @dates_filter.find { |date_filter| date_filter["filter_value"] == parsed_date&.iso8601 }
+
+      if selected_date_filter
+        relation = relation.where(data: parsed_date)
       end
     end
-    selected_filters[:date] = selected_date
+    selected_filters[:date] = selected_date_filter if selected_date_filter
 
     Result.new(
       relation: relation,
@@ -157,8 +165,22 @@ class ProgramacoesFilter
       selected_genre: selected_genre,
       selected_director: selected_director,
       selected_actor: selected_actor,
-      selected_date: selected_date,
-      available_dates: available_dates
+      selected_session_type: selected_session_type
     )
+  end
+
+  private
+
+  def apply_session_type_filter(relation, session_type)
+    case session_type
+    when "especial"
+      relation.where(sessao_gala: 1)
+    when "gratuidade"
+      relation.where("programacoes.gratuito = :enabled OR programacoes.gratuidade_limitada = :enabled", enabled: 1)
+    when "debate"
+      relation.where(sessao_debate: 1)
+    else
+      relation
+    end
   end
 end

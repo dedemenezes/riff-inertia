@@ -137,6 +137,42 @@ describe('extractFilterValues', () => {
     expect(extractFilterValues(input)).toEqual(expected)
   })
 
+  it('should expand filter_params into multiple query params', () => {
+    const input = {
+      data: {
+        filter_value: '2024-10-04..2024-10-10',
+        filter_display: '2024-10-04 - 2024-10-10',
+        filter_params: {
+          data_inicio: '2024-10-04',
+          data_fim: '2024-10-10',
+        },
+      },
+      caderno: { filter_value: 'talents-rio', filter_display: 'Talents Rio' },
+    }
+
+    const expected = {
+      data_inicio: '2024-10-04',
+      data_fim: '2024-10-10',
+      caderno: 'talents-rio',
+    }
+
+    expect(extractFilterValues(input)).toEqual(expected)
+  })
+
+  it('should ignore blank values inside filter_params', () => {
+    const input = {
+      data: {
+        filter_value: '2024-10-04',
+        filter_params: {
+          data_inicio: '2024-10-04',
+          data_fim: '',
+        },
+      },
+    }
+
+    expect(extractFilterValues(input)).toEqual({ data_inicio: '2024-10-04' })
+  })
+
   it('should not allow non-query keys with non-object values', () => {
     const input = {
       query: 'allowed',

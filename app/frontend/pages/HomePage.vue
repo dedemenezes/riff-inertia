@@ -1,19 +1,16 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
-import { ref, defineAsyncComponent, computed } from "vue";
 import TwContainer from "@components/layout/TwContainer.vue";
 
 import HomeBanner from "@/components/features/home/HomeBanner.vue";
-import banneImagePath from "@assets/images/mobile-banner.png";
 import QuickLinkSection from "@components/common/cards/QuickLinkSection.vue";
 import ArticlesSection from "@components/features/home/ArticlesSection.vue";
-import NavbarSecondary from "@components/layout/navbar/NavbarSecondary.vue";
 import SessionCard from "@/components/common/cards/SessionCard.vue";
 import HorizontalScrollLayout from "@/components/layout/HorizontalScrollLayout.vue";
 import TvFestival from "@/components/layout/TvFestival.vue";
 import DestaquesSection from "@/components/features/home/DestaquesSection.vue";
 
-import { simpleTranslation, useUpdateWindowWidth } from "@/lib/utils";
+import { simpleTranslation } from "@/lib/utils";
 import CarouselComponent from "@/components/ui/CarouselComponent.vue";
 import { CarouselItem } from "@/components/ui/carousel";
 
@@ -28,19 +25,6 @@ const props = defineProps({
   webdoors: { type: Array },
   destaques: { type: Array, default: () => [] },
 });
-const isDesktop = useUpdateWindowWidth();
-
-const mobileSizing = "height: 562px;";
-
-const backgroundImageStyle = (webdoor) => {
-  const imagePath = isDesktop.value
-    ? webdoor.desktop_image_url
-    : webdoor.mobile_image_url;
-  return `background-image: url(${imagePath});
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;`;
-};
 </script>
 
 <!-- <h1 class="text-header-base text-2xl lg:text-3xl mb-200 text-primary">
@@ -50,15 +34,52 @@ const backgroundImageStyle = (webdoor) => {
   De 2 a 12 de outubro o cinema estará sob a luz do Rio
 </p> -->
 <template>
-  <Head title="Festival do Rio" />
+  <Head title="Festival do Rio">
+    <link
+      v-if="props.webdoors?.[0]?.mobile_image_url"
+      rel="preload"
+      as="image"
+      :href="props.webdoors?.[0]?.mobile_image_url"
+      media="(max-width: 1023px)"
+      fetchpriority="high"
+    />
+    <link
+      v-if="props.webdoors?.[0]?.desktop_image_url"
+      rel="preload"
+      as="image"
+      :href="props.webdoors?.[0]?.desktop_image_url"
+      media="(min-width: 1024px)"
+      fetchpriority="high"
+    />
+  </Head>
   <HomeBanner>
     <CarouselComponent :full-screen="true">
       <template v-slot:items>
-        <CarouselItem v-for="webdoor in props.webdoors" :key="webdoor.id">
+        <CarouselItem
+          v-for="(webdoor, index) in props.webdoors"
+          :key="webdoor.id"
+        >
           <div
-            class="flex items-end justify-start h-[562px] lg:h-[618px]"
-            :style="[backgroundImageStyle(webdoor)]"
+            class="relative z-0 flex items-end justify-start h-[562px] lg:h-[618px] overflow-hidden"
           >
+            <picture
+              v-if="webdoor.mobile_image_url || webdoor.desktop_image_url"
+              class="absolute inset-0 -z-10"
+            >
+              <source
+                v-if="webdoor.desktop_image_url"
+                media="(min-width: 1024px)"
+                :srcset="webdoor.desktop_image_url"
+              />
+              <img
+                :src="webdoor.mobile_image_url || webdoor.desktop_image_url"
+                :alt="webdoor.titulo"
+                class="h-full w-full object-cover"
+                :loading="index === 0 ? 'eager' : 'lazy'"
+                :fetchpriority="index === 0 ? 'high' : 'auto'"
+                decoding="async"
+              />
+            </picture>
             <div
               class="px-400 py-200 lg:ps-[150px] lg:max-w-5xl pb-[58px] lg:pb-[77px]"
             >
