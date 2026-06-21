@@ -7,6 +7,13 @@ class Pelicula < ApplicationRecord
     [ "large", 300 ],
     [ "original", 1920 ]
   ].freeze
+  CARD_IMAGE_SIZES = "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw".freeze
+  # Widths are approximations until the S3 folder dimensions are confirmed.
+  CARD_IMAGE_VARIANTS = [
+    [ "medium", 400 ],
+    [ "medium2", 600 ],
+    [ "large", 800 ]
+  ].freeze
 
   METHODS_NEEDED = %i[
     display_titulo
@@ -42,6 +49,20 @@ class Pelicula < ApplicationRecord
     youtube_link_trailer
     vimeo_link_trailer
   ]
+
+  CARD_COLUMNS = %i[
+    edicao_id
+    duracao_coord_int
+  ].freeze
+  CARD_METHODS = %i[
+    display_titulo
+    genre
+    display_paises
+    card_image
+    mostra_tag_class
+    mostra_display_name
+    url
+  ].freeze
 
   belongs_to :importacao
   belongs_to :edicao
@@ -110,6 +131,17 @@ class Pelicula < ApplicationRecord
 
   def image_path_prefix = "#{edicao.descricao}/site/peliculas"
   def image_default_size = "original"
+
+  def card_image
+    image_name = imagem.presence || imagem_producao.presence
+
+    build_responsive_image(
+      image_name,
+      variants: CARD_IMAGE_VARIANTS,
+      sizes: CARD_IMAGE_SIZES,
+      src_folder: "medium2"
+    )
+  end
 
   def imageURL(image_name = nil, size = "original")
     image_name ||= imagem

@@ -163,10 +163,11 @@ const onRemoveFilter = (filter) => {
     >
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-1200 gap-800">
         <PeliculaCard
-          v-for="pelicula in allElements"
+          v-for="(pelicula, index) in allElements"
           :key="pelicula.url"
           :pelicula="pelicula"
           :linkable="false"
+          :lazy="index >= 3"
         />
       </div>
     </InfiniteScrollLayout>

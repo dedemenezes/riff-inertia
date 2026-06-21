@@ -71,8 +71,10 @@ const search = (value) => {
           class="grid grid-cols-1 lg:grid-cols-3 py-1200 gap-800"
         >
         <PeliculaCard
-          v-for="pelicula in allElements"
+          v-for="(pelicula, index) in allElements"
+          :key="pelicula.url"
           :pelicula="pelicula"
+          :lazy="index >= 3"
         />
       </InfiniteScrollLayout>
     </ul>

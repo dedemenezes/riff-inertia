@@ -5,7 +5,7 @@ class PeliculasController < ApplicationController
 
   def index
     @peliculas = Pelicula
-                  .includes(programacoes: :cinema)
+                  .includes(:paises, :mostra)
                   .where(edicao_id: Edicao.current.id)
                   .order(titulo_portugues_coord_int: :asc)
 
@@ -29,8 +29,8 @@ class PeliculasController < ApplicationController
 
     render inertia: "Peliculas/Index", props: {
       elements: @peliculas.as_json(
-        only: Pelicula::COLUMNS_NEEDED,
-        methods: Pelicula::METHODS_NEEDED
+        only: Pelicula::CARD_COLUMNS,
+        methods: Pelicula::CARD_METHODS
       ),
       crumbs: breadcrumbs(
         [ "", @root_url ],

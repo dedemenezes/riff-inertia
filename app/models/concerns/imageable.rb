@@ -21,6 +21,16 @@ module Imageable
 
   protected
 
+  def build_responsive_image(img_name, variants:, sizes:, src_folder:)
+    return nil if img_name.blank?
+
+    {
+      src: build_image_url(img_name, src_folder),
+      srcset: variants.map { |folder, width| "#{build_image_url(img_name, folder)} #{width}w" }.join(", "),
+      sizes: sizes
+    }
+  end
+
   def build_image_url(img_name, img_size)
     "#{ENV.fetch("IMAGES_BASE_URL")}/#{image_path_prefix}/#{img_size}/#{img_name}"
   end
