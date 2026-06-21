@@ -53,6 +53,9 @@ class Edicoes::NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_includes titles, "Zulu notícia da edição"
     assert_not_includes titles, "Notícia fora da edição"
     assert_equal edicao_anterior_noticias_path(@edicao, locale: :pt), props["tabBaseUrl"]
+    assert_equal "2024-10-02", props["dateFilter"]["min"]
+    assert_equal "2024-10-23", props["dateFilter"]["max"]
+    assert_equal "2024-10-02", props["dateFilter"]["default_month"]
   end
 
   test "query filters news by title and chamada" do
@@ -95,24 +98,54 @@ class Edicoes::NoticiasControllerTest < ActionDispatch::IntegrationTest
     assert_equal [ @talents.permalink_pt, @felix.permalink_pt ].sort, props["cadernos"].map { |c| c["filter_value"] }.sort
   end
 
-  test "date filter matches exact publication date inside the edition range" do
-    get edicao_anterior_noticias_path(@edicao, locale: :pt, data: "2024-10-04")
+  test "date range filter can match exact publication date inside the edition range" do
+    get edicao_anterior_noticias_path(@edicao, locale: :pt, data_inicio: "2024-10-04", data_fim: "2024-10-04")
 
     assert_response :success
 
     props = inertia_props
     assert_equal [ "Zulu notícia da edição" ], props["elements"].map { |news| news["titulo"] }
+    assert_equal "2024-10-04..2024-10-04", props["current_filters"]["data"]["filter_value"]
+    assert_equal(
+      { "data_inicio" => "2024-10-04", "data_fim" => "2024-10-04" },
+      props["current_filters"]["data"]["filter_params"]
+    )
+    assert props["has_active_filters"]
+  end
+
+  test "start date filter returns news from that date within the edition range" do
+    get edicao_anterior_noticias_path(@edicao, locale: :pt, data_inicio: "2024-10-04")
+
+    assert_response :success
+
+    props = inertia_props
+    titles = props["elements"].map { |news| news["titulo"] }
+    assert_includes titles, "Zulu notícia da edição"
+    assert_includes titles, "Beta notícia da edição"
+    assert_not_includes titles, "Alpha notícia da edição"
     assert_equal "2024-10-04", props["current_filters"]["data"]["filter_value"]
   end
 
   test "invalid date and page params fall back safely" do
-    get edicao_anterior_noticias_path(@edicao, locale: :pt, data: "not-a-date", page: "0")
+    get edicao_anterior_noticias_path(@edicao, locale: :pt, data_inicio: "not-a-date", page: "0")
 
     assert_response :success
 
     props = inertia_props
     assert_equal 1, props["pagy"]["page"]
     assert_nil props["current_filters"]["data"]
+    assert_not props["has_active_filters"]
+    assert_includes props["elements"].map { |news| news["titulo"] }, "Alpha notícia da edição"
+  end
+
+  test "date filters outside edition bounds are rejected" do
+    get edicao_anterior_noticias_path(@edicao, locale: :pt, data_inicio: "2026-01-01")
+
+    assert_response :success
+
+    props = inertia_props
+    assert_nil props["current_filters"]["data"]
+    assert_not props["has_active_filters"]
     assert_includes props["elements"].map { |news| news["titulo"] }, "Alpha notícia da edição"
   end
 
