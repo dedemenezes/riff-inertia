@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "${INERTIA_SSR_ENABLED:-false}" != "true" ]; then
+  exec bundle exec puma -C config/puma.rb
+fi
+
+npm run ssr &
+SSR_PID=$!
+
+bundle exec puma -C config/puma.rb &
+PUMA_PID=$!
+
+cleanup() {
+  kill -TERM "$SSR_PID" "$PUMA_PID" 2>/dev/null || true
+  wait "$SSR_PID" "$PUMA_PID" 2>/dev/null || true
+}
+
+trap cleanup TERM INT
+
+set +e
+wait -n "$SSR_PID" "$PUMA_PID"
+EXIT_CODE=$?
+set -e
+
+cleanup
+exit "$EXIT_CODE"
