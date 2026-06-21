@@ -39,7 +39,7 @@ const props = defineProps({
       v-if="props.webdoors?.[0]?.mobile_image_url"
       rel="preload"
       as="image"
-      :href="props.webdoors[0].mobile_image_url"
+      :href="props.webdoors?.[0]?.mobile_image_url"
       media="(max-width: 1023px)"
       fetchpriority="high"
     />
@@ -47,7 +47,7 @@ const props = defineProps({
       v-if="props.webdoors?.[0]?.desktop_image_url"
       rel="preload"
       as="image"
-      :href="props.webdoors[0].desktop_image_url"
+      :href="props.webdoors?.[0]?.desktop_image_url"
       media="(min-width: 1024px)"
       fetchpriority="high"
     />
