@@ -70,10 +70,14 @@ const props = defineProps({
                 v-if="webdoor.desktop_image_url"
                 media="(min-width: 1024px)"
                 :srcset="webdoor.desktop_image_url"
+                width="770"
+                height="400"
               />
               <img
                 :src="webdoor.mobile_image_url || webdoor.desktop_image_url"
                 :alt="webdoor.titulo"
+                width="600"
+                height="800"
                 class="h-full w-full object-cover"
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"

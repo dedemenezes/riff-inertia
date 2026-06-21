@@ -96,10 +96,14 @@ describe("HomePage", () => {
     expect(sources[0].attributes()).toMatchObject({
       media: "(min-width: 1024px)",
       srcset: webdoors[0].desktop_image_url,
+      width: "770",
+      height: "400",
     });
     expect(images[0].attributes()).toMatchObject({
       src: webdoors[0].mobile_image_url,
       alt: webdoors[0].titulo,
+      width: "600",
+      height: "800",
       decoding: "async",
     });
   });

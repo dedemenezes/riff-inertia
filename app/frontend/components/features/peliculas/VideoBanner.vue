@@ -11,6 +11,16 @@ const props = defineProps({
   title: { type: String, default: "Video Banner" },
   showPlay: { type: Boolean, default: true },
   showTitle: { type: Boolean, default: true },
+  thumbnailLoading: {
+    type: String,
+    default: "lazy",
+    validator: (value) => ["lazy", "eager"].includes(value),
+  },
+  thumbnailFetchPriority: {
+    type: String,
+    default: "low",
+    validator: (value) => ["high", "low", "auto"].includes(value),
+  },
 });
 
 const isPlaying = ref(false);
@@ -121,7 +131,12 @@ const playVideo = () => {
         v-if="thumbnailUrl"
         :src="thumbnailUrl"
         :alt="title"
+        width="1280"
+        height="720"
         class="w-full h-full object-cover rounded-200"
+        :loading="thumbnailLoading"
+        :fetchpriority="thumbnailFetchPriority"
+        decoding="async"
       />
       <div
         v-else
