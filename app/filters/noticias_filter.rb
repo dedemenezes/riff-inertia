@@ -140,5 +140,4 @@ class NoticiasFilter
       "filter_params" => filter_params
     }
   end
-
 end
