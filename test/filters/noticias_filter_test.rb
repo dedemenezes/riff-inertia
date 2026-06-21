@@ -86,6 +86,33 @@ class NoticiasFilterTest < ActiveSupport::TestCase
     assert_equal Noticia.published.count, filter.relation.count
   end
 
+  test "caps open ended start date filters at configured max bound" do
+    filter = NoticiasFilter.new(
+      relation: Noticia.published,
+      params: { data_inicio: "2025-08-10" },
+      date_bounds: { max: "2025-08-11" }
+    ).call
+
+    assert_equal "2025-08-10", filter.selected_date["filter_value"]
+    assert_includes filter.relation, noticias(:one_talents)
+    assert_not_includes filter.relation, noticias(:one_felix)
+  end
+
+  test "normalizes date bounds from time-like objects" do
+    filter = NoticiasFilter.new(
+      relation: Noticia.published,
+      params: { data_inicio: "2025-08-10" },
+      date_bounds: {
+        min: Time.zone.local(2025, 8, 10, 9, 0, 0),
+        max: Time.zone.local(2025, 8, 11, 18, 0, 0)
+      }
+    ).call
+
+    assert_equal "2025-08-10", filter.selected_date["filter_value"]
+    assert_includes filter.relation, noticias(:one_talents)
+    assert_not_includes filter.relation, noticias(:one_felix)
+  end
+
   test "rejects caderno options with blank permalink or display" do
     valid_caderno = Caderno.create!(
       nome_en: "Review Option",

@@ -91,30 +91,32 @@ class NoticiasFilter
 
   def normalize_date_bounds(date_bounds)
     {
-      min: parse_optional_date(date_bounds[:min] || date_bounds["min"]),
-      max: parse_optional_date(date_bounds[:max] || date_bounds["max"])
+      min: parse_bound_date(date_bounds[:min] || date_bounds["min"]),
+      max: parse_bound_date(date_bounds[:max] || date_bounds["max"])
     }
   end
 
-  def parse_optional_date(value)
-    return value if value.is_a?(Date)
+  def parse_bound_date(value)
     return nil if value.blank?
+    return value.to_date if value.respond_to?(:to_date)
 
     parse_date(value)
   end
 
   def build_date_range
-    start_date = parse_optional_date(@params[:data_inicio])
+    start_date = parse_date(@params[:data_inicio])
     return nil unless start_date
 
-    end_date = parse_optional_date(@params[:data_fim])
+    end_date = parse_date(@params[:data_fim])
     return nil if end_date && end_date < start_date
     return nil unless within_date_bounds?(start_date) && (!end_date || within_date_bounds?(end_date))
+
+    end_value = end_date || @date_bounds[:max]
 
     {
       start_date: start_date,
       end_date: end_date,
-      range: end_date ? start_date..end_date : start_date..
+      range: end_value ? start_date..end_value : start_date..
     }
   end
 
