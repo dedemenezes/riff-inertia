@@ -43,7 +43,7 @@ gem "httparty", "~> 0.23.1"
 
 gem "propshaft"
 
-gem "avo", "~> 3.0"
+gem "avo", "~> 3.32"
 gem "ckeditor5"
 
 group :development, :test do
