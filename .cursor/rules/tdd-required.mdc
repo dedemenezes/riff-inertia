@@ -1,0 +1,16 @@
+---
+description: TDD and test coverage expectations for new project code
+alwaysApply: true
+---
+
+# TDD Required
+
+This project expects TDD for new functionality.
+
+- When adding a new file for a feature, add or update tests in the same change.
+- Prefer writing the relevant test first, then implementation, then refactor.
+- Rails controllers/services use Minitest under `test/`.
+- Vue pages/components use Vitest under `app/frontend/tests/` or existing frontend test folders.
+- Do not report a feature as complete without saying which tests were added or updated and which commands passed.
+
+Before committing, keep unrelated dirty files out of the commit.

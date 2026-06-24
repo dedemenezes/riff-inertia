@@ -1,0 +1,17 @@
+---
+description: Safe handling for legacy HTML rendered through Inertia/Vue
+globs: app/controllers/**/*.rb,app/frontend/**/*.vue
+alwaysApply: false
+---
+
+# Legacy HTML In Inertia Pages
+
+Legacy CMS/admin content may be stored as raw HTML and rendered in Vue with `v-html`.
+
+- Server owns the data: load HTML in Rails and pass it as an Inertia prop.
+- Sanitize HTML on the server before sending it to Vue.
+- Remove `script` and `style` nodes before `helpers.sanitize`; Rails sanitize removes tags but can preserve script text.
+- Keep Vue components as renderers. Do not fetch page HTML client-side.
+- When legacy HTML contains `<br>`, do not assume whether to keep, normalize, or remove them. Ask the user what behavior they want for that content, because `<br>` may be intentional editorial formatting or legacy spacing noise.
+- Never globally hide `<br>` with CSS unless the user explicitly chooses that behavior.
+- Localize accessibility labels (`aria-label`, screen-reader text) via Rails props or `locale_messages`, not hardcoded strings.
