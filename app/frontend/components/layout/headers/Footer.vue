@@ -6,6 +6,7 @@ import { usePage } from "@inertiajs/vue3";
 const page = usePage()
 const locale = page.props.currentLocale
 const imprensaPath = page.props.imprensaPath
+const mediaItems = page.props.menuContext?.midias ?? []
 
 </script>
 
@@ -79,8 +80,14 @@ const imprensaPath = page.props.imprensaPath
           <a :href="`/${locale}/`" class="p-200">Parceiros</a>
         </div>
         <div class="flex lg:gap-1200 gap-400 text-body-regular border-b-1 py-300 flex-wrap lg:justify-start justify-center">
-          <a :href="`/${locale}/`" class="p-200">Fotos & Vídeos</a>
-          <a :href="`/${locale}/`" class="p-200">Impressos</a>
+          <a
+            v-for="item in mediaItems"
+            :key="item.path"
+            :href="item.path"
+            class="p-200"
+          >
+            {{ item.name }}
+          </a>
         </div>
         <div class="flex lg:gap-1200 gap-400 text-body-regular border-b-1 py-300 flex-wrap lg:justify-start justify-center">
           <a :href="`/${locale}/`" class="p-200">Ingressos</a>
